@@ -14,6 +14,7 @@ import { accordionModule } from './modules/accordion';
 import { testimonialSliderModule } from './modules/testimonial-slider';
 import { ctaRotatorModule, leadParagraphModule } from './modules/lead-paragraph';
 import { navActiveModule } from './modules/nav-active';
+import { magneticModule, workCardsModule } from './modules/magnetic';
 import { clipboardModule } from './modules/clipboard';
 import { mobileMenuModule } from './modules/mobile-menu';
 import { preloaderModule } from './modules/preloader';
@@ -35,6 +36,8 @@ const modules: AnimationModule[] = [
   accordionModule,
   testimonialSliderModule,
   ctaRotatorModule,
+  workCardsModule,
+  magneticModule,
   navActiveModule,
   clipboardModule,
   mobileMenuModule,

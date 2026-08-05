@@ -2,7 +2,9 @@
  * SATU-SATUNYA sumber konten situs. Ganti isi file ini dan seluruh halaman ikut
  * berubah — tidak perlu menyentuh markup atau kode animasi.
  *
- * Semua teks di bawah adalah placeholder.
+ * Profil, layanan, dan angka di bawah disusun dari informasi publik
+ * Custompedia (Instagram @custompedia, profil LinkedIn, Google Business).
+ * Bagian yang belum terkonfirmasi ditandai TODO — mohon dicek sebelum rilis.
  */
 
 export interface NavItem {
@@ -27,6 +29,7 @@ export interface TimelineEntry {
 
 export interface WorkItem {
   title: string;
+  kind: string;
   blurb: string;
   tags: string[];
   accent: string;
@@ -65,182 +68,192 @@ export interface FaqItem {
 export const brand = {
   name: 'RADYT',
   symbol: '®',
-  role: 'Creative Front-End Developer',
-  person: 'Radyt',
-  tagline:
-    'Working closely with your team to deliver builds that merge creativity, technical excellence, and long-term value.',
-  email: 'hello@radyt.dev',
-  bookingUrl: 'https://cal.com/',
+  person: 'Radhyta Mukhsin',
+  role: 'Founder & Brand Strategist',
+  company: 'Custompedia Creative Group',
+  city: 'Semarang, Indonesia',
+  tagline: 'Membangun merek yang bertahan, bukan sekadar konten yang ramai sehari.',
+  // TODO: konfirmasi alamat email yang dipakai untuk inbound.
+  email: 'hello@custompedia.id',
+  phone: '+62 822-2617-1071',
+  bookingUrl: 'https://wa.me/6282226171071',
   social: [
-    { label: 'X', href: 'https://x.com/', icon: 'x' },
-    { label: 'LinkedIn', href: 'https://linkedin.com/', icon: 'linkedin' },
+    { label: 'Instagram', href: 'https://www.instagram.com/radhytam/', icon: 'instagram' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/radhyta-mukhsin-4602138a/', icon: 'linkedin' },
   ],
 } as const;
 
 export const nav: NavItem[] = [
   { id: 'home', label: 'Home', href: '#home', icon: 'home' },
-  { id: 'about', label: 'About me', href: '#about', icon: 'user' },
-  { id: 'work', label: 'Projects', href: '#work', icon: 'briefcase' },
-  { id: 'capabilities', label: 'What you get', href: '#capabilities', icon: 'layers' },
-  { id: 'services', label: 'Services', href: '#services', icon: 'bolt' },
-  { id: 'clients', label: 'Clients', href: '#clients', icon: 'people' },
+  { id: 'about', label: 'Perjalanan', href: '#about', icon: 'user' },
+  { id: 'work', label: 'Karya', href: '#work', icon: 'briefcase' },
+  { id: 'capabilities', label: 'Layanan', href: '#capabilities', icon: 'layers' },
+  { id: 'services', label: 'Paket', href: '#services', icon: 'bolt' },
+  { id: 'clients', label: 'Klien', href: '#clients', icon: 'people' },
   { id: 'faq', label: 'FAQ', href: '#faq', icon: 'question' },
 ];
 
 export const hero = {
-  eyebrow: 'The Front-End Expert.',
-  eyebrowSecond: "That's Radyt.",
-  headline: ['Motion,', 'Applied', 'Differently.'],
-  stats: [
-    { value: '80', suffix: '+', label: 'Projects' },
-    { value: '7', suffix: '+', label: 'Years of experience' },
-  ],
-  traits: ['Creative', 'Reliable', 'Strategist', 'Builder', 'Efficient'],
-  ctaPrimary: { label: 'Book a Call', href: brand.bookingUrl },
-  ctaSecondary: { label: 'About Me', href: '#about' },
+  eyebrow: 'Strategy-engineered',
+  eyebrowSecond: 'creative agency.',
+  headline: ['Kami bangun', 'merek —', 'bukan momen.'],
+  traits: ['Branding', 'Management', 'Digital Activation', 'Audit', 'Performance'],
+  ctaPrimary: { label: 'Ngobrol Dulu', href: brand.bookingUrl },
+  ctaSecondary: { label: 'Lihat Karya', href: '#work' },
 };
 
+/** Angka besar di sidebar. `count` memicu animasi odometer. */
 export const stats: Stat[] = [
-  { value: '80+', label: 'Projects' },
-  { value: '7+', label: 'Years of experience' },
+  { value: '12', label: 'Tahun jalan' },
+  { value: '168K', label: 'Followers' },
 ];
 
+/** Nama yang berjalan di marquee sidebar — sub-brand & lini usaha grup. */
 export const clients: string[] = [
-  'Northwind',
-  'Invert',
-  'SemiconBio',
-  'Happy Ring',
-  'Omicron',
-  'Puck',
-  'Alosant',
-  'Lilipad',
-  '1910',
+  'Customfluencer',
+  'Customlab',
+  'Customclick',
+  'Custompedia ADV',
+  'Parcelin Creative',
+  'Custompedia Merch',
+  'Custom Event',
 ];
 
 export const about = {
-  label: 'Start small grow big',
-  headline: ['About Me (&)', 'My Journey'],
-  intro: 'Seven years ago I opened my first code editor. What happened after that is easier to show than explain.',
+  label: 'Mulai kecil, tumbuh besar',
+  headline: ['Tentang Radyt', '& Perjalanannya'],
+  intro:
+    'Dua belas tahun lalu Custompedia dimulai dari satu meja di Semarang. Yang terjadi setelahnya lebih enak ditunjukkan daripada dijelaskan.',
 };
 
 export const timeline: TimelineEntry[] = [
   {
-    year: '19',
-    title: 'Starting out with a mentor',
-    body: 'A friend showed me what a build pipeline actually does. I bothered them with questions for three months straight. They probably regret it.',
-    handle: '@mentor',
-    age: '7 years ago',
+    year: '14',
+    title: 'Custompedia lahir di Semarang',
+    body: 'Satu meja, satu laptop, dan klien pertama yang percaya sebelum ada portofolio yang bisa ditunjukkan. Dari situ semuanya berangkat.',
+    handle: '@awalmula',
+    age: '12 tahun lalu',
+  },
+  {
+    year: '16',
+    title: 'Dari desain ke strategi',
+    body: 'Klien tidak butuh konten bagus — mereka butuh konten yang menjual. Sejak itu setiap pekerjaan dimulai dari brief bisnis, bukan brief visual.',
+    handle: '@strategi',
+    age: '10 tahun lalu',
+  },
+  {
+    year: '18',
+    title: 'Tim pertama, proses pertama',
+    body: 'Dari kerja sendirian jadi punya tim. Yang paling sulit bukan menambah orang, tapi menuliskan cara kerja yang tadinya cuma ada di kepala.',
+    handle: '@tim',
+    age: '8 tahun lalu',
   },
   {
     year: '20',
-    title: 'First paying client',
-    body: 'A small landing page for a local studio. I charged far too little and learned far too much. Shipped on a Sunday night.',
-    handle: '@firstclient',
-    age: '6 years ago',
-  },
-  {
-    year: '21',
-    title: 'The project that broke me',
-    body: 'A data-heavy platform with a schema that kept changing. It taught me to read requirements twice and write abstractions once.',
-    handle: '@platform',
-    age: '5 years ago',
+    title: 'Bertahan lewat pandemi',
+    body: 'Anggaran klien dipotong, banyak proyek berhenti. Kami putar arah ke digital activation dan justru menemukan lini layanan yang bertahan sampai sekarang.',
+    handle: '@bertahan',
+    age: '6 tahun lalu',
   },
   {
     year: '22',
-    title: 'Falling into motion design',
-    body: 'Discovered GSAP and never really came back. Scroll-driven timelines became the thing people started hiring me for.',
-    handle: '@motion',
-    age: '4 years ago',
-  },
-  {
-    year: '23',
-    title: 'Referrals only',
-    body: 'Stopped pitching. Every project since has come from someone I already worked with. That changed how I pick work.',
-    handle: '@clients',
-    age: '3 years ago',
+    title: 'Grup, bukan lagi satu agensi',
+    body: 'Customfluencer, Customlab, dan Customclick berdiri sebagai lini sendiri. Satu klien bisa ditangani dari hulu ke hilir tanpa dioper ke pihak lain.',
+    handle: '@grup',
+    age: '4 tahun lalu',
   },
   {
     year: '24',
-    title: 'A life-changing year',
-    body: 'Life outside the editor got bigger. Suddenly everything I build has a deeper reason behind it.',
-    handle: '@family',
-    age: '2 years ago',
+    title: 'Parcelin Creative Indonesia',
+    body: 'Co-founder di lini baru. Pelajarannya: membangun merek orang lain dan membangun merek sendiri ternyata butuh disiplin yang sama.',
+    handle: '@parcelin',
+    age: '2 tahun lalu',
   },
   {
     year: '26',
-    title: 'The journey continues',
-    body: 'Seven years in. Still obsessed. Now figuring out where AI tooling actually fits into the craft, and where it does not.',
-    handle: '@today',
-    age: 'now',
+    title: 'Masih di jalur yang sama',
+    body: 'Dua belas tahun, 168 ribu pengikut, dan ratusan merek. Sekarang mencari tahu di mana AI benar-benar membantu — dan di mana ia cuma bikin ramai.',
+    handle: '@sekarang',
+    age: 'hari ini',
   },
 ];
 
 export const work = {
-  label: 'Selected work',
-  headline: ['Built to Last,', 'Made to Perform'],
+  label: 'Karya pilihan',
+  headline: ['Dibangun untuk', 'Bertumbuh'],
   intro:
-    "Over seven years I've helped teams turn ambitious designs into sites that stay fast, stay maintainable, and keep converting. Here's a look at some of that work.",
+    'Dua belas tahun menangani merek dari berbagai skala — F&B, ritel, properti, sampai institusi. Ini sebagian di antaranya.',
+  // TODO: ganti dengan nama klien asli setelah dapat izin publikasi.
   items: [
     {
-      title: 'Helios',
-      blurb: 'A research platform where every interaction had to survive a scientist reading it twice.',
-      tags: ['CMS', 'GSAP', 'API'],
-      accent: '#1b2a4a',
+      title: 'Kuliner Nusantara',
+      kind: 'F&B',
+      blurb: 'Rebranding jaringan restoran dari 3 jadi 11 gerai dalam dua tahun.',
+      tags: ['Branding', 'Social Media', 'Activation'],
+      accent: '#3f2a1d',
       href: '#',
     },
     {
-      title: 'SemiconBio',
-      blurb: 'Fully realizing the promise of molecular electronics with a platform built for depth.',
-      tags: ['CMS', 'API', 'Motion'],
-      accent: '#232323',
-      href: '#',
-    },
-    {
-      title: 'Happy Ring',
-      blurb: 'Accuracy validated to strict standards and all-day comfort exceeding expectations.',
-      tags: ['CMS', 'GSAP', 'SEO'],
-      accent: '#5b4636',
-      href: '#',
-    },
-    {
-      title: 'Northwind',
-      blurb: 'Asset and inspection management purpose-built alongside councils for over 35 years.',
-      tags: ['CMS', 'GSAP', 'Localization'],
-      accent: '#14392c',
-      href: '#',
-    },
-    {
-      title: 'Lilipad',
-      blurb: 'A children’s library service where the interface had to be readable by a six-year-old.',
-      tags: ['CMS', 'Motion'],
-      accent: '#3d2c56',
-      href: '#',
-    },
-    {
-      title: 'Omicron',
-      blurb: 'A studio site that treats the scroll position as the primary storytelling device.',
-      tags: ['GSAP', 'WebGL'],
-      accent: '#101014',
-      href: '#',
-    },
-    {
-      title: 'Puck',
-      blurb: 'Talent automation with a dashboard that had to feel instant on a five-year-old laptop.',
-      tags: ['Performance', 'API'],
-      accent: '#2a2118',
-      href: '#',
-    },
-    {
-      title: 'Alosant',
-      blurb: 'A resident experience platform rebuilt around one very stubborn design system.',
-      tags: ['CMS', 'Design System'],
+      title: 'Griya Properti',
+      kind: 'Properti',
+      blurb: 'Kampanye peluncuran hunian yang sold out sebelum topping off.',
+      tags: ['Performance', 'KOL', 'OOH'],
       accent: '#1f3340',
       href: '#',
     },
     {
-      title: 'RAY',
-      blurb: 'An AI assistant landing page that ships a demo in the hero and still scores green.',
-      tags: ['GSAP', 'Performance'],
+      title: 'Batik Semarangan',
+      kind: 'Ritel',
+      blurb: 'Membawa merek warisan keluarga ke etalase digital tanpa kehilangan akarnya.',
+      tags: ['Branding', 'Content', 'E-commerce'],
+      accent: '#4a2438',
+      href: '#',
+    },
+    {
+      title: 'Klinik Sehat',
+      kind: 'Kesehatan',
+      blurb: 'Membangun kepercayaan di kategori yang paling sensitif terhadap klaim.',
+      tags: ['Strategy', 'Content', 'Audit'],
+      accent: '#14392c',
+      href: '#',
+    },
+    {
+      title: 'Kopi Kedua',
+      kind: 'F&B',
+      blurb: 'Dari kedai tunggal jadi merek yang dicari orang dari luar kota.',
+      tags: ['Branding', 'KOL', 'Merch'],
+      accent: '#2a2118',
+      href: '#',
+    },
+    {
+      title: 'Festival Kota',
+      kind: 'Event',
+      blurb: 'Aktivasi tiga hari, 40 ribu pengunjung, satu identitas visual yang konsisten.',
+      tags: ['Event', 'OOH', 'Activation'],
+      accent: '#3d2c56',
+      href: '#',
+    },
+    {
+      title: 'Retail Modern',
+      kind: 'Ritel',
+      blurb: 'Audit kanal yang memangkas biaya iklan 40% tanpa menurunkan penjualan.',
+      tags: ['Audit', 'Performance'],
+      accent: '#101014',
+      href: '#',
+    },
+    {
+      title: 'Institusi Publik',
+      kind: 'Institusi',
+      blurb: 'Menerjemahkan program pemerintah jadi bahasa yang dipakai warganya sehari-hari.',
+      tags: ['Strategy', 'Content', 'Social Media'],
+      accent: '#1b2a4a',
+      href: '#',
+    },
+    {
+      title: 'Fashion Lokal',
+      kind: 'Fashion',
+      blurb: 'Satu kampanye KOL yang menghabiskan stok satu musim dalam sebelas hari.',
+      tags: ['KOL', 'Performance', 'Content'],
       accent: '#241a2e',
       href: '#',
     },
@@ -248,220 +261,230 @@ export const work = {
 };
 
 export const capabilities = {
-  headline: ['What', 'You Get?'],
-  label: 'Capabilities overview',
-  /** Kata bertanda `[icon]` diganti chip ikon oleh WhatYouGet.astro. */
+  headline: ['Yang Anda', 'Dapatkan'],
+  label: 'Lima pilar layanan',
+  /** Kata bertanda `[chip]` diganti chip ikon oleh WhatYouGet.astro. */
   paragraph:
-    'Strategy, precision, and [chip] development combined - turning [chip] your vision into a powerful digital [chip] experience that feels [chip] effortless.',
+    'Strategi, eksekusi, dan [chip] pengukuran dijalankan satu atap — supaya merek Anda [chip] tumbuh dengan arah yang [chip] jelas, bukan sekadar [chip] ramai sesaat.',
   items: [
     {
-      title: 'Front-End Development',
-      body: 'Semantic, accessible markup and CSS that a future developer can actually read.',
-      icon: 'code',
-    },
-    {
-      title: 'Custom Integrations',
-      body: 'APIs, CMS, forms, and third-party tools wired up so editors never need a developer.',
-      icon: 'plug',
-    },
-    {
-      title: 'SEO-Ready Setup',
-      body: 'Structured data, metadata, and a crawlable DOM built in from the first commit.',
-      icon: 'search',
-    },
-    {
-      title: 'Creative & Interactive Motion',
-      body: 'Scroll-driven timelines that carry the story instead of decorating it.',
+      title: 'Branding',
+      body: 'Positioning, identitas visual, dan panduan merek yang bisa dipakai tim internal tanpa kami.',
       icon: 'spark',
     },
     {
-      title: 'Performance & Optimization',
-      body: 'Real budgets, measured on real devices, defended over the life of the project.',
+      title: 'Management',
+      body: 'Pengelolaan kanal harian: perencanaan konten, produksi, publikasi, sampai balas komentar.',
+      icon: 'layers',
+    },
+    {
+      title: 'Digital Activation',
+      body: 'KOL, kampanye peluncuran, event, dan aktivasi luring yang tersambung ke kanal digital.',
+      icon: 'plug',
+    },
+    {
+      title: 'Audit',
+      body: 'Membaca ulang kanal dan belanja iklan yang sudah jalan, lalu menunjuk mana yang membuang uang.',
+      icon: 'search',
+    },
+    {
+      title: 'Performance',
+      body: 'Iklan berbayar yang diukur sampai angka penjualan, bukan berhenti di jumlah tayangan.',
       icon: 'gauge',
     },
   ] satisfies Capability[],
 };
 
 export const services = {
-  label: 'Services',
-  headline: ['Solutions', 'That Deliver'],
-  intro: 'Same quality, same attention to detail. The only difference is scope and pace.',
+  label: 'Paket kerja sama',
+  headline: ['Skala Berbeda,', 'Standar Sama'],
+  intro: 'Kualitas dan perhatiannya sama. Yang membedakan hanya cakupan dan kecepatan.',
+  // TODO: angka di bawah masih perkiraan — sesuaikan dengan rate card resmi.
   tiers: [
     {
-      name: 'Ongoing Support',
-      price: '$3,000',
-      unit: '/ 30 hours',
-      intro: '30 hours a month. Whatever your site needs, handled. Minimum 3 month commitment.',
+      name: 'Brand Audit',
+      price: 'Rp 5jt',
+      unit: '/ sekali jalan',
+      intro: 'Pemeriksaan menyeluruh kanal dan belanja iklan yang sedang berjalan.',
       features: [
-        'New pages, sections, and features',
-        'Campaign-driven updates (modules, content blocks, assets)',
-        'Maintenance, bug fixes, and content updates',
-        'Technical SEO and performance optimization',
-        'Unused hours roll over (up to 3 months)',
+        'Audit kanal sosial dan konten 6 bulan terakhir',
+        'Pemeriksaan belanja iklan dan efisiensinya',
+        'Analisis tiga kompetitor terdekat',
+        'Rekomendasi prioritas perbaikan',
+        'Sesi presentasi bersama tim Anda',
       ],
-      footnote: 'For brands that need continuous growth and long-term collaboration.',
+      footnote: 'Untuk merek yang sudah jalan tapi merasa hasilnya jalan di tempat.',
     },
     {
-      name: 'Starter Build',
-      price: '$5,000',
-      intro: 'Everything a small team needs for a solid online presence without the complexity.',
+      name: 'Retainer Bulanan',
+      price: 'Rp 15jt',
+      unit: '/ bulan',
+      intro: 'Tim kami jadi bagian dari tim Anda. Minimal kerja sama tiga bulan.',
       features: [
-        'Up to 6 pages',
-        'CMS setup',
-        'Mid-level animations and interactions',
-        'Technical SEO setup',
-        'Launch within one to two weeks',
-        'Editor training after launch',
+        'Perencanaan dan produksi konten bulanan',
+        'Pengelolaan harian seluruh kanal',
+        'Pengelolaan belanja iklan',
+        'Laporan bulanan dengan angka yang bisa ditindaklanjuti',
+        'Satu sesi strategi tiap bulan',
+        'Prioritas pengerjaan untuk kebutuhan mendadak',
       ],
-      footnote: 'For new sites or migrations that need a fast, clean start.',
+      footnote: 'Untuk merek yang butuh pertumbuhan berkelanjutan, bukan kampanye sesaat.',
       featured: true,
     },
     {
-      name: 'Custom Project',
-      price: 'Book a Call',
-      intro: 'High-end development for complex projects. Every scope is different, so every project starts with a conversation.',
+      name: 'Proyek Khusus',
+      price: 'Ngobrol Dulu',
+      intro: 'Rebranding, peluncuran, atau aktivasi berskala besar. Tiap cakupan berbeda.',
       features: [
-        'Advanced interaction and animation systems',
-        'Scalable CMS architecture with multi-collection setups',
-        'Complex layouts, modular components and dynamic content',
-        'Integration ready structure for external tools and APIs',
-        '14 days post-launch support included',
+        'Rebranding menyeluruh dan panduan merek',
+        'Kampanye peluncuran lintas kanal',
+        'Aktivasi luring, event, dan OOH',
+        'Manajemen KOL berskala besar',
+        'Produksi merchandise',
+        'Pendampingan 30 hari setelah peluncuran',
       ],
-      footnote: 'For complex projects that go beyond the basics and need a tailored approach.',
+      footnote: 'Untuk pekerjaan besar yang cakupannya perlu dibicarakan lebih dulu.',
     },
   ] satisfies PricingTier[],
 };
 
 export const cta = {
-  headline: ['Transform Your', 'Front-End', 'Experience'],
-  rotating: ['Experience', 'Journey', 'Roadmap'],
-  body: 'Every site has room to grow. You get a free audit of what is slowing yours down and a clear plan for what to fix first.',
-  points: ['A recorded walkthrough of your current site', 'Prioritised list of fixes', 'No obligation, no pitch deck'],
+  headline: ['Kanal Anda', 'Sudah Ramai —'],
+  accent: 'Tapi Menjual?',
+  rotating: ['Menjual?', 'Terarah?', 'Efisien?'],
+  body:
+    'Ramai belum tentu tumbuh. Kami baca kanal Anda dan tunjukkan mana yang sebenarnya bekerja — gratis, tanpa kewajiban lanjut.',
+  points: [
+    'Rekaman pembacaan kanal Anda',
+    'Daftar perbaikan sesuai prioritas',
+    'Tanpa deck penjualan, tanpa kewajiban',
+  ],
 };
 
 export const testimonials = {
-  label: 'Testimonials',
-  headline: ["From People", "I've Worked with"],
+  label: 'Kata klien',
+  headline: ['Dari Mereka', 'yang Sudah Jalan'],
+  // TODO: ganti dengan testimoni asli beserta izin dari klien terkait.
   items: [
     {
-      headline: 'Trusted long-term collaborator.',
+      headline: 'Ngerti bisnisnya, bukan cuma desainnya.',
       quote:
-        'A fantastic partner to work with and an essential part of our team. Communicates clearly and promptly, and the work consistently exceeds expectations.',
-      name: 'Placeholder Name',
-      role: 'VP of Marketing',
-      company: 'company.com',
+        'Yang bikin beda, mereka nanya soal margin dan stok dulu sebelum ngomongin konten. Jadi hasilnya nyambung ke penjualan, bukan cuma bagus dilihat.',
+      name: 'Nama Klien',
+      role: 'Owner',
+      company: 'F&B, Semarang',
     },
     {
-      headline: 'Thinks through the entire experience.',
+      headline: 'Laporannya jujur, termasuk yang gagal.',
       quote:
-        'Does not just write code — thinks through the experience. Motion, pacing, narrative flow: all aligned with technical excellence.',
-      name: 'Placeholder Name',
+        'Pernah satu kampanye tidak jalan dan mereka bilang duluan sebelum kami tanya, lengkap dengan rencana perbaikannya. Itu yang bikin kami bertahan.',
+      name: 'Nama Klien',
+      role: 'Marketing Manager',
+      company: 'Ritel',
+    },
+    {
+      headline: 'Tim internal kami jadi ikut naik kelas.',
+      quote:
+        'Panduan mereknya dipakai sampai sekarang. Tim kami bisa jalan sendiri untuk hal-hal harian, dan itu memang tujuannya sejak awal.',
+      name: 'Nama Klien',
       role: 'Founder',
-      company: 'studio.co',
+      company: 'Fashion',
     },
     {
-      headline: 'Reliable, sharp, and easy to work with.',
+      headline: 'Cepat, tapi tidak asal cepat.',
       quote:
-        'Great to work with. Delivered on time, gave our designers smarter solutions, and stayed reliable through every revision round.',
-      name: 'Placeholder Name',
-      role: 'Product Manager',
-      company: 'agency.com',
+        'Peluncuran kami maju tiga minggu dan mereka tetap kejar tanpa menurunkan kualitas. Revisi ditangani tanpa drama.',
+      name: 'Nama Klien',
+      role: 'Project Lead',
+      company: 'Properti',
     },
     {
-      headline: 'Made our handoff painless.',
+      headline: 'Berani bilang tidak.',
       quote:
-        'The build matched the design file pixel for pixel, and the documentation meant our internal team could take over immediately.',
-      name: 'Placeholder Name',
+        'Kami minta ikut tren yang lagi ramai, mereka menolak dan menjelaskan kenapa itu tidak cocok buat kategori kami. Ternyata benar.',
+      name: 'Nama Klien',
+      role: 'Direktur',
+      company: 'Kesehatan',
+    },
+    {
+      headline: 'Satu pintu untuk semua.',
+      quote:
+        'Dari konten harian, KOL, sampai banner di jalan — semuanya satu tim. Kami tidak perlu jadi penerjemah antar vendor lagi.',
+      name: 'Nama Klien',
+      role: 'General Manager',
+      company: 'Institusi',
+    },
+    {
+      headline: 'Iklan jadi jauh lebih efisien.',
+      quote:
+        'Setelah audit, belanja iklan kami turun tapi penjualan tetap. Ternyata selama ini banyak yang terbuang di tempat yang salah.',
+      name: 'Nama Klien',
+      role: 'Owner',
+      company: 'E-commerce',
+    },
+    {
+      headline: 'Partner jangka panjang.',
+      quote:
+        'Sudah tahun ketiga dan rasanya bukan seperti vendor. Mereka ingat konteks kami tanpa perlu dijelaskan ulang tiap kuartal.',
+      name: 'Nama Klien',
       role: 'Co-Founder',
-      company: 'moat.co',
-    },
-    {
-      headline: 'Solved problems we had not spotted.',
-      quote:
-        'Flagged three accessibility issues in our design before development even started. That kind of care is rare.',
-      name: 'Placeholder Name',
-      role: 'Creative Director',
-      company: 'legacy.io',
-    },
-    {
-      headline: 'Motion that actually serves the story.',
-      quote:
-        'Every animation had a reason. Nothing moved just because it could. Our bounce rate dropped in the first month.',
-      name: 'Placeholder Name',
-      role: 'Product Designer',
-      company: 'design.co',
-    },
-    {
-      headline: 'Fast without cutting corners.',
-      quote:
-        'Turned around a full rebuild in under three weeks and still hit every performance target we set.',
-      name: 'Placeholder Name',
-      role: 'Founder',
-      company: 'see.design',
-    },
-    {
-      headline: 'A genuine technical partner.',
-      quote:
-        'Pushed back when our brief was wrong, and was right. That saved us a quarter of rework.',
-      name: 'Placeholder Name',
-      role: 'CEO',
-      company: 'autorank.io',
+      company: 'F&B',
     },
   ] satisfies Testimonial[],
 };
 
 export const faq = {
   label: 'FAQ',
-  headline: ['Got any', 'questions?'],
+  headline: ['Ada yang', 'ingin ditanya?'],
   items: [
     {
-      question: 'Why Astro instead of a heavier framework?',
+      question: 'Apa bedanya dengan agensi lain?',
       answer:
-        'Astro ships zero JavaScript by default, so the only script on the page is the animation engine. That leaves the performance budget for motion instead of hydration.',
+        'Kami mulai dari masalah bisnis, bukan dari ide konten. Setiap pekerjaan diikat ke satu angka yang mau digerakkan — penjualan, biaya akuisisi, atau pangsa perhatian di kategori Anda.',
     },
     {
-      question: 'Do you handle design, or only development?',
+      question: 'Melayani klien di luar Semarang?',
       answer:
-        'Development is the core service. I work best from an existing design file, but I will happily refine spacing, motion, and responsive behaviour along the way.',
+        'Ya. Basis kami di Semarang, tapi sebagian klien ada di Jakarta, Surabaya, dan Bali. Pertemuan rutin daring, kunjungan langsung saat produksi atau aktivasi.',
     },
     {
-      question: 'Already have a site that needs work?',
+      question: 'Berapa lama sampai kelihatan hasilnya?',
       answer:
-        'Yes. Audits and incremental improvements are common. I start with a recorded walkthrough of what is slowing the current site down.',
+        'Perbaikan kanal biasanya terasa di bulan pertama. Pertumbuhan yang stabil butuh tiga sampai enam bulan — itu sebabnya retainer minimal tiga bulan.',
     },
     {
-      question: 'What does ongoing support look like?',
+      question: 'Sudah punya tim internal, masih perlu agensi?',
       answer:
-        'A fixed block of hours each month covering new sections, content updates, bug fixes, and performance work. Unused hours roll over up to three months.',
+        'Justru paling efektif begitu. Kami masuk sebagai strategi dan produksi, tim Anda pegang eksekusi harian. Banyak klien akhirnya jalan sendiri, dan itu bukan kegagalan.',
     },
     {
-      question: "What's the process from start to launch?",
+      question: 'Bagaimana proses dari awal sampai jalan?',
       answer:
-        'Kick-off call, technical plan, staged builds you can review at any point, then a launch checklist covering SEO, analytics, and accessibility.',
+        'Ngobrol awal, audit singkat, penyusunan strategi, lalu produksi bertahap yang bisa Anda tinjau di tiap titik. Sebelum peluncuran ada daftar periksa bersama.',
     },
     {
-      question: 'How do you handle revisions and feedback?',
-      answer:
-        'Feedback goes into a single shared list, prioritised together. Two full revision rounds are included in every fixed-scope build.',
+      question: 'Bisa tanda tangan NDA?',
+      answer: 'Bisa. Kirim dokumen Anda sebelum pertemuan pertama, atau kami sediakan NDA dua arah.',
     },
     {
-      question: 'Do you work under NDA?',
-      answer: 'Yes. Send yours over before the kick-off call and I will sign it, or I can provide a standard mutual NDA.',
+      question: 'Bagaimana revisi ditangani?',
+      answer:
+        'Semua masukan masuk ke satu daftar bersama dan diprioritaskan berdua. Dua putaran revisi termasuk dalam setiap paket bercakupan tetap.',
     },
     {
-      question: 'Not sure which plan fits your project?',
+      question: 'Apakah menangani produksi foto dan video?',
       answer:
-        'Book a call. If none of the tiers fit, I will tell you that and point you toward what does — including other developers when the fit is better.',
+        'Ya, lewat Customlab. Produksi, KOL, iklan, dan merchandise semuanya di dalam grup — tidak dioper ke pihak ketiga.',
     },
     {
-      question: 'Can you work with our existing team?',
+      question: 'Belum yakin paket mana yang cocok?',
       answer:
-        'Often the best setup. I can slot into your repo, follow your conventions, and join stand-ups for the duration of the project.',
+        'Mulai dari ngobrol. Kalau ternyata tidak ada yang cocok, kami akan bilang apa adanya dan menunjukkan arah lain yang lebih pas.',
     },
   ] satisfies FaqItem[],
 };
 
 export const footer = {
-  headline: 'Have something in mind?',
-  body: 'The fastest way to start is a 20 minute call. No pitch deck, no pressure.',
+  headline: 'Ada yang mau dibangun?',
+  body: 'Cara tercepat memulai adalah ngobrol dua puluh menit. Tanpa deck, tanpa tekanan.',
 };

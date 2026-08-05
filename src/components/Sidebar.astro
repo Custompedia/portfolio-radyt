@@ -10,7 +10,7 @@
  * anak-anak yang jadi saudara, bukan keturunan.
  */
 import Icon from './Icon.astro';
-import { brand, nav, stats, clients } from '../data/site';
+import { brand, hero, nav, stats, clients } from '../data/site';
 ---
 
 <aside class="sidebar" data-sidebar>
@@ -95,14 +95,14 @@ import { brand, nav, stats, clients } from '../data/site';
 
   <a
     class="btn btn-primary"
-    href={brand.bookingUrl}
+    href={hero.ctaPrimary.href}
     target="_blank"
     rel="noopener noreferrer"
     data-ghost="cta-primary"
     data-ghost-type="size"
     data-button-hover
   >
-    <span class="btn-label">Book a Call</span>
+    <span class="btn-label">{hero.ctaPrimary.label}</span>
   </a>
 </aside>
 

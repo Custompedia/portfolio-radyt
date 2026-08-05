@@ -31,23 +31,21 @@ interface GhostBox {
  * hero — mereka fade-in selama morph lewat `data-ghost-fade`.
  */
 const ghosts: GhostBox[] = [
-  // `max()` memberi lantai piksel: tanpa itu, di layar sempit ghost jadi lebih
-  // kecil dari elemen aslinya dan teks statistik justru menyusut, bukan membesar.
-  { id: 'stats-card-0', x: '17.5vw', y: '57vh', w: 'max(200px, 14.2vw)', h: '14vh' },
-  { id: 'stat-0', x: '19vw', y: '60vh', w: 'max(165px, 11.2vw)', h: '8vh' },
+  // Kartu statistik menempati kolom kiri, di luar jangkauan headline.
+  { id: 'stats-card-0', x: '15vw', y: '52vh', w: 'max(200px, 13.5vw)', h: '14vh' },
+  { id: 'stat-0', x: '16.4vw', y: '55vh', w: 'max(165px, 11vw)', h: '8vh' },
 
-  { id: 'stats-card-1', x: '18.5vw', y: '75vh', w: 'max(165px, 12vw)', h: '20vh' },
-  { id: 'stat-1', x: '19.6vw', y: '78vh', w: 'max(140px, 9.6vw)', h: '10vh' },
+  { id: 'stats-card-1', x: '18vw', y: '70vh', w: 'max(170px, 11.5vw)', h: '18vh' },
+  { id: 'stat-1', x: '19.2vw', y: '73vh', w: 'max(145px, 9.5vw)', h: '9vh' },
 
-  { id: 'menu-card', x: '2vw', y: '61vh', w: '96vw', h: '6.4vh', row: true },
+  // Baris navigasi naik ke bawah wordmark, di atas kepala — supaya tidak
+  // lagi tertabrak headline maupun kartu traits.
+  { id: 'menu-card', x: '2vw', y: '43.5vh', w: '96vw', h: '6.4vh', row: true },
 
-  // Ukurannya identik dengan tombol "About Me" di sebelahnya (lihat
-  // .hero-secondary). Karena tipenya `size`, lebar/tinggi inilah yang dipakai
-  // apa adanya — labelnya tidak ikut mengecil.
   {
     id: 'cta-primary',
     x: 'calc(50vw - var(--hero-btn-w) - 8px)',
-    y: '77.5vh',
+    y: '78vh',
     w: 'var(--hero-btn-w)',
     h: 'var(--hero-btn-h)',
   },
@@ -75,7 +73,8 @@ const ghosts: GhostBox[] = [
     </p>
 
     <div class="hero-portrait" data-tl-type="scroll" data-tl-trigger="[data-hero]" data-tl-start="0% top" data-tl-end="40% top" data-tl-from="{'opacity':1}" data-tl-to="{'scale':1.35,'opacity':0}">
-      <img src="/images/portrait.svg" alt="" width="640" height="900" fetchpriority="high" />
+      <!-- Foto placeholder berlisensi bebas; lihat public/images/README.md. -->
+      <img src="/images/portrait.webp" alt="" width="720" height="896" fetchpriority="high" />
     </div>
 
     {

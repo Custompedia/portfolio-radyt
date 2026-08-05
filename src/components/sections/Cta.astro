@@ -1,16 +1,13 @@
 ---
 import Icon from '../Icon.astro';
 import { brand, cta } from '../../data/site';
-
-const [first, second, ...rest] = cta.headline;
 ---
 
 <section class="section cta" data-cta>
   <h2 class="cta-title">
-    <span class="cta-line" data-reveal>{first}</span>
-    <span class="cta-line cta-line--accent" data-reveal>{second}</span>
+    {cta.headline.map((line) => <span class="cta-line" data-reveal>{line}</span>)}
     <!-- Kata terakhir berganti-ganti: satu kolom kata yang digeser per baris. -->
-    <span class="cta-rotator" data-cta-rotator aria-label={rest.join(' ')}>
+    <span class="cta-rotator" data-cta-rotator aria-label={cta.accent}>
       <span class="cta-rotator-track" data-cta-rotator-track>
         {cta.rotating.map((word) => <span class="cta-rotator-word">{word}</span>)}
       </span>
@@ -18,12 +15,12 @@ const [first, second, ...rest] = cta.headline;
   </h2>
 
   <div class="cta-body">
-    <p data-reveal data-reveal-stagger="0.05">{cta.body}</p>
+    <p class="cta-lead" data-reveal data-reveal-stagger="0.05">{cta.body}</p>
     <ul class="cta-points">
       {
         cta.points.map((point) => (
           <li
-            data-tl-from="{'opacity':0,'x':-24}"
+            data-tl-from="{'opacity':0,'x':-20}"
             data-tl-to="{'opacity':1,'x':0,'duration':0.6}"
             data-tl-start="top 90%"
             data-tl-once
@@ -34,8 +31,15 @@ const [first, second, ...rest] = cta.headline;
         ))
       }
     </ul>
-    <a class="btn cta-button" href={brand.bookingUrl} target="_blank" rel="noopener noreferrer" data-button-hover>
-      <span class="btn-label">Book a Call</span>
+    <a
+      class="btn cta-button"
+      href={brand.bookingUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-button-hover
+      data-magnetic
+    >
+      <span class="btn-label">Minta Audit Gratis</span>
     </a>
   </div>
 </section>

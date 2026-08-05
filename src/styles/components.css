@@ -133,12 +133,11 @@
 }
 
 .nav-stat-value {
-  color: var(--yellow);
+  color: var(--fg);
   font-size: 1.6rem;
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.04em;
-  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.25);
 }
 
 .nav-stat-label {

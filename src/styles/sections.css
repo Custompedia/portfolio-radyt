@@ -81,17 +81,25 @@
   width: auto;
 }
 
+/* Headline diturunkan ke depan dada, bukan di depan kepala: hanya di situ
+   siluet subjeknya cukup lebar sehingga teks putih terbaca penuh. Dipusatkan
+   dan dibatasi lebarnya supaya tidak pernah menjangkau kolom kartu. */
 .hero-headline {
   position: absolute;
-  left: 37.5vw;
-  top: 37vh;
+  left: 50%;
+  top: 51vh;
+  width: min(34vw, 520px);
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   color: var(--white);
-  font-size: clamp(2.5rem, 4.6vw, 5.5rem);
+  font-size: clamp(2.25rem, 3.9vw, 4.5rem);
   font-weight: 900;
   letter-spacing: -0.045em;
-  line-height: 1;
+  line-height: 1.02;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.28);
 }
 
 .hero-headline-line {
@@ -100,12 +108,12 @@
 
 .hero-traits {
   position: absolute;
-  right: 18vw;
+  right: 3.5vw;
   top: 52vh;
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  padding: 18px 22px;
+  gap: 9px;
+  padding: 20px 24px;
   border-radius: var(--radius-lg);
   background: var(--card-bg);
   border: var(--card-border);
@@ -120,21 +128,22 @@
   align-items: center;
   gap: 12px;
   color: var(--black);
-  font-size: 1.0625rem;
+  font-size: 0.9375rem;
   font-weight: 700;
 }
 
 .hero-trait-mark {
-  width: 17px;
-  height: 17px;
-  border-radius: 5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
   background: var(--yellow);
+  box-shadow: 0 0 0 4px rgba(255, 255, 35, 0.16);
 }
 
 .hero-eyebrow {
   position: absolute;
-  left: 3.4vw;
-  top: 84vh;
+  left: 2.5vw;
+  top: 86vh;
   display: flex;
   flex-direction: column;
   color: var(--black);
@@ -145,7 +154,7 @@
 .hero-secondary {
   position: absolute;
   left: calc(50vw + 8px);
-  top: 77.5vh;
+  top: 78vh;
   width: var(--hero-btn-w);
   height: var(--hero-btn-h);
 }
@@ -228,8 +237,17 @@
     position: static;
   }
 
+  /* Headline dipusatkan lewat left:50% + translateX(-50%) di desktop. Di
+     layout statis ketiganya harus dilepas — kalau tidak, teksnya tergeser
+     setengah lebarnya keluar layar. */
   .hero-headline {
-    font-size: clamp(2.5rem, 12vw, 4rem);
+    left: auto;
+    width: auto;
+    transform: none;
+    align-items: flex-start;
+    text-align: left;
+    font-size: clamp(2.25rem, 11vw, 3.5rem);
+    text-shadow: none;
     margin-bottom: 24px;
   }
 
@@ -341,7 +359,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  color: rgba(0, 0, 0, 0.55);
+  color: rgba(0, 0, 0, 0.4);
   pointer-events: none;
 }
 
@@ -354,7 +372,7 @@
 .timeline-card {
   position: relative;
   z-index: 1;
-  width: min(48%, 560px);
+  width: min(44%, 520px);
   padding: 30px 32px 24px;
 }
 
@@ -373,7 +391,6 @@
   font-weight: 900;
   letter-spacing: -0.05em;
   line-height: 0.9;
-  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.18);
 }
 
 .timeline-title {
@@ -542,6 +559,17 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 6px;
+}
+
+.work-card-kind {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--yellow);
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .work-card-title {
@@ -745,7 +773,6 @@
 
 .cta-line--accent {
   color: var(--yellow);
-  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.22);
 }
 
 .cta-rotator {
@@ -1083,4 +1110,20 @@
   .testimonial-drag {
     display: none;
   }
+}
+
+/* ==========================================================================
+   CTA — rotator kata
+   ========================================================================== */
+
+.cta-rotator {
+  display: block;
+  height: 1em;
+  overflow: hidden;
+  color: var(--yellow);
+}
+
+.cta-lead {
+  color: var(--fg);
+  font-size: clamp(1rem, 1.25vw, 1.25rem);
 }

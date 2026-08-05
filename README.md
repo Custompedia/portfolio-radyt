@@ -1,8 +1,17 @@
 # portfolio-radyt
 
-Portfolio satu halaman dengan Astro + GSAP. Motion-nya scroll-driven: hero yang
-berserakan merakit dirinya jadi sidebar, galeri proyek bergerak menyamping, dan
-tema sidebar berganti sendiri saat melewati section gelap.
+Portfolio satu halaman untuk **Radhyta Mukhsin** — pemilik Custompedia Creative
+Group, agensi kreatif di Semarang yang berjalan sejak 2014.
+
+Dibangun dengan Astro + GSAP. Motion-nya scroll-driven: wordmark raksasa masuk
+huruf demi huruf, hero yang berserakan merakit dirinya jadi sidebar, galeri
+proyek bergerak menyamping, dan tema sidebar berganti sendiri saat melewati
+section gelap.
+
+> **Konten masih perlu dikonfirmasi.** Angka paket harga, nama klien, dan
+> testimoni di `src/data/site.ts` masih perkiraan dan ditandai `TODO`.
+> Foto hero adalah placeholder berlisensi bebas, bukan foto Radyt —
+> lihat `public/images/README.md`.
 
 ## Stack
 
@@ -36,7 +45,8 @@ src/data/site.ts
 ```
 
 Ganti isinya dan seluruh halaman ikut berubah — markup dan kode animasi tidak
-perlu disentuh. Ganti juga `public/images/portrait.svg` dengan foto asli.
+perlu disentuh. Ganti juga `public/images/portrait.webp` dengan foto asli
+(petunjuknya ada di `public/images/README.md`).
 
 Warna dan tipografi ada di `src/styles/tokens.css` sebagai CSS custom property.
 
@@ -86,9 +96,14 @@ jadi tiap elemen membawa resepnya sendiri di markup:
 Atribut lain: `data-tl-target`, `data-tl-stagger`, `data-tl-once`,
 `data-tl-desktop`, dan `data-number-count` untuk penghitung angka odometer.
 
+**Timeline berkelok** (`modules/timeline-path.ts`) — garis penghubung antar
+kartu perjalanan dihitung dari posisi kartu yang sebenarnya, menempel di tepi
+kartu, dengan titik kendali yang saling menyilang supaya benar-benar membentuk
+huruf S. Ditarik dengan DrawSVG mengikuti scroll.
+
 **Modul lain:** intro, sidebar auto-scale, horizontal scroll, theme switcher,
-text reveal, lead paragraph, timeline path (DrawSVG), accordion, testimonial
-slider, nav active, clipboard, mobile menu.
+text reveal, lead paragraph, magnetic hover, kartu proyek, accordion,
+testimonial slider, nav active, clipboard, mobile menu.
 
 Tiap modul punya `init()` / `destroy()` dan menyatakan apakah ia butuh dibangun
 ulang saat resize. `main.ts` yang mengorkestrasi urutannya — sidebar mengunci
