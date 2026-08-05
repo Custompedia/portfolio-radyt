@@ -1,0 +1,53 @@
+import Lenis from 'lenis';
+import { gsap, ScrollTrigger } from './gsap';
+import { prefersReducedMotion } from './utils';
+
+let lenis: Lenis | null = null;
+
+/**
+ * Lenis dijalankan dari ticker GSAP (bukan rAF sendiri) supaya scroll position,
+ * tween, dan ScrollTrigger dievaluasi di frame yang sama. `lagSmoothing(0)`
+ * wajib: tanpa itu GSAP "melompati" waktu setelah frame berat dan scrub terlihat
+ * patah.
+ */
+export function initSmoothScroll(): Lenis | null {
+  if (prefersReducedMotion()) return null;
+
+  lenis = new Lenis({
+    duration: 0.4,
+    easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    touchMultiplier: 1.6,
+  });
+
+  lenis.on('scroll', ScrollTrigger.update);
+
+  const raf = (time: number) => lenis?.raf(time * 1000);
+  gsap.ticker.add(raf);
+  gsap.ticker.lagSmoothing(0);
+
+  return lenis;
+}
+
+export function getLenis(): Lenis | null {
+  return lenis;
+}
+
+/** Anchor link internal harus lewat Lenis, bukan scroll native. */
+export function initAnchorLinks(): void {
+  document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const hash = link.getAttribute('href');
+      if (!hash || hash === '#') return;
+      const target = document.querySelector(hash);
+      if (!target) return;
+
+      event.preventDefault();
+      if (lenis) {
+        lenis.scrollTo(target as HTMLElement, { offset: 0, duration: 1.1 });
+      } else {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+}

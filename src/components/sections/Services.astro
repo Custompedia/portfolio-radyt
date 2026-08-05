@@ -1,0 +1,51 @@
+---
+import Icon from '../Icon.astro';
+import { services } from '../../data/site';
+---
+
+<section class="section services" id="services">
+  <header class="section-head">
+    <span class="label-pill">{services.label}</span>
+    <h2 class="section-title" data-reveal>
+      {services.headline.map((line) => <span>{line}</span>)}
+    </h2>
+    <p class="section-intro" data-reveal data-reveal-stagger="0.05">{services.intro}</p>
+  </header>
+
+  <div class="pricing-grid">
+    {
+      services.tiers.map((tier) => (
+        <article
+          class:list={['pricing-card', 'card', tier.featured && 'is-featured']}
+          data-tl-from="{'opacity':0,'y':50}"
+          data-tl-to="{'opacity':1,'y':0,'duration':0.8}"
+          data-tl-start="top 85%"
+          data-tl-once
+        >
+          <header class="pricing-head">
+            <h3 class="pricing-name">{tier.name}</h3>
+            <p class="pricing-price">
+              <span class="pricing-amount">{tier.price}</span>
+              {tier.unit && <span class="pricing-unit">{tier.unit}</span>}
+            </p>
+            <p class="pricing-intro">{tier.intro}</p>
+          </header>
+
+          <ul class="pricing-features">
+            {tier.features.map((feature) => (
+              <li>
+                <span class="pricing-bullet" aria-hidden="true" />
+                {feature}
+              </li>
+            ))}
+          </ul>
+
+          <footer class="pricing-foot">
+            <Icon name="info" size={15} />
+            <span>{tier.footnote}</span>
+          </footer>
+        </article>
+      ))
+    }
+  </div>
+</section>

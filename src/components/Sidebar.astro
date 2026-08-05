@@ -1,0 +1,112 @@
+---
+/**
+ * Sidebar memegang elemen ASLI. Di hero ada placeholder kosong dengan
+ * `data-ghost-target` yang senama; ghost.ts mengukur selisih posisi keduanya
+ * lalu menerbangkan elemen ini dari posisi hero ke posisi sidebar saat scroll.
+ *
+ * ATURAN: elemen ber-`data-ghost` TIDAK BOLEH mengandung elemen ber-`data-ghost`
+ * lain — transform-nya akan bertumpuk dan pengukurannya jadi salah. Karena itu
+ * tiap kartu dipecah jadi lapisan background sendiri (`.nav-card-bg`) plus
+ * anak-anak yang jadi saudara, bukan keturunan.
+ */
+import Icon from './Icon.astro';
+import { brand, nav, stats, clients } from '../data/site';
+---
+
+<aside class="sidebar" data-sidebar>
+  <div class="nav-card nav-top">
+    <span class="nav-card-bg" data-ghost-fade></span>
+    <a class="brand" href="#home">
+      <span class="brand-name">{brand.name}</span><span class="brand-symbol">{brand.symbol}</span>
+    </a>
+    <div class="social" data-ghost-fade>
+      {
+        brand.social.map((item) => (
+          <a class="social-link" href={item.href} target="_blank" rel="noopener noreferrer" aria-label={item.label}>
+            <Icon name={item.icon} size={13} />
+          </a>
+        ))
+      }
+    </div>
+    <p class="nav-tagline" data-ghost="tagline" data-ghost-type="box">{brand.tagline}</p>
+  </div>
+
+  <!-- Dua kartu terpisah, bukan satu kartu dengan pemisah: di hero keduanya
+       terbang dari posisi berbeda, jadi masing-masing butuh lapisan bg sendiri. -->
+  <div class="nav-stats-row">
+    {
+      stats.map((stat, i) => (
+        <div class="nav-card nav-stat-card">
+          <span class="nav-card-bg" data-ghost={`stats-card-${i}`} data-ghost-type="background" />
+          <div class="nav-stat" data-ghost={`stat-${i}`} data-ghost-type="box">
+            <span class="nav-stat-value">{stat.value}</span>
+            <span class="nav-stat-label" set:html={stat.label.replace(' ', '<br />')} />
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <nav class="nav-card nav-menu" aria-label="Primary">
+    <span class="nav-card-bg" data-ghost-fade></span>
+    <ul>
+      {
+        nav.map((item) => (
+          <li>
+            <a
+              class="nav-link"
+              href={item.href}
+              data-nav-link={item.id}
+              data-ghost={`nav-${item.id}`}
+              data-ghost-type="box"
+            >
+              <span class="nav-link-bg" aria-hidden="true"></span>
+              <span class="nav-link-icon">
+                <Icon name={item.icon} size={14} />
+              </span>
+              <span class="nav-link-label">{item.label}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <div class="nav-card nav-clients">
+    <span class="nav-card-bg" data-ghost-fade></span>
+    <div class="marquee" data-ghost-fade>
+      <div class="marquee-track">
+        {clients.map((name) => <span class="marquee-item">{name}</span>)}
+        {clients.map((name) => <span class="marquee-item" aria-hidden="true">{name}</span>)}
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-card nav-email">
+    <span class="nav-card-bg" data-ghost-fade></span>
+    <button class="nav-email-btn" type="button" data-copy={brand.email} data-ghost-fade>
+      <span class="nav-email-text">{brand.email}</span>
+      <span class="nav-email-icon">
+        <Icon name="copy" size={14} />
+      </span>
+      <span class="nav-email-done" aria-live="polite"></span>
+    </button>
+  </div>
+
+  <a
+    class="btn btn-primary"
+    href={brand.bookingUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    data-ghost="cta-primary"
+    data-ghost-type="size"
+    data-button-hover
+  >
+    <span class="btn-label">Book a Call</span>
+  </a>
+</aside>
+
+<button class="mobile-menu-trigger" type="button" aria-label="Open menu" aria-expanded="false" data-menu-trigger>
+  <span></span>
+  <span></span>
+</button>

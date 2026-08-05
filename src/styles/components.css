@@ -1,0 +1,448 @@
+/* ==========================================================================
+   SIDEBAR — elemen asli yang diterbangkan GhostEngine
+   ========================================================================== */
+
+.sidebar {
+  position: fixed;
+  top: var(--sidebar-pad);
+  left: var(--sidebar-pad);
+  z-index: 60;
+  display: flex;
+  width: var(--sidebar-w);
+  flex-direction: column;
+  gap: 10px;
+  transform-origin: top left;
+}
+
+.nav-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+/* Selama morph, baris navigasi harus lewat DI BELAKANG kartu lain — persis
+   seperti referensi, di mana link tengah tertutup kartu statistik. */
+.sidebar > * {
+  position: relative;
+  z-index: 2;
+}
+
+.sidebar > .nav-menu {
+  z-index: 1;
+}
+
+/* Lapisan background terpisah: inilah yang di-scale non-uniform oleh
+   ghost.ts, sementara isinya diterbangkan sendiri-sendiri. */
+.nav-card-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--surface);
+  border: var(--surface-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition:
+    background-color var(--theme-dur) var(--ease-out),
+    border-color var(--theme-dur) var(--ease-out);
+}
+
+.nav-card > *:not(.nav-card-bg) {
+  position: relative;
+  z-index: 1;
+}
+
+.nav-top {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px 8px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  align-self: start;
+  padding: 5px 10px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--yellow);
+  color: var(--black);
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  transform-origin: top left;
+}
+
+.brand-symbol {
+  font-size: 0.5em;
+  align-self: flex-start;
+  margin-left: 1px;
+}
+
+.social {
+  display: flex;
+  gap: 6px;
+  align-self: start;
+  transform-origin: top left;
+}
+
+.social-link {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--surface-inner-alt);
+  color: var(--fg);
+  transition:
+    background-color var(--theme-dur) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.social-link:hover {
+  transform: translateY(-2px);
+}
+
+.nav-tagline {
+  grid-column: 1 / -1;
+  color: var(--fg);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  transform-origin: top left;
+}
+
+/* --- Stats --- */
+
+.nav-stats-row {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-stat-card {
+  flex: 1;
+  padding: 14px 10px;
+}
+
+.nav-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  text-align: center;
+  transform-origin: top left;
+}
+
+.nav-stat-value {
+  color: var(--yellow);
+  font-size: 1.6rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.25);
+}
+
+.nav-stat-label {
+  color: var(--fg);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+/* --- Menu --- */
+
+.nav-menu ul {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border-radius: var(--radius-pill);
+  color: var(--fg);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform-origin: top left;
+  /* background-color sengaja TIDAK ditransisikan: ghost.ts menulisnya tiap
+     frame, dan transisi CSS akan tertinggal di belakang scrub. */
+  transition: color var(--dur) var(--ease-out);
+}
+
+.nav-link-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--surface-inner);
+  transition: background-color var(--theme-dur) var(--ease-out);
+}
+
+.nav-link > *:not(.nav-link-bg) {
+  position: relative;
+  z-index: 1;
+}
+
+.nav-link.is-active {
+  color: var(--black);
+}
+
+.nav-link.is-active .nav-link-bg {
+  background: var(--yellow);
+}
+
+/* --- Clients marquee --- */
+
+/* Tidak boleh overflow:hidden — anak-anaknya diterbangkan jauh keluar kartu
+   oleh ghost.ts dan akan terpotong. Yang di-clip cukup .marquee saja. */
+.nav-clients {
+  padding: 12px 0;
+}
+
+.marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  transform-origin: top left;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 22px;
+  animation: marquee-scroll 26s linear infinite;
+}
+
+.marquee-item {
+  color: var(--fg);
+  font-family: var(--font-label);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+@keyframes marquee-scroll {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* --- Email --- */
+
+.nav-email {
+  padding: 10px;
+}
+
+.nav-email-btn {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  background: var(--surface-inner);
+  color: var(--fg);
+  font-size: 0.8125rem;
+  transform-origin: top left;
+  transition: background-color var(--theme-dur) var(--ease-out);
+}
+
+.nav-email-icon {
+  display: grid;
+  place-items: center;
+  opacity: 0.65;
+}
+
+.nav-email-done {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: inherit;
+  background: var(--yellow);
+  color: var(--black);
+  font-weight: 700;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.nav-email-btn.is-copied .nav-email-done {
+  opacity: 1;
+}
+
+/* --- Buttons --- */
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 26px;
+  border-radius: var(--radius-pill);
+  background: var(--yellow);
+  color: var(--black);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  overflow: hidden;
+  transform-origin: top left;
+}
+
+.btn-label {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+/* Isian gelap yang menyapu naik saat hover. Murni CSS: transisi transform
+   pada satu pseudo-element sudah cukup, tidak perlu modul JS sendiri. */
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--black);
+  transform: translate3d(0, 101%, 0);
+  transition: transform 0.45s var(--ease-out);
+}
+
+.btn[data-button-hover]:hover::after {
+  transform: translate3d(0, 0, 0);
+}
+
+.btn-label {
+  transition: color 0.3s var(--ease-out);
+}
+
+.btn[data-button-hover]:hover .btn-label {
+  color: var(--yellow);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid currentColor;
+  color: var(--fg);
+}
+
+.btn-outline::after {
+  background: var(--yellow);
+}
+
+/* ==========================================================================
+   GHOST — kotak pengukur tak terlihat di dalam hero
+   ========================================================================== */
+
+.ghost {
+  position: absolute;
+  left: var(--gx);
+  top: var(--gy);
+  width: var(--gw);
+  height: var(--gh);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   POTONGAN UI YANG DIPAKAI ULANG ANTAR SECTION
+   ========================================================================== */
+
+.label-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px 7px;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.section-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 22px;
+}
+
+.section-title {
+  font-size: var(--fs-h2);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+}
+
+.section-title span {
+  display: block;
+}
+
+.section-intro {
+  max-width: 34ch;
+  color: var(--fg);
+  font-size: var(--fs-body);
+}
+
+.card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: var(--surface-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ==========================================================================
+   MOBILE MENU
+   ========================================================================== */
+
+.mobile-menu-trigger {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 90;
+  display: none;
+  width: 46px;
+  height: 46px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 50%;
+  background: var(--yellow);
+}
+
+.mobile-menu-trigger span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--black);
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.mobile-menu-trigger[aria-expanded='true'] span:first-child {
+  transform: translateY(3.5px) rotate(45deg);
+}
+
+.mobile-menu-trigger[aria-expanded='true'] span:last-child {
+  transform: translateY(-3.5px) rotate(-45deg);
+}

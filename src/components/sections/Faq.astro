@@ -1,0 +1,40 @@
+---
+import Icon from '../Icon.astro';
+import { faq } from '../../data/site';
+---
+
+<section class="section faq" id="faq">
+  <header class="section-head">
+    <span class="label-pill">{faq.label}</span>
+    <h2 class="section-title" data-reveal>
+      {faq.headline.map((line) => <span>{line}</span>)}
+    </h2>
+  </header>
+
+  <div class="faq-grid">
+    {
+      faq.items.map((item, i) => (
+        <div
+          class="faq-item card"
+          data-accordion
+          data-tl-from="{'opacity':0,'y':30}"
+          data-tl-to="{'opacity':1,'y':0,'duration':0.6}"
+          data-tl-start="top 92%"
+          data-tl-once
+        >
+          <h3>
+            <button class="faq-question" type="button" aria-expanded="false" aria-controls={`faq-panel-${i}`}>
+              <span>{item.question}</span>
+              <span class="faq-icon" aria-hidden="true">
+                <Icon name="plus" size={18} />
+              </span>
+            </button>
+          </h3>
+          <div class="faq-panel" id={`faq-panel-${i}`} data-accordion-panel>
+            <p>{item.answer}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

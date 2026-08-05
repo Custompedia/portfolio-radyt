@@ -1,0 +1,107 @@
+/* Design tokens — diambil dari computed style situs referensi (heynesh.com). */
+
+:root {
+  /* --- Palette --- */
+  --bg: #d5cfbe;
+  --yellow: #ffff23;
+  --black: #000000;
+  --white: #ffffff;
+  --dark: #1d1d1d;
+  --dark-deep: #131313;
+
+  /* Surface: kartu di atas background terang */
+  --card-bg: rgba(223, 222, 206, 0.8);
+  --card-border: 1px solid rgba(255, 255, 255, 0.2);
+  --card-inner: #ebeada;
+  --card-inner-alt: #c9c8ba;
+
+  /* Surface: kartu saat sidebar melewati section gelap */
+  --card-bg-dark: rgba(29, 29, 29, 0.6);
+  --card-bg-dark-solid: rgba(29, 29, 29, 0.9);
+  --card-border-dark: 1px solid rgba(255, 255, 255, 0.1);
+  --card-inner-dark: rgba(57, 57, 57, 0.9);
+  --card-inner-alt-dark: #393939;
+
+  /* Token turunan yang di-flip oleh theme.ts lewat [data-theme] */
+  --surface: var(--card-bg);
+  --surface-border: var(--card-border);
+  --surface-inner: var(--card-inner);
+  --surface-inner-alt: var(--card-inner-alt);
+  --fg: var(--black);
+  --fg-muted: rgba(0, 0, 0, 0.6);
+
+  /* --- Typography --- */
+  --font-sans: 'Satoshi', 'Helvetica Neue', Arial, sans-serif;
+  --font-label: 'General Sans', 'Satoshi', Arial, sans-serif;
+
+  --fs-display: clamp(3.5rem, 11vw, 10.5rem);
+  --fs-h1: clamp(2.75rem, 5.6vw, 6rem);
+  --fs-h2: clamp(2.25rem, 4.6vw, 4.75rem);
+  --fs-h3: clamp(1.35rem, 1.85vw, 2rem);
+  --fs-lead: clamp(1.5rem, 3.1vw, 3.25rem);
+  --fs-body: clamp(0.95rem, 1.05vw, 1.125rem);
+  --fs-small: 0.875rem;
+  --fs-label: 0.8125rem;
+
+  --lh-tight: 0.92;
+  --lh-heading: 1.04;
+  --lh-body: 1.55;
+
+  /* --- Layout --- */
+  --sidebar-w: 17.5rem;
+  --sidebar-scale: 1;
+
+  /* Ukuran kedua tombol hero. Dipakai bersama oleh ghost tombol "Book a Call"
+     (tipe `size`) dan tombol statis "About Me", jadi keduanya dijamin identik. */
+  --hero-btn-w: max(160px, 10.5vw);
+  --hero-btn-h: 58px;
+  --sidebar-pad: 20px;
+  --gutter: clamp(1.25rem, 3vw, 3.5rem);
+  --content-left: calc(var(--sidebar-w) + var(--gutter) * 2);
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+
+  /* --- Motion --- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 0.2s;
+  --dur: 0.4s;
+  --theme-dur: 0.45s;
+}
+
+/* Sidebar / komponen apa pun yang sedang menimpa section gelap. */
+[data-theme='dark'] {
+  --surface: var(--card-bg-dark);
+  --surface-border: var(--card-border-dark);
+  --surface-inner: var(--card-inner-dark);
+  --surface-inner-alt: var(--card-inner-alt-dark);
+  --fg: rgba(255, 255, 255, 0.9);
+  --fg-muted: rgba(255, 255, 255, 0.55);
+}
+
+/* Section bertema gelap (work). */
+.theme-dark {
+  --surface: var(--card-bg-dark);
+  --surface-border: var(--card-border-dark);
+  --surface-inner: var(--card-inner-dark);
+  --fg: rgba(255, 255, 255, 0.9);
+  --fg-muted: rgba(255, 255, 255, 0.55);
+  background-color: var(--dark-deep);
+  color: var(--fg);
+}
+
+/* Komposisi bento hero dirancang untuk layar lebar. Di layar yang lebih
+   sempit sidebar — dan karenanya tombol hero yang dipatok ke lebarnya —
+   ikut mengecil supaya tidak bertabrakan dengan kartu statistik di kiri. */
+@media (max-width: 1400px) {
+  :root {
+    --sidebar-w: 15.5rem;
+  }
+}
+
+@media (max-width: 1150px) {
+  :root {
+    --sidebar-w: 13.5rem;
+  }
+}

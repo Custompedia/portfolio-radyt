@@ -1,0 +1,220 @@
+/* Self-hosted fonts (Fontshare, free commercial license). */
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/satoshi-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/satoshi-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/satoshi-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/satoshi-900.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'General Sans';
+  src: url('/fonts/general-sans-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'General Sans';
+  src: url('/fonts/general-sans-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- Reset --- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto;
+  /* `clip`, bukan `hidden`: hidden akan membuat viewport jadi scroll container
+     dan mematikan seluruh position:sticky di halaman ini. */
+  overflow-x: clip;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 700;
+  line-height: var(--lh-heading);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+ul {
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--yellow);
+  color: var(--black);
+}
+
+/* Lenis mengambil alih scroll; html butuh height auto. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* --- Utilities --- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.u-yellow {
+  color: var(--yellow);
+}
+
+/* SplitText: tiap baris dibungkus mask ber-overflow hidden. */
+.line-mask {
+  overflow: hidden;
+  display: block;
+}
+
+.line {
+  display: block;
+  will-change: transform;
+}
+
+/* Odometer angka: tiap digit adalah kolom 0–9 di dalam jendela setinggi
+   satu baris. */
+.digit-row {
+  display: inline-flex;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.digit-mask {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+  line-height: 1;
+}
+
+.digit-track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+.digit,
+.digit-literal {
+  display: block;
+  height: 1em;
+  line-height: 1;
+}
+
+/* Elemen yang di-reveal pertama kali disembunyikan lewat CSS supaya tidak
+   berkedip sebelum JS sempat jalan. Kelas ini dilepas oleh main.ts. */
+.js-loading [data-reveal] {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js-loading [data-reveal] {
+    visibility: visible;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

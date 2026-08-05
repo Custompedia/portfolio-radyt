@@ -1,0 +1,56 @@
+---
+import Icon from '../Icon.astro';
+import { capabilities } from '../../data/site';
+
+/**
+ * Paragrafnya ditulis dengan penanda `[chip]`; tiap penanda diganti satu chip
+ * ikon yang duduk sebaris dengan teks — persis pola "kata yang disela ikon"
+ * di referensi.
+ */
+const parts = capabilities.paragraph.split('[chip]');
+const chipIcons = capabilities.items.map((item) => item.icon);
+---
+
+<section class="section capabilities" id="capabilities">
+  <header class="section-head capabilities-head">
+    <h2 class="section-title" data-reveal>
+      {capabilities.headline.map((line) => <span>{line}</span>)}
+    </h2>
+    <span class="label-pill">{capabilities.label}</span>
+  </header>
+
+  <p class="capabilities-lead" data-capabilities-lead>
+    {
+      parts.map((part, i) => (
+        <>
+          <span class="lead-text">{part}</span>
+          {i < parts.length - 1 && (
+            <span class="lead-chip" data-chip>
+              <Icon name={chipIcons[i] ?? 'spark'} size={18} />
+            </span>
+          )}
+        </>
+      ))
+    }
+  </p>
+
+  <ul class="capability-grid">
+    {
+      capabilities.items.map((item) => (
+        <li
+          class="capability-card card"
+          data-tl-from="{'opacity':0,'y':40}"
+          data-tl-to="{'opacity':1,'y':0,'duration':0.7}"
+          data-tl-start="top 88%"
+          data-tl-once
+        >
+          <span class="capability-icon">
+            <Icon name={item.icon} size={20} />
+          </span>
+          <h3 class="capability-title">{item.title}</h3>
+          <p class="capability-body">{item.body}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

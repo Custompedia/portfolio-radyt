@@ -1,0 +1,53 @@
+---
+/** Set ikon inline — tidak ada request ekstra dan warnanya ikut `currentColor`. */
+interface Props {
+  name: string;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 16, class: className } = Astro.props;
+
+const paths: Record<string, string> = {
+  home: 'M3 9.5 10 3l7 6.5V16a1 1 0 0 1-1 1h-4v-5H8v5H4a1 1 0 0 1-1-1z',
+  user: 'M10 10a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-7 7a7 7 0 0 1 14 0z',
+  briefcase: 'M3 7h14v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1zm4 0V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2',
+  layers: 'm10 2 8 4.5-8 4.5-8-4.5zm8 8.5L10 15l-8-4.5M18 14l-8 4.5L2 14',
+  bolt: 'M11 2 4 11h5l-1 7 7-9h-5z',
+  people: 'M7 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm7 0a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM1 17a6 6 0 0 1 12 0m1-6a5 5 0 0 1 5 5',
+  question: 'M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm0-4v.01M7.6 7.5A2.5 2.5 0 1 1 10 11v1',
+  code: 'm6 6-4 4 4 4m8-8 4 4-4 4M11.5 3.5l-3 13',
+  plug: 'M7 2v5m6-5v5M4 7h12v3a6 6 0 0 1-12 0zm6 9v2',
+  search: 'M9 15A6 6 0 1 0 9 3a6 6 0 0 0 0 12Zm4.5-1.5L18 18',
+  spark: 'M10 2l2 6 6 2-6 2-2 6-2-6-6-2 6-2z',
+  gauge: 'M3 15a8 8 0 1 1 14 0M10 11l4-3',
+  copy: 'M6 6V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-2M3 7h9a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z',
+  arrow: 'M5 15 15 5m0 0H7m8 0v8',
+  plus: 'M10 4v12M4 10h12',
+  minus: 'M4 10h12',
+  x: 'M3 3l14 14M17 3 3 17',
+  linkedin: 'M4 8v9M4 4.5v.01M9 17v-5a3 3 0 0 1 6 0v5M9 8v9',
+  check: 'M4 10.5 8 14l8-8',
+  circle: 'M10 17a7 7 0 1 0 0-14 7 7 0 0 0 0 14Z',
+  info: 'M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm0-9v5m0-8v.01',
+  quote: 'M4 12c0-4 2-6 5-7M11 12c0-4 2-6 5-7M4 12h4v4H4zm7 0h4v4h-4z',
+};
+
+const d = paths[name] ?? paths.circle;
+---
+
+<svg
+  class={className}
+  width={size}
+  height={size}
+  viewBox="0 0 20 20"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.7"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d={d}></path>
+</svg>

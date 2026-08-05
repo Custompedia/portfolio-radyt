@@ -1,0 +1,51 @@
+---
+import Icon from '../Icon.astro';
+import { about, timeline } from '../../data/site';
+---
+
+<section class="section about" id="about">
+  <header class="section-head about-head">
+    <span class="label-pill">{about.label}</span>
+    <h2 class="section-title" data-reveal>
+      {about.headline.map((line) => <span>{line}</span>)}
+    </h2>
+    <p class="section-intro" data-reveal data-reveal-stagger="0.05">{about.intro}</p>
+  </header>
+
+  <div class="timeline" data-timeline>
+    <!-- Garis penghubung digambar ulang oleh timeline-path.ts dari posisi
+         kartu yang sebenarnya, lalu "ditarik" dengan DrawSVGPlugin. -->
+    <svg class="timeline-svg" data-timeline-svg aria-hidden="true" fill="none">
+      <path data-timeline-path stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+    </svg>
+
+    {
+      timeline.map((entry, i) => (
+        <article
+          class="timeline-card card"
+          data-timeline-card
+          data-side={i % 2 === 0 ? 'right' : 'left'}
+          data-tl-from="{'opacity':0,'y':60}"
+          data-tl-to="{'opacity':1,'y':0,'duration':0.8}"
+          data-tl-start="top 82%"
+          data-tl-once
+        >
+          <span class="timeline-year">'{entry.year}</span>
+          <h3 class="timeline-title">{entry.title}</h3>
+          <p class="timeline-body">{entry.body}</p>
+          <footer class="timeline-meta">
+            <span class="timeline-avatar" aria-hidden="true" />
+            <span class="timeline-handle">
+              <strong>{entry.handle}</strong>
+              <span>{entry.age}</span>
+            </span>
+            <span class="timeline-more">
+              Read more
+              <Icon name="arrow" size={12} />
+            </span>
+          </footer>
+        </article>
+      ))
+    }
+  </div>
+</section>
