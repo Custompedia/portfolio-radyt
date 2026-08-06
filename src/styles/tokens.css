@@ -1,4 +1,16 @@
-/* Design tokens — diambil dari computed style situs referensi (heynesh.com). */
+/* Design tokens — diambil dari computed style situs referensi (heynesh.com).
+ *
+ * Semua ukuran adalah `vw` di dalam `clamp()`. Referensinya tidak punya
+ * container ber-max-width sama sekali: satu-satunya sumbu adalah lebar
+ * viewport, dan tipe, radius, padding, serta lebar rail semuanya menskala
+ * dari situ. Itulah sebabnya halamannya terbaca sebagai satu objek yang
+ * dirancang, bukan tumpukan blok — dan kenapa `clamp()` per-token dengan
+ * radius `px` (versi sebelumnya) selalu melenceng di lebar layar lain.
+ *
+ * Angka yang tertulis di sini VERIFIED: diambil dari
+ * nesh-staging.webflow.shared.*.min.css dan dari getComputedStyle pada
+ * viewport 1512x950.
+ */
 
 :root {
   /* --- Palette --- */
@@ -14,60 +26,128 @@
   --card-border: 1px solid rgba(255, 255, 255, 0.2);
   --card-inner: #ebeada;
   --card-inner-alt: #c9c8ba;
+  --card-inner-hover: #edecda;
 
   /* Surface: kartu saat sidebar melewati section gelap */
   --card-bg-dark: rgba(29, 29, 29, 0.6);
-  --card-bg-dark-solid: rgba(29, 29, 29, 0.9);
   --card-border-dark: 1px solid rgba(255, 255, 255, 0.1);
   --card-inner-dark: rgba(57, 57, 57, 0.9);
   --card-inner-alt-dark: #393939;
+  --card-inner-hover-dark: rgba(94, 94, 94, 0.5);
+
+  /* Kaca hero — kartu stat & trait melayang di atas potret, jadi warnanya
+     taupe transparan, bukan beige solid seperti kartu section. */
+  --glass-bg: rgba(194, 184, 172, 0.3);
+  --glass-blur: 20px;
+  --glass-blur-soft: 15px;
+
+  /* Permukaan khusus per-section */
+  --capa-bg: #e4e0ce;
+  --service-bg: #dfdece;
+  --service-featured: #cecdbb;
+  --work-bg: linear-gradient(#000000, #222222 44%);
+  --work-scrim: linear-gradient(rgba(0, 0, 0, 0.3), rgba(51, 51, 51, 0.03) 50%, rgba(0, 0, 0, 0.4));
+  --work-dim: rgba(0, 0, 0, 0.6);
+  --work-arrow-idle-bg: #2f2f2f;
+  --work-arrow-idle-fg: #8c8c8c;
+  --timeline-stroke: linear-gradient(
+    rgba(46, 32, 6, 0.49),
+    rgba(46, 32, 6, 0.27) 44%,
+    rgba(46, 32, 6, 0) 95%
+  );
+  --swiper-bullet: #a8a684;
 
   /* Token turunan yang di-flip oleh theme.ts lewat [data-theme] */
   --surface: var(--card-bg);
   --surface-border: var(--card-border);
   --surface-inner: var(--card-inner);
   --surface-inner-alt: var(--card-inner-alt);
+  --surface-inner-hover: var(--card-inner-hover);
   --fg: var(--black);
-  --fg-muted: rgba(0, 0, 0, 0.6);
+  --fg-muted: rgba(0, 0, 0, 0.7);
+  --label-border: rgba(0, 0, 0, 0.3);
 
   /* --- Typography --- */
   --font-sans: 'Satoshi', 'Helvetica Neue', Arial, sans-serif;
   --font-label: 'General Sans', 'Satoshi', Arial, sans-serif;
 
-  --fs-display: clamp(3.5rem, 11vw, 10.5rem);
-  --fs-h1: clamp(2.75rem, 5.6vw, 6rem);
-  --fs-h2: clamp(2.25rem, 4.6vw, 4.75rem);
-  --fs-h3: clamp(1.35rem, 1.85vw, 2rem);
-  --fs-lead: clamp(1.5rem, 3.1vw, 3.25rem);
-  --fs-body: clamp(0.95rem, 1.05vw, 1.125rem);
-  --fs-small: 0.875rem;
-  --fs-label: 0.8125rem;
+  /* Skala tipe — verbatim dari referensi. Tiap baris juga mencatat line-height
+     dan weight yang menyertainya supaya pasangannya tidak terpisah. */
+  --fs-body: clamp(0.75rem, 1.18vw, 1.5rem); /* lh 1.6  w400 */
+  --fs-h1: clamp(3rem, 5.3vw, 5.5rem); /* lh 1.03 w700 */
+  --fs-h2: clamp(2.5rem, 4.58vw, 5rem); /* lh 1.15 w500 */
+  --fs-h2-big: clamp(10rem, 12.5vw, 200px); /* lh 0.9  w700 */
+  --fs-cta: clamp(5.5rem, 7.64vw, 8.5rem); /* lh 1    w700 */
+  --fs-lead: clamp(3.5rem, 4.72vw, 5.5rem); /* lh 1    w700 — paragraf What You Get */
+  --fs-year: clamp(4rem, 5.56vw, 6.25rem); /* lh 1    w700 kuning */
+  --fs-stat: clamp(4rem, 5.69vw, 6.25rem); /* lh 0.9  w700 */
+  --fs-work-title: clamp(1.25rem, 1.94vw, 3rem); /* lh 1    w500 */
+  --fs-h3: clamp(0.75rem, 1.32vw, 1.75rem); /* lh 1.4  w500 */
+  --fs-quote: 2.08vw; /* lh 1    kutipan testimoni */
+  --fs-price: clamp(1.125rem, 1.67vw, 2rem); /* lh 1    w500 */
+  --fs-label: clamp(0.625rem, 0.97vw, 1.5rem); /* lh 1    w700 UPPERCASE */
 
-  --lh-tight: 0.92;
-  --lh-heading: 1.04;
-  --lh-body: 1.55;
+  --lh-big: 0.9;
+  --lh-one: 1;
+  --lh-h1: 1.03;
+  --lh-h2: 1.15;
+  --lh-h3: 1.4;
+  --lh-body: 1.6;
+
+  /* Tracking hanya pernah negatif, dan hanya pada tipe terbesar. Sisanya
+     `normal` — memaksa -0.03em ke semua heading (versi sebelumnya) membuat
+     ukuran menengah terlihat sesak. */
+  --ls-big: -0.25vw;
+  --ls-cta: -0.23vw;
+  --ls-lead: -0.09vw;
+  --ls-toggle: -0.01vw;
 
   /* --- Layout --- */
-  --sidebar-w: 17.5rem;
+  --sidebar-left: 1.39vw;
+  --sidebar-w: 18.54vw;
   --sidebar-scale: 1;
+  --sidebar-pad: 1.11vw;
 
-  /* Ukuran kedua tombol hero. Dipakai bersama oleh ghost tombol "Book a Call"
-     (tipe `size`) dan tombol statis "About Me", jadi keduanya dijamin identik. */
+  /* Tiap section menyisakan gutter yang sama untuk rail. Asimetris memang
+     disengaja: tidak ada versi terpusat dari layout ini. */
+  --gutter: 1.39vw;
+  --content-left: 21vw;
+
+  /* Ukuran kedua tombol hero. Dipakai bersama oleh ghost tombol CTA
+     (tipe `size`) dan tombol sekunder statis, jadi keduanya dijamin identik. */
   --hero-btn-w: max(160px, 10.5vw);
-  --hero-btn-h: 58px;
-  --sidebar-pad: 20px;
-  --gutter: clamp(1.25rem, 3vw, 3.5rem);
-  --content-left: calc(var(--sidebar-w) + var(--gutter) * 2);
-  --radius-sm: 8px;
-  --radius: 14px;
-  --radius-lg: 22px;
-  --radius-pill: 999px;
+  /* 3.28vw = 49px @1492 — tinggi tombol hero referensi, diukur langsung.
+     3.9vw sebelumnya membuat tombolnya 9px lebih tinggi dari aslinya. */
+  --hero-btn-h: 3.28vw;
+
+  /* Tangga radius. `.83vw` adalah radius rumah — kartu, tombol, kartu work.
+     `.56vw` yang lebih rapat dipakai panel sidebar dan kartu kaca hero. */
+  --radius-sm: 0.56vw;
+  --radius: 0.69vw;
+  --radius-lg: 0.83vw;
+  --radius-xs: 0.42vw;
+  --radius-pill: 5.14vw;
+
+  /* Tangga jarak, bukan grid 8px. */
+  --sp-1: 0.28vw;
+  --sp-2: 0.56vw;
+  --sp-3: 0.83vw;
+  --sp-4: 1.11vw;
+  --sp-5: 1.39vw;
+  --sp-6: 1.67vw;
+  --sp-7: 2.08vw;
+  --sp-8: 2.78vw;
+  --sp-9: 3.47vw;
+  --sp-10: 4.17vw;
+  --sp-11: 5vw;
+  --sp-12: 10vw;
+  --sp-13: 15vw;
 
   /* --- Motion --- */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast: 0.2s;
   --dur: 0.4s;
-  --theme-dur: 0.45s;
+  --theme-dur: 0.3s;
 }
 
 /* Sidebar / komponen apa pun yang sedang menimpa section gelap. */
@@ -76,8 +156,10 @@
   --surface-border: var(--card-border-dark);
   --surface-inner: var(--card-inner-dark);
   --surface-inner-alt: var(--card-inner-alt-dark);
+  --surface-inner-hover: var(--card-inner-hover-dark);
   --fg: rgba(255, 255, 255, 0.9);
   --fg-muted: rgba(255, 255, 255, 0.55);
+  --label-border: rgba(255, 255, 255, 0.3);
 }
 
 /* Section bertema gelap (work). */
@@ -85,23 +167,54 @@
   --surface: var(--card-bg-dark);
   --surface-border: var(--card-border-dark);
   --surface-inner: var(--card-inner-dark);
+  --surface-inner-hover: var(--card-inner-hover-dark);
   --fg: rgba(255, 255, 255, 0.9);
   --fg-muted: rgba(255, 255, 255, 0.55);
-  background-color: var(--dark-deep);
+  --label-border: rgba(255, 255, 255, 0.3);
+  background: var(--work-bg);
   color: var(--fg);
 }
 
-/* Komposisi bento hero dirancang untuk layar lebar. Di layar yang lebih
-   sempit sidebar — dan karenanya tombol hero yang dipatok ke lebarnya —
-   ikut mengecil supaya tidak bertabrakan dengan kartu statistik di kiri. */
-@media (max-width: 1400px) {
-  :root {
-    --sidebar-w: 15.5rem;
-  }
+/* Heading gradient-clip. Selector `.line` wajib diduplikasi: SplitText
+   membungkus ulang tiap baris jadi elemen sendiri, dan tanpa aturan kedua
+   background-clip milik induk tidak diwarisi — teksnya jadi transparan total. */
+.h2-style,
+.h2-style .line {
+  background: linear-gradient(266deg, #3d3d3d 11.86%, #000000 92.59%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
-@media (max-width: 1150px) {
+.h2-style-white,
+.h2-style-white .line {
+  background: linear-gradient(89deg, #d5d5d5 7.42%, #ffffff 95.11%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Di bawah 767px rail runtuh jadi menu mobile, jadi sumbu skalanya berpindah:
+   `vw` yang tadinya pas di desktop jadi terlalu kecil di layar sempit. */
+@media (max-width: 767px) {
   :root {
-    --sidebar-w: 13.5rem;
+    --fs-body: clamp(0.91rem, 4.53vw, 2.17rem);
+
+    --radius-sm: clamp(0.43rem, 2.13vw, 1.02rem);
+    --radius: clamp(0.5rem, 2.5vw, 1.2rem);
+    --radius-lg: clamp(0.64rem, 3.2vw, 1.53rem);
+    --radius-xs: clamp(0.32rem, 1.6vw, 0.77rem);
+    --radius-pill: 999px;
+
+    --sidebar-left: 4vw;
+    --sidebar-w: auto;
+    --gutter: 5vw;
+    --content-left: 5vw;
+
+    --ls-big: -0.02em;
+    --ls-cta: -0.02em;
+    --ls-lead: -0.01em;
   }
 }

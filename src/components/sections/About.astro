@@ -1,51 +1,154 @@
 ---
+/**
+ * Garis perjalanan digambar TANGAN, bukan dihitung dari posisi kartu.
+ *
+ * Versi sebelumnya membangun bezier dari rect tiap kartu — hasilnya garis yang
+ * selalu "benar" tapi tak pernah punya karakter: lengkungnya seragam dan
+ * ayunannya sekecil jarak antar kartu. Referensinya justru sebaliknya: satu
+ * path tetap yang menyapu nyaris ke dua tepi, lalu KARTU-nya yang dipasang
+ * menempel ke simpul path itu (lihat modules/timeline-path.ts).
+ *
+ * Simpul dan path lahir dari daftar `nodes` yang sama, jadi keduanya tidak
+ * mungkin lepas sinkron.
+ */
 import Icon from '../Icon.astro';
 import { about, timeline } from '../../data/site';
+
+const VB_W = 1000;
+const VB_H = 2200;
+
+/**
+ * x/y dalam koordinat viewBox; `side` menentukan kartu duduk di kiri atau kanan
+ * simpul. Kartu digantung DI ATAS simpulnya (sudut bawahnya yang menempel),
+ * jadi simpul pertama harus turun setidaknya setinggi satu kartu — kalau tidak
+ * kartu pertama terdorong ke tepi atas dan menabrak kartu kedua.
+ */
+const nodes = [
+  { x: 880, y: 380, side: 'right' },
+  { x: 140, y: 670, side: 'left' },
+  { x: 880, y: 960, side: 'right' },
+  { x: 140, y: 1250, side: 'left' },
+  { x: 880, y: 1540, side: 'right' },
+  { x: 140, y: 1830, side: 'left' },
+  { x: 620, y: 2120, side: 'right' },
+] as const;
+
+/**
+ * Tiap ruas adalah satu kubik dengan titik kendali yang menahan arah horizontal
+ * di kedua ujungnya — itulah yang membuat garisnya berayun lebar, bukan
+ * memotong lurus dari simpul ke simpul.
+ */
+const path = nodes
+  .map((node, i) => {
+    if (i === 0) return `M ${node.x} ${node.y}`;
+    const prev = nodes[i - 1]!;
+    const reach = (node.y - prev.y) * 0.53;
+    return `C ${prev.x} ${prev.y + reach}, ${node.x} ${node.y - reach}, ${node.x} ${node.y}`;
+  })
+  .join(' ');
+
+const entries = timeline.slice(0, nodes.length);
 ---
 
 <section class="section about" id="about">
   <header class="section-head about-head">
-    <span class="label-pill">{about.label}</span>
-    <h2 class="section-title" data-reveal>
+    <span class="label-pill" data-label-pill>{about.label}</span>
+    <h2 class="section-title h2-style" data-reveal>
       {about.headline.map((line) => <span>{line}</span>)}
     </h2>
     <p class="section-intro" data-reveal data-reveal-stagger="0.05">{about.intro}</p>
   </header>
 
   <div class="timeline" data-timeline>
-    <!-- Garis penghubung digambar ulang oleh timeline-path.ts dari posisi
-         kartu yang sebenarnya, lalu "ditarik" dengan DrawSVGPlugin. -->
-    <svg class="timeline-svg" data-timeline-svg aria-hidden="true" fill="none">
-      <path data-timeline-path stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+    <!-- Dua salinan path yang identik ditumpuk. Yang bawah adalah jejak samar
+         sepanjang penuh; yang atas dipotong oleh pembungkus ber-`height` yang
+         di-scrub, jadi garisnya seolah terisi mengikuti scroll. -->
+    <svg class="timeline-svg" viewBox={`0 0 ${VB_W} ${VB_H}`} preserveAspectRatio="none" aria-hidden="true" fill="none">
+      <path class="timeline-trace" d={path} stroke-width="2.5" stroke-linecap="round"></path>
     </svg>
 
+    <div class="timeline-fill" data-timeline-fill aria-hidden="true">
+      <svg class="timeline-svg" viewBox={`0 0 ${VB_W} ${VB_H}`} preserveAspectRatio="none" fill="none">
+        <path class="timeline-lit" d={path} stroke-width="2.5" stroke-linecap="round"></path>
+      </svg>
+    </div>
+
+    {/* Simpul TIDAK ikut di dalam SVG. SVG-nya di-stretch (preserveAspectRatio
+        "none") supaya path mengisi kotak apa pun, dan stretch itu mengubah
+        lingkaran jadi elips. Sebagai elemen HTML yang diposisikan persen, titik
+        ini tetap bulat sempurna sambil duduk di koordinat yang sama. */}
     {
-      timeline.map((entry, i) => (
+      nodes.map((node, i) => (
+        <span
+          class="timeline-dot"
+          data-timeline-node={i}
+          aria-hidden="true"
+          style={`left:${(node.x / VB_W) * 100}%;top:${(node.y / VB_H) * 100}%`}
+        />
+      ))
+    }
+
+    {
+      entries.map((entry, i) => (
         <article
           class="timeline-card card"
-          data-timeline-card
-          data-side={i % 2 === 0 ? 'right' : 'left'}
-          data-tl-from="{'opacity':0,'y':60}"
-          data-tl-to="{'opacity':1,'y':0,'duration':0.8}"
-          data-tl-start="top 82%"
+          data-timeline-card={i}
+          data-side={nodes[i]!.side}
+          data-tl-from="{'opacity':0,'y':'10%','scale':0.6}"
+          data-tl-to="{'opacity':1,'y':'0%','scale':1,'duration':1.1,'delay':0.3,'ease':'expo.out'}"
+          data-tl-start="top 88%"
           data-tl-once
         >
-          <span class="timeline-year">'{entry.year}</span>
+          <span class="timeline-year">
+            <span class="timeline-tick" aria-hidden="true">
+              '
+            </span>
+            <span data-number-count={entry.year}>{entry.year}</span>
+          </span>
           <h3 class="timeline-title">{entry.title}</h3>
           <p class="timeline-body">{entry.body}</p>
           <footer class="timeline-meta">
-            <span class="timeline-avatar" aria-hidden="true" />
+            {/* Sepasang lingkaran bertumpuk, bukan satu — yang kedua digeser
+                masuk supaya saling menindih seperti tumpukan avatar. */}
+            <span class="timeline-avatars" aria-hidden="true">
+              <span class="timeline-avatar" />
+              <span class="timeline-avatar is-second" />
+            </span>
             <span class="timeline-handle">
               <strong>{entry.handle}</strong>
               <span>{entry.age}</span>
             </span>
-            <span class="timeline-more">
-              Read more
+            {/* Teksnya dititipkan di atribut, bukan diimpor ulang di modul —
+                mengimpor site.ts dari sisi klien akan menyeret seluruh isi
+                situs (work, paket, FAQ, testimoni) masuk ke bundle JS. */}
+            <button
+              class="timeline-more"
+              type="button"
+              data-story
+              data-story-year={entry.year}
+              data-story-title={entry.title}
+              data-story-text={entry.story ?? entry.body}
+            >
+              Baca selengkapnya
               <Icon name="arrow" size={12} />
-            </span>
+            </button>
           </footer>
         </article>
       ))
     }
   </div>
 </section>
+
+<!-- Popup cerita panjang. Satu dialog dipakai ulang untuk ketujuh kartu:
+     isinya ditulis ulang saat dibuka, jadi tidak ada tujuh salinan markup. -->
+<div class="story" data-story-dialog hidden>
+  <button class="story-scrim" type="button" data-story-close aria-label="Tutup"></button>
+  <div class="story-panel card" role="dialog" aria-modal="true" aria-labelledby="story-title">
+    <button class="story-close" type="button" data-story-close aria-label="Tutup">
+      <Icon name="x" size={16} />
+    </button>
+    <span class="story-year" data-story-year></span>
+    <h3 class="story-title" id="story-title" data-story-title></h3>
+    <p class="story-body" data-story-body></p>
+  </div>
+</div>

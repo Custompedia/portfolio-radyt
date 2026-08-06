@@ -26,6 +26,13 @@ export function initSmoothScroll(): Lenis | null {
   gsap.ticker.add(raf);
   gsap.ticker.lagSmoothing(0);
 
+  // Lenis memegang posisi scroll-nya sendiri; `window.scrollTo` dari luar akan
+  // dilawan balik di frame berikutnya. Handle-nya dibuka saat dev supaya
+  // pemeriksaan lewat DevTools bisa memindahkan halaman lewat jalur yang benar.
+  if (import.meta.env.DEV) {
+    (window as unknown as { lenis: Lenis }).lenis = lenis;
+  }
+
   return lenis;
 }
 

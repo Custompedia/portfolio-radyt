@@ -2,18 +2,26 @@
 /**
  * Hero berisi dua hal:
  *  1. konten yang memang hanya milik hero (wordmark, potret, headline, traits),
- *  2. kotak `.ghost` tak terlihat — cuma penanda posisi & ukuran awal untuk
- *     elemen sidebar. Lihat scripts/modules/ghost.ts.
+ *  2. penanda posisi untuk elemen sidebar — kotak `.ghost` tak terlihat untuk
+ *     kartu, dan baris label transparan untuk navigasi. Lihat modules/ghost.ts.
  *
  * Dipecah jadi DUA lapisan sticky karena sidebar (z-index 60) harus berada
  * di ATAS potret tapi di BAWAH headline & kartu traits — persis seperti
  * referensi, di mana baris navigasi tersembunyi di belakang konten tengah.
  *
  * Posisi ghost ditulis dalam vw/vh lewat custom property supaya komposisinya
- * ikut menyesuaikan ukuran layar tanpa media query berlapis.
+ * ikut menyesuaikan ukuran layar tanpa media query berlapis. Angkanya diukur
+ * langsung dari hero referensi pada 1492x882.
+ *
+ * Wordmark raksasa MENGERUT ke pill brand di pojok kiri atas saat scroll
+ * (lihat buildWordmarkMorph di modules/ghost.ts). Yang terbang bukan elemen
+ * sidebar-nya, melainkan wordmark ini sendiri: ia harus tetap di `.hero-back`
+ * supaya berada di belakang potret, sementara elemen sidebar z-index-nya di
+ * atas. Di ujung lintasan keduanya berimpit persis, jadi serah-terimanya
+ * cukup lewat silang-pudar — tanpa perlu menukar z-index di tengah scroll.
  */
 import Icon from '../Icon.astro';
-import { brand, hero } from '../../data/site';
+import { brand, hero, nav } from '../../data/site';
 
 interface GhostBox {
   id: string;
@@ -21,37 +29,42 @@ interface GhostBox {
   y: string;
   w: string;
   h: string;
-  row?: boolean;
 }
 
 /**
  * Hanya elemen yang memang terlihat di hero referensi yang diberi ghost:
- * kartu statistik, baris navigasi, tombol utama, dan teks blurb. Sisanya
- * (logo, ikon sosial, kartu email, marquee klien) sengaja tidak punya posisi
- * hero — mereka fade-in selama morph lewat `data-ghost-fade`.
+ * kartu statistik, tombol utama, dan teks blurb. Navigasi punya jalurnya
+ * sendiri (baris label transparan di bawah). Sisanya — logo, ikon sosial,
+ * kartu email, marquee klien — sengaja tidak punya posisi hero: mereka
+ * fade-in selama morph lewat `data-ghost-fade`.
  */
 const ghosts: GhostBox[] = [
   // Kartu statistik menempati kolom kiri, di luar jangkauan headline.
-  { id: 'stats-card-0', x: '15vw', y: '52vh', w: 'max(200px, 13.5vw)', h: '14vh' },
-  { id: 'stat-0', x: '16.4vw', y: '55vh', w: 'max(165px, 11vw)', h: '8vh' },
+  // Kartu pertama melebar, kartu kedua lebih tinggi — bentuknya memang tidak
+  // seragam di referensi, dan morph tipe `background` yang menanganinya.
+  { id: 'stats-card-0', x: '17.9vw', y: '64.5vh', w: '14.9vw', h: '12.3vh' },
+  { id: 'stat-0', x: '19.57vw', y: '67.3vh', w: '11.56vw', h: '6.7vh' },
 
-  { id: 'stats-card-1', x: '18vw', y: '70vh', w: 'max(170px, 11.5vw)', h: '18vh' },
-  { id: 'stat-1', x: '19.2vw', y: '73vh', w: 'max(145px, 9.5vw)', h: '9vh' },
-
-  // Baris navigasi naik ke bawah wordmark, di atas kepala — supaya tidak
-  // lagi tertabrak headline maupun kartu traits.
-  { id: 'menu-card', x: '2vw', y: '43.5vh', w: '96vw', h: '6.4vh', row: true },
+  { id: 'stats-card-1', x: '20.9vw', y: '79.3vh', w: '9.8vw', h: '17.9vh' },
+  { id: 'stat-1', x: '22.57vw', y: '82.1vh', w: '6.46vw', h: '12.3vh' },
 
   {
     id: 'cta-primary',
-    x: 'calc(50vw - var(--hero-btn-w) - 8px)',
-    y: '78vh',
+    x: 'calc(50vw - var(--hero-btn-w) - 0.28vw)',
+    y: '89.8vh',
     w: 'var(--hero-btn-w)',
     h: 'var(--hero-btn-h)',
   },
 
-  { id: 'tagline', x: '74.6vw', y: '80vh', w: '21.8vw', h: '10vh' },
+  { id: 'tagline', x: '72vw', y: '87vh', w: '22.8vw', h: '7.4vh' },
 ];
+
+/**
+ * Baris navigasi hero terbelah dua dengan celah di tengah untuk potret. Tanpa
+ * belahan ini, label tengah tertutup kepala dan tidak terbaca sama sekali.
+ */
+const navLeft = nav.slice(0, 3);
+const navRight = nav.slice(3);
 ---
 
 <section class="hero" id="home" data-hero>
@@ -60,42 +73,147 @@ const ghosts: GhostBox[] = [
     <!-- Wordmark ini merangkap dua peran: elemen intro (terbang masuk dari
          kanan, hurufnya naik satu per satu) sekaligus latar hero. Tiap huruf
          punya mask sendiri supaya bisa naik dari balik garis. -->
-    <p class="hero-wordmark" aria-label={brand.name} data-hero-wordmark data-tl-type="scroll" data-tl-trigger="[data-hero]" data-tl-start="0% top" data-tl-end="34% top" data-tl-from="{'opacity':1}" data-tl-to="{'yPercent':-45,'opacity':0}">
-      {
-        [...brand.name].map((letter) => (
-          <span class="wordmark-letter-mask" aria-hidden="true">
-            <span class="wordmark-letter" data-wordmark-letter>
-              {letter}
+    <!-- Dua lapis, dan pembagian tugasnya tegas:
+         `.hero-wordmark`       — kotak selebar layar, hanya untuk menengahkan;
+                                  transform-nya milik intro (terbang dari kanan).
+         `.hero-wordmark-inner` — kotak sepas teks; transform-nya milik morph
+                                  scroll. Dipisah karena keduanya menulis x/y,
+                                  dan karena skala morph hanya benar kalau titik
+                                  jangkarnya sudut kiri-atas TEKS, bukan sudut
+                                  kotak selebar layar. -->
+    <p class="hero-wordmark" aria-label={brand.name} data-hero-wordmark>
+      <span class="hero-wordmark-inner" data-wordmark-inner>
+        {
+          [...brand.name].map((letter) => (
+            <span class="wordmark-letter-mask" aria-hidden="true">
+              <span class="wordmark-letter" data-wordmark-letter>
+                {letter}
+              </span>
             </span>
-          </span>
-        ))
-      }
+          ))
+        }
+      </span>
     </p>
 
-    <div class="hero-portrait" data-tl-type="scroll" data-tl-trigger="[data-hero]" data-tl-start="0% top" data-tl-end="40% top" data-tl-from="{'opacity':1}" data-tl-to="{'scale':1.35,'opacity':0}">
+    <!-- Potret tidak mengecil, ia melebur: blur naik sampai 90px sementara
+         opacity turun ke 0.3 sepanjang 70% pertama hero. Efeknya foto berubah
+         jadi gradasi latar, bukan menghilang. -->
+    <div
+      class="hero-portrait"
+      data-tl-type="scroll"
+      data-tl-trigger="[data-hero]"
+      data-tl-start="0% top"
+      data-tl-end="70% top"
+      data-tl-from="{'filter':'blur(0px)','opacity':1}"
+      data-tl-to="{'filter':'blur(90px)','opacity':0.3}"
+      data-tl-desktop
+    >
       <!-- Foto placeholder berlisensi bebas; lihat public/images/README.md. -->
       <img src="/images/portrait.webp" alt="" width="720" height="896" fetchpriority="high" />
     </div>
 
     {
       ghosts.map((g) => (
-        <span
-          class="ghost"
-          data-ghost-target={g.id}
-          data-ghost-row={g.row ? 'menu' : undefined}
-          style={`--gx:${g.x};--gy:${g.y};--gw:${g.w};--gh:${g.h}`}
-        />
+        <span class="ghost" data-ghost-target={g.id} style={`--gx:${g.x};--gy:${g.y};--gw:${g.w};--gh:${g.h}`} />
       ))
     }
   </div>
 
   <!-- Lapisan depan: di atas sidebar, menutupi baris navigasi. -->
   <div class="hero-front">
-    <h1 class="hero-headline" data-tl-type="scroll" data-tl-trigger="[data-hero]" data-tl-start="0% top" data-tl-end="30% top" data-tl-from="{'opacity':1}" data-tl-to="{'y':-160,'opacity':0}">
+    <!--
+      Label di baris ini transparan: yang terlihat adalah link sidebar asli yang
+      diterbangkan ke posisinya oleh ghost.ts. Jadi baris ini murni penanda tata
+      letak — dan karena ia baris flex sungguhan, posisi tiap link tidak perlu
+      dihitung manual di runtime.
+    -->
+    <div class="hero-nav" aria-hidden="true">
+      <div class="hero-nav-group">
+        {
+          navLeft.map((item, i) => (
+            <>
+              {i > 0 && (
+                <span
+                  class="hero-nav-sep"
+                  data-tl-type="scroll"
+                  data-tl-trigger="[data-hero]"
+                  data-tl-start="0% top"
+                  data-tl-end={`${i + 1}% top`}
+                  data-tl-from="{'opacity':1,'y':0}"
+                  data-tl-to="{'autoAlpha':0,'y':'1vw'}"
+                  data-tl-desktop
+                />
+              )}
+              {/* Ikon ikut dirender walau tak terlihat: kotak label harus
+                  persis seukuran link sidebar, kalau tidak rasio lebarnya
+                  bukan 1 dan navigasi ikut mengecil saat terbang ke hero. */}
+              <span class="hero-nav-link" data-ghost-target={`nav-${item.id}`}>
+                <span class="hero-nav-icon">
+                  <Icon name={item.icon} size={14} />
+                </span>
+                {item.label}
+              </span>
+            </>
+          ))
+        }
+      </div>
+
+      <div class="hero-nav-group">
+        {
+          navRight.map((item, i) => (
+            <>
+              {i > 0 && (
+                <span
+                  class="hero-nav-sep"
+                  data-tl-type="scroll"
+                  data-tl-trigger="[data-hero]"
+                  data-tl-start="0% top"
+                  data-tl-end={`${i + 2}% top`}
+                  data-tl-from="{'opacity':1,'y':0}"
+                  data-tl-to="{'autoAlpha':0,'y':'1vw'}"
+                  data-tl-desktop
+                />
+              )}
+              {/* Ikon ikut dirender walau tak terlihat: kotak label harus
+                  persis seukuran link sidebar, kalau tidak rasio lebarnya
+                  bukan 1 dan navigasi ikut mengecil saat terbang ke hero. */}
+              <span class="hero-nav-link" data-ghost-target={`nav-${item.id}`}>
+                <span class="hero-nav-icon">
+                  <Icon name={item.icon} size={14} />
+                </span>
+                {item.label}
+              </span>
+            </>
+          ))
+        }
+      </div>
+    </div>
+
+    <h1
+      class="hero-headline"
+      data-tl-type="scroll"
+      data-tl-trigger="[data-hero]"
+      data-tl-start="5% top"
+      data-tl-end="10% top"
+      data-tl-from="{'opacity':1,'yPercent':0}"
+      data-tl-to="{'yPercent':-100,'autoAlpha':0}"
+      data-tl-desktop
+    >
       {hero.headline.map((line) => <span class="hero-headline-line">{line}</span>)}
     </h1>
 
-    <div class="hero-traits" data-tl-type="scroll" data-tl-trigger="[data-hero]" data-tl-start="0% top" data-tl-end="28% top" data-tl-from="{'opacity':1}" data-tl-to="{'x':140,'opacity':0}">
+    <!-- Kartu traits tidak sekadar memudar: ia mengerut ke arah kiri-atas,
+         seolah ditarik masuk ke rail. -->
+    <div
+      class="hero-traits glass-card"
+      data-tl-type="scroll"
+      data-tl-trigger="[data-hero]"
+      data-tl-start="5% top"
+      data-tl-end="20% top"
+      data-tl-from="{'opacity':1,'scale':1,'x':0,'y':0}"
+      data-tl-to="{'scale':0.3,'autoAlpha':0,'x':'-25vw','y':'-5vw'}"
+      data-tl-desktop
+    >
       {
         hero.traits.map((trait) => (
           <span class="hero-trait">
@@ -106,18 +224,33 @@ const ghosts: GhostBox[] = [
       }
     </div>
 
-    <p class="hero-eyebrow" data-tl-type="scroll" data-tl-trigger="[data-hero]" data-tl-start="0% top" data-tl-end="26% top" data-tl-from="{'opacity':1}" data-tl-to="{'y':70,'opacity':0}">
+    <p
+      class="hero-eyebrow"
+      data-tl-type="scroll"
+      data-tl-trigger="[data-hero]"
+      data-tl-start="5% top"
+      data-tl-end="10% top"
+      data-tl-from="{'opacity':1,'yPercent':0}"
+      data-tl-to="{'yPercent':-100,'autoAlpha':0}"
+      data-tl-desktop
+    >
       <span>{hero.eyebrow}</span>
       <span>{hero.eyebrowSecond}</span>
     </p>
 
-    <a class="btn hero-secondary" href={hero.ctaSecondary.href} data-tl-type="scroll" data-tl-trigger="[data-hero]" data-tl-start="0% top" data-tl-end="24% top" data-tl-from="{'opacity':1}" data-tl-to="{'y':60,'opacity':0}" data-button-hover>
+    <a
+      class="btn hero-secondary"
+      href={hero.ctaSecondary.href}
+      data-tl-type="scroll"
+      data-tl-trigger="[data-hero]"
+      data-tl-start="5% top"
+      data-tl-end="12% top"
+      data-tl-from="{'opacity':1}"
+      data-tl-to="{'y':'2vw','autoAlpha':0}"
+      data-tl-desktop
+      data-button-hover
+    >
       <span class="btn-label">{hero.ctaSecondary.label}</span>
     </a>
-
-    <span class="hero-scroll" aria-hidden="true" data-tl-type="scroll" data-tl-trigger="[data-hero]" data-tl-start="0% top" data-tl-end="14% top" data-tl-from="{'opacity':1}" data-tl-to="{'opacity':0}">
-      <Icon name="arrow" size={13} />
-      Scroll
-    </span>
   </div>
 </section>

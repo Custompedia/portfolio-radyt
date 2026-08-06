@@ -6,8 +6,8 @@ import { testimonials } from '../../data/site';
 <section class="section testimonials" id="clients">
   <header class="section-head testimonials-head">
     <div>
-      <span class="label-pill">{testimonials.label}</span>
-      <h2 class="section-title" data-reveal>
+      <span class="label-pill" data-label-pill>{testimonials.label}</span>
+      <h2 class="section-title h2-style" data-reveal>
         {testimonials.headline.map((line) => <span>{line}</span>)}
       </h2>
     </div>
@@ -44,5 +44,12 @@ import { testimonials } from '../../data/site';
     </div>
   </div>
 
-  <span class="testimonial-drag" data-testimonial-drag aria-hidden="true">Drag</span>
+  <span class="testimonial-drag" data-testimonial-drag aria-hidden="true">
+    <span class="testimonial-drag-mask">
+      <span class="testimonial-drag-track">
+        <span>Geser</span>
+        <span>Tahan</span>
+      </span>
+    </span>
+  </span>
 </section>

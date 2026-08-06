@@ -11,6 +11,14 @@ import { $ } from '../core/utils';
 
 let tween: gsap.core.Tween | null = null;
 
+/**
+ * Dipakai work-cards untuk `containerAnimation` — satu-satunya cara benar
+ * memicu ScrollTrigger pada elemen yang bergerak menyamping. Tanpa ini,
+ * ScrollTrigger memakai posisi vertikal kartu (yang tidak pernah berubah) dan
+ * kesembilan kartu terpicu bersamaan di awal.
+ */
+export const getWorkTween = (): gsap.core.Tween | null => tween;
+
 export const horizontalModule: AnimationModule = {
   name: 'horizontal',
   desktopOnly: true,

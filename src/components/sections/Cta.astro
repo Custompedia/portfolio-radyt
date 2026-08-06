@@ -1,45 +1,49 @@
 ---
-import Icon from '../Icon.astro';
+/**
+ * Judul empat baris dengan dua baris terakhir dipudarkan, lalu simulasi
+ * percakapan: avatar → titik-titik mengetik → gelembung pertanyaan → tombol.
+ *
+ * Rotator kata yang sebelumnya ada di sini dihapus. Ia menarik perhatian ke
+ * satu kata yang berganti-ganti, sementara section ini justru harus mengarahkan
+ * perhatian ke tombolnya.
+ */
 import { brand, cta } from '../../data/site';
 ---
 
 <section class="section cta" data-cta>
   <h2 class="cta-title">
     {cta.headline.map((line) => <span class="cta-line" data-reveal>{line}</span>)}
-    <!-- Kata terakhir berganti-ganti: satu kolom kata yang digeser per baris. -->
-    <span class="cta-rotator" data-cta-rotator aria-label={cta.accent}>
-      <span class="cta-rotator-track" data-cta-rotator-track>
-        {cta.rotating.map((word) => <span class="cta-rotator-word">{word}</span>)}
-      </span>
-    </span>
+    {cta.headlineSoft.map((line) => <span class="cta-line cta-line--soft" data-reveal>{line}</span>)}
   </h2>
 
   <div class="cta-body">
     <p class="cta-lead" data-reveal data-reveal-stagger="0.05">{cta.body}</p>
-    <ul class="cta-points">
-      {
-        cta.points.map((point) => (
-          <li
-            data-tl-from="{'opacity':0,'x':-20}"
-            data-tl-to="{'opacity':1,'x':0,'duration':0.6}"
-            data-tl-start="top 90%"
-            data-tl-once
-          >
-            <Icon name="check" size={15} />
-            {point}
-          </li>
-        ))
-      }
-    </ul>
-    <a
-      class="btn cta-button"
-      href={brand.bookingUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      data-button-hover
-      data-magnetic
-    >
-      <span class="btn-label">Minta Audit Gratis</span>
-    </a>
+
+    <!-- Urutannya dijalankan cta-chat.ts saat masuk viewport: titik-titik
+         berkedip dulu, baru gelembungnya menggantikan mereka, baru tombolnya. -->
+    <div class="cta-chat" data-cta-chat>
+      <span class="cta-chat-avatar" aria-hidden="true"></span>
+
+      <div class="cta-chat-stack">
+        <span class="cta-chat-typing" data-cta-typing aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+
+        <span class="cta-chat-bubble" data-cta-bubble>{cta.chat}</span>
+      </div>
+
+      <a
+        class="btn cta-button"
+        href={brand.bookingUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-cta-button
+        data-button-hover
+      >
+        <span class="btn-label">{cta.chatCta}</span>
+      </a>
+    </div>
   </div>
 </section>

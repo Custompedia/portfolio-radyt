@@ -16,8 +16,10 @@ const {
 } = Astro.props;
 ---
 
+<!-- lang="id": seluruh isi situs berbahasa Indonesia. Salah menandainya
+     membuat pembaca layar melafalkannya dengan fonem Inggris. -->
 <!doctype html>
-<html lang="en" class="js-loading">
+<html lang="id" class="js-loading">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -28,6 +30,13 @@ const {
     <meta property="og:type" content="website" />
     <meta name="theme-color" content="#d5cfbe" />
     <link rel="canonical" href={Astro.site} />
+
+    <!-- Favicon SVG inline: pill kuning dengan inisial, kembaran logo di
+         sidebar. Tanpa ini browser meminta /favicon.ico dan dapat 404. -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23ffff23'/%3E%3Ctext x='16' y='23' font-family='Helvetica,Arial,sans-serif' font-size='20' font-weight='700' text-anchor='middle' fill='%23000'%3ER%3C/text%3E%3C/svg%3E"
+    />
 
     <link rel="preload" href="/fonts/satoshi-700.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin />

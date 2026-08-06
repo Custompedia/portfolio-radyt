@@ -1,6 +1,6 @@
 import { ScrollTrigger } from './core/gsap';
 import type { AnimationModule } from './core/module';
-import { initAnchorLinks, initSmoothScroll } from './core/smooth-scroll';
+import { getLenis, initAnchorLinks, initSmoothScroll } from './core/smooth-scroll';
 import { debounce, isDesktop, prefersReducedMotion, whenFontsReady } from './core/utils';
 
 import { sidebarModule } from './modules/sidebar';
@@ -12,11 +12,14 @@ import { themeModule } from './modules/theme';
 import { timelinePathModule } from './modules/timeline-path';
 import { accordionModule } from './modules/accordion';
 import { testimonialSliderModule } from './modules/testimonial-slider';
-import { ctaRotatorModule, leadParagraphModule } from './modules/lead-paragraph';
+import { leadParagraphModule } from './modules/lead-paragraph';
+import { ctaChatModule } from './modules/cta-chat';
 import { navActiveModule } from './modules/nav-active';
-import { magneticModule, workCardsModule } from './modules/magnetic';
+import { workCardsModule } from './modules/work-cards';
 import { clipboardModule } from './modules/clipboard';
 import { mobileMenuModule } from './modules/mobile-menu';
+import { imageTrailModule } from './modules/image-trail';
+import { microModule } from './modules/micro';
 import { preloaderModule } from './modules/preloader';
 
 /**
@@ -35,12 +38,13 @@ const modules: AnimationModule[] = [
   themeModule,
   accordionModule,
   testimonialSliderModule,
-  ctaRotatorModule,
+  ctaChatModule,
   workCardsModule,
-  magneticModule,
   navActiveModule,
   clipboardModule,
   mobileMenuModule,
+  imageTrailModule,
+  microModule,
   preloaderModule,
 ];
 
@@ -70,12 +74,16 @@ function destroyModules(): void {
 
 let lastWidth = window.innerWidth;
 
+/**
+ * Hanya perubahan LEBAR yang berarti. Di mobile, bar browser yang menyusut
+ * saat scroll mengubah tinggi viewport terus-menerus — kalau itu ikut memicu
+ * rebuild, seluruh modul dibongkar-pasang di tengah gerakan jari.
+ */
 const handleResize = debounce(() => {
   const widthChanged = window.innerWidth !== lastWidth;
   lastWidth = window.innerWidth;
 
-  const needsRebuild = active.some((m) => m.rebuildOnResize);
-  if (!needsRebuild && !widthChanged) {
+  if (!widthChanged) {
     ScrollTrigger.refresh();
     return;
   }
@@ -110,6 +118,15 @@ async function boot(): Promise<void> {
 
   document.documentElement.classList.remove('js-loading');
   ScrollTrigger.refresh();
+
+  // Intro berjalan ~3,3 detik dan tidak akan pernah terlihat utuh kalau
+  // halaman sudah bisa di-scroll sejak frame pertama. Scroll dikunci selama
+  // durasi itu — hanya di desktop, karena intro-nya sendiri desktop-only.
+  const lenis = getLenis();
+  if (lenis && isDesktop() && !prefersReducedMotion()) {
+    lenis.stop();
+    window.setTimeout(() => lenis.start(), 3000);
+  }
 
   window.addEventListener('resize', handleResize, { passive: true });
 }

@@ -5,19 +5,19 @@
 .sidebar {
   position: fixed;
   top: var(--sidebar-pad);
-  left: var(--sidebar-pad);
+  left: var(--sidebar-left);
   z-index: 60;
   display: flex;
   width: var(--sidebar-w);
   flex-direction: column;
-  gap: 10px;
+  gap: 0.69vw;
   transform-origin: top left;
 }
 
 .nav-card {
   position: relative;
-  border-radius: var(--radius-lg);
-  padding: 16px;
+  border-radius: var(--radius-sm);
+  padding: 1.11vw;
 }
 
 /* Selama morph, baris navigasi harus lewat DI BELAKANG kartu lain — persis
@@ -40,8 +40,8 @@
   border-radius: inherit;
   background: var(--surface);
   border: var(--surface-border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   transition:
     background-color var(--theme-dur) var(--ease-out),
     border-color var(--theme-dur) var(--ease-out);
@@ -55,18 +55,18 @@
 .nav-top {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 12px 8px;
+  gap: 0.83vw 0.56vw;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
   align-self: start;
-  padding: 5px 10px 6px;
-  border-radius: var(--radius-sm);
+  padding: 0.33vw 0.69vw 0.4vw;
+  border-radius: var(--radius-xs);
   background: var(--yellow);
   color: var(--black);
-  font-size: 1.3rem;
+  font-size: 1.37vw;
   font-weight: 900;
   letter-spacing: -0.045em;
   line-height: 1;
@@ -76,12 +76,12 @@
 .brand-symbol {
   font-size: 0.5em;
   align-self: flex-start;
-  margin-left: 1px;
+  margin-left: 0.07vw;
 }
 
 .social {
   display: flex;
-  gap: 6px;
+  gap: 0.4vw;
   align-self: start;
   transform-origin: top left;
 }
@@ -89,9 +89,9 @@
 .social-link {
   display: grid;
   place-items: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 7px;
+  width: 1.72vw;
+  height: 1.72vw;
+  border-radius: var(--radius-xs);
   background: var(--surface-inner-alt);
   color: var(--fg);
   transition:
@@ -100,41 +100,70 @@
 }
 
 .social-link:hover {
-  transform: translateY(-2px);
+  transform: translateY(-0.13vw);
 }
 
 .nav-tagline {
   grid-column: 1 / -1;
   color: var(--fg);
-  font-size: 0.8125rem;
+  font-size: 0.86vw;
   line-height: 1.45;
   transform-origin: top left;
 }
 
 /* --- Stats --- */
 
+/* Dua kartu, gap nol, plus pembatas di antaranya: di sidebar keduanya terbaca
+   sebagai satu kartu, tapi tetap dua elemen supaya masing-masing bisa terbang
+   ke posisi hero-nya sendiri (di hero mereka memang terpisah jauh). */
 .nav-stats-row {
+  position: relative;
   display: flex;
-  gap: 8px;
+  gap: 0;
 }
 
 .nav-stat-card {
   flex: 1;
-  padding: 14px 10px;
+  padding: 0.97vw 0.69vw;
+}
+
+.nav-stats-row > .nav-stat-card:first-child .nav-card-bg {
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.nav-stats-row > .nav-stat-card:last-child .nav-card-bg {
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.nav-stats-sep {
+  position: absolute;
+  top: 22%;
+  bottom: 22%;
+  left: 50%;
+  z-index: 3;
+  width: 1px;
+  background: var(--fg);
+  opacity: 0.18;
+  pointer-events: none;
 }
 
 .nav-stat {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 0.2vw;
   text-align: center;
   transform-origin: top left;
 }
 
+/* Angka statistik kuning, labelnya tebal dan gelap — bukan sebaliknya. */
 .nav-stat-value {
-  color: var(--fg);
-  font-size: 1.6rem;
+  color: var(--yellow);
+  font-size: 1.72vw;
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.04em;
@@ -142,7 +171,7 @@
 
 .nav-stat-label {
   color: var(--fg);
-  font-size: 0.6875rem;
+  font-size: 0.73vw;
   font-weight: 700;
   line-height: 1.15;
 }
@@ -153,20 +182,24 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 5px;
+  gap: 0.33vw;
 }
 
 .nav-link {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 7px 12px;
+  gap: 0.46vw;
+  padding: 0.46vw 0.79vw;
   border-radius: var(--radius-pill);
   color: var(--fg);
-  font-size: 0.8125rem;
+  font-size: 1.25vw;
   font-weight: 700;
   letter-spacing: 0.01em;
+  /* Harus 1, sama seperti label kembarannya di hero. Kalau mewarisi 1.6 dari
+     body, kotak link sidebar jadi 12px lebih tinggi dan teksnya mendarat
+     melenceng ke bawah di akhir morph. */
+  line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
   transform-origin: top left;
@@ -189,11 +222,16 @@
   z-index: 1;
 }
 
+.nav-link:hover .nav-link-bg {
+  background: var(--surface-inner-hover);
+}
+
 .nav-link.is-active {
   color: var(--black);
 }
 
-.nav-link.is-active .nav-link-bg {
+.nav-link.is-active .nav-link-bg,
+.nav-link.is-active:hover .nav-link-bg {
   background: var(--yellow);
 }
 
@@ -202,7 +240,7 @@
 /* Tidak boleh overflow:hidden — anak-anaknya diterbangkan jauh keluar kartu
    oleh ghost.ts dan akan terpotong. Yang di-clip cukup .marquee saja. */
 .nav-clients {
-  padding: 12px 0;
+  padding: 0.83vw 0;
 }
 
 .marquee {
@@ -215,14 +253,15 @@
 .marquee-track {
   display: flex;
   width: max-content;
-  gap: 22px;
-  animation: marquee-scroll 26s linear infinite;
+  align-items: center;
+  gap: 1.53vw;
+  animation: marquee-scroll 25s linear infinite;
 }
 
 .marquee-item {
   color: var(--fg);
   font-family: var(--font-label);
-  font-size: 0.8125rem;
+  font-size: 0.86vw;
   font-weight: 600;
   letter-spacing: -0.01em;
   opacity: 0.75;
@@ -244,7 +283,7 @@
 /* --- Email --- */
 
 .nav-email {
-  padding: 10px;
+  padding: 0.69vw;
 }
 
 .nav-email-btn {
@@ -253,14 +292,22 @@
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: var(--radius);
+  gap: 0.69vw;
+  padding: 0.56vw 0.69vw;
+  border-radius: var(--radius-xs);
   background: var(--surface-inner);
   color: var(--fg);
-  font-size: 0.8125rem;
+  font-size: 0.93vw;
   transform-origin: top left;
   transition: background-color var(--theme-dur) var(--ease-out);
+}
+
+.nav-email-btn:hover .nav-email-text {
+  opacity: 0.35;
+}
+
+.nav-email-text {
+  transition: opacity var(--dur-fast) var(--ease-out);
 }
 
 .nav-email-icon {
@@ -289,17 +336,21 @@
 
 /* --- Buttons --- */
 
+/* Radius tombol sama dengan radius rumah (.83vw), bukan pill. Ini termasuk
+   detail yang paling terlihat: pill membuat halamannya terasa lebih lunak
+   daripada referensinya. */
 .btn {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 26px;
-  border-radius: var(--radius-pill);
+  padding: 0.9vw 1.5vw;
+  border-radius: var(--radius-lg);
   background: var(--yellow);
   color: var(--black);
-  font-size: 1rem;
-  font-weight: 700;
+  /* 1.18vw / w500 = 17.6px @1492, ukuran tombol referensi. */
+  font-size: 1.18vw;
+  font-weight: 500;
   line-height: 1;
   overflow: hidden;
   transform-origin: top left;
@@ -311,38 +362,10 @@
   display: block;
 }
 
-/* Isian gelap yang menyapu naik saat hover. Murni CSS: transisi transform
-   pada satu pseudo-element sudah cukup, tidak perlu modul JS sendiri. */
-.btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: var(--black);
-  transform: translate3d(0, 101%, 0);
-  transition: transform 0.45s var(--ease-out);
-}
-
-.btn[data-button-hover]:hover::after {
-  transform: translate3d(0, 0, 0);
-}
-
-.btn-label {
-  transition: color 0.3s var(--ease-out);
-}
-
-.btn[data-button-hover]:hover .btn-label {
-  color: var(--yellow);
-}
-
 .btn-outline {
   background: transparent;
   border: 1px solid currentColor;
   color: var(--fg);
-}
-
-.btn-outline::after {
-  background: var(--yellow);
 }
 
 /* ==========================================================================
@@ -363,41 +386,52 @@
    POTONGAN UI YANG DIPAKAI ULANG ANTAR SECTION
    ========================================================================== */
 
+/* Pill label dianimasikan dari width:0 ke width:auto, jadi ia harus
+   `overflow:hidden` dan `white-space:nowrap` — kalau tidak, teksnya membungkus
+   saat lebarnya nol dan kartunya melonjak tinggi di frame pertama. */
 .label-pill {
   display: inline-flex;
   align-items: center;
-  padding: 6px 14px 7px;
-  border: 1px solid currentColor;
+  overflow: hidden;
+  padding: 0.22vw 0.83vw 0.28vw;
+  border: 0.14vw solid var(--label-border);
   border-radius: var(--radius-pill);
   font-family: var(--font-label);
   font-size: var(--fs-label);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .section-head {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 22px;
+  gap: 1.53vw;
 }
 
 .section-title {
   font-size: var(--fs-h2);
-  font-weight: 900;
-  letter-spacing: -0.045em;
+  font-weight: 500;
+  line-height: var(--lh-h2);
+  letter-spacing: normal;
 }
 
+/* Pemenggalan baris judul ditulis tangan di site.ts. Tanpa `nowrap` baris
+   panjang membungkus lagi jadi dua, dan di section ber-sticky (work) tinggi
+   ekstra itu langsung mendorong judulnya keluar viewport. */
 .section-title span {
   display: block;
+  white-space: nowrap;
 }
 
 .section-intro {
   max-width: 34ch;
   color: var(--fg);
   font-size: var(--fs-body);
+  line-height: var(--lh-body);
 }
 
 .card {
@@ -405,8 +439,28 @@
   border-radius: var(--radius-lg);
   background: var(--surface);
   border: var(--surface-border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Kartu kaca hero. Nilainya DIUKUR dari kartu hero referensi, bukan dikira:
+   background rgba(194,184,172,.3), border 1px rgba(255,255,255,.2),
+   radius 8.36px (= .56vw @1492), backdrop blur 20px, teks putih.
+   Versi sebelumnya memakai gradien gelap sendiri demi kontras; itulah yang
+   membuat kartunya terbaca cokelat keruh di atas beige — bukan warna referensi.
+
+   simplified: kontras teks putih di sini ~1.9:1, persis seperti referensinya,
+   karena kartunya memang mengandalkan baju hitam subjek yang terseret masuk
+   lewat blur. Potret kita siluetnya lebih sempit, jadi di bagian yang jatuh ke
+   beige polos teksnya lebih lemah; naikkan alpha background ke ~.45 kalau
+   keterbacaan lebih penting daripada kemiripan warna. */
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  color: var(--white);
 }
 
 /* ==========================================================================
@@ -444,4 +498,118 @@
 
 .mobile-menu-trigger[aria-expanded='true'] span:last-child {
   transform: translateY(-3.5px) rotate(-45deg);
+}
+
+/* ==========================================================================
+   MOBILE — lantai ukuran
+
+   Sistem `vw` murni memberi proporsi yang benar di desktop dan runtuh di layar
+   sempit: 0.99vw yang jadi 15px di 1512 menyusut jadi 3,8px di 390. Token yang
+   memakai `clamp()` sudah punya lantai rem-nya sendiri; yang di bawah ini
+   adalah nilai vw mentah pada primitif bersama, jadi harus dilantai manual.
+
+   Rail sendiri berubah jadi panel menu penuh layar di lebar ini, jadi ukurannya
+   bukan lagi versi kecil dari sidebar — ia memang harus seukuran menu.
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .sidebar {
+    gap: 10px;
+  }
+
+  .nav-card {
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  /* Tombol tutup menu melayang di kanan-atas layar. Tanpa ruang ekstra di
+     sini, ikon sosial terakhir duduk tepat di bawahnya dan tidak bisa ditekan. */
+  .nav-top {
+    gap: 12px 8px;
+    padding-right: 58px;
+  }
+
+  .brand {
+    padding: 5px 10px 6px;
+    border-radius: 8px;
+    font-size: 1.35rem;
+  }
+
+  .social {
+    gap: 6px;
+  }
+
+  .social-link {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+  }
+
+  .nav-tagline {
+    font-size: 0.875rem;
+  }
+
+  .nav-stat-card {
+    padding: 14px 10px;
+  }
+
+  .nav-stat-value {
+    font-size: 1.75rem;
+  }
+
+  .nav-stat-label {
+    font-size: 0.75rem;
+  }
+
+  .nav-menu ul {
+    gap: 6px;
+  }
+
+  .nav-link {
+    gap: 8px;
+    padding: 10px 14px;
+    font-size: 1rem;
+  }
+
+  .nav-clients {
+    padding: 12px 0;
+  }
+
+  .marquee-track {
+    gap: 20px;
+  }
+
+  .marquee-item {
+    font-size: 0.875rem;
+  }
+
+  .nav-email {
+    padding: 10px;
+  }
+
+  .nav-email-btn {
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.9375rem;
+  }
+
+  .btn {
+    padding: 15px 22px;
+    border-radius: 12px;
+    font-size: 0.9375rem;
+  }
+
+  .label-pill {
+    padding: 5px 12px 6px;
+    border-width: 1.5px;
+  }
+
+  .section-head {
+    gap: 16px;
+  }
+
+  .card {
+    border-radius: 14px;
+  }
 }

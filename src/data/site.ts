@@ -25,6 +25,12 @@ export interface TimelineEntry {
   body: string;
   handle: string;
   age: string;
+  /**
+   * Versi panjang yang muncul di popup "Baca selengkapnya". Kalau kosong,
+   * popup jatuh ke `body` — isinya jadi sama persis dengan kartunya, jadi
+   * TODO: isi ini kalau tombolnya memang mau berguna.
+   */
+  story?: string;
 }
 
 export interface WorkItem {
@@ -34,6 +40,18 @@ export interface WorkItem {
   tags: string[];
   accent: string;
   href: string;
+  /**
+   * Media kartu. Selama ketiganya kosong, kartu memakai mockup CSS di atas
+   * warna `accent` sebagai placeholder — tidak ada gambar rusak, dan slot-nya
+   * sudah siap.
+   *
+   *   image     — poster diam, juga jadi frame pertama sebelum video jalan
+   *   video     — latar mp4 yang berputar (disuntik lazy dari data-src)
+   *   videoWebm — sumber webm, dipakai duluan kalau browser mendukungnya
+   */
+  image?: string;
+  video?: string;
+  videoWebm?: string;
 }
 
 export interface Capability {
@@ -50,6 +68,9 @@ export interface PricingTier {
   features: string[];
   footnote: string;
   featured?: boolean;
+  /** Nama ikon di Icon.astro. Tiap paket harus beda — dua ikon yang sama
+   *  membuat ketiganya terbaca sebagai varian dari hal yang sama. */
+  icon: string;
 }
 
 export interface Testimonial {
@@ -257,7 +278,10 @@ export const work = {
       accent: '#241a2e',
       href: '#',
     },
-  ] satisfies WorkItem[],
+    // `as`, bukan `satisfies`: satisfies mempertahankan tipe literal array ini,
+    // jadi field media opsional (image/video/videoWebm) terbaca "tidak ada" di
+    // Work.astro sampai ada satu item yang benar-benar mengisinya.
+  ] as WorkItem[],
 };
 
 export const capabilities = {
@@ -265,7 +289,7 @@ export const capabilities = {
   label: 'Lima pilar layanan',
   /** Kata bertanda `[chip]` diganti chip ikon oleh WhatYouGet.astro. */
   paragraph:
-    'Strategi, eksekusi, dan [chip] pengukuran dijalankan satu atap — supaya merek Anda [chip] tumbuh dengan arah yang [chip] jelas, bukan sekadar [chip] ramai sesaat.',
+    'Strategi, [chip] eksekusi, dan pengukuran [chip] dijalankan satu atap — supaya merek Anda [chip] tumbuh dengan arah [chip] yang jelas, bukan [chip] sekadar ramai sesaat.',
   items: [
     {
       title: 'Branding',
@@ -303,6 +327,7 @@ export const services = {
   tiers: [
     {
       name: 'Brand Audit',
+      icon: 'search',
       price: 'Rp 5jt',
       unit: '/ sekali jalan',
       intro: 'Pemeriksaan menyeluruh kanal dan belanja iklan yang sedang berjalan.',
@@ -317,6 +342,7 @@ export const services = {
     },
     {
       name: 'Retainer Bulanan',
+      icon: 'gauge',
       price: 'Rp 15jt',
       unit: '/ bulan',
       intro: 'Tim kami jadi bagian dari tim Anda. Minimal kerja sama tiga bulan.',
@@ -333,6 +359,7 @@ export const services = {
     },
     {
       name: 'Proyek Khusus',
+      icon: 'spark',
       price: 'Ngobrol Dulu',
       intro: 'Rebranding, peluncuran, atau aktivasi berskala besar. Tiap cakupan berbeda.',
       features: [
@@ -349,16 +376,16 @@ export const services = {
 };
 
 export const cta = {
+  /** Dua baris pertama gelap, dua baris `soft` dipudarkan hampir jadi latar.
+   *  Empat baris total — itu yang memberi judulnya arah turun ke tombol. */
   headline: ['Kanal Anda', 'Sudah Ramai —'],
-  accent: 'Tapi Menjual?',
-  rotating: ['Menjual?', 'Terarah?', 'Efisien?'],
+  headlineSoft: ['Tapi Apakah', 'Menjual?'],
   body:
     'Ramai belum tentu tumbuh. Kami baca kanal Anda dan tunjukkan mana yang sebenarnya bekerja — gratis, tanpa kewajiban lanjut.',
-  points: [
-    'Rekaman pembacaan kanal Anda',
-    'Daftar perbaikan sesuai prioritas',
-    'Tanpa deck penjualan, tanpa kewajiban',
-  ],
+  /** Isi gelembung chat. Harus berupa pertanyaan: tombol di sebelahnya baru
+   *  terbaca sebagai jawaban kalau ada yang ditanyakan lebih dulu. */
+  chat: 'Ada yang mau dibangun?',
+  chatCta: 'Ngobrol Yuk',
 };
 
 export const testimonials = {
@@ -484,7 +511,3 @@ export const faq = {
   ] satisfies FaqItem[],
 };
 
-export const footer = {
-  headline: 'Ada yang mau dibangun?',
-  body: 'Cara tercepat memulai adalah ngobrol dua puluh menit. Tanpa deck, tanpa tekanan.',
-};

@@ -16,8 +16,25 @@ import { brand, hero, nav, stats, clients } from '../data/site';
 <aside class="sidebar" data-sidebar>
   <div class="nav-card nav-top">
     <span class="nav-card-bg" data-ghost-fade></span>
-    <a class="brand" href="#home">
-      <span class="brand-name">{brand.name}</span><span class="brand-symbol">{brand.symbol}</span>
+    <!-- Pill ini adalah TITIK MENDARAT wordmark raksasa. Jendelanya 36.7%–40%
+         (= 110vh–120vh dari puncak hero) sengaja berakhir persis di ujung
+         morph: saat pill mencapai opacity penuh, wordmark yang mengerut sudah
+         berimpit di atasnya dan tinggal padam. Kalau jendelanya dimulai
+         setelah morph selesai (versi lama: 40%–44%), ada satu jeda di mana
+         pojok kiri atas benar-benar kosong.
+         `data-brand-name` dibaca ghost.ts sebagai kotak tujuan. -->
+    <a
+      class="brand"
+      href="#home"
+      data-tl-type="scroll"
+      data-tl-trigger="[data-hero]"
+      data-tl-start="36.7% top"
+      data-tl-end="40% top"
+      data-tl-from="{'autoAlpha':0}"
+      data-tl-to="{'autoAlpha':1}"
+      data-tl-desktop
+    >
+      <span class="brand-name" data-brand-name>{brand.name}</span><span class="brand-symbol">{brand.symbol}</span>
     </a>
     <div class="social" data-ghost-fade>
       {
@@ -32,7 +49,9 @@ import { brand, hero, nav, stats, clients } from '../data/site';
   </div>
 
   <!-- Dua kartu terpisah, bukan satu kartu dengan pemisah: di hero keduanya
-       terbang dari posisi berbeda, jadi masing-masing butuh lapisan bg sendiri. -->
+       terbang dari posisi berbeda, jadi masing-masing butuh lapisan bg sendiri.
+       Di sidebar gap-nya nol dan sisi yang bertemu kehilangan radius, jadi
+       keduanya terbaca sebagai satu kartu dengan garis pemisah di tengah. -->
   <div class="nav-stats-row">
     {
       stats.map((stat, i) => (
@@ -45,6 +64,17 @@ import { brand, hero, nav, stats, clients } from '../data/site';
         </div>
       ))
     }
+    <span
+      class="nav-stats-sep"
+      aria-hidden="true"
+      data-tl-type="scroll"
+      data-tl-trigger="[data-hero]"
+      data-tl-start="39% top"
+      data-tl-end="41% top"
+      data-tl-from="{'opacity':0}"
+      data-tl-to="{'opacity':0.18}"
+      data-tl-desktop
+    />
   </div>
 
   <nav class="nav-card nav-menu" aria-label="Primary">

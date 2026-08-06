@@ -1,4 +1,14 @@
 ---
+/**
+ * Kartu proyek disusun berlapis, persis seperti referensi:
+ *
+ *   poster <img>  →  <video> latar  →  mockup placeholder  →  scrim + konten
+ *   →  overlay peredup
+ *
+ * Tiga lapisan pertama saling menggantikan sesuai media yang tersedia di
+ * site.ts. Selama belum ada aset asli, mockup CSS yang tampil — bukan gambar
+ * rusak, dan markup-nya tidak perlu diubah saat asetnya masuk.
+ */
 import Icon from '../Icon.astro';
 import { work } from '../../data/site';
 ---
@@ -9,8 +19,8 @@ import { work } from '../../data/site';
   <div class="work-sticky" data-work-sticky>
     <header class="work-head">
       <div class="work-head-left">
-        <span class="label-pill">{work.label}</span>
-        <h2 class="section-title" data-reveal>
+        <span class="label-pill" data-label-pill>{work.label}</span>
+        <h2 class="section-title h2-style-white" data-reveal>
           {work.headline.map((line) => <span>{line}</span>)}
         </h2>
       </div>
@@ -22,27 +32,62 @@ import { work } from '../../data/site';
         {
           work.items.map((item, i) => (
             <a class="work-card" href={item.href} style={`--accent:${item.accent}`} data-work-card>
-              <div class="work-card-top">
-                <span class="work-index">{String(i + 1).padStart(2, '0')}</span>
-                <span class="work-tags">
-                  {item.tags.map((tag) => (
-                    <span class="work-tag">{tag}</span>
-                  ))}
-                </span>
+              {item.image && <img class="work-poster" src={item.image} alt="" loading="lazy" decoding="async" />}
+
+              {/* preload="none" + sumber lewat data-*: video baru diambil saat
+                  kartunya benar-benar mendekat, bukan sembilan sekaligus di
+                  awal halaman. */}
+              {item.video && (
+                <video
+                  class="work-bg"
+                  muted
+                  loop
+                  playsinline
+                  preload="none"
+                  data-src={item.video}
+                  data-webm={item.videoWebm}
+                />
+              )}
+
+              {!item.image && !item.video && (
+                <div class="work-card-visual" aria-hidden="true">
+                  <span class="work-card-glow" />
+                  <span class="work-card-mock">
+                    <span class="work-card-mock-bar" />
+                    <span class="work-card-mock-line" />
+                    <span class="work-card-mock-line is-short" />
+                    <span class="work-card-mock-block" />
+                  </span>
+                </div>
+              )}
+
+              <div class="work-card-content">
+                <div class="work-card-top">
+                  <span class="work-index">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="work-tags">
+                    {item.tags.map((tag) => (
+                      <span class="work-tag">{tag}</span>
+                    ))}
+                  </span>
+                </div>
+
+                <div class="work-card-body">
+                  <span class="work-card-kind">{item.kind}</span>
+                  <h3 class="work-card-title">{item.title}</h3>
+                  <p class="work-card-blurb">{item.blurb}</p>
+                  <span class="work-card-arrow">
+                    {/* Dua ikon bertumpuk di jendela ber-overflow-hidden: saat
+                        hover keduanya digeser diagonal, jadi panah lama keluar
+                        dan panah baru masuk dari sudut berlawanan. */}
+                    <span class="work-card-arrow-slide">
+                      <Icon name="arrow" size={16} />
+                      <Icon name="arrow" size={16} />
+                    </span>
+                  </span>
+                </div>
               </div>
 
-              <div class="work-card-visual" aria-hidden="true">
-                <span class="work-card-glow" />
-              </div>
-
-              <div class="work-card-body">
-                <span class="work-card-kind">{item.kind}</span>
-                <h3 class="work-card-title">{item.title}</h3>
-                <p class="work-card-blurb">{item.blurb}</p>
-                <span class="work-card-arrow">
-                  <Icon name="arrow" size={16} />
-                </span>
-              </div>
+              <span class="work-image-overlay" aria-hidden="true" />
             </a>
           ))
         }

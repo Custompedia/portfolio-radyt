@@ -5,9 +5,9 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
+import { Flip } from 'gsap/Flip';
 
-gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin);
+gsap.registerPlugin(ScrollTrigger, SplitText, Flip);
 
 // Hanya saat dev: memudahkan memeriksa & men-seek timeline dari konsol
 // devtools. Tidak ikut ter-bundle ke produksi.
@@ -15,4 +15,4 @@ if (import.meta.env.DEV) {
   (window as unknown as { gsap: typeof gsap }).gsap = gsap;
 }
 
-export { gsap, ScrollTrigger, SplitText, DrawSVGPlugin };
+export { gsap, ScrollTrigger, SplitText, Flip };

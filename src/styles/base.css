@@ -104,14 +104,34 @@ a {
   text-decoration: none;
 }
 
+/* Tracking dibiarkan `normal`. Referensinya hanya pernah memakai tracking
+   negatif, dan hanya pada tipe terbesar (--ls-big / --ls-cta / --ls-lead);
+   memaksa -0.03em ke semua heading membuat ukuran menengah terlihat sesak.
+   `text-wrap: balance` juga tidak dipakai: pemenggalan barisnya ditulis
+   tangan dengan <br>, dan balance akan melawan pemenggalan itu. */
 h1,
 h2,
 h3,
 h4 {
   font-weight: 700;
-  line-height: var(--lh-heading);
-  letter-spacing: -0.03em;
-  text-wrap: balance;
+  line-height: var(--lh-h2);
+  letter-spacing: normal;
+}
+
+h1 {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-h1);
+}
+
+h2 {
+  font-size: var(--fs-h2);
+  font-weight: 500;
+}
+
+h3 {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: var(--lh-h3);
 }
 
 ul {
@@ -171,12 +191,50 @@ html.lenis body {
   will-change: transform;
 }
 
+/* Reveal per-karakter di paragraf What You Get. Dibungkus splitter sendiri
+   (bukan SplitText) karena kartu kapabilitas ditanam di dalam paragrafnya dan
+   harus dilewati utuh. */
+.anim-char {
+  display: inline-block;
+  will-change: transform, opacity, color;
+}
+
+/* Lapisan kata di luar karakter. Tanpa ini tiap huruf jadi titik putus baris
+   yang sah dan paragrafnya memenggal kata di tengah. */
+.lead-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Word-swap hover tombol: teks asli dan klonnya ditumpuk, keduanya dipotong
+   oleh jendela setinggi satu baris. */
+.word-swap {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.word-swap-clone {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.word {
+  display: inline-block;
+  will-change: transform;
+}
+
 /* Odometer angka: tiap digit adalah kolom 0–9 di dalam jendela setinggi
    satu baris. */
+/* Angka tabular wajib: tiap digit harus punya lebar yang sama, kalau tidak
+   kolom digit bergeser ke samping saat angkanya berputar. */
 .digit-row {
   display: inline-flex;
   align-items: flex-start;
   overflow: hidden;
+  font-variant-numeric: tabular-nums;
 }
 
 .digit-mask {

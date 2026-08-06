@@ -1,148 +1,214 @@
-import { gsap } from '../core/gsap';
+import { gsap, ScrollTrigger } from '../core/gsap';
 import type { AnimationModule } from '../core/module';
-import { $, $$, isDesktop } from '../core/utils';
+import { $, $$, isDesktop, prefersReducedMotion } from '../core/utils';
 
 /**
- * Garis yang menghubungkan kartu-kartu timeline.
+ * TIMELINE
  *
- * Bentuknya huruf S berkelok: berangkat dari tepi DALAM satu kartu, menyeberang
- * ke sisi lain, lalu masuk ke tepi dalam kartu berikutnya. Kartu di kanan
- * disambung di tepi kirinya, kartu di kiri disambung di tepi kanannya — jadi
- * garisnya benar-benar menempel ke kartu, bukan melayang di selokan tengah.
+ * Path-nya tetap — digambar di About.astro dari daftar simpul. Modul ini
+ * mengerjakan tiga hal:
  *
- * Path-nya tidak ditulis tangan: dihitung dari posisi kartu yang sebenarnya,
- * jadi tetap benar berapa pun jumlah entri dan tinggi tiap kartu. Setelah itu
- * "ditarik" dengan DrawSVG mengikuti scroll.
+ *  1. MENEMPELKAN kartu ke simpul. Kartu di-`position:absolute`; sudut yang
+ *     bernama (bawah-kiri atau bawah-kanan, tergantung sisi simpul) diletakkan
+ *     tepat di simpulnya. Karena posisinya dibaca dari rect simpul yang
+ *     sebenarnya, komposisinya bertahan di lebar layar mana pun tanpa satu pun
+ *     media query.
+ *
+ *  2. MENGISI garis lewat tinggi pembungkus, bukan DrawSVG. Alasannya bukan
+ *     selera: pengisiannya bertahap dalam TUJUH langkah dengan durasi tidak
+ *     rata, jadi garisnya berhenti sejenak di tiap simpul. Scrub linear
+ *     kehilangan ritme itu sepenuhnya.
+ *
+ *  3. Popup cerita panjang.
  */
-
-const SVG_NS = 'http://www.w3.org/2000/svg';
-
-/** Seberapa jauh titik kendali ditarik vertikal, rasio terhadap jarak antar titik. */
-const BEND = 0.55;
 
 /**
- * Dorongan mendatar titik kendali, rasio terhadap celah antar kolom kartu.
- * Inilah yang membuat kurvanya benar-benar berkelok: titik kendali kedua ujung
- * saling menyilang, jadi garisnya menggembung keluar dulu sebelum masuk ke
- * kartu berikutnya. Tanpa ini, dengan kartu selebar ini ayunannya cuma puluhan
- * piksel dan hasilnya terlihat seperti garis lurus.
+ * Tujuh langkah, durasi sengaja tidak rata. Angka-angka ini yang membuat
+ * garisnya terasa "singgah" di tiap simpul alih-alih meluncur rata.
  */
-const SWING = 1.15;
+const FILL_STEPS = [
+  { height: '14%', duration: 2 },
+  { height: '28%', duration: 1 },
+  { height: '42%', duration: 1.5 },
+  { height: '56%', duration: 2 },
+  { height: '70%', duration: 1 },
+  { height: '84%', duration: 1.5 },
+  { height: '100%', duration: 2 },
+];
 
-let tween: gsap.core.Tween | null = null;
+/** Jarak kartu dari simpulnya, dalam piksel. */
+const NODE_GAP = 18;
 
-interface Point {
-  x: number;
-  y: number;
-  /** +1 bila garis meninggalkan kartu ke kanan, -1 bila ke kiri. */
-  dir: number;
+const triggers: ScrollTrigger[] = [];
+let closeStory: (() => void) | null = null;
+
+/**
+ * Fase baca lalu fase tulis, sama seperti ghost engine: semua rect diambil
+ * saat DOM masih bersih, baru posisinya ditulis. Kalau dicampur, kartu ke-N
+ * diukur setelah kartu ke-1 sudah pindah.
+ */
+function anchorCards(container: HTMLElement): void {
+  const cards = $$<HTMLElement>('[data-timeline-card]', container);
+  const wrapRect = container.getBoundingClientRect();
+
+  const placements = cards.map((card) => {
+    const index = Number(card.dataset.timelineCard);
+    const node = $(`[data-timeline-node="${index}"]`, container);
+    if (!node) return null;
+
+    const nodeRect = node.getBoundingClientRect();
+    const nodeX = nodeRect.left + nodeRect.width / 2 - wrapRect.left;
+    const nodeY = nodeRect.top + nodeRect.height / 2 - wrapRect.top;
+
+    // Simpul di kanan → kartu duduk di sebelah KIRI-nya, sudut kanan-bawahnya
+    // yang menempel. Simpul di kiri → kebalikannya.
+    const onRight = card.dataset.side === 'right';
+    const left = onRight ? nodeX - card.offsetWidth - NODE_GAP : nodeX + NODE_GAP;
+
+    return {
+      card,
+      left: Math.max(0, Math.min(left, wrapRect.width - card.offsetWidth)),
+      top: Math.max(0, nodeY - card.offsetHeight),
+    };
+  });
+
+  for (const p of placements) {
+    if (!p) continue;
+    p.card.style.left = `${p.left}px`;
+    p.card.style.top = `${p.top}px`;
+  }
+}
+
+function buildFill(container: HTMLElement): void {
+  const fill = $('[data-timeline-fill]', container);
+  if (!fill) return;
+
+  const tween = gsap.fromTo(
+    fill,
+    { height: '0%' },
+    {
+      keyframes: FILL_STEPS,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: container,
+        start: 'top 90%',
+        end: 'bottom 80%',
+        scrub: 1,
+      },
+    },
+  );
+  if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
+
+  const dots = $$('[data-timeline-node]', container);
+  if (dots.length === 0) return;
+
+  const dotTween = gsap.fromTo(
+    dots,
+    { scale: 0, transformOrigin: 'center' },
+    {
+      scale: 1,
+      ease: 'back.out(2)',
+      duration: 0.6,
+      stagger: { each: 0.5 },
+      scrollTrigger: {
+        trigger: container,
+        start: 'top 90%',
+        end: 'bottom 80%',
+        scrub: 1,
+      },
+    },
+  );
+  if (dotTween.scrollTrigger) triggers.push(dotTween.scrollTrigger);
 }
 
 /**
- * Kurva S: titik kendali ditarik VERTIKAL dari kedua ujung. Itu yang membuat
- * garisnya keluar-masuk kartu secara mendatar dan berkelok di antaranya.
+ * Dipasang sekali seumur halaman, bukan tiap init(): modul ini dibangun ulang
+ * saat resize, dan listener yang dipasang ulang akan menumpuk.
  */
-function buildPathData(points: Point[], gap: number): string {
-  if (points.length < 2) return '';
+let storyBound = false;
 
-  const swing = gap * SWING;
-  let d = `M ${points[0]!.x.toFixed(1)} ${points[0]!.y.toFixed(1)}`;
+function buildStory(): void {
+  if (storyBound) return;
 
-  for (let i = 1; i < points.length; i += 1) {
-    const a = points[i - 1]!;
-    const b = points[i]!;
-    const bend = (b.y - a.y) * BEND;
-    const c1x = a.x + a.dir * swing;
-    const c2x = b.x + b.dir * swing;
-    d +=
-      ` C ${c1x.toFixed(1)} ${(a.y + bend).toFixed(1)},` +
-      ` ${c2x.toFixed(1)} ${(b.y - bend).toFixed(1)},` +
-      ` ${b.x.toFixed(1)} ${b.y.toFixed(1)}`;
-  }
-  return d;
+  const dialog = $<HTMLElement>('[data-story-dialog]');
+  const panel = $<HTMLElement>('.story-panel');
+  const yearEl = $('[data-story-year]');
+  const titleEl = $('[data-story-title]');
+  const bodyEl = $('[data-story-body]');
+  if (!dialog || !panel || !yearEl || !titleEl || !bodyEl) return;
+
+  storyBound = true;
+  let lastTrigger: HTMLElement | null = null;
+
+  const open = (source: HTMLElement) => {
+    lastTrigger = source;
+    yearEl.textContent = `'${source.dataset.storyYear ?? ''}`;
+    titleEl.textContent = source.dataset.storyTitle ?? '';
+    bodyEl.textContent = source.dataset.storyText ?? '';
+
+    dialog.hidden = false;
+    gsap.fromTo(dialog, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out' });
+    gsap.fromTo(panel, { y: 24, scale: 0.96 }, { y: 0, scale: 1, duration: 0.45, ease: 'expo.out' });
+    $<HTMLElement>('.story-close', dialog)?.focus();
+  };
+
+  const close = () => {
+    if (dialog.hidden) return;
+    gsap.to(dialog, {
+      opacity: 0,
+      duration: 0.2,
+      ease: 'power2.in',
+      onComplete: () => {
+        dialog.hidden = true;
+        lastTrigger?.focus();
+        lastTrigger = null;
+      },
+    });
+  };
+
+  closeStory = close;
+
+  $$<HTMLElement>('[data-story]').forEach((button) => {
+    button.addEventListener('click', () => open(button));
+  });
+
+  $$<HTMLElement>('[data-story-close]', dialog).forEach((button) => {
+    button.addEventListener('click', close);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') close();
+  });
 }
 
 export const timelinePathModule: AnimationModule = {
-  name: 'timeline-path',
-  desktopOnly: true,
-  skipOnReducedMotion: true,
+  name: 'timeline',
   rebuildOnResize: true,
 
   init() {
-    const container = $('[data-timeline]');
-    const svg = $<SVGSVGElement>('[data-timeline-svg]');
-    const path = $<SVGPathElement>('[data-timeline-path]');
-    const cards = $$('[data-timeline-card]');
-    if (!container || !svg || !path || cards.length < 2 || !isDesktop()) return;
+    const container = $<HTMLElement>('[data-timeline]');
+    if (!container) return;
 
-    const box = container.getBoundingClientRect();
-    svg.setAttribute('viewBox', `0 0 ${box.width} ${box.height}`);
-    svg.setAttribute('width', String(box.width));
-    svg.setAttribute('height', String(box.height));
+    // Popup selalu dipasang — ia fitur, bukan gerakan. Modul ini karena itu
+    // tidak boleh ditandai `skipOnReducedMotion`: menonaktifkan seluruhnya
+    // ikut mematikan tombol "Baca selengkapnya".
+    buildStory();
 
-    const points: Point[] = cards.map((card) => {
-      const rect = card.getBoundingClientRect();
-      const onRight = card.dataset.side === 'right';
-      // Titik sambung menempel di tepi kartu yang menghadap ke tengah halaman:
-      // kartu kanan disambung di tepi KIRI-nya, kartu kiri di tepi KANAN-nya.
-      const x = onRight ? rect.left - box.left : rect.right - box.left;
-      return { x, y: rect.top - box.top + rect.height / 2, dir: onRight ? -1 : 1 };
-    });
+    // Di bawah 768px dan pada reduced motion, kartunya kembali mengalir normal
+    // dan garisnya disembunyikan — tidak ada yang perlu ditempelkan.
+    if (!isDesktop() || prefersReducedMotion()) return;
 
-    // Celah antar kolom kartu — jadi acuan seberapa lebar kurva boleh mengayun.
-    const xs = points.map((p) => p.x);
-    const gap = Math.max(40, Math.max(...xs) - Math.min(...xs));
-
-    path.setAttribute('d', buildPathData(points, gap));
-
-    // Titik penanda tepat di tempat garis menyentuh kartu.
-    svg.querySelectorAll('circle').forEach((c) => c.remove());
-    for (const point of points) {
-      const dot = document.createElementNS(SVG_NS, 'circle');
-      dot.setAttribute('cx', point.x.toFixed(1));
-      dot.setAttribute('cy', point.y.toFixed(1));
-      dot.setAttribute('r', '5.5');
-      dot.setAttribute('class', 'timeline-dot');
-      svg.appendChild(dot);
-    }
-
-    tween = gsap.fromTo(
-      path,
-      { drawSVG: '0%' },
-      {
-        drawSVG: '100%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: container,
-          start: 'top 70%',
-          end: 'bottom 80%',
-          scrub: 1,
-        },
-      },
-    );
-
-    // Dot ikut menyala satu per satu seiring garis melewatinya.
-    gsap.fromTo(
-      svg.querySelectorAll('.timeline-dot'),
-      { scale: 0, transformOrigin: 'center' },
-      {
-        scale: 1,
-        ease: 'back.out(2)',
-        duration: 0.4,
-        stagger: { each: 0.5 },
-        scrollTrigger: {
-          trigger: container,
-          start: 'top 70%',
-          end: 'bottom 80%',
-          scrub: 1,
-        },
-      },
-    );
+    anchorCards(container);
+    buildFill(container);
   },
 
   destroy() {
-    tween?.scrollTrigger?.kill();
-    tween?.kill();
-    tween = null;
+    while (triggers.length) triggers.pop()?.kill();
+    closeStory?.();
+    closeStory = null;
+    $$<HTMLElement>('[data-timeline-card]').forEach((card) => {
+      card.style.left = '';
+      card.style.top = '';
+    });
   },
 };

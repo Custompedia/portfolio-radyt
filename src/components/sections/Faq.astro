@@ -1,12 +1,38 @@
 ---
+/**
+ * FAQ tinggal di dalam `<footer>`, bukan sebagai section sendiri, dan halaman
+ * berakhir di sini. Tidak ada blok footer terpisah: kontak, sosial, dan tombol
+ * pemesanan semuanya sudah permanen di sidebar, jadi mengulanginya di kaki
+ * halaman cuma menambah baris yang tidak dibaca siapa pun.
+ *
+ * Yang membuka footer justru wordmark raksasa — jawaban atas wordmark yang
+ * membuka hero, dengan jejak gambar yang mengikuti kursor di atasnya.
+ */
 import Icon from '../Icon.astro';
-import { faq } from '../../data/site';
+import { brand, faq, work } from '../../data/site';
+
+/* Kartu jejak memakai warna aksen proyek. Selama belum ada aset gambar, inilah
+   placeholder-nya — dan warnanya tetap milik situs ini, bukan stok. */
+const trailTiles = work.items.map((item) => item.accent);
 ---
 
-<section class="section faq" id="faq">
-  <header class="section-head">
-    <span class="label-pill">{faq.label}</span>
-    <h2 class="section-title" data-reveal>
+<footer class="site-footer" id="faq">
+  <!-- Wordmark penutup. Jejaknya digambar di atas elemen ini oleh
+       modules/image-trail.ts. -->
+  <div class="footer-wordmark-wrap" data-trail-area>
+    <p class="footer-wordmark" aria-label={brand.name}>
+      <span aria-hidden="true">{brand.name}</span><span class="footer-wordmark-symbol" aria-hidden="true"
+        >{brand.symbol}</span
+      >
+    </p>
+    <div class="trail-layer" data-trail-layer aria-hidden="true">
+      {trailTiles.map((accent) => <span class="trail-tile" data-trail-tile style={`--tile:${accent}`} />)}
+    </div>
+  </div>
+
+  <header class="section-head faq-head">
+    <span class="label-pill" data-label-pill>{faq.label}</span>
+    <h2 class="section-title h2-style" data-reveal>
       {faq.headline.map((line) => <span>{line}</span>)}
     </h2>
   </header>
@@ -15,7 +41,7 @@ import { faq } from '../../data/site';
     {
       faq.items.map((item, i) => (
         <div
-          class="faq-item card"
+          class="faq-item"
           data-accordion
           data-tl-from="{'opacity':0,'y':30}"
           data-tl-to="{'opacity':1,'y':0,'duration':0.6}"
@@ -37,4 +63,4 @@ import { faq } from '../../data/site';
       ))
     }
   </div>
-</section>
+</footer>

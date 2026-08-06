@@ -32,7 +32,9 @@ export const testimonialSliderModule: AnimationModule = {
       modules: [Mousewheel],
       slidesPerView: 'auto',
       spaceBetween: 18,
-      grabCursor: true,
+      // `grabCursor` dimatikan: kursor bawaannya ikut tampil di samping cakram
+      // kuning dan jadi dua kursor sekaligus. CSS sudah memasang `cursor:none`.
+      grabCursor: false,
       speed: 620,
       mousewheel: { forceToAxis: true },
       breakpoints: {
@@ -45,10 +47,12 @@ export const testimonialSliderModule: AnimationModule = {
 
     paint(0);
 
-    // Petunjuk "Drag" mengikuti kursor dan hanya muncul saat berada di atas
-    // slider — kalau selalu tampil ia cuma jadi hiasan yang diabaikan.
-    const hint = $('[data-testimonial-drag]');
+    // Cakram penunjuk menggantikan kursor di dalam carousel dan hanya muncul
+    // saat berada di atasnya — kalau selalu tampil ia cuma jadi hiasan yang
+    // diabaikan. Di perangkat sentuh tidak ada kursor untuk digantikan.
+    const hint = $<HTMLElement>('[data-testimonial-drag]');
     if (!hint) return;
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
     const quickX = gsap.quickTo(hint, 'x', { duration: 0.35, ease: 'power3' });
     const quickY = gsap.quickTo(hint, 'y', { duration: 0.35, ease: 'power3' });
@@ -59,17 +63,28 @@ export const testimonialSliderModule: AnimationModule = {
       quickY(event.clientY - rect.top);
     };
     const onEnter = () => gsap.to(hint, { opacity: 1, scale: 1, duration: 0.25 });
-    const onLeave = () => gsap.to(hint, { opacity: 0, scale: 0.6, duration: 0.25 });
+    const onLeave = () => {
+      hint.classList.remove('is-pressed');
+      gsap.to(hint, { opacity: 0, scale: 0.6, duration: 0.25 });
+    };
+    const onDown = () => hint.classList.add('is-pressed');
+    const onUp = () => hint.classList.remove('is-pressed');
 
     gsap.set(hint, { opacity: 0, scale: 0.6, xPercent: -50, yPercent: -50 });
 
     el.addEventListener('pointermove', onMove);
     el.addEventListener('pointerenter', onEnter);
     el.addEventListener('pointerleave', onLeave);
+    el.addEventListener('pointerdown', onDown);
+    // Di window, bukan di elemen: melepas tombol di luar carousel tetap harus
+    // mengembalikan labelnya.
+    window.addEventListener('pointerup', onUp);
     cleanups.push(() => {
       el.removeEventListener('pointermove', onMove);
       el.removeEventListener('pointerenter', onEnter);
       el.removeEventListener('pointerleave', onLeave);
+      el.removeEventListener('pointerdown', onDown);
+      window.removeEventListener('pointerup', onUp);
     });
   },
 

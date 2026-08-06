@@ -27,12 +27,11 @@ const stage = () => ({
   portrait: $('.hero-portrait'),
   headlineLines: $$('.hero-headline-line'),
   navLinks: $$('.nav-link'),
+  navSeps: $$('.hero-nav-sep'),
   statCards: [...$$('.nav-stat-card .nav-card-bg'), ...$$('.nav-stat')],
   traits: $('.hero-traits'),
-  brand: $('.brand'),
   buttons: [$('.btn-primary'), $('.hero-secondary')].filter(Boolean) as HTMLElement[],
   paragraphs: [$('.hero-eyebrow'), $('.nav-tagline')].filter(Boolean) as HTMLElement[],
-  scrollHint: $('.hero-scroll'),
 });
 
 export const preloaderModule: AnimationModule = {
@@ -53,8 +52,11 @@ export const preloaderModule: AnimationModule = {
     gsap.set(letters, { yPercent: 110 });
 
     const el = stage();
-    gsap.set([el.portrait, el.traits, el.scrollHint, el.brand].filter(Boolean), { autoAlpha: 0 });
+    gsap.set([el.portrait, el.traits].filter(Boolean), { autoAlpha: 0 });
     gsap.set(el.portrait, { scale: 0.88, filter: 'blur(20px)', transformOrigin: 'center bottom' });
+    // Separator tumbuh dari tinggi nol, bukan memudar — garisnya seolah
+    // ditarik keluar di antara label.
+    gsap.set(el.navSeps, { height: 0 });
     gsap.set(el.headlineLines, { autoAlpha: 0, scale: 0.9, filter: 'blur(10px)' });
     gsap.set(el.traits, { filter: 'blur(8px)' });
     // Link nav & tombol utama sudah dipegang transform-nya oleh GhostEngine,
@@ -85,12 +87,12 @@ export const preloaderModule: AnimationModule = {
         'hero+=0.3',
       )
       .to(el.navLinks, { autoAlpha: 1, filter: 'blur(0px)', duration: 0.5, ease: 'power2.out' }, 'hero+=0.6')
+      .to(el.navSeps, { height: '0.8vw', duration: 0.2, ease: 'power2.out' }, 'hero+=0.6')
       .to(
         el.statCards,
         { autoAlpha: 1, filter: 'blur(0px)', duration: 0.9, stagger: 0.1, ease: 'power2.out' },
         'hero+=0.6',
       )
-      .to(el.brand, { autoAlpha: 1, duration: 0.6, ease: 'power2.out' }, 'hero+=0.6')
       .to(el.traits, { autoAlpha: 1, filter: 'blur(0px)', duration: 0.9, ease: 'power2.out' }, 'hero+=0.9')
       .to(
         el.buttons,
@@ -101,8 +103,7 @@ export const preloaderModule: AnimationModule = {
         el.paragraphs,
         { autoAlpha: 1, filter: 'blur(0px)', duration: 0.7, stagger: 0.1, ease: 'power2.out' },
         'hero+=1.65',
-      )
-      .to(el.scrollHint, { autoAlpha: 1, duration: 0.5 }, 'hero+=2');
+      );
   },
 
   destroy() {
