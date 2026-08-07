@@ -61,7 +61,8 @@ const ghosts: GhostBox[] = [
   {
     id: 'cta-primary',
     x: 'calc(50vw - var(--hero-btn-w) - 0.28vw)',
-    y: '89.8vh',
+    // Sepasang dengan `.hero-secondary`, yang memakai token yang sama.
+    y: 'var(--hero-cta-top)',
     w: 'var(--hero-btn-w)',
     h: 'var(--hero-btn-h)',
   },

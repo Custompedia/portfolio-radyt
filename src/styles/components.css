@@ -422,11 +422,19 @@
   gap: 1.53vw;
 }
 
+/* Bobotnya ditulis di SINI, bukan di elemen `h2` di base.css: kelas ini punya
+   font-weight sendiri dan akan menimpanya. */
 .section-title {
   font-size: var(--fs-h2);
-  font-weight: 500;
+  /* 900, bukan 500 — sekelas dengan headline hero, jadi judul-judul halaman ini
+     terbaca sebagai satu keluarga. Satoshi Black memang sudah dimuat untuk
+     wordmark, jadi tidak ada file font tambahan yang ditarik. */
+  font-weight: 900;
   line-height: var(--lh-h2);
-  letter-spacing: normal;
+  /* Pada bobot display, jarak antar hurufnya melebar sendiri; -0.015em
+     menutupnya sekaligus mengganti lebar yang dimakan bobot barunya — itu yang
+     menjaga baris ber-`nowrap` di bawah tetap muat. */
+  letter-spacing: -0.015em;
 }
 
 /* Pemenggalan baris judul ditulis tangan di site.ts. Tanpa `nowrap` baris

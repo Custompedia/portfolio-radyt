@@ -157,36 +157,50 @@
    subjeknya cukup lebar sehingga teks terang terbaca penuh. */
 /* Anggaran horizontal baris tengah hero, dalam vw:
  *
- *   18.0  tepi kiri kartu statistik
- * + 14.9  lebar kartu statistik           → berakhir di 32.9
- * +  1.1  jarak
- * + 34.1  headline  (batas font 4.9vw × ~6.9 lebar-em baris terpanjang)
- * +  1.4  jarak
- * + 11.5  kartu traits
- * + 17.0  tepi kanan
+ *   18.5  tepi kiri kartu statistik
+ * + 11.0  lebar kartu statistik           → berakhir di 29.5
+ * +  4.0  jarak
+ * + 38.2  headline  (batas font 4.85vw × 7.874 lebar-em baris terpanjang)
+ * +  1.9  jarak
+ * + 13.6  kartu traits
+ * + 12.0  tepi kanan
  *   ————
- *   100.0
+ *   99.2  (+0.8 lebar scrollbar)
  *
- * Referensinya memakai left 35.7vw, tapi baris terpanjangnya ("Differently.")
- * jauh lebih pendek dari "bukan momen." — dan Satoshi lebih lebar dari huruf
- * aslinya. Dengan angka referensi, headline menabrak kartu traits di SEMUA
- * lebar desktop. Angka di bawah ini yang membuat ketiganya benar-benar muat.
+ * Baris terpanjang sekarang "Merek dibangun," — 7.874 lebar-em pada w900,
+ * DIUKUR di browser, bukan ditaksir. Angka 6.9 pada versi lama sudah tidak
+ * berlaku sejak teksnya berganti, dan cap 4.9vw yang lahir darinya membuat
+ * headline menabrak kartu traits di layar tinggi; yang menyelamatkannya cuma
+ * cap 8.4vh yang kebetulan lebih ketat. Cap vw di bawah ini yang benar.
+ *
+ * Kiri digeser 35.54 → 33.5vw dan kartu traits 17 → 12vw dari kanan: keduanya
+ * murni untuk melebarkan kolom headline. 33.5vw masih aman di dalam siluet
+ * potret (tepi kirinya 31.25vw) — di luar itu teks terangnya jatuh ke latar
+ * terang dan hilang.
  */
 .hero-headline {
   position: absolute;
-  left: 35.54vw;
-  top: 59.23vh;
+  left: 33.5vw;
+  /* 51vh = setinggi leher subjek: tepat di bawah kaki huruf wordmark, dan
+     menembus pita navigasi hero (56.6–61.3vh) lewat celah tengahnya yang
+     memang kosong — grup nav kiri berhenti di 28.8vw, grup kanan mulai di
+     74.7vw, sedangkan headline paling lebar berakhir di 71.7vw. */
+  top: var(--hero-h1-top);
   display: flex;
   flex-direction: column;
   color: #f8f7f3;
-  /* Tiga batas sekaligus, masing-masing menjaga satu tabrakan:
-       --fs-h1  skala referensi
-       8.4vh    di layar pendek tiga baris menabrak tombol di 90.7vh
-       4.9vw    baris terpanjang harus muat di 34.1vw yang tersedia
-                (34.1 ÷ 6.9 lebar-em baris terpanjang) */
-  font-size: min(var(--fs-h1), 8.4vh, 4.9vw);
-  font-weight: 700;
-  letter-spacing: normal;
+  /* Tiga batas sekaligus (lihat --hero-h1-size di tokens.css):
+       6.5rem   langit-langit mutlak di layar sangat besar
+       11.5vh   tiga baris + jarak nafas sebelum tombol
+       4.85vw   baris terpanjang harus muat di 38.2vw yang tersedia
+                (38.2 ÷ 7.874 lebar-em baris terpanjang)
+     Tombol CTA menurunkan posisinya dari rumus yang sama, jadi keduanya tidak
+     mungkin lepas sinkron. */
+  font-size: var(--hero-h1-size);
+  font-weight: 900;
+  /* Satoshi Black merapat sendiri pada ukuran display; -0.02em menutup celah
+     yang tersisa dan sekalian membeli ~0.3em lebar untuk baris terpanjang. */
+  letter-spacing: -0.02em;
   line-height: var(--lh-h1);
 }
 
@@ -202,11 +216,13 @@
    34.2px kanan, gap 12.4px @1492 — kanan memang lebih lebar daripada kiri.
    Lebarnya sengaja dibiarkan mengikuti isi: "Digital Activation" tidak muat
    kalau lebar 11.5vw referensi dipaksakan, dan tanpa dipaksa pun hasilnya
-   mendarat di ~11.5vw. `right` tetap 17vw, bukan 22.4vw seperti referensi:
-   headline Indonesia lebih panjang dari aslinya dan akan menabraknya. */
+   mendarat di ~11.5vw. `right` 12vw, bukan 22.4vw seperti referensi: headline
+   Indonesia lebih panjang dari aslinya dan akan menabraknya kalau kartunya
+   ditarik lebih ke tengah. Sisi kanannya berhenti di ~88vw — masih di dalam
+   layar, dan tidak menyenggol ghost tagline yang baru mulai di 92.8vh. */
 .hero-traits {
   position: absolute;
-  right: 17vw;
+  right: 12vw;
   top: 61.2vh;
   display: flex;
   flex-direction: column;
@@ -250,7 +266,9 @@
 .hero-secondary {
   position: absolute;
   left: calc(50vw + 0.28vw);
-  top: 89.8vh;
+  /* Ikut tepi bawah headline, bukan angka mati — lihat --hero-cta-top. Ghost
+     tombol primer di Hero.astro memakai token yang sama supaya sepasang. */
+  top: var(--hero-cta-top);
   width: var(--hero-btn-w);
   height: var(--hero-btn-h);
 }

@@ -79,7 +79,12 @@
      "Yang Anda Dapatkan" dan paragraf Indonesianya jauh lebih panjang dan pada
      ukuran itu memenuhi layar sampai terbaca sesak. */
   --fs-h2-big: clamp(4rem, 8.2vw, 8.75rem); /* lh 0.9  w700 */
-  --fs-cta: clamp(5.5rem, 7.64vw, 8.5rem); /* lh 1    w700 */
+  /* Diturunkan dari clamp(5.5rem, 7.64vw, 8.5rem): pada 1920 judulnya 136px
+     dan baris terpanjang "Mereknya Rapi —" memakan 55vw, jauh melewati blok
+     teks di bawahnya sehingga bacanya terasa berteriak. 5.6vw menaruhnya di
+     ~104px — masih paling besar di halaman, tapi sekelas dengan judul section
+     lain (88px), bukan dua kali lipatnya. */
+  --fs-cta: clamp(3.5rem, 5.6vw, 6.5rem); /* lh 1    w700 */
   --fs-lead: clamp(2rem, 3.2vw, 3.5rem); /* lh 1    w700 — paragraf What You Get */
   --fs-year: clamp(4rem, 5.56vw, 6.25rem); /* lh 1    w700 kuning */
   --fs-stat: clamp(4rem, 5.69vw, 6.25rem); /* lh 0.9  w700 */
@@ -121,6 +126,21 @@
   /* 3.28vw = 49px @1492 — tinggi tombol hero referensi, diukur langsung.
      3.9vw sebelumnya membuat tombolnya 9px lebih tinggi dari aslinya. */
   --hero-btn-h: 3.28vw;
+
+  /* Geometri headline hero, dipakai bersama oleh headline-nya sendiri DAN oleh
+     tombol CTA di bawahnya. Sebelumnya tombol dipatok mati di 89.8vh: angka itu
+     lahir dari kasus terburuk (layar lebar-pendek, headline mentok cap 11.5vh
+     dan berakhir di 86.5vh). Di layar normal headline berhenti jauh lebih
+     tinggi, dan tombolnya tertinggal dengan jurang ~9vh di tengahnya.
+     Dengan menurunkan tepi bawah headline dari rumusnya, jarak itu jadi tetap
+     3.2vh di SEMUA rasio — dan kasus terburuk tetap aman karena rumus yang
+     sama ikut melar. */
+  --hero-h1-top: 51vh;
+  --hero-h1-size: min(6.5rem, 11.5vh, 4.85vw);
+  /* 3 baris × line-height 1.03 (--lh-h1). Ditulis eksplisit, bukan lewat
+     var(--lh-h1), supaya terbaca sebagai "tinggi tiga baris" saat dibaca. */
+  --hero-h1-bottom: calc(var(--hero-h1-top) + 3 * 1.03 * var(--hero-h1-size));
+  --hero-cta-top: calc(var(--hero-h1-bottom) + 3.2vh);
 
   /* Tangga radius. `.83vw` adalah radius rumah — kartu, tombol, kartu work.
      `.56vw` yang lebih rapat dipakai panel sidebar dan kartu kaca hero. */
