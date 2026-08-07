@@ -787,7 +787,7 @@
   gap: 1.4vw;
   /* Panel duduk di atas scrim gelap, jadi ia memakai beige pekat, bukan
      kaca setengah tembus seperti kartu di atas halaman. */
-  background: var(--capa-bg);
+  background: var(--panel-bg);
 }
 
 /* Panel adalah kolom flex ber-max-height: begitu isinya melewati 86vh, tiap
@@ -1268,164 +1268,6 @@
     background: var(--yellow);
     color: var(--black);
   }
-}
-
-/* ==========================================================================
-   CAPABILITIES
-   ========================================================================== */
-
-.capabilities {
-  padding: 15vw 6.39vw 15vw var(--content-left);
-}
-
-.capabilities-head {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.39vw;
-  text-align: center;
-}
-
-/* Judul terbesar di halaman. Tracking negatifnya wajib: pada ukuran ini jarak
-   huruf default terbaca renggang, bukan netral. */
-.capabilities-title {
-  font-size: var(--fs-h2-big);
-  font-weight: 700;
-  line-height: var(--lh-big);
-  letter-spacing: var(--ls-big);
-}
-
-.capabilities-title span {
-  display: block;
-}
-
-.capabilities-lead {
-  max-width: 17em;
-  margin: clamp(48px, 7vh, 96px) auto 0;
-  font-size: var(--fs-lead);
-  font-weight: 700;
-  letter-spacing: var(--ls-lead);
-  line-height: var(--lh-one);
-  text-align: center;
-}
-
-/* Chip = kartu kapabilitas yang mengerut jadi IKON TELANJANG di dalam kalimat:
-   tanpa kotak, tanpa panah. Ia tetap tombol — yang terbaca sebagai hiasan di
-   tengah teks sebenarnya bisa dibuka. */
-.lead-chip {
-  display: inline-flex;
-  height: 0.92em;
-  align-items: center;
-  justify-content: center;
-  /* Jarak ke kata di kiri-kanannya datang dari sini, bukan dari spasi di
-     dalam teks — lihat WhatYouGet.astro. */
-  margin-inline: 0.22em;
-  padding: 0;
-  border-radius: 0;
-  background: none;
-  color: var(--yellow);
-  vertical-align: -0.1em;
-  cursor: pointer;
-  transition: opacity var(--dur) var(--ease-out);
-}
-
-.lead-chip:hover {
-  opacity: 0.65;
-}
-
-/* Ukuran dalam `em`, bukan atribut px milik Icon.astro: ikonnya harus tumbuh
-   dan menyusut bersama teks yang mengapitnya di tiap lebar layar. */
-.lead-chip svg {
-  flex: none;
-  width: 0.85em;
-  height: 0.85em;
-}
-
-.lead-chip-icon {
-  display: grid;
-  place-items: center;
-}
-
-/* --- Panel penuh layar hasil Flip --- */
-
-.capa-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 120;
-  display: grid;
-  place-items: center;
-  padding: var(--gutter);
-}
-
-.capa-overlay[hidden] {
-  display: none;
-}
-
-.capa-scrim {
-  position: absolute;
-  inset: 0;
-  background: rgba(19, 19, 19, 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  cursor: pointer;
-}
-
-.capa-panel {
-  position: relative;
-  display: flex;
-  width: min(38rem, 100%);
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.1vw;
-  padding: 2.4vw;
-}
-
-.capa-close {
-  position: absolute;
-  top: 1.2vw;
-  right: 1.2vw;
-  display: grid;
-  width: 2.4vw;
-  height: 2.4vw;
-  min-width: 34px;
-  min-height: 34px;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--surface-inner);
-}
-
-/* Chip yang sedang diterbangkan masuk ke slot ini; ukurannya dipaksa naik
-   supaya Flip punya beda rect yang jelas untuk dianimasikan. */
-.capa-panel-icon {
-  display: grid;
-  place-items: center;
-}
-
-/* Di dalam panel ikonnya BOLEH berkotak lagi — di situ ia bukan lagi bagian
-   dari kalimat, melainkan penanda judul. Ukuran svg-nya dipatok ulang karena
-   `em` di sini mengikuti font panel, bukan font paragraf raksasa. */
-.lead-chip.is-expanded {
-  height: 3.4vw;
-  min-height: 48px;
-  padding-inline: 1vw;
-  border-radius: var(--radius);
-  background: var(--yellow);
-  color: var(--black);
-  cursor: default;
-}
-
-.lead-chip.is-expanded svg {
-  width: 20px;
-  height: 20px;
-}
-
-.capa-panel-title {
-  font-size: var(--fs-h3);
-}
-
-.capa-panel-body {
-  color: var(--fg-muted);
-  max-width: 52ch;
 }
 
 /* ==========================================================================
@@ -2243,7 +2085,6 @@
 
 @media (max-width: 767px) {
   .section,
-  .capabilities,
   .cta,
   .testimonials {
     padding: 64px var(--gutter);
@@ -2269,16 +2110,6 @@
 
   .work-card {
     scroll-snap-align: start;
-  }
-
-  .capabilities-title {
-    font-size: clamp(3rem, 16vw, 5.5rem);
-  }
-
-  .capabilities-lead {
-    max-width: none;
-    font-size: clamp(1.6rem, 8vw, 2.6rem);
-    text-align: left;
   }
 
   .cta-title {
@@ -2380,13 +2211,11 @@
     padding-bottom: 18px;
   }
 
-  .capa-panel,
   .story-panel {
     padding: 24px;
     gap: 14px;
   }
 
-  .capa-close,
   .story-close {
     top: 14px;
     right: 14px;
@@ -2394,14 +2223,7 @@
     height: 34px;
   }
 
-  .capa-panel-title,
   .story-title {
     font-size: 1.25rem;
-  }
-
-  .lead-chip.is-expanded {
-    height: 48px;
-    padding-inline: 14px;
-    border-radius: 12px;
   }
 }

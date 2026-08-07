@@ -92,12 +92,6 @@ export interface WorkItem {
   videoWebm?: string;
 }
 
-export interface Capability {
-  title: string;
-  body: string;
-  icon: string;
-}
-
 export interface Testimonial {
   headline: string;
   quote: string;
@@ -133,7 +127,6 @@ export const nav: NavItem[] = [
   { id: 'home', label: 'Home', href: '#home', icon: 'home' },
   { id: 'about', label: 'Journey', href: '#about', icon: 'user' },
   { id: 'work', label: 'Work', href: '#work', icon: 'briefcase' },
-  { id: 'capabilities', label: 'Services', href: '#capabilities', icon: 'layers' },
   { id: 'clients', label: 'Clients', href: '#clients', icon: 'people' },
   { id: 'faq', label: 'FAQ', href: '#faq', icon: 'question' },
 ];
@@ -414,45 +407,6 @@ export const work = {
     // jadi field media opsional (image/video/videoWebm) terbaca "tidak ada" di
     // Work.astro sampai ada satu item yang benar-benar mengisinya.
   ] as WorkItem[],
-};
-
-export const capabilities = {
-  headline: ['Yang Anda', 'Dapatkan'],
-  label: 'Lima pilar, dua bendera',
-  /**
-   * Kata bertanda `[chip]` diganti chip ikon oleh WhatYouGet.astro. Jumlah
-   * `[chip]` HARUS sama dengan jumlah `items` — chip ke-n mengambil item ke-n,
-   * dan item yang tidak kebagian chip tidak akan pernah bisa dibuka.
-   */
-  paragraph:
-    'Merek dirancang, [chip] kanalnya dijalankan, [chip] iklannya diukur, [chip] kemasannya diproduksi, [chip] dan aktivasinya turun ke lapangan [chip] — semua di bawah satu penanggung jawab.',
-  items: [
-    {
-      title: 'Branding & Identitas',
-      body: 'Positioning, identitas visual, dan panduan merek yang bisa dipakai tim internal tanpa kami. Custompedia.',
-      icon: 'spark',
-    },
-    {
-      title: 'Social & KOL',
-      body: 'Kanal harian dan kampanye kreator: perencanaan, produksi, publikasi, sampai laporan. Custompedia.',
-      icon: 'people',
-    },
-    {
-      title: 'Digital Advertising',
-      body: 'Iklan berbayar yang diukur sampai angka penjualan, plus audit belanja iklan yang sudah berjalan. Custompedia.',
-      icon: 'gauge',
-    },
-    {
-      title: 'Custom Packaging',
-      body: 'Kotak, kemasan produk, hampers, dan PR package. MOQ rendah, dari UMKM sampai multinasional. Parcelin.',
-      icon: 'layers',
-    },
-    {
-      title: 'Aktivasi, Merch & Event',
-      body: 'Peluncuran, POI, OOH, merchandise, dan event — barang dan kemasannya dikerjakan sekaligus.',
-      icon: 'bolt',
-    },
-  ] satisfies Capability[],
 };
 
 export const cta = {

@@ -12,7 +12,6 @@ import { themeModule } from './modules/theme';
 import { timelinePathModule } from './modules/timeline-path';
 import { accordionModule } from './modules/accordion';
 import { testimonialSliderModule } from './modules/testimonial-slider';
-import { leadParagraphModule } from './modules/lead-paragraph';
 import { ctaChatModule } from './modules/cta-chat';
 import { navActiveModule } from './modules/nav-active';
 import { workCardsModule } from './modules/work-cards';
@@ -33,7 +32,6 @@ const modules: AnimationModule[] = [
   horizontalModule,
   styleEngineModule,
   textRevealModule,
-  leadParagraphModule,
   timelinePathModule,
   themeModule,
   accordionModule,

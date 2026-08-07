@@ -220,21 +220,6 @@ html.lenis body {
   will-change: transform;
 }
 
-/* Reveal per-karakter di paragraf What You Get. Dibungkus splitter sendiri
-   (bukan SplitText) karena kartu kapabilitas ditanam di dalam paragrafnya dan
-   harus dilewati utuh. */
-.anim-char {
-  display: inline-block;
-  will-change: transform, opacity, color;
-}
-
-/* Lapisan kata di luar karakter. Tanpa ini tiap huruf jadi titik putus baris
-   yang sah dan paragrafnya memenggal kata di tengah. */
-.lead-word {
-  display: inline-block;
-  white-space: nowrap;
-}
-
 /* Word-swap hover tombol: teks asli dan klonnya ditumpuk, keduanya dipotong
    oleh jendela setinggi satu baris. */
 .word-swap {

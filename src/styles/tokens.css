@@ -43,7 +43,9 @@
   --glass-blur-soft: 15px;
 
   /* Permukaan khusus per-section */
-  --capa-bg: #e4e0ce;
+  /* Beige pekat untuk panel modal yang duduk di atas scrim gelap — di situ
+     kaca setengah tembus seperti kartu di badan halaman tidak terbaca. */
+  --panel-bg: #e4e0ce;
   --work-bg: linear-gradient(#000000, #222222 44%);
   --work-scrim: linear-gradient(rgba(0, 0, 0, 0.3), rgba(51, 51, 51, 0.03) 50%, rgba(0, 0, 0, 0.4));
   --work-dim: rgba(0, 0, 0, 0.6);
