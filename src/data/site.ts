@@ -119,7 +119,7 @@ export const brand = {
   role: 'Owner Custompedia · Co-Founder Parcelin',
   company: 'Custompedia Creative Group & Parcelin Creative Indonesia',
   city: 'Semarang, Indonesia',
-  tagline: 'Membangun merek lewat Custompedia, lalu mengemasnya lewat Parcelin.',
+  tagline: 'Build brands through Custompedia, then package them through Parcelin.',
   email: 'hello@custompedia.id',
   phone: '+62 822-2617-1071',
   bookingUrl: 'https://wa.me/6282226171071',
@@ -131,10 +131,10 @@ export const brand = {
 
 export const nav: NavItem[] = [
   { id: 'home', label: 'Home', href: '#home', icon: 'home' },
-  { id: 'about', label: 'Perjalanan', href: '#about', icon: 'user' },
-  { id: 'work', label: 'Karya', href: '#work', icon: 'briefcase' },
-  { id: 'capabilities', label: 'Layanan', href: '#capabilities', icon: 'layers' },
-  { id: 'clients', label: 'Klien', href: '#clients', icon: 'people' },
+  { id: 'about', label: 'Journey', href: '#about', icon: 'user' },
+  { id: 'work', label: 'Work', href: '#work', icon: 'briefcase' },
+  { id: 'capabilities', label: 'Services', href: '#capabilities', icon: 'layers' },
+  { id: 'clients', label: 'Clients', href: '#clients', icon: 'people' },
   { id: 'faq', label: 'FAQ', href: '#faq', icon: 'question' },
 ];
 
@@ -143,8 +143,8 @@ export const hero = {
   eyebrowSecond: 'creative packaging.',
   headline: ['Merek dibangun,', 'kemasannya', 'ikut bicara.'],
   traits: ['Branding', 'Social & KOL', 'Digital Ads', 'Custom Packaging', 'Activation'],
-  ctaPrimary: { label: 'Ngobrol Dulu', href: brand.bookingUrl },
-  ctaSecondary: { label: 'Lihat Karya', href: '#work' },
+  ctaPrimary: { label: "Let's Talk", href: brand.bookingUrl },
+  ctaSecondary: { label: 'See Work', href: '#work' },
 };
 
 /**
@@ -152,7 +152,7 @@ export const hero = {
  * jadi tahan tetap pendek — dua kata pas, tiga kata mulai memaksa kartunya
  * melebar. Angkanya klaim publik Parcelin (950+ bisnis terlayani).
  */
-export const stats: Stat[] = [{ value: '950+', label: 'Bisnis dibantu' }];
+export const stats: Stat[] = [{ value: '950+', label: 'Businesses served' }];
 
 /** Berjalan di marquee sidebar — dua bendera, lalu lini layanan di bawahnya. */
 export const clients: string[] = [
