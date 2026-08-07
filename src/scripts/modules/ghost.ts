@@ -18,7 +18,7 @@ import { getSidebarScale } from './sidebar';
  * dan seluruh komposisi meleset.
  */
 
-type GhostType = 'box' | 'background' | 'size';
+type GhostType = 'box' | 'background' | 'size' | 'stat';
 
 interface Rect {
   left: number;
@@ -32,6 +32,54 @@ interface Measurement {
   type: GhostType;
   from: Rect;
   to: Rect;
+  /** Hanya terisi untuk tipe `stat` — lihat measureStacked(). */
+  stacked?: StackedLayout;
+}
+
+/**
+ * Susunan BERTUMPUK dari sebuah blok statistik, diukur sekali di fase 1.
+ *
+ * `box`  kotak blok saat bertumpuk, relatif terhadap kotaknya saat sebaris
+ * `kids` selisih posisi tiap anak: sebaris → bertumpuk
+ */
+interface StackedLayout {
+  box: { dx: number; dy: number; width: number };
+  kids: { el: HTMLElement; dx: number; dy: number }[];
+}
+
+/**
+ * Angka statistik di hero tampil BERTUMPUK (kartu bujur sangkar), di rail
+ * tampil SEBARIS (kartu lebar-pendek). `flex-direction` tidak bisa ditween,
+ * jadi susunan bertumpuknya tidak pernah benar-benar dipasang: kelas
+ * `.is-stacked` ditempel satu frame hanya untuk MENGUKUR, lalu dilepas lagi.
+ * Selisih yang didapat dipakai menggeser tiap anak dengan transform — dan
+ * transform bisa ditween, jadi angkanya betul-betul meluncur ke tempatnya
+ * alih-alih bertukar tampil.
+ */
+function measureStacked(real: HTMLElement): StackedLayout | null {
+  const kids = [...real.children].filter((n): n is HTMLElement => n instanceof HTMLElement);
+  if (kids.length === 0) return null;
+
+  const inlineBox = toRect(real);
+  const inlineKids = kids.map(toRect);
+
+  real.classList.add('is-stacked');
+  const stackedBox = toRect(real);
+  const stackedKids = kids.map(toRect);
+  real.classList.remove('is-stacked');
+
+  return {
+    box: {
+      dx: stackedBox.left - inlineBox.left,
+      dy: stackedBox.top - inlineBox.top,
+      width: stackedBox.width,
+    },
+    kids: kids.map((el, i) => ({
+      el,
+      dx: stackedKids[i]!.left - inlineKids[i]!.left,
+      dy: stackedKids[i]!.top - inlineKids[i]!.top,
+    })),
+  };
 }
 
 /** Radius yang terlihat pada kartu saat masih berukuran hero. */
@@ -65,11 +113,14 @@ function measurePairs(): Measurement[] {
     const ghost = $(`[data-ghost-target="${id}"]`);
     if (!ghost) continue;
 
+    const type = (real.dataset.ghostType as GhostType) ?? 'box';
+
     measurements.push({
       real,
-      type: (real.dataset.ghostType as GhostType) ?? 'box',
+      type,
       from: toRect(ghost),
       to: toRect(real),
+      stacked: type === 'stat' ? (measureStacked(real) ?? undefined) : undefined,
     });
   }
 
@@ -77,12 +128,28 @@ function measurePairs(): Measurement[] {
 }
 
 function buildTween(m: Measurement, trigger: Element): void {
-  const { real, type, from, to } = m;
+  const { real, type, from, to, stacked } = m;
   if (to.width === 0 || to.height === 0) return;
 
   const scale = getSidebarScale();
-  const x = (from.left - to.left) / scale;
-  const y = (from.top - to.top) / scale;
+  let x = (from.left - to.left) / scale;
+  let y = (from.top - to.top) / scale;
+
+  /**
+   * Tipe `stat` menyimpang dari yang lain di DUA hal, dan keduanya berasal dari
+   * satu sebab: yang harus mendarat pas di kotak ghost bukan elemennya, tapi
+   * SUSUNAN BERTUMPUK di dalamnya.
+   *
+   *   1. skalanya dihitung dari lebar susunan bertumpuk, bukan lebar elemen
+   *      (yang sebaris, jadi jauh lebih lebar dan bikin skalanya terlalu kecil);
+   *   2. x/y dikoreksi sebesar pergeseran susunan itu di dalam elemen, supaya
+   *      yang berimpit dengan kotak ghost memang susunannya.
+   */
+  const statScale = stacked ? from.width / stacked.box.width : 1;
+  if (type === 'stat' && stacked) {
+    x -= (statScale * stacked.box.dx) / scale;
+    y -= (statScale * stacked.box.dy) / scale;
+  }
 
   const fromVars: gsap.TweenVars = {
     x,
@@ -149,17 +216,46 @@ function buildTween(m: Measurement, trigger: Element): void {
     fromVars.height = from.height / scale;
     toVars.width = to.width / scale;
     toVars.height = to.height / scale;
+  } else if (type === 'stat' && stacked) {
+    fromVars.scale = statScale;
   } else {
     fromVars.scale = from.width / to.width;
   }
 
   gsap.fromTo(real, fromVars, toVars);
+
+  // Anak-anaknya digeser ke susunan bertumpuk lalu ditarik balik ke nol
+  // sepanjang morph yang sama. Karena induknya ikut mengerut di jendela yang
+  // sama, keduanya terbaca sebagai satu gerakan: angkanya meluncur ke kiri
+  // sementara labelnya turun ke sebelah kanannya. Nilainya dibagi skala sidebar
+  // — ia ditulis ke koordinat lokal, sedangkan yang diukur koordinat layar.
+  if (type === 'stat' && stacked) {
+    for (const kid of stacked.kids) {
+      gsap.fromTo(
+        kid.el,
+        { x: kid.dx / scale, y: kid.dy / scale, force3D: false },
+        {
+          x: 0,
+          y: 0,
+          ease: 'power1.inOut',
+          force3D: false,
+          scrollTrigger: {
+            trigger,
+            start: 'top top',
+            end: () => `+=${window.innerHeight * MORPH_VH}`,
+            scrub: 1,
+            invalidateOnRefresh: false,
+          },
+        },
+      );
+    }
+  }
 }
 
 /**
  * WORDMARK RAKSASA → PILL BRAND
  *
- * Momen pembuka situs ini: "RADYT" setinggi hampir setengah layar mengerut
+ * Momen pembuka situs ini: "RADHYTA" setinggi hampir setengah layar mengerut
  * sambil terbang ke pojok kiri atas, lalu mendarat jadi pill kecil di sidebar.
  *
  * Arahnya SEBALIKNYA dari ghost biasa. Di ghost, elemen sidebar-lah yang nyata
@@ -286,7 +382,7 @@ function buildHeroTone(trigger: Element, sidebar: Element): void {
 }
 
 const GHOSTED =
-  '[data-ghost], [data-ghost-fade], [data-wordmark-inner], .nav-link, .nav-link-bg, .nav-link-icon';
+  '[data-ghost], [data-ghost-fade], [data-wordmark-inner], .nav-link, .nav-link-bg, .nav-link-icon, [data-ghost-type="stat"] > *';
 
 export const ghostModule: AnimationModule = {
   name: 'ghost',

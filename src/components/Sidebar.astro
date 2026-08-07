@@ -58,9 +58,15 @@ import { brand, hero, nav, stats, clients } from '../data/site';
       stats.map((stat, i) => (
         <div class="nav-card nav-stat-card">
           <span class="nav-card-bg" data-ghost={`stats-card-${i}`} data-ghost-type="background" />
-          <div class="nav-stat" data-ghost={`stat-${i}`} data-ghost-type="box">
+          {/* SATU elemen, dua susunan. Tata letak aslinya SEBARIS (bentuk
+              akhirnya di rail); di hero, ghost.ts menggeser kedua anaknya jadi
+              bertumpuk lalu menariknya balik sepanjang morph — jadi angkanya
+              benar-benar meluncur ke kiri dan labelnya turun ke sebelah
+              kanannya, bukan sekadar bertukar tampil. Lihat `data-ghost-type`
+              di bawah. */}
+          <div class="nav-stat" data-ghost={`stat-${i}`} data-ghost-type="stat">
             <span class="nav-stat-value">{stat.value}</span>
-            <span class="nav-stat-label" set:html={stat.label.replace(' ', '<br />')} />
+            <span class="nav-stat-label">{stat.label}</span>
           </div>
         </div>
       ))

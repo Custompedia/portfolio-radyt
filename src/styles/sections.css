@@ -45,7 +45,13 @@
   width: 100%;
   justify-content: center;
   color: var(--yellow);
-  font-size: 30.5vw; /* Full kanan kiri */
+  /* Full kanan kiri. Angkanya TERIKAT pada jumlah huruf nama: "RADHYTA" pada
+     bobot 900 dengan tracking -0.035em memakan 4.678vw lebar per 1vw ukuran
+     font (diukur di browser), jadi 100 ÷ 4.678 = 21.4vw yang membuatnya pas
+     selebar layar. Nilai lama 30.5vw dikalibrasi untuk "RADYT" yang lima
+     huruf; dipakai apa adanya di sini, wordmark-nya melebar jadi 142vw.
+     Kalau namanya berubah lagi, ukur ulang — jangan ditaksir. */
+  font-size: 21.4vw;
   font-weight: 900;
   letter-spacing: -0.035em;
   line-height: 1;
@@ -104,12 +110,17 @@
 .hero-nav {
   position: absolute;
   left: 0;
-  /* Tulisan RADYT memiliki font-size 30.5vw dan top -0.05em (-1.5vw), sehingga
-     kaki hurufnya (baseline, bukan kotak barisnya) jatuh di sekitar 26vw.
-     Navbar ditaruh tepat 0.7vw di bawahnya: cukup rapat untuk terbaca sebagai
-     satu blok dengan wordmark, dan cukup tinggi untuk lolos dari kartu
-     statistik & traits yang mulai di 62vh. */
-  top: 26.7vw;
+  /* Dipatok ke KAKI wordmark, jadi angkanya ikut berubah setiap ukuran
+     wordmark berubah. Kaki huruf (baseline, bukan kotak barisnya) jatuh di
+     sekitar 0.852 × font-size; navbar ditaruh 0.7vw di bawahnya supaya terbaca
+     sebagai satu blok dengan wordmark:
+
+       0.852 × 21.4vw + 0.7vw ≈ 18.7vw
+
+     Nilai lama 26.7vw dihitung untuk wordmark 30.5vw ("RADYT", lima huruf).
+     Dibiarkan di situ setelah wordmark mengecil, navbar-nya menggantung
+     sendirian 8vw di bawah kaki huruf. */
+  top: 18.7vw;
   display: flex;
   width: 100%;
   align-items: center;
@@ -1493,7 +1504,11 @@
 
   .hero-wordmark {
     position: static;
-    font-size: 23vw;
+    /* Sama seperti versi desktop, angkanya terikat jumlah huruf: "RADHYTA"
+       memakan 4.678vw lebar per 1vw ukuran font. 19vw ≈ 89vw lebar, masih
+       muat di dalam gutter kiri-kanan. Nilai lama 23vw dikalibrasi untuk
+       "RADYT" dan akan meluber sampai 108vw. */
+    font-size: 19vw;
     text-align: left;
     margin-bottom: 12px;
   }

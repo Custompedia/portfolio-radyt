@@ -84,7 +84,7 @@ export interface FaqItem {
 }
 
 export const brand = {
-  name: 'RADYT',
+  name: 'RADHYTA',
   symbol: '®',
   person: 'Radhyta Mukhsin',
   /** Ikut jadi <title> halaman, jadi ditahan tetap pendek. */
@@ -120,8 +120,9 @@ export const hero = {
 };
 
 /**
- * Angka besar di sidebar. `label` dipecah dua baris di spasi pertama, jadi
- * tahan tetap dua kata. Angkanya klaim publik Parcelin (950+ bisnis terlayani).
+ * Angka besar di sidebar. `label` dirender satu baris utuh di bawah angkanya,
+ * jadi tahan tetap pendek — dua kata pas, tiga kata mulai memaksa kartunya
+ * melebar. Angkanya klaim publik Parcelin (950+ bisnis terlayani).
  */
 export const stats: Stat[] = [{ value: '950+', label: 'Bisnis dibantu' }];
 
@@ -141,7 +142,7 @@ export const clients: string[] = [
 
 export const about = {
   label: 'Dua bisnis, satu meja',
-  headline: ['Tentang Radyt', '& Dua Bisnisnya'],
+  headline: ['Tentang Radhyta', '& Dua Bisnisnya'],
   intro:
     'Custompedia membangun mereknya, Parcelin mengemasnya. Keduanya berangkat dari Semarang dan berjalan dari satu meja yang sama.',
 };

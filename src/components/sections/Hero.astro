@@ -40,9 +40,9 @@ interface GhostBox {
  */
 /**
  * Tepi atas kartu statistik. `min(..., 95vh - 11vw)` menahannya dari jatuh
- * melewati tepi bawah layar ultra-wide; `max(29.5vw, ...)` menahannya dari
- * naik menutupi baris navigasi hero (yang dipatok di 26.7vw) pada layar yang
- * pendek. Dipakai dua kali — kotak kartu dan blok angka di dalamnya.
+ * melewati tepi bawah layar ultra-wide (11vw = tinggi kartu); `max(29.5vw, ...)`
+ * menahannya dari naik menutupi baris navigasi hero pada layar yang pendek.
+ * Dipakai dua kali — kotak kartu dan blok angka di dalamnya.
  */
 const statsY = 'max(29.5vw, min(62vh, 95vh - 11vw))';
 
@@ -50,13 +50,25 @@ const ghosts: GhostBox[] = [
   // Kartu statistik menempati kolom kiri, di luar jangkauan headline. Bentuknya
   // bujur sangkar 1:1 — 11vw × 11vw — dan morph tipe `background` yang
   // menanganinya melar jadi kartu rail yang lebar.
-  // Menggunakan 'vw' untuk h agar skalanya selaras dengan teks (yang juga
-  // menggunakan vw) pada rasio aspek apapun, sehingga teks tidak bocor keluar card.
+  // `h` memakai vw (bukan vh) supaya skalanya selaras dengan teks di dalamnya,
+  // yang juga diukur dalam vw, pada rasio aspek apa pun.
   { id: 'stats-card-0', x: '18.5vw', y: statsY, w: '11vw', h: '11vw' },
-  // Blok angka dipatok ke tengah kotak: lebarnya 6vw dari 11vw, jadi sisa 5vw
-  // dibagi dua di kiri-kanan, dan 1.9vw dari atas menaruh tiga baris teks
-  // (angka + label dua baris) kira-kira di titik tengahnya.
-  { id: 'stat-0', x: '21vw', y: `calc(${statsY} + 1.9vw)`, w: '6vw', h: '7.2vw' },
+  /*
+   * Blok angka dipatok ke tengah kartu. Ghost tipe `box` MENSKALAKAN blok ini
+   * dengan rasio LEBAR saja (`from.width / to.width` di ghost.ts) — tingginya
+   * ikut sendiri. Jadi `w` di sini yang menentukan sebesar apa teksnya tampil
+   * di hero, dan `h` cuma dokumentasi hasilnya.
+   *
+   * Yang diukur adalah `.nav-stat-stack` (versi BERTUMPUK) — versi sebaris
+   * tidak dighost sama sekali, ia hanya menyala di ujung morph.
+   *
+   *   4.75vw × 2.73vw  ukuran alami blok bertumpuk di rail (diukur di browser)
+   *   8.8 ÷ 4.75       = skala 1.853 di hero
+   *   → blok jadi 8.8vw × 5.14vw
+   *   (11 − 8.8) ÷ 2   = 1.1vw sisa kiri-kanan
+   *   (11 − 5.14) ÷ 2  = 2.93vw sisa atas-bawah
+   */
+  { id: 'stat-0', x: '19.6vw', y: `calc(${statsY} + 2.93vw)`, w: '8.8vw', h: '5.14vw' },
 
   {
     id: 'cta-primary',
