@@ -2,9 +2,20 @@
  * SATU-SATUNYA sumber konten situs. Ganti isi file ini dan seluruh halaman ikut
  * berubah — tidak perlu menyentuh markup atau kode animasi.
  *
- * Profil, layanan, dan angka di bawah disusun dari informasi publik
- * Custompedia (Instagram @custompedia, profil LinkedIn, Google Business).
- * Bagian yang belum terkonfirmasi ditandai TODO — mohon dicek sebelum rilis.
+ * Konten disusun dari informasi publik atas DUA bisnis yang dipegang Radhyta
+ * Mukhsin:
+ *
+ *   Custompedia Creative Group (PT) — agensi kreatif & marketing di Semarang.
+ *     Layanan publiknya: KOL Management, Social Media Handling, Digital
+ *     Advertising, Design & Content, Branding Activation, POI, OOH,
+ *     Merchandise, Event Organizer. Tagline resmi: "Deliver Your Brand Vision".
+ *
+ *   Parcelin Creative Indonesia (PT) / Parcelinpack — creative packaging,
+ *     berdiri 2017, klaim publiknya 950+ bisnis terlayani, MOQ rendah, melayani
+ *     UMKM sampai perusahaan multinasional. Lini produk: custom box, kemasan
+ *     produk, hampers, PR package, merchandise.
+ *
+ * Yang belum terkonfirmasi ditandai TODO — mohon dicek sebelum rilis.
  */
 
 export interface NavItem {
@@ -27,8 +38,7 @@ export interface TimelineEntry {
   age: string;
   /**
    * Versi panjang yang muncul di popup "Baca selengkapnya". Kalau kosong,
-   * popup jatuh ke `body` — isinya jadi sama persis dengan kartunya, jadi
-   * TODO: isi ini kalau tombolnya memang mau berguna.
+   * popup jatuh ke `body` — isinya jadi sama persis dengan kartunya.
    */
   story?: string;
 }
@@ -77,11 +87,11 @@ export const brand = {
   name: 'RADYT',
   symbol: '®',
   person: 'Radhyta Mukhsin',
-  role: 'Founder & Brand Strategist',
-  company: 'Custompedia Creative Group',
+  /** Ikut jadi <title> halaman, jadi ditahan tetap pendek. */
+  role: 'Owner Custompedia · Co-Founder Parcelin',
+  company: 'Custompedia Creative Group & Parcelin Creative Indonesia',
   city: 'Semarang, Indonesia',
-  tagline: 'Membangun merek yang bertahan, bukan sekadar konten yang ramai sehari.',
-  // TODO: konfirmasi alamat email yang dipakai untuk inbound.
+  tagline: 'Membangun merek lewat Custompedia, lalu mengemasnya lewat Parcelin.',
   email: 'hello@custompedia.id',
   phone: '+62 822-2617-1071',
   bookingUrl: 'https://wa.me/6282226171071',
@@ -101,84 +111,109 @@ export const nav: NavItem[] = [
 ];
 
 export const hero = {
-  eyebrow: 'Strategy-engineered',
-  eyebrowSecond: 'creative agency.',
-  headline: ['Kami bangun', 'merek —', 'bukan momen.'],
-  traits: ['Branding', 'Management', 'Digital Activation', 'Audit', 'Performance'],
+  eyebrow: 'Creative agency &',
+  eyebrowSecond: 'creative packaging.',
+  headline: ['Merek dibangun,', 'kemasannya', 'ikut bicara.'],
+  traits: ['Branding', 'Social & KOL', 'Digital Ads', 'Custom Packaging', 'Activation'],
   ctaPrimary: { label: 'Ngobrol Dulu', href: brand.bookingUrl },
   ctaSecondary: { label: 'Lihat Karya', href: '#work' },
 };
 
-/** Angka besar di sidebar. `count` memicu animasi odometer. */
-export const stats: Stat[] = [{ value: '12+', label: 'Tahun jalan' }];
+/**
+ * Angka besar di sidebar. `label` dipecah dua baris di spasi pertama, jadi
+ * tahan tetap dua kata. Angkanya klaim publik Parcelin (950+ bisnis terlayani).
+ */
+export const stats: Stat[] = [{ value: '950+', label: 'Bisnis dibantu' }];
 
-/** Nama yang berjalan di marquee sidebar — sub-brand & lini usaha grup. */
+/** Berjalan di marquee sidebar — dua bendera, lalu lini layanan di bawahnya. */
 export const clients: string[] = [
-  'Customfluencer',
-  'Customlab',
-  'Customclick',
-  'Custompedia ADV',
-  'Parcelin Creative',
-  'Custompedia Merch',
-  'Custom Event',
+  'Custompedia Creative Group',
+  'Parcelin Creative Indonesia',
+  'Parcelinpack',
+  'KOL Management',
+  'Social Media Handling',
+  'Digital Advertising',
+  'Branding Activation',
+  'OOH & POI',
+  'Merchandise',
+  'Event Organizer',
 ];
 
 export const about = {
-  label: 'Mulai kecil, tumbuh besar',
-  headline: ['Tentang Radyt', '& Perjalanannya'],
+  label: 'Dua bisnis, satu meja',
+  headline: ['Tentang Radyt', '& Dua Bisnisnya'],
   intro:
-    'Dua belas tahun lalu Custompedia dimulai dari satu meja di Semarang. Yang terjadi setelahnya lebih enak ditunjukkan daripada dijelaskan.',
+    'Custompedia membangun mereknya, Parcelin mengemasnya. Keduanya berangkat dari Semarang dan berjalan dari satu meja yang sama.',
 };
 
+/**
+ * TODO: hanya tahun 2017 (berdirinya Parcelin) yang terkonfirmasi dari
+ * informasi publik. Tahun pada entri lain adalah perkiraan urutan cerita —
+ * mohon dikoreksi sebelum rilis.
+ */
 export const timeline: TimelineEntry[] = [
   {
     year: '14',
-    title: 'Custompedia lahir di Semarang',
-    body: 'Satu meja, satu laptop, dan klien pertama yang percaya sebelum ada portofolio yang bisa ditunjukkan. Dari situ semuanya berangkat.',
+    title: 'Custompedia mulai di Semarang',
+    body: 'Satu meja, satu laptop, dan klien pertama yang percaya sebelum ada portofolio yang bisa ditunjukkan.',
     handle: '@awalmula',
     age: '12 tahun lalu',
+    story:
+      'Custompedia berangkat dari pekerjaan desain yang datang satu-satu, tanpa kantor dan tanpa tim. Klien pertama tidak membeli portofolio — mereka membeli kesediaan untuk mengangkat telepon dan menyelesaikan urusan. Cara kerja itu yang kemudian jadi standar internal: apa pun skala proyeknya, yang dijanjikan harus selesai.',
   },
   {
     year: '16',
-    title: 'Dari desain ke strategi',
-    body: 'Klien tidak butuh konten bagus — mereka butuh konten yang menjual. Sejak itu setiap pekerjaan dimulai dari brief bisnis, bukan brief visual.',
+    title: 'Dari desain ke strategi merek',
+    body: 'Klien tidak butuh konten bagus — mereka butuh konten yang menjual. Sejak itu setiap pekerjaan dimulai dari brief bisnis.',
     handle: '@strategi',
     age: '10 tahun lalu',
+    story:
+      'Titik baliknya sederhana: beberapa desain yang paling dibanggakan ternyata tidak menggerakkan penjualan sama sekali. Sejak itu setiap proyek dibuka dengan pertanyaan bisnis — siapa yang beli, berapa marginnya, apa yang menghambat orang membeli — sebelum satu pun visual dibuat. Custompedia berhenti menjual jasa desain dan mulai menjual arah.',
   },
   {
-    year: '18',
-    title: 'Tim pertama, proses pertama',
-    body: 'Dari kerja sendirian jadi punya tim. Yang paling sulit bukan menambah orang, tapi menuliskan cara kerja yang tadinya cuma ada di kepala.',
-    handle: '@tim',
-    age: '8 tahun lalu',
+    year: '17',
+    title: 'Parcelin Creative Indonesia berdiri',
+    body: 'Banyak klien punya merek rapi tapi kemasannya asal. Parcelin lahir untuk menutup jarak antara identitas merek dan barang yang dipegang pembeli.',
+    handle: '@parcelin',
+    age: '9 tahun lalu',
+    story:
+      'Parcelin berdiri pada 2017 sebagai lini kedua, bukan cabang agensi. Alasannya datang dari lapangan: merek yang sudah dibangun rapi di layar sering rontok begitu produknya sampai di tangan pembeli dengan kemasan seadanya. Menangani kemasan berarti menangani pabrik, material, dan toleransi cetak — disiplin yang sama sekali berbeda dari kerja kreatif, dan justru itu yang membuatnya berkembang jadi bisnis sendiri.',
   },
   {
-    year: '20',
-    title: 'Bertahan lewat pandemi',
-    body: 'Anggaran klien dipotong, banyak proyek berhenti. Kami putar arah ke digital activation dan justru menemukan lini layanan yang bertahan sampai sekarang.',
-    handle: '@bertahan',
-    age: '6 tahun lalu',
+    year: '19',
+    title: 'Layanan agensi jadi utuh',
+    body: 'KOL, iklan berbayar, OOH, sampai event masuk satu atap. Satu klien bisa ditangani dari strategi sampai eksekusi tanpa dioper ke pihak lain.',
+    handle: '@satuatap',
+    age: '7 tahun lalu',
+    story:
+      'Menambah layanan bukan soal memperbanyak daftar harga, tapi soal memperpendek rantai. Ketika KOL, iklan, produksi konten, OOH, dan event ditangani tim yang sama, klien berhenti jadi penerjemah antar vendor — dan pesan mereknya tidak berubah bentuk di setiap perpindahan tangan.',
   },
   {
-    year: '22',
-    title: 'Grup, bukan lagi satu agensi',
-    body: 'Customfluencer, Customlab, dan Customclick berdiri sebagai lini sendiri. Satu klien bisa ditangani dari hulu ke hilir tanpa dioper ke pihak lain.',
-    handle: '@grup',
-    age: '4 tahun lalu',
+    year: '21',
+    title: 'MOQ rendah untuk UMKM',
+    body: 'Kemasan bagus selama ini terkunci di pesanan besar. Parcelin membuka pintu untuk pesanan kecil tanpa menurunkan mutu cetak.',
+    handle: '@umkm',
+    age: '5 tahun lalu',
+    story:
+      'Hambatan terbesar UMKM bukan selera, tapi minimum order. Menurunkan MOQ berarti menata ulang cara produksi dijadwalkan dan digabung, bukan sekadar memangkas angka di penawaran. Hasilnya: usaha rumahan bisa memakai kotak yang setara dengan merek besar, dan itu yang membuat produk mereka layak masuk rak yang sama.',
   },
   {
     year: '24',
-    title: 'Parcelin Creative Indonesia',
-    body: 'Co-founder di lini baru. Pelajarannya: membangun merek orang lain dan membangun merek sendiri ternyata butuh disiplin yang sama.',
-    handle: '@parcelin',
+    title: '950+ bisnis lewat Parcelin',
+    body: 'Dari usaha rumahan sampai perusahaan multinasional — kemasan produk, hampers, PR package, dan merchandise.',
+    handle: '@sembilanratus',
     age: '2 tahun lalu',
+    story:
+      'Angka 950+ menarik bukan karena besarnya, tapi karena rentangnya: warung kopi satu gerai dan perusahaan multinasional dilayani lini produksi yang sama. Rentang itu memaksa prosesnya rapi — brief, mockup, sampel, produksi — karena proses yang hanya jalan untuk klien besar akan langsung patah di pesanan kecil.',
   },
   {
     year: '26',
     title: 'Masih di jalur yang sama',
-    body: 'Dua belas tahun, 168 ribu pengikut, dan ratusan merek. Sekarang mencari tahu di mana AI benar-benar membantu — dan di mana ia cuma bikin ramai.',
+    body: 'Dua bendera, satu prinsip: merek dibangun dari masalah bisnisnya, dan diselesaikan sampai ke barang yang dipegang pembeli.',
     handle: '@sekarang',
     age: 'hari ini',
+    story:
+      'Hari ini Custompedia dan Parcelin berjalan berdampingan: satu mengurus bagaimana merek dibaca, satu mengurus bagaimana merek dipegang. Yang sedang dicari sekarang adalah di mana otomasi dan AI benar-benar memangkas pekerjaan berulang — dan di mana ia cuma menambah ramai tanpa menambah hasil.',
   },
 ];
 
@@ -186,79 +221,79 @@ export const work = {
   label: 'Karya pilihan',
   headline: ['Dibangun untuk', 'Bertumbuh'],
   intro:
-    'Dua belas tahun menangani merek dari berbagai skala — F&B, ritel, properti, sampai institusi. Ini sebagian di antaranya.',
-  // TODO: ganti dengan nama klien asli setelah dapat izin publikasi.
+    'Dua lini kerja, satu penanggung jawab: Custompedia menangani merek dan kanalnya, Parcelin menangani kemasan dan barangnya.',
+  // TODO: ganti judul kartu dengan nama klien asli setelah dapat izin publikasi.
   items: [
     {
-      title: 'Kuliner Nusantara',
-      kind: 'F&B',
-      blurb: 'Rebranding jaringan restoran dari 3 jadi 11 gerai dalam dua tahun.',
-      tags: ['Branding', 'Social Media', 'Activation'],
+      title: 'Branding & Identitas',
+      kind: 'Custompedia',
+      blurb: 'Positioning, identitas visual, dan panduan merek yang bisa dipakai tim internal tanpa kami.',
+      tags: ['Branding', 'Design', 'Guideline'],
       accent: '#3f2a1d',
       href: '#',
     },
     {
-      title: 'Griya Properti',
-      kind: 'Properti',
-      blurb: 'Kampanye peluncuran hunian yang sold out sebelum topping off.',
-      tags: ['Performance', 'KOL', 'OOH'],
+      title: 'Social Media Handling',
+      kind: 'Custompedia',
+      blurb: 'Pengelolaan kanal harian: perencanaan, produksi, publikasi, sampai balas komentar.',
+      tags: ['Social Media', 'Content', 'Community'],
       accent: '#1f3340',
       href: '#',
     },
     {
-      title: 'Batik Semarangan',
-      kind: 'Ritel',
-      blurb: 'Membawa merek warisan keluarga ke etalase digital tanpa kehilangan akarnya.',
-      tags: ['Branding', 'Content', 'E-commerce'],
+      title: 'KOL Management',
+      kind: 'Custompedia',
+      blurb: 'Pemilihan, negosiasi, dan pengukuran kreator — dinilai dari penjualan, bukan jumlah tayangan.',
+      tags: ['KOL', 'Campaign', 'Report'],
       accent: '#4a2438',
       href: '#',
     },
     {
-      title: 'Klinik Sehat',
-      kind: 'Kesehatan',
-      blurb: 'Membangun kepercayaan di kategori yang paling sensitif terhadap klaim.',
-      tags: ['Strategy', 'Content', 'Audit'],
-      accent: '#14392c',
-      href: '#',
-    },
-    {
-      title: 'Kopi Kedua',
-      kind: 'F&B',
-      blurb: 'Dari kedai tunggal jadi merek yang dicari orang dari luar kota.',
-      tags: ['Branding', 'KOL', 'Merch'],
-      accent: '#2a2118',
-      href: '#',
-    },
-    {
-      title: 'Festival Kota',
-      kind: 'Event',
-      blurb: 'Aktivasi tiga hari, 40 ribu pengunjung, satu identitas visual yang konsisten.',
-      tags: ['Event', 'OOH', 'Activation'],
-      accent: '#3d2c56',
-      href: '#',
-    },
-    {
-      title: 'Retail Modern',
-      kind: 'Ritel',
-      blurb: 'Audit kanal yang memangkas biaya iklan 40% tanpa menurunkan penjualan.',
-      tags: ['Audit', 'Performance'],
+      title: 'Digital Advertising',
+      kind: 'Custompedia',
+      blurb: 'Iklan berbayar yang diikat ke satu angka bisnis, lengkap dengan audit belanja yang sudah jalan.',
+      tags: ['Ads', 'Audit', 'Performance'],
       accent: '#101014',
       href: '#',
     },
     {
-      title: 'Institusi Publik',
-      kind: 'Institusi',
-      blurb: 'Menerjemahkan program pemerintah jadi bahasa yang dipakai warganya sehari-hari.',
-      tags: ['Strategy', 'Content', 'Social Media'],
-      accent: '#1b2a4a',
+      title: 'Aktivasi, OOH & Event',
+      kind: 'Custompedia',
+      blurb: 'Peluncuran, POI, papan luar ruang, dan event yang tersambung kembali ke kanal digital.',
+      tags: ['Activation', 'OOH', 'Event'],
+      accent: '#3d2c56',
       href: '#',
     },
     {
-      title: 'Fashion Lokal',
-      kind: 'Fashion',
-      blurb: 'Satu kampanye KOL yang menghabiskan stok satu musim dalam sebelas hari.',
-      tags: ['KOL', 'Performance', 'Content'],
+      title: 'Custom Box',
+      kind: 'Parcelin',
+      blurb: 'Kemasan produk yang dirancang dari ukuran barangnya, bukan dari cetakan yang kebetulan tersedia.',
+      tags: ['Packaging', 'Struktur', 'Cetak'],
+      accent: '#14392c',
+      href: '#',
+    },
+    {
+      title: 'Hampers & PR Package',
+      kind: 'Parcelin',
+      blurb: 'Paket kiriman untuk media dan mitra — dibuat supaya layak difoto begitu kotaknya dibuka.',
+      tags: ['Hampers', 'PR Kit', 'Seasonal'],
+      accent: '#2a2118',
+      href: '#',
+    },
+    {
+      title: 'Kemasan UMKM, MOQ Rendah',
+      kind: 'Parcelin',
+      blurb: 'Pesanan kecil dengan mutu cetak yang sama — supaya usaha rumahan bisa masuk rak yang sama.',
+      tags: ['UMKM', 'MOQ Rendah', 'Konsultasi'],
       accent: '#241a2e',
+      href: '#',
+    },
+    {
+      title: 'Merchandise & Gift Set',
+      kind: 'Custompedia × Parcelin',
+      blurb: 'Barang jadi plus kemasannya dikerjakan sekaligus, jadi tidak ada dua vendor yang saling menunggu.',
+      tags: ['Merch', 'Packaging', 'Produksi'],
+      accent: '#1b2a4a',
       href: '#',
     },
     // `as`, bukan `satisfies`: satisfies mempertahankan tipe literal array ini,
@@ -269,35 +304,39 @@ export const work = {
 
 export const capabilities = {
   headline: ['Yang Anda', 'Dapatkan'],
-  label: 'Lima pilar layanan',
-  /** Kata bertanda `[chip]` diganti chip ikon oleh WhatYouGet.astro. */
+  label: 'Lima pilar, dua bendera',
+  /**
+   * Kata bertanda `[chip]` diganti chip ikon oleh WhatYouGet.astro. Jumlah
+   * `[chip]` HARUS sama dengan jumlah `items` — chip ke-n mengambil item ke-n,
+   * dan item yang tidak kebagian chip tidak akan pernah bisa dibuka.
+   */
   paragraph:
-    'Strategi, [chip] eksekusi, dan pengukuran [chip] dijalankan satu atap — supaya merek Anda [chip] tumbuh dengan arah [chip] yang jelas, bukan [chip] sekadar ramai sesaat.',
+    'Merek dirancang, [chip] kanalnya dijalankan, [chip] iklannya diukur, [chip] kemasannya diproduksi, [chip] dan aktivasinya turun ke lapangan [chip] — semua di bawah satu penanggung jawab.',
   items: [
     {
-      title: 'Branding',
-      body: 'Positioning, identitas visual, dan panduan merek yang bisa dipakai tim internal tanpa kami.',
+      title: 'Branding & Identitas',
+      body: 'Positioning, identitas visual, dan panduan merek yang bisa dipakai tim internal tanpa kami. Custompedia.',
       icon: 'spark',
     },
     {
-      title: 'Management',
-      body: 'Pengelolaan kanal harian: perencanaan konten, produksi, publikasi, sampai balas komentar.',
+      title: 'Social & KOL',
+      body: 'Kanal harian dan kampanye kreator: perencanaan, produksi, publikasi, sampai laporan. Custompedia.',
+      icon: 'people',
+    },
+    {
+      title: 'Digital Advertising',
+      body: 'Iklan berbayar yang diukur sampai angka penjualan, plus audit belanja iklan yang sudah berjalan. Custompedia.',
+      icon: 'gauge',
+    },
+    {
+      title: 'Custom Packaging',
+      body: 'Kotak, kemasan produk, hampers, dan PR package. MOQ rendah, dari UMKM sampai multinasional. Parcelin.',
       icon: 'layers',
     },
     {
-      title: 'Digital Activation',
-      body: 'KOL, kampanye peluncuran, event, dan aktivasi luring yang tersambung ke kanal digital.',
-      icon: 'plug',
-    },
-    {
-      title: 'Audit',
-      body: 'Membaca ulang kanal dan belanja iklan yang sudah jalan, lalu menunjuk mana yang membuang uang.',
-      icon: 'search',
-    },
-    {
-      title: 'Performance',
-      body: 'Iklan berbayar yang diukur sampai angka penjualan, bukan berhenti di jumlah tayangan.',
-      icon: 'gauge',
+      title: 'Aktivasi, Merch & Event',
+      body: 'Peluncuran, POI, OOH, merchandise, dan event — barang dan kemasannya dikerjakan sekaligus.',
+      icon: 'bolt',
     },
   ] satisfies Capability[],
 };
@@ -305,10 +344,10 @@ export const capabilities = {
 export const cta = {
   /** Dua baris pertama gelap, dua baris `soft` dipudarkan hampir jadi latar.
    *  Empat baris total — itu yang memberi judulnya arah turun ke tombol. */
-  headline: ['Kanal Anda', 'Sudah Ramai —'],
-  headlineSoft: ['Tapi Apakah', 'Menjual?'],
+  headline: ['Mereknya Rapi —', 'Tapi Apakah'],
+  headlineSoft: ['Kemasannya', 'Ikut Bicara?'],
   body:
-    'Ramai belum tentu tumbuh. Kami baca kanal Anda dan tunjukkan mana yang sebenarnya bekerja — gratis, tanpa kewajiban lanjut.',
+    'Kirim kanal dan produk Anda. Kami baca mana yang sudah bekerja dan mana yang masih membocorkan penjualan — gratis, tanpa kewajiban lanjut.',
   /** Isi gelembung chat. Harus berupa pertanyaan: tombol di sebelahnya baru
    *  terbaca sebagai jawaban kalau ada yang ditanyakan lebih dulu. */
   chat: 'Ada yang mau dibangun?',
@@ -329,6 +368,22 @@ export const testimonials = {
       company: 'F&B, Semarang',
     },
     {
+      headline: 'Kemasannya akhirnya nyambung sama mereknya.',
+      quote:
+        'Dulu logo kami rapi tapi dusnya polos beli jadi. Sekarang orang motret paketnya sendiri dan itu jadi promosi gratis buat kami.',
+      name: 'Nama Klien',
+      role: 'Founder',
+      company: 'Skincare lokal',
+    },
+    {
+      headline: 'Pesanan kecil tetap dilayani serius.',
+      quote:
+        'Kami cuma pesan beberapa ratus kotak dan tetap dapat sampel, revisi desain, dan penjelasan bahannya. Tempat lain langsung menolak di angka segitu.',
+      name: 'Nama Klien',
+      role: 'Pemilik',
+      company: 'UMKM makanan ringan',
+    },
+    {
       headline: 'Laporannya jujur, termasuk yang gagal.',
       quote:
         'Pernah satu kampanye tidak jalan dan mereka bilang duluan sebelum kami tanya, lengkap dengan rencana perbaikannya. Itu yang bikin kami bertahan.',
@@ -337,36 +392,20 @@ export const testimonials = {
       company: 'Ritel',
     },
     {
-      headline: 'Tim internal kami jadi ikut naik kelas.',
+      headline: 'Satu pintu untuk konten dan kemasan.',
       quote:
-        'Panduan mereknya dipakai sampai sekarang. Tim kami bisa jalan sendiri untuk hal-hal harian, dan itu memang tujuannya sejak awal.',
-      name: 'Nama Klien',
-      role: 'Founder',
-      company: 'Fashion',
-    },
-    {
-      headline: 'Cepat, tapi tidak asal cepat.',
-      quote:
-        'Peluncuran kami maju tiga minggu dan mereka tetap kejar tanpa menurunkan kualitas. Revisi ditangani tanpa drama.',
-      name: 'Nama Klien',
-      role: 'Project Lead',
-      company: 'Properti',
-    },
-    {
-      headline: 'Berani bilang tidak.',
-      quote:
-        'Kami minta ikut tren yang lagi ramai, mereka menolak dan menjelaskan kenapa itu tidak cocok buat kategori kami. Ternyata benar.',
-      name: 'Nama Klien',
-      role: 'Direktur',
-      company: 'Kesehatan',
-    },
-    {
-      headline: 'Satu pintu untuk semua.',
-      quote:
-        'Dari konten harian, KOL, sampai banner di jalan — semuanya satu tim. Kami tidak perlu jadi penerjemah antar vendor lagi.',
+        'Konten, KOL, sampai dus kirimannya satu tim. Kami tidak perlu jadi penerjemah antara agensi dan percetakan lagi.',
       name: 'Nama Klien',
       role: 'General Manager',
-      company: 'Institusi',
+      company: 'E-commerce',
+    },
+    {
+      headline: 'PR package-nya bikin liputan datang sendiri.',
+      quote:
+        'Kotak peluncurannya dibuat supaya enak dibuka di depan kamera. Setengah penerima mengunggahnya tanpa kami minta.',
+      name: 'Nama Klien',
+      role: 'Brand Manager',
+      company: 'Fashion',
     },
     {
       headline: 'Iklan jadi jauh lebih efisien.',
@@ -374,7 +413,7 @@ export const testimonials = {
         'Setelah audit, belanja iklan kami turun tapi penjualan tetap. Ternyata selama ini banyak yang terbuang di tempat yang salah.',
       name: 'Nama Klien',
       role: 'Owner',
-      company: 'E-commerce',
+      company: 'Kesehatan',
     },
     {
       headline: 'Partner jangka panjang.',
@@ -392,6 +431,21 @@ export const faq = {
   headline: ['Ada yang', 'ingin ditanya?'],
   items: [
     {
+      question: 'Custompedia dan Parcelin itu dua perusahaan berbeda?',
+      answer:
+        'Ya, dua badan usaha terpisah dengan tim produksinya masing-masing. Custompedia menangani merek dan kanalnya, Parcelin menangani kemasan dan barangnya. Yang menyatukan keduanya satu penanggung jawab, jadi Anda tidak perlu mengulang brief dua kali.',
+    },
+    {
+      question: 'Bisa ambil salah satu saja?',
+      answer:
+        'Bisa. Banyak klien hanya memakai kemasan lewat Parcelin, atau hanya pengelolaan kanal lewat Custompedia. Paket gabungan ditawarkan kalau memang menghemat waktu Anda, bukan sebagai syarat.',
+    },
+    {
+      question: 'Berapa minimum order untuk kemasan?',
+      answer:
+        'Parcelin memang dibangun untuk MOQ rendah — usaha rumahan bisa masuk tanpa harus memesan puluhan ribu pieces. Angka pastinya tergantung bahan dan teknik cetak, jadi paling cepat dikonfirmasi lewat konsultasi singkat.',
+    },
+    {
       question: 'Apa bedanya dengan agensi lain?',
       answer:
         'Kami mulai dari masalah bisnis, bukan dari ide konten. Setiap pekerjaan diikat ke satu angka yang mau digerakkan — penjualan, biaya akuisisi, atau pangsa perhatian di kategori Anda.',
@@ -399,12 +453,12 @@ export const faq = {
     {
       question: 'Melayani klien di luar Semarang?',
       answer:
-        'Ya. Basis kami di Semarang, tapi sebagian klien ada di Jakarta, Surabaya, dan Bali. Pertemuan rutin daring, kunjungan langsung saat produksi atau aktivasi.',
+        'Ya. Basis kami di Semarang, tapi klien Parcelin tersebar dari UMKM daerah sampai perusahaan multinasional. Pertemuan rutin daring, kunjungan langsung saat produksi atau aktivasi.',
     },
     {
       question: 'Berapa lama sampai kelihatan hasilnya?',
       answer:
-        'Perbaikan kanal biasanya terasa di bulan pertama. Pertumbuhan yang stabil butuh tiga sampai enam bulan — itu sebabnya retainer minimal tiga bulan.',
+        'Untuk kemasan, dari brief ke sampel biasanya hitungan minggu, tergantung bahan dan teknik cetak. Untuk kanal, perbaikan terasa di bulan pertama tapi pertumbuhan yang stabil butuh tiga sampai enam bulan — itu sebabnya retainer minimal tiga bulan.',
     },
     {
       question: 'Sudah punya tim internal, masih perlu agensi?',
@@ -412,29 +466,10 @@ export const faq = {
         'Justru paling efektif begitu. Kami masuk sebagai strategi dan produksi, tim Anda pegang eksekusi harian. Banyak klien akhirnya jalan sendiri, dan itu bukan kegagalan.',
     },
     {
-      question: 'Bagaimana proses dari awal sampai jalan?',
-      answer:
-        'Ngobrol awal, audit singkat, penyusunan strategi, lalu produksi bertahap yang bisa Anda tinjau di tiap titik. Sebelum peluncuran ada daftar periksa bersama.',
-    },
-    {
       question: 'Bisa tanda tangan NDA?',
       answer: 'Bisa. Kirim dokumen Anda sebelum pertemuan pertama, atau kami sediakan NDA dua arah.',
     },
-    {
-      question: 'Bagaimana revisi ditangani?',
-      answer:
-        'Semua masukan masuk ke satu daftar bersama dan diprioritaskan berdua. Dua putaran revisi termasuk dalam setiap paket bercakupan tetap.',
-    },
-    {
-      question: 'Apakah menangani produksi foto dan video?',
-      answer:
-        'Ya, lewat Customlab. Produksi, KOL, iklan, dan merchandise semuanya di dalam grup — tidak dioper ke pihak ketiga.',
-    },
-    {
-      question: 'Belum yakin paket mana yang cocok?',
-      answer:
-        'Mulai dari ngobrol. Kalau ternyata tidak ada yang cocok, kami akan bilang apa adanya dan menunjukkan arah lain yang lebih pas.',
-    },
+    // Jumlahnya sengaja dijaga GENAP: grid FAQ dua kolom, jadi item ganjil
+    // terakhir akan berdiri sendirian di kolom kiri.
   ] satisfies FaqItem[],
 };
-
