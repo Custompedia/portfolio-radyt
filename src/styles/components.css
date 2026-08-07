@@ -214,7 +214,9 @@
 .nav-stat-label {
   color: var(--fg);
   font-size: 1.1vw;
-  font-weight: 700;
+  /* Sepadan dengan angka di atasnya (juga 900). Pada 700 label ini terbaca
+     sebagai keterangan kecil, bukan sebagai separuh dari satu blok statistik. */
+  font-weight: 900;
   line-height: 1.15;
 }
 
@@ -398,9 +400,12 @@
   border-radius: var(--radius-lg);
   background: var(--yellow);
   color: var(--black);
-  /* 1.18vw / w500 = 17.6px @1492, ukuran tombol referensi. */
+  /* 1.18vw = 17.6px @1492, ukuran tombol referensi. Bobotnya SENGAJA menyimpang
+     dari referensi (w500): label kuning-di-atas-hitam pada ukuran sekecil ini
+     terbaca tipis, dan tombol adalah satu-satunya elemen di halaman yang harus
+     menang duluan dari sekitarnya. */
   font-size: 1.18vw;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1;
   overflow: hidden;
   transform-origin: top left;

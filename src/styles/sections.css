@@ -51,6 +51,11 @@
   font-weight: 900;
   letter-spacing: -0.035em;
   line-height: 1;
+  /* Menyempitkan kotak yang dipusatkan `justify-content: center`, jadi isinya
+     bergeser kiri sebanyak SETENGAH nilai ini — persis kompensasi yang
+     dibutuhkan untuk memusatkan TINTA, bukan kotak advance-nya. Lihat
+     --wordmark-bearing-l. */
+  padding-right: calc(var(--wordmark-bearing-l) * var(--wordmark-size));
   user-select: none;
 }
 
@@ -120,7 +125,27 @@
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2.77vw;
+  padding: 0;
+}
+
+/* Tepi luar baris ini dipatok ke tepi TINTA wordmark di atasnya: "HOME" mulai
+   tepat di bawah kaki kiri huruf R, "FAQ" berhenti tepat di bawah kaki kanan
+   huruf A. Keduanya kini sama-sama berdiri di --gutter, garis vertikal yang
+   sama dengan sisa halaman.
+   Yang digeser margin GRUP, bukan padding .hero-nav, karena koreksinya di kiri
+   bernilai negatif — dan yang harus lurus adalah GLIF-nya, bukan kotak link.
+   Di dalam kotak link masih ada barisan yang mendahului teks:
+     0.79vw  padding kiri
+     14px    ikon (dirender tapi tak terlihat; lihat Hero.astro)
+     0.46vw  jarak ikon ke teks
+   Ketiganya harus dibayar balik supaya glif — bukan kotaknya — yang mendarat
+   di gutter. Di kanan hanya ada padding 0.79vw yang mengikuti teks. */
+.hero-nav-group:first-child {
+  margin-left: calc(var(--gutter) - 1.25vw - 14px);
+}
+
+.hero-nav-group:last-child {
+  margin-right: calc(var(--gutter) - 0.79vw);
 }
 
 .hero-nav-group {
@@ -230,10 +255,14 @@
    `tagline`, yang membaca token yang sama). Dengan `right`, tepi kiri ikut
    bergeser setiap isi kartunya berubah panjang dan kelurusan itu diam-diam
    hilang. */
+/* Tinggi kartu = tinggi isinya, tanpa rasio yang dipaksakan. Dijangkar dari
+   KAKI, bukan kepala: yang harus tetap adalah jarak ke paragraf tagline di
+   bawahnya, sementara tinggi kartu sendiri ikut berubah kalau daftar traits
+   di site.ts ditambah atau dikurangi. */
 .hero-traits {
   position: absolute;
   left: var(--hero-traits-left);
-  top: 61.2vh;
+  bottom: 15vh;
   display: flex;
   flex-direction: column;
   gap: 0.83vw;
@@ -247,7 +276,10 @@
   gap: 0.66vw;
   color: var(--white);
   font-size: 0.93vw;
-  font-weight: 700;
+  /* 900, bukan 700: teks putih kecil di atas foto berkontras rendah kehilangan
+     bobotnya, jadi ia butuh satu tingkat lebih tebal daripada teks yang duduk
+     di atas latar polos. */
+  font-weight: 900;
   /* 1.25, bukan 1.5: tinggi kartu ini ditentukan isinya (semua vw) sementara
      posisinya dipatok vh. Di layar pendek yang 1.5 membuat kaki kartu turun
      sampai menabrak paragraf tagline di 87vh. */
@@ -1914,6 +1946,7 @@
   .hero-traits {
     right: auto;
     top: auto;
+    bottom: auto;
     align-items: flex-start;
     gap: 8px;
     padding: 18px 20px;

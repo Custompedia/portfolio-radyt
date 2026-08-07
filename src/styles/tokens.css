@@ -185,12 +185,31 @@
      sama ikut melar. */
   /* Ukuran wordmark raksasa, dan SATU-SATUNYA tempat angkanya ditulis.
    *
-   * Terikat pada jumlah huruf nama: "RADHYTA" pada bobot 900 dengan tracking
-   * -0.035em memakan 4.678vw lebar per 1vw ukuran font (diukur di browser),
-   * jadi 100 ÷ 4.678 = 21.4vw membuatnya pas selebar layar. Kalau namanya
-   * berubah, UKUR ULANG angka itu — jangan ditaksir — lalu ganti di sini saja.
+   * Ketiga angka di bawah diukur di browser pada "RADHYTA" (Satoshi 900,
+   * tracking -0.035em) lewat canvas measureText. JANGAN ditaksir — kalau nama
+   * brand-nya berubah, ukur ulang ketiganya.
+   *
+   * --wordmark-ink  lebar TINTA per 1vw ukuran font. Yang diukur tinta, bukan
+   *                 kotak advance-nya: kotak R menyisakan side bearing kiri
+   *                 yang lumayan (lihat di bawah), dan menyamakan KOTAK ke
+   *                 gutter membuat tinta R berhenti ~20px lebih ke dalam
+   *                 daripada tinta A — wordmark-nya terbaca miring ke kanan,
+   *                 dan "HOME" di bawahnya menonjol keluar melewati kaki R.
+   * --wordmark-bearing-l  jarak dari tepi kiri kotak R ke tinta pertamanya,
+   *                 sebagai kelipatan ukuran font. Dibayar balik lewat
+   *                 padding-right di .hero-wordmark supaya yang terpusat di
+   *                 layar adalah tintanya, bukan kotaknya. Huruf A di ujung
+   *                 kanan bearing-nya nol, jadi hanya sisi kiri yang perlu
+   *                 dikoreksi.
+   *
+   * Ukurannya lalu diturunkan dari ruang yang benar-benar tersedia — lebar
+   * layar dikurangi gutter kiri-kanan — supaya wordmark BERHENTI tepat di
+   * gutter alih-alih terpotong tepi layar. Versi sebelumnya menulis 21.4vw
+   * lepas, yang berarti pas 100vw, dan kedua ujungnya hilang tergunting.
    * Baris navigasi dan versi mobile menurunkan nilainya dari sini. */
-  --wordmark-size: 21.4vw;
+  --wordmark-ink: 4.6405;
+  --wordmark-bearing-l: 0.0625;
+  --wordmark-size: calc((100vw - 2 * var(--gutter)) / var(--wordmark-ink));
 
   /* Kaki huruf (baseline, bukan kotak barisnya) jatuh di sekitar 0.852 ×
      ukuran font; navbar ditaruh 0.7vw di bawahnya supaya terbaca sebagai satu
