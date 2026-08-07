@@ -62,6 +62,35 @@ html {
   /* `clip`, bukan `hidden`: hidden akan membuat viewport jadi scroll container
      dan mematikan seluruh position:sticky di halaman ini. */
   overflow-x: clip;
+  /* Firefox, dan Chrome 121+ yang mengutamakan properti standar ini di atas
+     pseudo-element ::-webkit-scrollbar di bawah. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+/* Chrome/Safari lama. Duplikat yang disengaja: browser baru memakai blok di
+   atas, yang lama memakai blok ini, dan keduanya menunjuk token yang sama. */
+html::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  /* Border transparan + background-clip: piloknya menyusut ke tengah lajur,
+     jadi thumb-nya melayang alih-alih menempel rapat ke tepi layar. */
+  border: 3px solid transparent;
+  background: var(--scrollbar-thumb);
+  background-clip: padding-box;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+  background-clip: padding-box;
 }
 
 body {

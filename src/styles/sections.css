@@ -85,11 +85,19 @@
   visibility: hidden;
 }
 
+/* Yang dijangkar bukan tepi bawah potret melainkan tepi ATAS-nya, di
+   --hero-portrait-top. `bottom` dihitung mundur dari situ supaya menaikkan
+   --hero-portrait-h membesarkan potret TANPA menggeser kepalanya; kelebihannya
+   jatuh ke bawah dan dipotong .hero-back. Kalau tepi bawah yang dijangkar
+   (bottom: 0), memperbesar potret akan mendorong kepalanya keluar layar. */
 .hero-portrait {
   position: absolute;
-  bottom: 0;
-  left: 50%;
-  height: 97vh;
+  bottom: calc(100vh - var(--hero-portrait-top) - var(--hero-portrait-h));
+  /* Pergeserannya dititipkan ke `left`, BUKAN ke translateX di bawah: preloader
+     dan timeline scroll menulis `transform` elemen ini lewat GSAP, dan apa pun
+     yang kita tambahkan di sana akan tertimpa begitu animasi jalan. */
+  left: calc(53% + var(--hero-portrait-x));
+  height: var(--hero-portrait-h);
   transform: translateX(-50%);
 }
 
@@ -1818,9 +1826,11 @@
     margin-bottom: 12px;
   }
 
+  /* Di sini potret jadi elemen alir biasa — tidak ada yang memotongnya, jadi
+     tingginya angka utuh, bukan turunan dari jangkar 3vh seperti di desktop. */
   .hero-portrait {
     position: static;
-    height: 46vh;
+    height: var(--hero-portrait-h-sm);
     transform: none;
     margin: 0 auto 24px;
   }

@@ -134,8 +134,14 @@ const navRight = nav.slice(3);
       data-tl-to="{'filter':'blur(90px)','opacity':0}"
       data-tl-desktop
     >
-      <!-- Foto placeholder berlisensi bebas; lihat public/images/README.md. -->
-      <img src="/images/portrait.webp" alt="" width="720" height="896" fetchpriority="high" />
+      <!-- Foto studio yang latarnya sudah dipotong; lihat public/images/README.md. -->
+      <img
+        src="/images/portrait.webp"
+        alt={`${brand.person} — ${brand.role}`}
+        width="810"
+        height="1365"
+        fetchpriority="high"
+      />
     </div>
 
     {

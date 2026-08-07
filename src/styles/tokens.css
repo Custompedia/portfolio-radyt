@@ -56,6 +56,16 @@
   );
   --swiper-bullet: #a8a684;
 
+  /* Scrollbar halaman. Track-nya SENGAJA transparan: dengan begitu yang
+     terlihat di belakangnya adalah section yang sedang lewat — beige di
+     sebagian besar halaman, hitam saat Work — jadi ia ikut berganti warna
+     tanpa satu baris JS pun.
+     Thumb-nya taupe pertengahan, dipilih supaya tetap terbaca di KEDUA latar
+     itu: terlalu gelap ia hilang di section Work, terlalu terang ia hilang di
+     beige. */
+  --scrollbar-thumb: #8f8b76;
+  --scrollbar-thumb-hover: #6f6c5b;
+
   /* Token turunan yang di-flip oleh theme.ts lewat [data-theme] */
   --surface: var(--card-bg);
   --surface-border: var(--card-border);
@@ -120,6 +130,35 @@
      disengaja: tidak ada versi terpusat dari layout ini. */
   --gutter: 1.39vw;
   --content-left: 21vw;
+
+  /* SATU-SATUNYA tempat mengatur besar potret hero. Naikkan angkanya = potret
+     membesar; tepi ATAS-nya tetap di 3vh (lihat .hero-portrait), jadi yang
+     tumbuh ke bawah dan terpotong oleh `overflow: clip` milik .hero-back
+     hanyalah kaki. Batas atasnya bukan angka ini melainkan headroom foto:
+     lewat ~135vh kepalanya mulai keluar layar.
+     Padanan mobile ada di --hero-portrait-h-sm. */
+  --hero-portrait-h: 150vh;
+  /* Dipisah karena di mobile potret ikut mengalir bersama teks: tiap vh yang
+     ditambahkan di sini benar-benar mendorong headline turun. */
+  --hero-portrait-h-sm: 54vh;
+
+  /* Geser potret mendatar. Negatif = ke kiri, positif = ke kanan; 0 berarti
+     kotak fotonya persis di tengah layar.
+     Ini murni koreksi OPTIS, bukan perbaikan centering: fotonya sendiri sudah
+     center (subjek jatuh di 405 dari lebar 810), tapi posenya menyerong dan
+     bahu kirinya menjulur lebih jauh, jadi massa visualnya terbaca condong ke
+     kanan. Hanya berlaku di desktop — di mobile potret jadi elemen alir dan
+     dipusatkan oleh `margin: 0 auto`. */
+  --hero-portrait-x: -3vw;
+
+  /* Jarak tepi ATAS kotak foto ke tepi atas layar — knob naik-turun potret.
+     Kecilkan / buat negatif = potret naik. Sebelumnya angka ini terkunci di
+     3vh di dalam .hero-portrait.
+     Batas amannya bergantung pada --hero-portrait-h: di dalam file fotonya ada
+     margin kosong 1.76% tinggi di atas rambut, jadi ruang gerak ke atas kira-
+     kira 1.76% × --hero-portrait-h (pada 150vh ≈ 2.6vh) sebelum ubun-ubunnya
+     ikut terpotong. */
+  --hero-portrait-top: -2vh;
 
   /* Ukuran kedua tombol hero. Dipakai bersama oleh ghost tombol CTA
      (tipe `size`) dan tombol sekunder statis, jadi keduanya dijamin identik. */
