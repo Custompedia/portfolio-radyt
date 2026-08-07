@@ -40,35 +40,49 @@ interface GhostBox {
  */
 /**
  * Tepi atas kartu statistik. `min(..., 95vh - 11vw)` menahannya dari jatuh
- * melewati tepi bawah layar ultra-wide (11vw = tinggi kartu); `max(29.5vw, ...)`
+ * melewati tepi bawah layar ultra-wide (11vw = tinggi kartu); `max(22.5vw, ...)`
  * menahannya dari naik menutupi baris navigasi hero pada layar yang pendek.
  * Dipakai dua kali — kotak kartu dan blok angka di dalamnya.
  */
-const statsY = 'max(29.5vw, min(62vh, 95vh - 11vw))';
+const statsY = 'max(22.5vw, min(48vh, 95vh - 11vw))';
+
+/** Sisi kartu statistik hero. Bujur sangkar, jadi satu angka untuk w dan h. */
+const STAT_CARD = 11;
+/** Padding optis di dalam kartu; sisanya jadi lebar blok teks. */
+const STAT_PAD = 0.75;
 
 const ghosts: GhostBox[] = [
-  // Kartu statistik menempati kolom kiri, di luar jangkauan headline. Bentuknya
-  // bujur sangkar 1:1 — 11vw × 11vw — dan morph tipe `background` yang
-  // menanganinya melar jadi kartu rail yang lebar.
-  // `h` memakai vw (bukan vh) supaya skalanya selaras dengan teks di dalamnya,
-  // yang juga diukur dalam vw, pada rasio aspek apa pun.
-  { id: 'stats-card-0', x: '18.5vw', y: statsY, w: '11vw', h: '11vw' },
   /*
-   * Blok angka dipatok ke tengah kartu. Ghost tipe `box` MENSKALAKAN blok ini
-   * dengan rasio LEBAR saja (`from.width / to.width` di ghost.ts) — tingginya
-   * ikut sendiri. Jadi `w` di sini yang menentukan sebesar apa teksnya tampil
-   * di hero, dan `h` cuma dokumentasi hasilnya.
-   *
-   * Yang diukur adalah `.nav-stat-stack` (versi BERTUMPUK) — versi sebaris
-   * tidak dighost sama sekali, ia hanya menyala di ujung morph.
-   *
-   *   4.75vw × 2.73vw  ukuran alami blok bertumpuk di rail (diukur di browser)
-   *   8.8 ÷ 4.75       = skala 1.853 di hero
-   *   → blok jadi 8.8vw × 5.14vw
-   *   (11 − 8.8) ÷ 2   = 1.1vw sisa kiri-kanan
-   *   (11 − 5.14) ÷ 2  = 2.93vw sisa atas-bawah
+   * Kartu statistik menempati kolom kiri, di luar jangkauan headline. Lebarnya
+   * mengikuti anggaran horizontal di sections.css: tepi kiri 18.5vw + 11vw
+   * lebar → berakhir di 29.5vw, menyisakan jarak 4vw ke headline di 33.5vw.
+   * `h` memakai vw (bukan vh) supaya bujur sangkarnya tetap 1:1 dan skalanya
+   * selaras dengan teks di dalamnya — yang juga diukur dalam vw — pada rasio
+   * aspek apa pun.
    */
-  { id: 'stat-0', x: '19.6vw', y: `calc(${statsY} + 2.93vw)`, w: '8.8vw', h: '5.14vw' },
+  { id: 'stats-card-0', x: '18.5vw', y: statsY, w: `${STAT_CARD}vw`, h: `${STAT_CARD}vw` },
+  /*
+   * Blok angka. Ghost tipe `stat` memakai kotak ini sebagai tujuan SUSUNAN
+   * BERTUMPUK di dalam elemen: `w` menentukan skalanya (from.width ÷ lebar
+   * susunan bertumpuk di ghost.ts), `x`/`y` menentukan sudut kiri-atasnya.
+   * `h` tidak dibaca engine — diisi apa adanya sebagai dokumentasi.
+   *
+   * Lebarnya = sisi kartu dikurangi padding kiri+kanan, jadi teksnya mengisi
+   * kartu semaksimal mungkin. Yang paling lebar di susunan itu adalah LABEL
+   * (7.55vw pada ukuran rail, diukur di browser), jadi:
+   *
+   *   skala   = 9.5 ÷ 7.55                   = 1.258
+   *   tinggi  = (1.8 + 0.35 + 1.08) × 1.258  = 4.06vw
+   *             ^angka  ^gap   ^label          (gap = .nav-stat.is-stacked)
+   *   sisa    = (11 − 4.06) ÷ 2              = 3.47vw  → atas = bawah
+   */
+  {
+    id: 'stat-0',
+    x: `${18.5 + STAT_PAD}vw`,
+    y: `calc(${statsY} + 3.47vw)`,
+    w: `${STAT_CARD - STAT_PAD * 2}vw`,
+    h: '4.06vw',
+  },
 
   {
     id: 'cta-primary',

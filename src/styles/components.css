@@ -126,7 +126,7 @@
 .nav-stat-card {
   position: relative; /* jangkar untuk `.nav-stat-stack` yang absolut */
   flex: 1;
-  padding: 0.97vw 0.69vw;
+  padding: 1.2vw 0.7vw;
 }
 
 /* `:not()`-nya penting: dengan satu statistik saja, kartu yang sama adalah
@@ -175,10 +175,8 @@
 .nav-stat {
   display: flex;
   flex-direction: row;
-  /* `baseline`, bukan `center`: kaki "950+" dan kaki "Bisnis dibantu" duduk di
-     garis yang sama — dengan `center` label yang jauh lebih kecil melayang. */
   align-items: baseline;
-  gap: 0.83vw;
+  gap: 0.5vw;
   width: fit-content;
   margin-inline: auto;
   text-align: center;
@@ -186,38 +184,49 @@
 }
 
 /* HANYA dipakai selama satu frame pengukuran oleh ghost.ts, tidak pernah
-   bertahan di DOM. Nilainya harus persis susunan yang mau ditiru di hero. */
+   bertahan di DOM. Nilainya harus persis susunan yang mau ditiru di hero.
+ *
+ * JANGAN menimpa font-size/letter-spacing di sini. Yang benar-benar dirender
+ * di hero selalu tipografi RAIL yang di-scale utuh oleh induknya; blok ini
+ * cuma dipakai untuk mengukur POSISI tiap anak. Begitu ukurannya beda, dua
+ * hal langsung meleset:
+ *   1. skalanya (= lebar ghost ÷ lebar blok ini) dihitung dari lebar yang tak
+ *      pernah dirender — versi lama memakai 7vw, blok terukur jadi 16.6vw,
+ *      dan angkanya justru MENGECIL jadi 0.82× di kartu 15vw;
+ *   2. jarak antar anak ikut salah, karena dy-nya lahir dari tinggi baris
+ *      yang berbeda dari yang terlihat.
+ * Cukup ubah arah flex dan gap-nya — keduanya berskala benar.
+ *
+ * Gap-nya rapat: angka dan label harus terbaca sebagai SATU blok. Versi
+ * sebelumnya memakai 2.9vw untuk merentangkan keduanya ke tepi atas dan bawah
+ * kartu, dan hasilnya justru terbaca sebagai dua elemen tak berhubungan dengan
+ * lubang di tengah. Ruang sisa kartu lebih baik jadi margin di luar blok.
+ * Kalau angka ini berubah, `stat-0` di Hero.astro harus ikut dihitung ulang —
+ * ia yang menengahkan blok ini secara vertikal. */
 .nav-stat.is-stacked {
   flex-direction: column;
   align-items: center;
-  gap: 0.3vw;
+  gap: 0.35vw;
 }
 
-/* Angka statistik kuning, labelnya tebal dan gelap — bukan sebaliknya.
- *
- * Ukuran ini milik kartu RAIL: dinaikkan 1.5× dari nilai lama (1.72 / 0.73 /
- * gap 0.55vw) supaya blok sebarisnya benar-benar mengisi kartu yang lebar,
- * bukan mengambang kecil di tengahnya.
- *
- * Tampilan di hero TIDAK ikut berubah: di sana ukurannya dipatok oleh lebar
- * kotak ghost `stat-0` (8.8vw), dan ghost.ts menghitung skalanya dari lebar
- * alami blok ini. Font yang lebih besar hanya membuat skala itu lebih kecil —
- * hasil akhirnya tetap 8.8vw, malah lebih tajam karena kurang diperbesar. */
+/* Angka statistik kuning tebal, labelnya lebih tipis dan gelap di rail. */
 .nav-stat-value {
   color: var(--yellow);
-  font-size: 2.58vw;
+  font-size: 1.8vw;
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.04em;
 }
 
 .nav-stat-label {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25em;
   color: var(--fg);
-  font-size: 1.1vw;
-  /* Sepadan dengan angka di atasnya (juga 900). Pada 700 label ini terbaca
-     sebagai keterangan kecil, bukan sebagai separuh dari satu blok statistik. */
-  font-weight: 900;
-  line-height: 1.15;
+  font-size: 0.9vw;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 /* --- Menu --- */
