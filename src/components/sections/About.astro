@@ -12,7 +12,7 @@
  * mungkin lepas sinkron.
  */
 import Icon from '../Icon.astro';
-import { about, timeline } from '../../data/site';
+import { about, timeline, timelineFlags } from '../../data/site';
 
 const VB_W = 1000;
 const VB_H = 2200;
@@ -48,6 +48,32 @@ const path = nodes
   .join(' ');
 
 const entries = timeline.slice(0, nodes.length);
+const total = String(entries.length).padStart(2, '0');
+
+/**
+ * Isi popup dititipkan sebagai SATU blok JSON, bukan sebagai belasan atribut
+ * `data-*` per kartu (versi sebelumnya) dan bukan dengan mengimpor site.ts dari
+ * sisi klien — impor itu akan menyeret seluruh isi situs (work, paket, FAQ,
+ * testimoni) masuk ke bundle JS.
+ *
+ * `<` di-escape supaya sebuah `</script>` yang kelak masuk ke teks konten tidak
+ * bisa menutup tag ini lebih awal.
+ */
+const storyData = JSON.stringify(
+  entries.map((entry, i) => ({
+    step: `${String(i + 1).padStart(2, '0')} / ${total}`,
+    year: entry.year,
+    flag: entry.flag,
+    flagLabel: timelineFlags[entry.flag],
+    title: entry.title,
+    age: entry.age,
+    body: entry.story ?? entry.body,
+    metrics: entry.metrics,
+    moves: entry.moves,
+    outcome: entry.outcome,
+    tags: entry.tags,
+  })),
+).replace(/</g, '\\u003c');
 ---
 
 <section class="section about" id="about">
@@ -75,13 +101,9 @@ const entries = timeline.slice(0, nodes.length);
         "none") supaya path mengisi kotak apa pun, dan stretch itu mengubah
         lingkaran jadi elips. Sebagai elemen HTML yang diposisikan persen, titik
         ini tetap bulat sempurna sambil duduk di koordinat yang sama. */}
-    {/* Titik progres. Posisinya dihitung timeline-path.ts dari geometri path
-        (getPointAtLength) lalu ditulis sebagai persen — cara yang sama dengan
-        simpul statis di bawah, dan satu-satunya cara menjaganya tetap BULAT:
-        SVG-nya di-stretch `preserveAspectRatio="none"`, jadi apa pun yang
-        digambar di dalamnya berubah jadi elips. */}
-    <span class="timeline-runner" data-timeline-runner aria-hidden="true"></span>
-
+    {/* Tidak ada titik yang berjalan di ujung garis. Versi sebelumnya punya
+        satu, tapi di antara simpul-simpul kuning ia cuma terbaca sebagai
+        noda hitam yang nyangkut di tengah lengkungan. */}
     {
       nodes.map((node, i) => (
         <span
@@ -104,6 +126,18 @@ const entries = timeline.slice(0, nodes.length);
           data-tl-start="top 88%"
           data-tl-once
         >
+          {/* Baris penanda: bendera mana yang mengerjakan bab ini, dan bab
+              keberapa dari tujuh. Keduanya menggantikan sepasang lingkaran
+              avatar abu-abu di versi sebelumnya — lingkaran itu tidak mewakili
+              siapa pun dan cuma terbaca sebagai placeholder. */}
+          <header class="tl-head">
+            <span class="tl-flag" data-flag={entry.flag}>
+              <span class="tl-flag-dot" aria-hidden="true" />
+              {timelineFlags[entry.flag]}
+            </span>
+            <span class="tl-step">{String(i + 1).padStart(2, '0')}<span>/{total}</span></span>
+          </header>
+
           <span class="timeline-year">
             <span class="timeline-tick" aria-hidden="true">
               '
@@ -112,28 +146,21 @@ const entries = timeline.slice(0, nodes.length);
           </span>
           <h3 class="timeline-title">{entry.title}</h3>
           <p class="timeline-body">{entry.body}</p>
+
+          {/* Dua angka teratas saja; yang ketiga disimpan untuk popup supaya
+              membuka kartu benar-benar menambah isi, bukan mengulangnya. */}
+          <ul class="tl-metrics">
+            {entry.metrics.slice(0, 2).map((metric) => (
+              <li>
+                <strong>{metric.value}</strong>
+                <span>{metric.label}</span>
+              </li>
+            ))}
+          </ul>
+
           <footer class="timeline-meta">
-            {/* Sepasang lingkaran bertumpuk, bukan satu — yang kedua digeser
-                masuk supaya saling menindih seperti tumpukan avatar. */}
-            <span class="timeline-avatars" aria-hidden="true">
-              <span class="timeline-avatar" />
-              <span class="timeline-avatar is-second" />
-            </span>
-            <span class="timeline-handle">
-              <strong>{entry.handle}</strong>
-              <span>{entry.age}</span>
-            </span>
-            {/* Teksnya dititipkan di atribut, bukan diimpor ulang di modul —
-                mengimpor site.ts dari sisi klien akan menyeret seluruh isi
-                situs (work, paket, FAQ, testimoni) masuk ke bundle JS. */}
-            <button
-              class="timeline-more"
-              type="button"
-              data-story
-              data-story-year={entry.year}
-              data-story-title={entry.title}
-              data-story-text={entry.story ?? entry.body}
-            >
+            <span class="tl-age">{entry.age}</span>
+            <button class="timeline-more" type="button" data-story data-story-index={i}>
               Baca selengkapnya
               <Icon name="arrow" size={12} />
             </button>
@@ -144,16 +171,55 @@ const entries = timeline.slice(0, nodes.length);
   </div>
 </section>
 
+<script type="application/json" data-timeline-data set:html={storyData} is:inline></script>
+
 <!-- Popup cerita panjang. Satu dialog dipakai ulang untuk ketujuh kartu:
-     isinya ditulis ulang saat dibuka, jadi tidak ada tujuh salinan markup. -->
+     isinya ditulis ulang saat dibuka dari blok JSON di atas, jadi tidak ada
+     tujuh salinan markup. Elemen ber-`data-story-step` di bawah adalah urutan
+     yang dianimasikan masuk oleh timeline-path.ts. -->
 <div class="story" data-story-dialog hidden>
   <button class="story-scrim" type="button" data-story-close aria-label="Tutup"></button>
-  <div class="story-panel card" role="dialog" aria-modal="true" aria-labelledby="story-title">
+  <!-- `data-lenis-prevent`: panel ini punya scroll sendiri. Tanpa atribut itu
+       Lenis menelan wheel event-nya dan isi panel yang panjang tidak bisa
+       digulir sama sekali. -->
+  <div
+    class="story-panel card"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="story-title"
+    data-lenis-prevent
+  >
     <button class="story-close" type="button" data-story-close aria-label="Tutup">
       <Icon name="x" size={16} />
     </button>
-    <span class="story-year" data-story-year></span>
-    <h3 class="story-title" id="story-title" data-story-title></h3>
-    <p class="story-body" data-story-body></p>
+
+    <header class="story-head" data-story-step>
+      <span class="tl-flag" data-story-flag>
+        <span class="tl-flag-dot" aria-hidden="true"></span>
+        <span data-story-flag-label></span>
+      </span>
+      <span class="tl-step" data-story-stepno></span>
+    </header>
+
+    <div class="story-hero" data-story-step>
+      <span class="story-year" data-story-year></span>
+      <div class="story-hero-text">
+        <h3 class="story-title" id="story-title" data-story-title></h3>
+        <span class="tl-age" data-story-age></span>
+      </div>
+    </div>
+
+    <p class="story-body" data-story-body data-story-step></p>
+
+    <ul class="story-metrics" data-story-metrics data-story-step></ul>
+
+    <section class="story-block" data-story-step>
+      <h4 class="story-label">Yang dikerjakan</h4>
+      <ul class="story-moves" data-story-moves></ul>
+    </section>
+
+    <p class="story-outcome" data-story-outcome data-story-step></p>
+
+    <ul class="story-tags" data-story-tags data-story-step></ul>
   </div>
 </div>

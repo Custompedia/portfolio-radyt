@@ -30,18 +30,46 @@ export interface Stat {
   label: string;
 }
 
+/** Angka pendek di kartu & popup perjalanan. `value` ditulis apa adanya —
+ *  boleh bersufiks ('950+', '50 pcs'), jadi jangan diperlakukan sebagai number. */
+export interface TimelineMetric {
+  value: string;
+  label: string;
+}
+
 export interface TimelineEntry {
   year: string;
   title: string;
   body: string;
-  handle: string;
+  /** Bendera yang mengerjakan bab ini — menentukan warna chip di kartu. */
+  flag: TimelineFlag;
   age: string;
+  /**
+   * Tiga angka: dua pertama tampil di kartu, ketiganya tampil di popup.
+   * Urutkan dari yang paling kuat.
+   */
+  metrics: [TimelineMetric, TimelineMetric, TimelineMetric];
+  /** Apa yang benar-benar dikerjakan di bab ini — kalimat pendek, bukan paragraf. */
+  moves: string[];
+  /** Satu kalimat akibat: apa yang berubah setelah bab ini. */
+  outcome: string;
+  tags: string[];
   /**
    * Versi panjang yang muncul di popup "Baca selengkapnya". Kalau kosong,
    * popup jatuh ke `body` — isinya jadi sama persis dengan kartunya.
    */
   story?: string;
 }
+
+export type TimelineFlag = 'custompedia' | 'parcelin' | 'both';
+
+/** Nama panjang tiap bendera. Dipisah dari entri supaya penulisannya tidak
+ *  pernah berbeda antar tahun. */
+export const timelineFlags: Record<TimelineFlag, string> = {
+  custompedia: 'Custompedia',
+  parcelin: 'Parcelin',
+  both: 'Custompedia × Parcelin',
+};
 
 export interface WorkItem {
   title: string;
@@ -148,17 +176,30 @@ export const about = {
 };
 
 /**
- * TODO: hanya tahun 2017 (berdirinya Parcelin) yang terkonfirmasi dari
- * informasi publik. Tahun pada entri lain adalah perkiraan urutan cerita —
- * mohon dikoreksi sebelum rilis.
+ * TODO: hanya tahun 2017 (berdirinya Parcelin) dan angka 950+ bisnis yang
+ * terkonfirmasi dari informasi publik. Tahun pada entri lain adalah perkiraan
+ * urutan cerita, dan SELURUH `metrics` selain 950+ adalah angka contoh
+ * (mock) untuk mengisi tampilan — mohon dikoreksi sebelum rilis.
  */
 export const timeline: TimelineEntry[] = [
   {
     year: '14',
     title: 'Custompedia mulai di Semarang',
     body: 'Satu meja, satu laptop, dan klien pertama yang percaya sebelum ada portofolio yang bisa ditunjukkan.',
-    handle: '@awalmula',
+    flag: 'custompedia',
     age: '12 tahun lalu',
+    metrics: [
+      { value: '1', label: 'Klien pertama' },
+      { value: '2', label: 'Orang di tim' },
+      { value: '0', label: 'Kantor' },
+    ],
+    moves: [
+      'Menerima pekerjaan desain satu per satu, tanpa perantara.',
+      'Menjawab sendiri semua pertanyaan klien, dari brief sampai revisi.',
+      'Menyimpan tiap hasil kerja jadi portofolio pertama.',
+    ],
+    outcome: 'Kebiasaan "yang dijanjikan harus selesai" jadi standar internal sejak hari pertama.',
+    tags: ['Desain grafis', 'Freelance', 'Semarang'],
     story:
       'Custompedia berangkat dari pekerjaan desain yang datang satu-satu, tanpa kantor dan tanpa tim. Klien pertama tidak membeli portofolio — mereka membeli kesediaan untuk mengangkat telepon dan menyelesaikan urusan. Cara kerja itu yang kemudian jadi standar internal: apa pun skala proyeknya, yang dijanjikan harus selesai.',
   },
@@ -166,8 +207,20 @@ export const timeline: TimelineEntry[] = [
     year: '16',
     title: 'Dari desain ke strategi merek',
     body: 'Klien tidak butuh konten bagus — mereka butuh konten yang menjual. Sejak itu setiap pekerjaan dimulai dari brief bisnis.',
-    handle: '@strategi',
+    flag: 'custompedia',
     age: '10 tahun lalu',
+    metrics: [
+      { value: '100%', label: 'Proyek dibuka dari brief bisnis' },
+      { value: '12', label: 'Merek ditangani' },
+      { value: '3', label: 'Layanan inti' },
+    ],
+    moves: [
+      'Menyusun brief bisnis wajib: siapa pembelinya, berapa marginnya, apa hambatannya.',
+      'Menghentikan pekerjaan desain yang tidak punya target penjualan.',
+      'Menambah riset pasar kecil sebelum eksekusi visual.',
+    ],
+    outcome: 'Custompedia berhenti menjual jasa desain dan mulai menjual arah.',
+    tags: ['Strategi merek', 'Brief bisnis', 'Riset'],
     story:
       'Titik baliknya sederhana: beberapa desain yang paling dibanggakan ternyata tidak menggerakkan penjualan sama sekali. Sejak itu setiap proyek dibuka dengan pertanyaan bisnis — siapa yang beli, berapa marginnya, apa yang menghambat orang membeli — sebelum satu pun visual dibuat. Custompedia berhenti menjual jasa desain dan mulai menjual arah.',
   },
@@ -175,8 +228,20 @@ export const timeline: TimelineEntry[] = [
     year: '17',
     title: 'Parcelin Creative Indonesia berdiri',
     body: 'Banyak klien punya merek rapi tapi kemasannya asal. Parcelin lahir untuk menutup jarak antara identitas merek dan barang yang dipegang pembeli.',
-    handle: '@parcelin',
+    flag: 'parcelin',
     age: '9 tahun lalu',
+    metrics: [
+      { value: '2017', label: 'Tahun berdiri' },
+      { value: '5', label: 'Jenis kemasan' },
+      { value: '1', label: 'Lini produksi sendiri' },
+    ],
+    moves: [
+      'Memetakan pabrik, material, dan toleransi cetak yang bisa dipegang.',
+      'Membuat lini kedua sebagai badan usaha sendiri, bukan cabang agensi.',
+      'Menyusun alur baku: brief → mockup → sampel → produksi.',
+    ],
+    outcome: 'Merek yang rapi di layar berhenti rontok saat produknya sampai di tangan pembeli.',
+    tags: ['Custom box', 'Produksi', 'Kemasan'],
     story:
       'Parcelin berdiri pada 2017 sebagai lini kedua, bukan cabang agensi. Alasannya datang dari lapangan: merek yang sudah dibangun rapi di layar sering rontok begitu produknya sampai di tangan pembeli dengan kemasan seadanya. Menangani kemasan berarti menangani pabrik, material, dan toleransi cetak — disiplin yang sama sekali berbeda dari kerja kreatif, dan justru itu yang membuatnya berkembang jadi bisnis sendiri.',
   },
@@ -184,8 +249,20 @@ export const timeline: TimelineEntry[] = [
     year: '19',
     title: 'Layanan agensi jadi utuh',
     body: 'KOL, iklan berbayar, OOH, sampai event masuk satu atap. Satu klien bisa ditangani dari strategi sampai eksekusi tanpa dioper ke pihak lain.',
-    handle: '@satuatap',
+    flag: 'custompedia',
     age: '7 tahun lalu',
+    metrics: [
+      { value: '9', label: 'Layanan satu atap' },
+      { value: '40+', label: 'KOL aktif' },
+      { value: '1', label: 'Tim untuk semua kanal' },
+    ],
+    moves: [
+      'Menarik KOL management, iklan berbayar, OOH, dan event ke dalam satu tim.',
+      'Menyatukan pelaporan semua kanal dalam satu format.',
+      'Menghapus perpindahan tangan antar vendor di tengah kampanye.',
+    ],
+    outcome: 'Klien berhenti jadi penerjemah antar vendor — pesan mereknya tidak berubah bentuk.',
+    tags: ['KOL', 'Digital ads', 'OOH', 'Event'],
     story:
       'Menambah layanan bukan soal memperbanyak daftar harga, tapi soal memperpendek rantai. Ketika KOL, iklan, produksi konten, OOH, dan event ditangani tim yang sama, klien berhenti jadi penerjemah antar vendor — dan pesan mereknya tidak berubah bentuk di setiap perpindahan tangan.',
   },
@@ -193,8 +270,20 @@ export const timeline: TimelineEntry[] = [
     year: '21',
     title: 'MOQ rendah untuk UMKM',
     body: 'Kemasan bagus selama ini terkunci di pesanan besar. Parcelin membuka pintu untuk pesanan kecil tanpa menurunkan mutu cetak.',
-    handle: '@umkm',
+    flag: 'parcelin',
     age: '5 tahun lalu',
+    metrics: [
+      { value: '50 pcs', label: 'MOQ terendah' },
+      { value: '70%', label: 'Klien dari UMKM' },
+      { value: '4 hari', label: 'Sampel sampai di tangan' },
+    ],
+    moves: [
+      'Menggabung jadwal produksi beberapa pesanan kecil jadi satu batch.',
+      'Menurunkan MOQ tanpa memangkas mutu cetak.',
+      'Menyiapkan template ukuran siap pakai untuk pesanan pertama.',
+    ],
+    outcome: 'Usaha rumahan bisa memakai kotak setara merek besar, dan layak masuk rak yang sama.',
+    tags: ['MOQ rendah', 'UMKM', 'Batch produksi'],
     story:
       'Hambatan terbesar UMKM bukan selera, tapi minimum order. Menurunkan MOQ berarti menata ulang cara produksi dijadwalkan dan digabung, bukan sekadar memangkas angka di penawaran. Hasilnya: usaha rumahan bisa memakai kotak yang setara dengan merek besar, dan itu yang membuat produk mereka layak masuk rak yang sama.',
   },
@@ -202,8 +291,20 @@ export const timeline: TimelineEntry[] = [
     year: '24',
     title: '950+ bisnis lewat Parcelin',
     body: 'Dari usaha rumahan sampai perusahaan multinasional — kemasan produk, hampers, PR package, dan merchandise.',
-    handle: '@sembilanratus',
+    flag: 'parcelin',
     age: '2 tahun lalu',
+    metrics: [
+      { value: '950+', label: 'Bisnis terlayani' },
+      { value: '34', label: 'Kota tujuan kirim' },
+      { value: '12', label: 'Jenis industri' },
+    ],
+    moves: [
+      'Melayani warung satu gerai dan perusahaan multinasional di lini yang sama.',
+      'Merapikan proses supaya tidak patah di pesanan kecil.',
+      'Menambah lini hampers, PR package, dan merchandise.',
+    ],
+    outcome: 'Rentangnya — bukan besarnya — yang memaksa prosesnya rapi.',
+    tags: ['Hampers', 'PR package', 'Merchandise'],
     story:
       'Angka 950+ menarik bukan karena besarnya, tapi karena rentangnya: warung kopi satu gerai dan perusahaan multinasional dilayani lini produksi yang sama. Rentang itu memaksa prosesnya rapi — brief, mockup, sampel, produksi — karena proses yang hanya jalan untuk klien besar akan langsung patah di pesanan kecil.',
   },
@@ -211,8 +312,20 @@ export const timeline: TimelineEntry[] = [
     year: '26',
     title: 'Masih di jalur yang sama',
     body: 'Dua bendera, satu prinsip: merek dibangun dari masalah bisnisnya, dan diselesaikan sampai ke barang yang dipegang pembeli.',
-    handle: '@sekarang',
+    flag: 'both',
     age: 'hari ini',
+    metrics: [
+      { value: '2', label: 'Bendera berjalan' },
+      { value: '12', label: 'Tahun jalan' },
+      { value: '1', label: 'Prinsip kerja' },
+    ],
+    moves: [
+      'Menjalankan Custompedia dan Parcelin berdampingan dari satu meja.',
+      'Menguji di mana otomasi dan AI benar-benar memangkas pekerjaan berulang.',
+      'Menutup pekerjaan sampai ke barang yang dipegang pembeli.',
+    ],
+    outcome: 'Satu mengurus bagaimana merek dibaca, satu mengurus bagaimana merek dipegang.',
+    tags: ['Branding', 'Packaging', 'Otomasi'],
     story:
       'Hari ini Custompedia dan Parcelin berjalan berdampingan: satu mengurus bagaimana merek dibaca, satu mengurus bagaimana merek dipegang. Yang sedang dicari sekarang adalah di mana otomasi dan AI benar-benar memangkas pekerjaan berulang — dan di mana ia cuma menambah ramai tanpa menambah hasil.',
   },

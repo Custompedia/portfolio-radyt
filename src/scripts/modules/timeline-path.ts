@@ -1,5 +1,6 @@
 import { gsap, ScrollTrigger } from '../core/gsap';
 import type { AnimationModule } from '../core/module';
+import { getLenis } from '../core/smooth-scroll';
 import { $, $$, isDesktop, prefersReducedMotion } from '../core/utils';
 
 /**
@@ -172,41 +173,100 @@ function buildActiveNodes(container: HTMLElement): void {
 }
 
 /**
- * Titik yang berjalan di ujung garis yang sedang digambar.
+ * KARTU DISOROT — hanya `scale`, dan hanya lewat GSAP.
  *
- * Posisinya diambil dari geometri path lewat getPointAtLength lalu ditulis
- * sebagai PERSEN, bukan digambar di dalam SVG-nya. Alasannya sama dengan
- * simpul statis: SVG-nya di-stretch `preserveAspectRatio="none"`, jadi apa pun
- * yang digambar di dalamnya berubah jadi elips.
+ * Kartu sudah memegang `y` (animasi masuk) dan `yPercent` (parallax) sebagai
+ * style inline milik GSAP; `transform` apa pun dari CSS akan ditimpa style itu.
+ * `scale` adalah komponen transform terpisah, jadi ia bisa hidup berdampingan
+ * dengan keduanya. Sisa efek hover (bayangan, warna tombol) tetap di CSS.
  */
-function buildRunner(container: HTMLElement): void {
-  const runner = $<HTMLElement>('[data-timeline-runner]', container);
-  const path = $<SVGPathElement>('.timeline-lit', container);
-  const svg = $<SVGSVGElement>('.timeline-svg', container);
-  if (!runner || !path || !svg) return;
+let hoverBound = false;
 
-  const viewBox = svg.viewBox.baseVal;
-  if (!viewBox.width || !viewBox.height) return;
-  const length = path.getTotalLength();
+function buildHover(container: HTMLElement): void {
+  // Sekali seumur halaman: kartunya elemen yang sama setelah rebuild resize,
+  // jadi listener yang dipasang ulang akan menumpuk di elemen yang itu-itu juga.
+  if (hoverBound) return;
+  hoverBound = true;
 
-  const place = (progress: number) => {
-    const point = path.getPointAtLength(length * gsap.utils.clamp(0, 1, progress));
-    runner.style.left = `${(point.x / viewBox.width) * 100}%`;
-    runner.style.top = `${(point.y / viewBox.height) * 100}%`;
-  };
-
-  place(0);
-
-  const instance = ScrollTrigger.create({
-    trigger: container,
-    start: 'top 90%',
-    end: 'bottom 80%',
-    // Jendela pengisian garis yang sama dengan buildFill — titik ini harus
-    // duduk tepat di ujung garis, bukan berjalan dengan iramanya sendiri.
-    onUpdate: (self) => place(self.progress),
-    onToggle: (self) => gsap.to(runner, { opacity: self.isActive ? 1 : 0, duration: 0.3 }),
+  $$<HTMLElement>('[data-timeline-card]', container).forEach((card) => {
+    // `gsap.to`, bukan `quickTo`: quickTo pada sub-properti transform tidak
+    // pernah ter-render di sini — nilainya tetap 1 (diuji di browser).
+    const lift = (scale: number) => gsap.to(card, { scale, duration: 0.4, ease: 'expo.out' });
+    card.addEventListener('mouseenter', () => lift(1.02));
+    card.addEventListener('mouseleave', () => lift(1));
   });
-  triggers.push(instance);
+}
+
+/* --------------------------------------------------------------------------
+ * POPUP CERITA
+ * ----------------------------------------------------------------------- */
+
+interface StoryMetric {
+  value: string;
+  label: string;
+}
+
+interface StoryEntry {
+  step: string;
+  year: string;
+  flag: string;
+  flagLabel: string;
+  title: string;
+  age: string;
+  body: string;
+  metrics: StoryMetric[];
+  moves: string[];
+  outcome: string;
+  tags: string[];
+}
+
+/**
+ * Isi popup datang dari satu blok JSON yang ditanam About.astro, bukan dari
+ * belasan atribut `data-*` per kartu dan bukan dari `import` site.ts — impor
+ * itu akan menyeret seluruh isi situs masuk ke bundle JS.
+ */
+function readEntries(): StoryEntry[] {
+  const script = $<HTMLScriptElement>('[data-timeline-data]');
+  if (!script?.textContent) return [];
+  try {
+    return JSON.parse(script.textContent) as StoryEntry[];
+  } catch {
+    console.warn('[timeline] data cerita gagal di-parse');
+    return [];
+  }
+}
+
+/** Semua teks masuk lewat `textContent`, tidak pernah `innerHTML`. */
+function fillList<T>(host: HTMLElement, items: T[], render: (item: T) => HTMLElement): void {
+  host.replaceChildren(...items.map(render));
+}
+
+/**
+ * Angka dihitung naik hanya kalau ia memang angka. `value` boleh bersufiks
+ * ('950+', '50 pcs', '2017'), jadi bagian numerik dipisah dari sisanya dan
+ * hanya bagian itu yang dianimasikan — sufiksnya tetap terbaca sejak frame
+ * pertama.
+ */
+function countUp(el: HTMLElement, value: string): void {
+  const match = /^(\d+)(.*)$/.exec(value.trim());
+  if (!match || prefersReducedMotion()) {
+    el.textContent = value;
+    return;
+  }
+
+  const target = Number(match[1]);
+  const suffix = match[2] ?? '';
+  const state = { n: 0 };
+
+  gsap.to(state, {
+    n: target,
+    duration: 0.9,
+    delay: 0.15,
+    ease: 'expo.out',
+    onUpdate: () => {
+      el.textContent = `${Math.round(state.n)}${suffix}`;
+    },
+  });
 }
 
 /**
@@ -220,31 +280,105 @@ function buildStory(): void {
 
   const dialog = $<HTMLElement>('[data-story-dialog]');
   const panel = $<HTMLElement>('.story-panel');
-  const yearEl = $('[data-story-year]');
-  const titleEl = $('[data-story-title]');
-  const bodyEl = $('[data-story-body]');
-  if (!dialog || !panel || !yearEl || !titleEl || !bodyEl) return;
+  if (!dialog || !panel) return;
+
+  const el = {
+    flag: $<HTMLElement>('[data-story-flag]', dialog),
+    flagLabel: $<HTMLElement>('[data-story-flag-label]', dialog),
+    step: $<HTMLElement>('[data-story-stepno]', dialog),
+    year: $<HTMLElement>('[data-story-year]', dialog),
+    title: $<HTMLElement>('[data-story-title]', dialog),
+    age: $<HTMLElement>('[data-story-age]', dialog),
+    body: $<HTMLElement>('[data-story-body]', dialog),
+    metrics: $<HTMLElement>('[data-story-metrics]', dialog),
+    moves: $<HTMLElement>('[data-story-moves]', dialog),
+    outcome: $<HTMLElement>('[data-story-outcome]', dialog),
+    tags: $<HTMLElement>('[data-story-tags]', dialog),
+  };
+  if (Object.values(el).some((node) => node === null)) return;
+
+  const entries = readEntries();
+  if (entries.length === 0) return;
 
   storyBound = true;
+
+  const steps = $$<HTMLElement>('[data-story-step]', dialog);
   let lastTrigger: HTMLElement | null = null;
 
+  const render = (entry: StoryEntry) => {
+    el.flag!.dataset.flag = entry.flag;
+    el.flagLabel!.textContent = entry.flagLabel;
+    el.step!.textContent = entry.step;
+    el.year!.textContent = `'${entry.year}`;
+    el.title!.textContent = entry.title;
+    el.age!.textContent = entry.age;
+    el.body!.textContent = entry.body;
+    el.outcome!.textContent = entry.outcome;
+
+    fillList(el.metrics!, entry.metrics, (metric) => {
+      const li = document.createElement('li');
+      const value = document.createElement('strong');
+      const label = document.createElement('span');
+      value.textContent = metric.value;
+      label.textContent = metric.label;
+      li.append(value, label);
+      return li;
+    });
+
+    fillList(el.moves!, entry.moves, (move) => {
+      const li = document.createElement('li');
+      li.textContent = move;
+      return li;
+    });
+
+    fillList(el.tags!, entry.tags, (tag) => {
+      const li = document.createElement('li');
+      li.textContent = tag;
+      return li;
+    });
+  };
+
   const open = (source: HTMLElement) => {
+    const entry = entries[Number(source.dataset.storyIndex)];
+    if (!entry) return;
+
     lastTrigger = source;
-    yearEl.textContent = `'${source.dataset.storyYear ?? ''}`;
-    titleEl.textContent = source.dataset.storyTitle ?? '';
-    bodyEl.textContent = source.dataset.storyText ?? '';
+    render(entry);
 
     dialog.hidden = false;
-    gsap.fromTo(dialog, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out' });
-    gsap.fromTo(panel, { y: 24, scale: 0.96 }, { y: 0, scale: 1, duration: 0.45, ease: 'expo.out' });
+    // Panel bisa dibuka lagi setelah digulir ke bawah pada kunjungan sebelumnya.
+    panel.scrollTop = 0;
+    // Halaman di belakang scrim tidak boleh ikut bergulir; Lenis memegang
+    // scroll-nya sendiri, jadi `overflow:hidden` saja tidak menghentikannya.
+    getLenis()?.stop();
+
+    gsap
+      .timeline()
+      .fromTo(dialog, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out' }, 0)
+      .fromTo(
+        panel,
+        { y: 28, scale: 0.96 },
+        { y: 0, scale: 1, duration: 0.55, ease: 'expo.out' },
+        0,
+      )
+      .fromTo(
+        steps,
+        { y: 18, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, stagger: 0.06, ease: 'expo.out' },
+        0.12,
+      );
+
+    $$<HTMLElement>('strong', el.metrics!).forEach((node, i) => countUp(node, entry.metrics[i]!.value));
+
     $<HTMLElement>('.story-close', dialog)?.focus();
   };
 
   const close = () => {
     if (dialog.hidden) return;
+    getLenis()?.start();
     gsap.to(dialog, {
       opacity: 0,
-      duration: 0.2,
+      duration: 0.22,
       ease: 'power2.in',
       onComplete: () => {
         dialog.hidden = true;
@@ -290,17 +424,18 @@ export const timelinePathModule: AnimationModule = {
     buildFill(container);
     buildParallax(container);
     buildActiveNodes(container);
-    buildRunner(container);
+    buildHover(container);
   },
 
   destroy() {
     while (triggers.length) triggers.pop()?.kill();
+    // TIDAK di-null-kan: popup-nya dipasang sekali seumur halaman (`storyBound`),
+    // jadi handle ini harus tetap hidup untuk destroy berikutnya.
     closeStory?.();
-    closeStory = null;
     $$<HTMLElement>('[data-timeline-card]').forEach((card) => {
       card.style.left = '';
       card.style.top = '';
-      gsap.set(card, { clearProps: 'yPercent' });
+      gsap.set(card, { clearProps: 'yPercent,scale' });
     });
     $$<HTMLElement>('[data-timeline-node]').forEach((node) => node.classList.remove('is-active'));
   },
