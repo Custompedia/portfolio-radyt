@@ -79,7 +79,9 @@ const ghosts: GhostBox[] = [
     h: 'var(--hero-btn-h)',
   },
 
-  { id: 'tagline', x: '72vw', y: '87vh', w: '22.8vw', h: '7.4vh' },
+  // `x` sengaja token, bukan angka: tepi kirinya harus lurus dengan kartu
+  // traits di atasnya, dan keduanya membaca --hero-traits-left.
+  { id: 'tagline', x: 'var(--hero-traits-left)', y: '87vh', w: '22.8vw', h: '7.4vh' },
 ];
 
 /**

@@ -160,6 +160,14 @@
      ikut terpotong. */
   --hero-portrait-top: -2vh;
 
+  /* Tepi KIRI kartu traits hero, dan sekaligus tepi kiri paragraf tagline di
+     bawahnya (lewat ghost `tagline` di Hero.astro). Keduanya WAJIB memakai
+     token ini: kelurusan tepi kiri mereka itu yang bikin sudut kanan hero
+     terbaca sebagai satu blok, dan dulu angkanya ditulis dua kali sehingga
+     menggeser salah satunya diam-diam merusak kelurusan itu.
+     Kecilkan = kedua-duanya bergeser ke kiri. */
+  --hero-traits-left: 69vw;
+
   /* Ukuran kedua tombol hero. Dipakai bersama oleh ghost tombol CTA
      (tipe `size`) dan tombol sekunder statis, jadi keduanya dijamin identik. */
   --hero-btn-w: max(160px, 10.5vw);

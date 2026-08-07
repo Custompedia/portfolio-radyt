@@ -227,11 +227,12 @@
    kalau lebar 11.5vw referensi dipaksakan, dan tanpa dipaksa pun hasilnya
    mendarat di ~11.5vw. Dipatok lewat `left`, BUKAN `right`: yang harus lurus
    adalah tepi KIRI-nya dengan paragraf tagline tepat di bawahnya (ghost
-   `tagline`, juga 72vw). Dengan `right`, tepi kiri ikut bergeser setiap isi
-   kartunya berubah panjang dan kelurusan itu diam-diam hilang. */
+   `tagline`, yang membaca token yang sama). Dengan `right`, tepi kiri ikut
+   bergeser setiap isi kartunya berubah panjang dan kelurusan itu diam-diam
+   hilang. */
 .hero-traits {
   position: absolute;
-  left: 72vw;
+  left: var(--hero-traits-left);
   top: 61.2vh;
   display: flex;
   flex-direction: column;
@@ -253,12 +254,60 @@
   line-height: 1.25;
 }
 
+/* Tiap trait dapat bentuk penanda sendiri — masih titik kuning padat, cuma
+   siluetnya bergantian, supaya lima baris ini terbaca sebagai daftar berisi
+   dan bukan lima salinan dari satu baris.
+   Semuanya digambar dengan clip-path pada kotak yang sama, jadi tidak ada
+   aset, font ikon, atau emoji yang perlu diunduh. */
+/* KOTAKNYA sama besar untuk kelima baris — itu yang menjaga tepi kiri teks
+   tetap lurus satu kolom. Yang membedakan bobot optis tiap bentuk diurus
+   `scale`, yang tidak mengubah ruang yang dipakai elemen. Kalau ukurannya
+   yang diutak-atik (versi pertama), tepi kiri labelnya ragged 2–3px. */
 .hero-trait-mark {
   flex: none;
-  width: 0.79vw;
-  height: 0.79vw;
+  width: 0.95vw;
+  height: 0.95vw;
   border-radius: 50%;
   background: var(--yellow);
+  /* Lingkaran memenuhi kotaknya sendiri, jadi ia perlu dikecilkan agar tidak
+     terbaca paling berat di antara kelimanya. */
+  transform: scale(0.83);
+}
+
+/* Belah ketupat */
+.hero-trait:nth-child(2) .hero-trait-mark {
+  border-radius: 0;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  transform: none;
+}
+
+/* Segitiga */
+.hero-trait:nth-child(3) .hero-trait-mark {
+  border-radius: 0;
+  clip-path: polygon(50% 4%, 96% 92%, 4% 92%);
+  transform: none;
+}
+
+/* Kotak bersudut tumpul */
+.hero-trait:nth-child(4) .hero-trait-mark {
+  border-radius: 0.14vw;
+  transform: scale(0.78);
+}
+
+/* Kilau empat sudut */
+.hero-trait:nth-child(5) .hero-trait-mark {
+  border-radius: 0;
+  clip-path: polygon(
+    50% 0,
+    62% 38%,
+    100% 50%,
+    62% 62%,
+    50% 100%,
+    38% 62%,
+    0 50%,
+    38% 38%
+  );
+  transform: none;
 }
 
 .hero-eyebrow {
@@ -1886,9 +1935,15 @@
     font-size: 0.95rem;
   }
 
+  /* Cuma kotaknya yang dikecilkan; clip-path dan scale tiap bentuk diwarisi
+     dari aturan desktop karena keduanya relatif terhadap kotak ini. */
   .hero-trait-mark {
-    width: 7px;
-    height: 7px;
+    width: 8.5px;
+    height: 8.5px;
+  }
+
+  .hero-trait:nth-child(4) .hero-trait-mark {
+    border-radius: 1.5px;
   }
 
   .hero-eyebrow {
