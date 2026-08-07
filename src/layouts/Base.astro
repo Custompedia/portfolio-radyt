@@ -54,6 +54,13 @@ const {
   <body>
     <slot />
 
+    <!-- Butir film di atas SELURUH halaman, satu elemen untuk semuanya.
+         Beige rata terbaca seperti warna CSS bawaan; butiran tipis membuatnya
+         terasa seperti hasil cetak. Sengaja `fixed` dan bukan per-section:
+         butiran yang ikut menggulung akan terbaca sebagai tekstur benda,
+         bukan sebagai lapisan film. -->
+    <div class="grain" aria-hidden="true"></div>
+
     <script>
       import '../scripts/main';
     </script>

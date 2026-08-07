@@ -21,6 +21,7 @@
   --dark: #1d1d1d;
   --dark-deep: #131313;
 
+
   /* Surface: kartu di atas background terang */
   --card-bg: rgba(223, 222, 206, 0.8);
   --card-border: 1px solid rgba(255, 255, 255, 0.2);
@@ -135,8 +136,24 @@
      Dengan menurunkan tepi bawah headline dari rumusnya, jarak itu jadi tetap
      3.2vh di SEMUA rasio — dan kasus terburuk tetap aman karena rumus yang
      sama ikut melar. */
+  /* Ukuran wordmark raksasa, dan SATU-SATUNYA tempat angkanya ditulis.
+   *
+   * Terikat pada jumlah huruf nama: "RADHYTA" pada bobot 900 dengan tracking
+   * -0.035em memakan 4.678vw lebar per 1vw ukuran font (diukur di browser),
+   * jadi 100 ÷ 4.678 = 21.4vw membuatnya pas selebar layar. Kalau namanya
+   * berubah, UKUR ULANG angka itu — jangan ditaksir — lalu ganti di sini saja.
+   * Baris navigasi dan versi mobile menurunkan nilainya dari sini. */
+  --wordmark-size: 21.4vw;
+
+  /* Kaki huruf (baseline, bukan kotak barisnya) jatuh di sekitar 0.852 ×
+     ukuran font; navbar ditaruh 0.7vw di bawahnya supaya terbaca sebagai satu
+     blok dengan wordmark. Sebelum ini angkanya ditulis lepas (26.7vw), dan
+     satu kali penggantian nama langsung membuatnya menggantung 8vw dari kaki
+     hurufnya tanpa ada yang mengingatkan. */
+  --hero-nav-top: calc(0.852 * var(--wordmark-size) + 0.7vw);
+
   --hero-h1-top: 51vh;
-  --hero-h1-size: min(6.5rem, 11.5vh, 4.85vw);
+  --hero-h1-size: min(6.5rem, 11.5vh, 4.7vw);
   /* 3 baris × line-height 1.03 (--lh-h1). Ditulis eksplisit, bukan lewat
      var(--lh-h1), supaya terbaca sebagai "tinggi tiga baris" saat dibaca. */
   --hero-h1-bottom: calc(var(--hero-h1-top) + 3 * 1.03 * var(--hero-h1-size));

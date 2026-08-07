@@ -45,13 +45,9 @@
   width: 100%;
   justify-content: center;
   color: var(--yellow);
-  /* Full kanan kiri. Angkanya TERIKAT pada jumlah huruf nama: "RADHYTA" pada
-     bobot 900 dengan tracking -0.035em memakan 4.678vw lebar per 1vw ukuran
-     font (diukur di browser), jadi 100 ÷ 4.678 = 21.4vw yang membuatnya pas
-     selebar layar. Nilai lama 30.5vw dikalibrasi untuk "RADYT" yang lima
-     huruf; dipakai apa adanya di sini, wordmark-nya melebar jadi 142vw.
-     Kalau namanya berubah lagi, ukur ulang — jangan ditaksir. */
-  font-size: 21.4vw;
+  /* Full kanan kiri. Angkanya hidup di --wordmark-size (tokens.css), bukan di
+     sini — baris navigasi dan versi mobile menurunkannya dari token yang sama. */
+  font-size: var(--wordmark-size);
   font-weight: 900;
   letter-spacing: -0.035em;
   line-height: 1;
@@ -110,17 +106,8 @@
 .hero-nav {
   position: absolute;
   left: 0;
-  /* Dipatok ke KAKI wordmark, jadi angkanya ikut berubah setiap ukuran
-     wordmark berubah. Kaki huruf (baseline, bukan kotak barisnya) jatuh di
-     sekitar 0.852 × font-size; navbar ditaruh 0.7vw di bawahnya supaya terbaca
-     sebagai satu blok dengan wordmark:
-
-       0.852 × 21.4vw + 0.7vw ≈ 18.7vw
-
-     Nilai lama 26.7vw dihitung untuk wordmark 30.5vw ("RADYT", lima huruf).
-     Dibiarkan di situ setelah wordmark mengecil, navbar-nya menggantung
-     sendirian 8vw di bawah kaki huruf. */
-  top: 18.7vw;
+  /* Dipatok ke KAKI wordmark lewat token turunan — lihat --hero-nav-top. */
+  top: var(--hero-nav-top);
   display: flex;
   width: 100%;
   align-items: center;
@@ -171,10 +158,10 @@
  *   18.5  tepi kiri kartu statistik
  * + 11.0  lebar kartu statistik           → berakhir di 29.5
  * +  4.0  jarak
- * + 38.2  headline  (batas font 4.85vw × 7.874 lebar-em baris terpanjang)
- * +  1.9  jarak
- * + 13.6  kartu traits
- * + 12.0  tepi kanan
+ * + 37.0  headline  (batas font 4.70vw × 7.874 lebar-em baris terpanjang)
+ * +  1.5  jarak
+ * + 13.6  kartu traits  (tepi kirinya dipatok 72vw, lurus dengan tagline)
+ * + 14.4  tepi kanan
  *   ————
  *   99.2  (+0.8 lebar scrollbar)
  *
@@ -184,10 +171,13 @@
  * headline menabrak kartu traits di layar tinggi; yang menyelamatkannya cuma
  * cap 8.4vh yang kebetulan lebih ketat. Cap vw di bawah ini yang benar.
  *
- * Kiri digeser 35.54 → 33.5vw dan kartu traits 17 → 12vw dari kanan: keduanya
- * murni untuk melebarkan kolom headline. 33.5vw masih aman di dalam siluet
- * potret (tepi kirinya 31.25vw) — di luar itu teks terangnya jatuh ke latar
- * terang dan hilang.
+ * Kiri digeser 35.54 → 33.5vw: murni untuk melebarkan kolom headline. 33.5vw
+ * masih aman di dalam siluet potret (tepi kirinya 31.25vw) — di luar itu teks
+ * terangnya jatuh ke latar terang dan hilang.
+ *
+ * Cap headline turun 4.85 → 4.70vw karena kartu traits digeser ke kiri supaya
+ * lurus dengan tagline: kolomnya berkurang 1.2vw, dan jarak 1.5vw ke kartu itu
+ * yang menjaga keduanya tidak bersenggolan di layar tinggi.
  */
 .hero-headline {
   position: absolute;
@@ -203,8 +193,8 @@
   /* Tiga batas sekaligus (lihat --hero-h1-size di tokens.css):
        6.5rem   langit-langit mutlak di layar sangat besar
        11.5vh   tiga baris + jarak nafas sebelum tombol
-       4.85vw   baris terpanjang harus muat di 38.2vw yang tersedia
-                (38.2 ÷ 7.874 lebar-em baris terpanjang)
+       4.70vw   baris terpanjang harus muat di 37.0vw yang tersedia
+                (37.0 ÷ 7.874 lebar-em baris terpanjang)
      Tombol CTA menurunkan posisinya dari rumus yang sama, jadi keduanya tidak
      mungkin lepas sinkron. */
   font-size: var(--hero-h1-size);
@@ -227,13 +217,13 @@
    34.2px kanan, gap 12.4px @1492 — kanan memang lebih lebar daripada kiri.
    Lebarnya sengaja dibiarkan mengikuti isi: "Digital Activation" tidak muat
    kalau lebar 11.5vw referensi dipaksakan, dan tanpa dipaksa pun hasilnya
-   mendarat di ~11.5vw. `right` 12vw, bukan 22.4vw seperti referensi: headline
-   Indonesia lebih panjang dari aslinya dan akan menabraknya kalau kartunya
-   ditarik lebih ke tengah. Sisi kanannya berhenti di ~88vw — masih di dalam
-   layar, dan tidak menyenggol ghost tagline yang baru mulai di 92.8vh. */
+   mendarat di ~11.5vw. Dipatok lewat `left`, BUKAN `right`: yang harus lurus
+   adalah tepi KIRI-nya dengan paragraf tagline tepat di bawahnya (ghost
+   `tagline`, juga 72vw). Dengan `right`, tepi kiri ikut bergeser setiap isi
+   kartunya berubah panjang dan kelurusan itu diam-diam hilang. */
 .hero-traits {
   position: absolute;
-  right: 12vw;
+  left: 72vw;
   top: 61.2vh;
   display: flex;
   flex-direction: column;
@@ -437,7 +427,37 @@
   margin: -7.5px 0 0 -7.5px;
   border: 2px solid rgba(0, 0, 0, 0.55);
   border-radius: 50%;
+  /* `transform` sengaja TIDAK dipakai di sini: dot sudah dianimasikan skalanya
+     oleh timeline-path.ts, dan transform dari CSS akan ditimpa style inline
+     milik GSAP. */
   background: var(--yellow);
+  box-shadow: 0 0 0 0 transparent;
+  transition:
+    box-shadow 0.35s var(--ease-out),
+    border-color 0.35s var(--ease-out);
+  pointer-events: none;
+}
+
+/* Simpul yang kartunya sedang di tengah layar. Cincin, bukan pembesaran —
+   lihat alasan `transform` di atas. */
+.timeline-dot.is-active {
+  border-color: var(--fg);
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--yellow) 35%, transparent),
+    0 0 18px 2px color-mix(in srgb, var(--yellow) 45%, transparent);
+}
+
+/* Titik yang berjalan di ujung garis yang sedang digambar. Lebih kecil dan
+   tanpa border supaya tidak tertukar dengan simpul tahun. */
+.timeline-runner {
+  position: absolute;
+  z-index: 3;
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border-radius: 50%;
+  background: var(--fg);
+  opacity: 0;
   pointer-events: none;
 }
 
@@ -1416,7 +1436,15 @@
   display: flex;
   align-items: flex-start;
   color: var(--yellow);
-  font-size: 22.5vw;
+  /* Diturunkan dari --wordmark-size dengan alasan yang sama seperti versi hero:
+     angkanya terikat jumlah huruf nama. Di sini "RADHYTA" + ® memakan 4.703vw
+     lebar per 1vw ukuran font (diukur di browser), dan kotak pembungkusnya
+     hanya 76.8vw — dimulai dari --content-left 21vw. 0.76 × 21.4 = 16.3vw yang
+     membuatnya pas mengisi kotak itu.
+     Nilai lama 22.5vw dikalibrasi untuk "RADYT" yang lima huruf; dipakai apa
+     adanya untuk tujuh huruf, tulisannya melebar jadi 105.8vw dan terpotong di
+     "RADHY" oleh `overflow: clip` milik pembungkusnya. */
+  font-size: calc(var(--wordmark-size) * 0.76);
   font-weight: 900;
   letter-spacing: -0.035em;
   line-height: 0.82;
@@ -1504,11 +1532,10 @@
 
   .hero-wordmark {
     position: static;
-    /* Sama seperti versi desktop, angkanya terikat jumlah huruf: "RADHYTA"
-       memakan 4.678vw lebar per 1vw ukuran font. 19vw ≈ 89vw lebar, masih
-       muat di dalam gutter kiri-kanan. Nilai lama 23vw dikalibrasi untuk
-       "RADYT" dan akan meluber sampai 108vw. */
-    font-size: 19vw;
+    /* Lebih kecil dari desktop karena di sini wordmark rata kiri di dalam
+       gutter, bukan full-bleed. Tetap diturunkan dari token yang sama supaya
+       ganti nama cukup di satu tempat. */
+    font-size: calc(var(--wordmark-size) * 0.888);
     text-align: left;
     margin-bottom: 12px;
   }
@@ -1843,7 +1870,11 @@
   }
 
   .footer-wordmark {
-    font-size: 26vw;
+    /* Pembungkusnya di sini 87vw (selebar layar dikurangi gutter), bukan 76.8vw
+       seperti desktop — jadi pengalinya lebih besar. 0.86 × 21.4 = 18.4vw →
+       tulisannya 86.5vw, pas di dalam pembungkus. 0.9 masih meluber 3.6vw dan
+       terpotong `overflow: clip`. */
+    font-size: calc(var(--wordmark-size) * 0.86);
   }
 
   .faq-question {

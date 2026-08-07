@@ -75,6 +75,13 @@ const entries = timeline.slice(0, nodes.length);
         "none") supaya path mengisi kotak apa pun, dan stretch itu mengubah
         lingkaran jadi elips. Sebagai elemen HTML yang diposisikan persen, titik
         ini tetap bulat sempurna sambil duduk di koordinat yang sama. */}
+    {/* Titik progres. Posisinya dihitung timeline-path.ts dari geometri path
+        (getPointAtLength) lalu ditulis sebagai persen — cara yang sama dengan
+        simpul statis di bawah, dan satu-satunya cara menjaganya tetap BULAT:
+        SVG-nya di-stretch `preserveAspectRatio="none"`, jadi apa pun yang
+        digambar di dalamnya berubah jadi elips. */}
+    <span class="timeline-runner" data-timeline-runner aria-hidden="true"></span>
+
     {
       nodes.map((node, i) => (
         <span

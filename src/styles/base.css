@@ -282,3 +282,30 @@ html.lenis body {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* --- Butir film ---------------------------------------------------------- */
+
+/* Noise dibuat oleh SVG feTurbulence yang di-inline sebagai data URI: tidak ada
+   berkas gambar yang perlu diunduh, dan ukurannya nol di jaringan.
+   `pointer-events: none` WAJIB — tanpa itu lapisan ini menutupi seluruh
+   halaman dan tidak ada satu pun tombol yang bisa diklik.
+   4% dengan `overlay` adalah batas di mana butirannya terasa tapi teks belum
+   kehilangan ketajaman; di atas itu heading tipis mulai terlihat kotor. */
+.grain {
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  opacity: 0.04;
+  pointer-events: none;
+}
+
+/* Butiran statis tidak memicu mabuk gerak, tapi ia menambah beban paint di
+   mesin lemah — dan pembaca yang meminta gerakan minimal biasanya juga
+   meminta tampilan yang tenang. */
+@media (prefers-reduced-motion: reduce) {
+  .grain {
+    display: none;
+  }
+}

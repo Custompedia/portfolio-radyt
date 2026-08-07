@@ -264,8 +264,16 @@
   z-index: 1;
 }
 
+/* Hover memakai kuning yang sama dengan keadaan aktif — kursor jadi seolah
+   MEMBAWA sorotan itu, bukan memicu warna kedua yang tidak ada artinya.
+   Teksnya wajib ikut jadi hitam: di tema gelap warnanya putih, dan putih di
+   atas kuning nyaris tidak terbaca. */
 .nav-link:hover .nav-link-bg {
-  background: var(--surface-inner-hover);
+  background: var(--yellow);
+}
+
+.nav-link:hover {
+  color: var(--black);
 }
 
 .nav-link.is-active {
