@@ -60,13 +60,11 @@ const entries = timeline.slice(0, nodes.length);
   </header>
 
   <div class="timeline" data-timeline>
-    <!-- Dua salinan path yang identik ditumpuk. Yang bawah adalah jejak samar
-         sepanjang penuh; yang atas dipotong oleh pembungkus ber-`height` yang
-         di-scrub, jadi garisnya seolah terisi mengikuti scroll. -->
-    <svg class="timeline-svg" viewBox={`0 0 ${VB_W} ${VB_H}`} preserveAspectRatio="none" aria-hidden="true" fill="none">
-      <path class="timeline-trace" d={path} stroke-width="2.5" stroke-linecap="round"></path>
-    </svg>
-
+    <!-- Hanya SATU salinan path, dan ia dipotong oleh pembungkus ber-`height`
+         yang di-scrub. Dulu ada salinan kedua di bawahnya sebagai jejak samar
+         sepanjang penuh — itu dihapus dengan sengaja: begitu jalur di depan
+         sudah kelihatan, garisnya cuma terbaca "terisi", bukan sedang
+         digambar. Di depan progress sekarang benar-benar kosong. -->
     <div class="timeline-fill" data-timeline-fill aria-hidden="true">
       <svg class="timeline-svg" viewBox={`0 0 ${VB_W} ${VB_H}`} preserveAspectRatio="none" fill="none">
         <path class="timeline-lit" d={path} stroke-width="2.5" stroke-linecap="round"></path>

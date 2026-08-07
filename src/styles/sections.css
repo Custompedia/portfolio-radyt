@@ -39,35 +39,15 @@
    satu per satu dari balik garis saat pembukaan. */
 .hero-wordmark {
   position: absolute;
-  /* 4.69vh adalah posisi PUNCAK HURUF di referensi, bukan puncak kotak baris.
-     Satoshi menyisakan ~0.05em di atas cap-height dalam line-box `1`, jadi
-     kotaknya harus naik sebanyak itu supaya hurufnya mendarat di angka yang
-     benar di semua ukuran font. */
-  top: calc(4.69vh - 0.05em);
+  top: -0.05em; /* Nempel atas */
   left: 0;
   display: flex;
   width: 100%;
   justify-content: center;
   color: var(--yellow);
-  /* Ukuran diturunkan dari kotak wordmark referensi yang DIUKUR langsung
-     (heynesh.com @1492x882): lebar 94.44vw, tepi kiri 2.79vw, tinggi huruf
-     41.92vh dengan puncak di 4.69vh.
-     Di sana wordmark itu SVG lettering — kotaknya bebas. Milik kita teks hidup
-     (RADYT, 5 huruf, Satoshi 900), jadi satu-satunya kenop adalah font-size:
-       lebar   = 3.281em  → 94.44vw / 3.281 = 28.78vw
-       tinggi  = 0.75em   → hasilnya 21.6vw (≈36.5vh di rasio 1492x882)
-     Tinggi huruf jadi ~5vh lebih pendek dari referensi; itu konsekuensi 5 huruf
-     vs 4, bukan kesalahan setelan. Batas vh menjaga layar pendek: dengan puncak
-     di 4.69vh, 0.75em tidak boleh melewati baris navigasi di 49.55vh. */
-  /* Batas 44vh, bukan 55vh: di layar pendek (mis. 1568x740) 55vh membuat kaki
-     huruf berhenti di ~46vh sementara baris navigasi ada di 49.55vh — jaraknya
-     tinggal 3vh dan navigasinya terbaca sesak menempel di bawah wordmark.
-     44vh menyisakan ~16vh napas di rasio mana pun. */
-  font-size: min(28.78vw, 44vh);
+  font-size: 30.5vw; /* Full kanan kiri */
   font-weight: 900;
   letter-spacing: -0.035em;
-  /* line-height 1, bukan lebih rapat: mask memotong tepat di kotak baris, dan
-     kotak yang lebih pendek dari glyph-nya akan memangkas ujung huruf. */
   line-height: 1;
   user-select: none;
 }
@@ -121,11 +101,15 @@
    cuma penanda tata letak, yang terlihat adalah link sidebar yang diterbangkan
    ke sini. Ukuran fontnya sengaja SAMA dengan link sidebar — di referensi
    navigasi hanya berpindah tempat, tidak ikut membesar. */
-/* 49.55vh & tepi kiri 2.77vw: diukur dari baris navigasi hero referensi. */
 .hero-nav {
   position: absolute;
   left: 0;
-  top: 49.55vh;
+  /* Tulisan RADYT memiliki font-size 30.5vw dan top -0.05em (-1.5vw), sehingga
+     kaki hurufnya (baseline, bukan kotak barisnya) jatuh di sekitar 26vw.
+     Navbar ditaruh tepat 0.7vw di bawahnya: cukup rapat untuk terbaca sebagai
+     satu blok dengan wordmark, dan cukup tinggi untuk lolos dari kartu
+     statistik & traits yang mulai di 62vh. */
+  top: 26.7vw;
   display: flex;
   width: 100%;
   align-items: center;
@@ -136,7 +120,7 @@
 .hero-nav-group {
   display: flex;
   align-items: center;
-  gap: 0.9vw;
+  gap: 0.2vw;
 }
 
 /* Kotaknya harus identik dengan `.nav-link` — padding, gap, dan ikon yang
@@ -392,12 +376,11 @@
   pointer-events: none;
 }
 
-.timeline-trace {
-  stroke: rgba(46, 32, 6, 0.16);
-}
-
+/* Nyaris hitam pekat: garis inilah satu-satunya yang tersisa — tidak ada lagi
+   jejak samar di belakangnya — jadi ia harus cukup tegas untuk terbaca sebagai
+   garis yang sedang ditarik, bukan bayangan. */
 .timeline-lit {
-  stroke: rgba(46, 32, 6, 0.48);
+  stroke: rgba(17, 12, 2, 0.92);
 }
 
 /* Pembungkus inilah yang di-scrub: tingginya naik bertahap dan memotong
@@ -915,49 +898,41 @@
   text-align: center;
 }
 
-/* Chip = kartu kapabilitas yang mengerut jadi ikon. Ia tetap tombol: yang
-   terlihat sebagai hiasan di dalam kalimat sebenarnya bisa dibuka. */
+/* Chip = kartu kapabilitas yang mengerut jadi IKON TELANJANG di dalam kalimat:
+   tanpa kotak, tanpa panah. Ia tetap tombol — yang terbaca sebagai hiasan di
+   tengah teks sebenarnya bisa dibuka. */
 .lead-chip {
   display: inline-flex;
   height: 0.92em;
   align-items: center;
   justify-content: center;
-  gap: 0.12em;
-  overflow: hidden;
-  padding-inline: 0.3em;
   /* Jarak ke kata di kiri-kanannya datang dari sini, bukan dari spasi di
      dalam teks — lihat WhatYouGet.astro. */
   margin-inline: 0.22em;
-  border-radius: 0.28em;
-  background: var(--capa-bg);
+  padding: 0;
+  border-radius: 0;
+  background: none;
   color: var(--yellow);
   vertical-align: -0.1em;
   cursor: pointer;
-  transition: background-color var(--dur) var(--ease-out);
+  transition: opacity var(--dur) var(--ease-out);
 }
 
 .lead-chip:hover {
-  background: var(--card-inner-hover);
+  opacity: 0.65;
 }
 
+/* Ukuran dalam `em`, bukan atribut px milik Icon.astro: ikonnya harus tumbuh
+   dan menyusut bersama teks yang mengapitnya di tiap lebar layar. */
 .lead-chip svg {
   flex: none;
+  width: 0.85em;
+  height: 0.85em;
 }
 
 .lead-chip-icon {
   display: grid;
   place-items: center;
-}
-
-.lead-chip-arrow {
-  display: grid;
-  place-items: center;
-  color: var(--fg-muted);
-  transition: rotate var(--dur) var(--ease-out);
-}
-
-.lead-chip:hover .lead-chip-arrow {
-  rotate: 180deg;
 }
 
 /* --- Panel penuh layar hasil Flip --- */
@@ -1015,6 +990,9 @@
   place-items: center;
 }
 
+/* Di dalam panel ikonnya BOLEH berkotak lagi — di situ ia bukan lagi bagian
+   dari kalimat, melainkan penanda judul. Ukuran svg-nya dipatok ulang karena
+   `em` di sini mengikuti font panel, bukan font paragraf raksasa. */
 .lead-chip.is-expanded {
   height: 3.4vw;
   min-height: 48px;
@@ -1025,8 +1003,9 @@
   cursor: default;
 }
 
-.lead-chip.is-expanded .lead-chip-arrow {
-  display: none;
+.lead-chip.is-expanded svg {
+  width: 20px;
+  height: 20px;
 }
 
 .capa-panel-title {
@@ -1036,118 +1015,6 @@
 .capa-panel-body {
   color: var(--fg-muted);
   max-width: 52ch;
-}
-
-/* ==========================================================================
-   SERVICES
-   ========================================================================== */
-
-.services {
-  padding: 2vw var(--gutter) 10vw var(--content-left);
-}
-
-/* Padding kanan lebih besar dari kiri: kartu unggulan di kiri sudah punya
-   latarnya sendiri, jadi ia butuh ruang lebih rapat ke tepi wadah. */
-.pricing-wrap {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  margin-top: clamp(40px, 6vh, 76px);
-  padding: 0.9vw 2.36vw 0.9vw 0.9vw;
-  border-radius: var(--radius);
-  background: var(--service-bg);
-}
-
-.pricing-card {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 1.53vw;
-  padding: 1.67vw 1.9vw;
-}
-
-/* Yang unggulan dipromosikan lewat latar dan lebar, bukan lewat badge. */
-.pricing-card.is-featured {
-  flex: 1.12;
-  border-radius: var(--radius-sm);
-  background: var(--service-featured);
-}
-
-.pricing-icon {
-  display: grid;
-  width: 2.2vw;
-  height: 2.2vw;
-  min-width: 30px;
-  min-height: 30px;
-  place-items: center;
-  border-radius: var(--radius-xs);
-  background: var(--yellow);
-  color: var(--black);
-}
-
-.pricing-head {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.7vw;
-}
-
-.pricing-name {
-  font-size: var(--fs-h3);
-}
-
-.pricing-price {
-  display: flex;
-  align-items: baseline;
-  gap: 0.42vw;
-}
-
-.pricing-amount {
-  font-size: var(--fs-price);
-  font-weight: 500;
-  letter-spacing: normal;
-  line-height: 1;
-}
-
-.pricing-unit {
-  color: var(--fg-muted);
-  font-size: 0.86vw;
-}
-
-.pricing-intro {
-  color: var(--fg-muted);
-}
-
-.pricing-features li {
-  display: flex;
-  gap: 0.83vw;
-  margin-bottom: 0.83vw;
-}
-
-/* Cincin, bukan titik penuh — detail kecil yang bikin daftarnya terasa
-   digambar, bukan hasil `list-style`. */
-.pricing-bullet {
-  flex: none;
-  width: 0.83vw;
-  height: 0.83vw;
-  min-width: 11px;
-  min-height: 11px;
-  margin-top: 0.45em;
-  border: 0.14vw solid var(--yellow);
-  border-radius: 50%;
-}
-
-.pricing-foot {
-  display: flex;
-  gap: 0.56vw;
-  margin-top: auto;
-  color: var(--fg-muted);
-  font-size: 0.86vw;
-}
-
-.pricing-foot svg {
-  flex: none;
-  margin-top: 0.15em;
 }
 
 /* ==========================================================================
@@ -1817,18 +1684,6 @@
     flex-direction: column;
     align-items: flex-start;
   }
-
-  /* Tiga kolom harga tidak lagi muat berdampingan. Wadahnya tetap ada —
-     itulah yang menandai ketiganya sebagai satu penawaran — tapi isinya
-     ditumpuk. */
-  .pricing-wrap {
-    flex-direction: column;
-    padding: 0.9vw;
-  }
-
-  .pricing-card.is-featured {
-    flex: 1;
-  }
 }
 
 @media (max-width: 900px) {
@@ -1840,7 +1695,6 @@
 @media (max-width: 767px) {
   .section,
   .capabilities,
-  .services,
   .cta,
   .testimonials {
     padding: 64px var(--gutter);

@@ -61,21 +61,24 @@ function buildButtonHover(): void {
     const splitB = new SplitText(clone, { type: 'words', wordsClass: 'word', aria: 'none' });
     splits.push(splitA, splitB);
 
-    const height = label.offsetHeight || 16;
     let showingA = true;
 
-    gsap.set(splitB.words, { y: height });
+    // Geser sedikit lebih jauh dari 100% (misal 130%) karena beberapa font (seperti Satoshi)
+    // punya huruf (g, y, j, dsb) yang ekornya memanjang ke luar dari bounding box line-height: 1.
+    // Jika hanya digeser 100%, ekor huruf tersebut akan masih mengintip dari atas/bawah.
+    gsap.set(splitB.words, { yPercent: 130 });
 
     const onEnter = () => {
       const out = showingA ? splitA.words : splitB.words;
       const inbound = showingA ? splitB.words : splitA.words;
       showingA = !showingA;
 
-      gsap.to(out, { y: -height, duration: 0.5, stagger: 0.05, ease: 'power2.out' });
+      // Gunakan overwrite: true agar tidak bertumpuk jika kursor masuk-keluar dengan cepat
+      gsap.to(out, { yPercent: -130, duration: 0.5, stagger: 0.05, ease: 'power2.out', overwrite: true });
       gsap.fromTo(
         inbound,
-        { y: height },
-        { y: 0, duration: 0.5, stagger: 0.05, ease: 'power2.out' },
+        { yPercent: 130 },
+        { yPercent: 0, duration: 0.5, stagger: 0.05, ease: 'power2.out', overwrite: true },
       );
     };
 

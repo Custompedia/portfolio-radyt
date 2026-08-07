@@ -113,9 +113,10 @@
 
 /* --- Stats --- */
 
-/* Dua kartu, gap nol, plus pembatas di antaranya: di sidebar keduanya terbaca
-   sebagai satu kartu, tapi tetap dua elemen supaya masing-masing bisa terbang
-   ke posisi hero-nya sendiri (di hero mereka memang terpisah jauh). */
+/* Gap nol plus pembatas di antaranya: kalau statistiknya lebih dari satu,
+   di sidebar semuanya terbaca sebagai satu kartu, tapi tetap elemen terpisah
+   supaya masing-masing bisa terbang ke posisi hero-nya sendiri (di hero mereka
+   memang terpisah jauh). */
 .nav-stats-row {
   position: relative;
   display: flex;
@@ -127,13 +128,16 @@
   padding: 0.97vw 0.69vw;
 }
 
-.nav-stats-row > .nav-stat-card:first-child .nav-card-bg {
+/* `:not()`-nya penting: dengan satu statistik saja, kartu yang sama adalah
+   first- SEKALIGUS last-child — tanpa penjaga ini keempat sudutnya disiku dan
+   kartu tunggalnya kehilangan radius sama sekali. */
+.nav-stats-row > .nav-stat-card:first-child:not(:last-child) .nav-card-bg {
   border-right: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.nav-stats-row > .nav-stat-card:last-child .nav-card-bg {
+.nav-stats-row > .nav-stat-card:last-child:not(:first-child) .nav-card-bg {
   border-left: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
@@ -151,11 +155,17 @@
   pointer-events: none;
 }
 
+/* Lebarnya sepas isi, bukan selebar kartu. Morph menskalakan blok ini dengan
+   rasio lebar hero:sidebar — kalau lebarnya ikut kartu, jumlah kartu di rail
+   (satu vs dua) diam-diam mengubah besar angka di hero. Dengan fit-content
+   rasionya cuma bergantung pada teksnya sendiri. */
 .nav-stat {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.2vw;
+  width: fit-content;
+  margin-inline: auto;
   text-align: center;
   transform-origin: top left;
 }

@@ -48,10 +48,11 @@ import { brand, hero, nav, stats, clients } from '../data/site';
     <p class="nav-tagline" data-ghost="tagline" data-ghost-type="box">{brand.tagline}</p>
   </div>
 
-  <!-- Dua kartu terpisah, bukan satu kartu dengan pemisah: di hero keduanya
-       terbang dari posisi berbeda, jadi masing-masing butuh lapisan bg sendiri.
-       Di sidebar gap-nya nol dan sisi yang bertemu kehilangan radius, jadi
-       keduanya terbaca sebagai satu kartu dengan garis pemisah di tengah. -->
+  <!-- Tiap statistik jadi kartu terpisah, bukan satu kartu dengan pemisah: di
+       hero masing-masing terbang dari posisi berbeda, jadi butuh lapisan bg
+       sendiri. Kalau statistiknya lebih dari satu, gap-nya nol dan sisi yang
+       bertemu kehilangan radius sehingga terbaca sebagai satu kartu dengan
+       garis pemisah di tengah. -->
   <div class="nav-stats-row">
     {
       stats.map((stat, i) => (
@@ -64,17 +65,21 @@ import { brand, hero, nav, stats, clients } from '../data/site';
         </div>
       ))
     }
-    <span
-      class="nav-stats-sep"
-      aria-hidden="true"
-      data-tl-type="scroll"
-      data-tl-trigger="[data-hero]"
-      data-tl-start="39% top"
-      data-tl-end="41% top"
-      data-tl-from="{'opacity':0}"
-      data-tl-to="{'opacity':0.18}"
-      data-tl-desktop
-    />
+    {
+      stats.length > 1 && (
+        <span
+          class="nav-stats-sep"
+          aria-hidden="true"
+          data-tl-type="scroll"
+          data-tl-trigger="[data-hero]"
+          data-tl-start="39% top"
+          data-tl-end="41% top"
+          data-tl-from="{'opacity':0}"
+          data-tl-to="{'opacity':0.18}"
+          data-tl-desktop
+        />
+      )
+    }
   </div>
 
   <nav class="nav-card nav-menu" aria-label="Primary">

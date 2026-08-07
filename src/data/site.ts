@@ -60,19 +60,6 @@ export interface Capability {
   icon: string;
 }
 
-export interface PricingTier {
-  name: string;
-  price: string;
-  unit?: string;
-  intro: string;
-  features: string[];
-  footnote: string;
-  featured?: boolean;
-  /** Nama ikon di Icon.astro. Tiap paket harus beda — dua ikon yang sama
-   *  membuat ketiganya terbaca sebagai varian dari hal yang sama. */
-  icon: string;
-}
-
 export interface Testimonial {
   headline: string;
   quote: string;
@@ -109,7 +96,6 @@ export const nav: NavItem[] = [
   { id: 'about', label: 'Perjalanan', href: '#about', icon: 'user' },
   { id: 'work', label: 'Karya', href: '#work', icon: 'briefcase' },
   { id: 'capabilities', label: 'Layanan', href: '#capabilities', icon: 'layers' },
-  { id: 'services', label: 'Paket', href: '#services', icon: 'bolt' },
   { id: 'clients', label: 'Klien', href: '#clients', icon: 'people' },
   { id: 'faq', label: 'FAQ', href: '#faq', icon: 'question' },
 ];
@@ -124,10 +110,7 @@ export const hero = {
 };
 
 /** Angka besar di sidebar. `count` memicu animasi odometer. */
-export const stats: Stat[] = [
-  { value: '12', label: 'Tahun jalan' },
-  { value: '168K', label: 'Followers' },
-];
+export const stats: Stat[] = [{ value: '12+', label: 'Tahun jalan' }];
 
 /** Nama yang berjalan di marquee sidebar — sub-brand & lini usaha grup. */
 export const clients: string[] = [
@@ -317,62 +300,6 @@ export const capabilities = {
       icon: 'gauge',
     },
   ] satisfies Capability[],
-};
-
-export const services = {
-  label: 'Paket kerja sama',
-  headline: ['Skala Berbeda,', 'Standar Sama'],
-  intro: 'Kualitas dan perhatiannya sama. Yang membedakan hanya cakupan dan kecepatan.',
-  // TODO: angka di bawah masih perkiraan — sesuaikan dengan rate card resmi.
-  tiers: [
-    {
-      name: 'Brand Audit',
-      icon: 'search',
-      price: 'Rp 5jt',
-      unit: '/ sekali jalan',
-      intro: 'Pemeriksaan menyeluruh kanal dan belanja iklan yang sedang berjalan.',
-      features: [
-        'Audit kanal sosial dan konten 6 bulan terakhir',
-        'Pemeriksaan belanja iklan dan efisiensinya',
-        'Analisis tiga kompetitor terdekat',
-        'Rekomendasi prioritas perbaikan',
-        'Sesi presentasi bersama tim Anda',
-      ],
-      footnote: 'Untuk merek yang sudah jalan tapi merasa hasilnya jalan di tempat.',
-    },
-    {
-      name: 'Retainer Bulanan',
-      icon: 'gauge',
-      price: 'Rp 15jt',
-      unit: '/ bulan',
-      intro: 'Tim kami jadi bagian dari tim Anda. Minimal kerja sama tiga bulan.',
-      features: [
-        'Perencanaan dan produksi konten bulanan',
-        'Pengelolaan harian seluruh kanal',
-        'Pengelolaan belanja iklan',
-        'Laporan bulanan dengan angka yang bisa ditindaklanjuti',
-        'Satu sesi strategi tiap bulan',
-        'Prioritas pengerjaan untuk kebutuhan mendadak',
-      ],
-      footnote: 'Untuk merek yang butuh pertumbuhan berkelanjutan, bukan kampanye sesaat.',
-      featured: true,
-    },
-    {
-      name: 'Proyek Khusus',
-      icon: 'spark',
-      price: 'Ngobrol Dulu',
-      intro: 'Rebranding, peluncuran, atau aktivasi berskala besar. Tiap cakupan berbeda.',
-      features: [
-        'Rebranding menyeluruh dan panduan merek',
-        'Kampanye peluncuran lintas kanal',
-        'Aktivasi luring, event, dan OOH',
-        'Manajemen KOL berskala besar',
-        'Produksi merchandise',
-        'Pendampingan 30 hari setelah peluncuran',
-      ],
-      footnote: 'Untuk pekerjaan besar yang cakupannya perlu dibicarakan lebih dulu.',
-    },
-  ] satisfies PricingTier[],
 };
 
 export const cta = {

@@ -38,15 +38,25 @@ interface GhostBox {
  * kartu email, marquee klien — sengaja tidak punya posisi hero: mereka
  * fade-in selama morph lewat `data-ghost-fade`.
  */
-const ghosts: GhostBox[] = [
-  // Kartu statistik menempati kolom kiri, di luar jangkauan headline.
-  // Kartu pertama melebar, kartu kedua lebih tinggi — bentuknya memang tidak
-  // seragam di referensi, dan morph tipe `background` yang menanganinya.
-  { id: 'stats-card-0', x: '17.9vw', y: '64.5vh', w: '14.9vw', h: '12.3vh' },
-  { id: 'stat-0', x: '19.57vw', y: '67.3vh', w: '11.56vw', h: '6.7vh' },
+/**
+ * Tepi atas kartu statistik. `min(..., 95vh - 11vw)` menahannya dari jatuh
+ * melewati tepi bawah layar ultra-wide; `max(29.5vw, ...)` menahannya dari
+ * naik menutupi baris navigasi hero (yang dipatok di 26.7vw) pada layar yang
+ * pendek. Dipakai dua kali — kotak kartu dan blok angka di dalamnya.
+ */
+const statsY = 'max(29.5vw, min(62vh, 95vh - 11vw))';
 
-  { id: 'stats-card-1', x: '20.9vw', y: '79.3vh', w: '9.8vw', h: '17.9vh' },
-  { id: 'stat-1', x: '22.57vw', y: '82.1vh', w: '6.46vw', h: '12.3vh' },
+const ghosts: GhostBox[] = [
+  // Kartu statistik menempati kolom kiri, di luar jangkauan headline. Bentuknya
+  // bujur sangkar 1:1 — 11vw × 11vw — dan morph tipe `background` yang
+  // menanganinya melar jadi kartu rail yang lebar.
+  // Menggunakan 'vw' untuk h agar skalanya selaras dengan teks (yang juga
+  // menggunakan vw) pada rasio aspek apapun, sehingga teks tidak bocor keluar card.
+  { id: 'stats-card-0', x: '18.5vw', y: statsY, w: '11vw', h: '11vw' },
+  // Blok angka dipatok ke tengah kotak: lebarnya 6vw dari 11vw, jadi sisa 5vw
+  // dibagi dua di kiri-kanan, dan 1.9vw dari atas menaruh tiga baris teks
+  // (angka + label dua baris) kira-kira di titik tengahnya.
+  { id: 'stat-0', x: '21vw', y: `calc(${statsY} + 1.9vw)`, w: '6vw', h: '7.2vw' },
 
   {
     id: 'cta-primary',
@@ -96,16 +106,19 @@ const navRight = nav.slice(3);
     </p>
 
     <!-- Potret tidak mengecil, ia melebur: blur naik sampai 90px sementara
-         opacity turun ke 0.3 sepanjang 70% pertama hero. Efeknya foto berubah
-         jadi gradasi latar, bukan menghilang. -->
+         opacity turun sampai NOL. Sebelumnya berhenti di 0.3, dan sisa 0.3 itu
+         yang terbaca sebagai noda gelap di belakang kartu About.
+         Selesai di 55%, bukan 70%: About ditarik naik lewat margin negatif dan
+         mulai menumpuk hero sekitar 57%, jadi potretnya harus sudah padam
+         sebelum itu — kalau tidak, nodanya tetap muncul betapapun tipisnya. -->
     <div
       class="hero-portrait"
       data-tl-type="scroll"
       data-tl-trigger="[data-hero]"
       data-tl-start="0% top"
-      data-tl-end="70% top"
+      data-tl-end="55% top"
       data-tl-from="{'filter':'blur(0px)','opacity':1}"
-      data-tl-to="{'filter':'blur(90px)','opacity':0.3}"
+      data-tl-to="{'filter':'blur(90px)','opacity':0}"
       data-tl-desktop
     >
       <!-- Foto placeholder berlisensi bebas; lihat public/images/README.md. -->

@@ -47,11 +47,11 @@ const parts = capabilities.paragraph.split('[chip]');
                 data-capa-body={item.body}
                 aria-label={`Selengkapnya: ${item.title}`}
               >
+                {/* Ikonnya berdiri telanjang di dalam kalimat — tanpa kotak,
+                    tanpa panah. Ukurannya diatur CSS dalam `em` supaya ia ikut
+                    besar-kecilnya teks di sekitarnya. */}
                 <span class="lead-chip-icon">
                   <Icon name={item.icon} size={18} />
-                </span>
-                <span class="lead-chip-arrow" aria-hidden="true">
-                  <Icon name="arrow" size={12} />
                 </span>
               </button>
             )}
