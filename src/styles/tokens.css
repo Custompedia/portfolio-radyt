@@ -38,7 +38,7 @@
 
   /* Kaca hero — kartu stat & trait melayang di atas potret, jadi warnanya
      taupe transparan, bukan beige solid seperti kartu section. */
-  --glass-bg: rgba(194, 184, 172, 0.3);
+  --glass-bg: rgba(194, 184, 172, 0.45);
   --glass-blur: 20px;
   --glass-blur-soft: 15px;
 
