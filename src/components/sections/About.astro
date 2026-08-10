@@ -11,7 +11,6 @@
  * Simpul dan path lahir dari daftar `nodes` yang sama, jadi keduanya tidak
  * mungkin lepas sinkron.
  */
-import Icon from '../Icon.astro';
 import { about, timeline, timelineFlags } from '../../data/site';
 
 const VB_W = 1000;
@@ -48,32 +47,7 @@ const path = nodes
   .join(' ');
 
 const entries = timeline.slice(0, nodes.length);
-const total = String(entries.length).padStart(2, '0');
 
-/**
- * Isi popup dititipkan sebagai SATU blok JSON, bukan sebagai belasan atribut
- * `data-*` per kartu (versi sebelumnya) dan bukan dengan mengimpor site.ts dari
- * sisi klien — impor itu akan menyeret seluruh isi situs (work, paket, FAQ,
- * testimoni) masuk ke bundle JS.
- *
- * `<` di-escape supaya sebuah `</script>` yang kelak masuk ke teks konten tidak
- * bisa menutup tag ini lebih awal.
- */
-const storyData = JSON.stringify(
-  entries.map((entry, i) => ({
-    step: `${String(i + 1).padStart(2, '0')} / ${total}`,
-    year: entry.year,
-    flag: entry.flag,
-    flagLabel: timelineFlags[entry.flag],
-    title: entry.title,
-    age: entry.age,
-    body: entry.story ?? entry.body,
-    metrics: entry.metrics,
-    moves: entry.moves,
-    outcome: entry.outcome,
-    tags: entry.tags,
-  })),
-).replace(/</g, '\\u003c');
 ---
 
 <section class="section about" id="about">
@@ -121,8 +95,8 @@ const storyData = JSON.stringify(
           class="timeline-card card"
           data-timeline-card={i}
           data-side={nodes[i]!.side}
-          data-tl-from="{'opacity':0,'y':'10%','scale':0.6}"
-          data-tl-to="{'opacity':1,'y':'0%','scale':1,'duration':1.1,'delay':0.3,'ease':'expo.out'}"
+          data-tl-from="{'opacity':0,'y':'8%','scale':0.96}"
+          data-tl-to="{'opacity':1,'y':'0%','scale':1,'duration':0.8,'delay':0.12,'ease':'power3.out'}"
           data-tl-start="top 88%"
           data-tl-once
         >
@@ -132,23 +106,15 @@ const storyData = JSON.stringify(
               siapa pun dan cuma terbaca sebagai placeholder. */}
           <header class="tl-head">
             <span class="tl-flag" data-flag={entry.flag}>
-              <span class="tl-flag-dot" aria-hidden="true" />
               {timelineFlags[entry.flag]}
             </span>
-            <span class="tl-step">{String(i + 1).padStart(2, '0')}<span>/{total}</span></span>
           </header>
 
-          <span class="timeline-year">
-            <span class="timeline-tick" aria-hidden="true">
-              '
-            </span>
-            <span data-number-count={entry.year}>{entry.year}</span>
-          </span>
+          <time class="timeline-year" datetime={entry.year} data-number-count={entry.year}>{entry.year}</time>
           <h3 class="timeline-title">{entry.title}</h3>
           <p class="timeline-body">{entry.body}</p>
 
-          {/* Dua angka teratas saja; yang ketiga disimpan untuk popup supaya
-              membuka kartu benar-benar menambah isi, bukan mengulangnya. */}
+          {/* Dua angka teratas menjaga kartu tetap ringkas dan mudah dipindai. */}
           <ul class="tl-metrics">
             {entry.metrics.slice(0, 2).map((metric) => (
               <li>
@@ -160,66 +126,9 @@ const storyData = JSON.stringify(
 
           <footer class="timeline-meta">
             <span class="tl-age">{entry.age}</span>
-            <button class="timeline-more" type="button" data-story data-story-index={i}>
-              Baca selengkapnya
-              <Icon name="arrow" size={12} />
-            </button>
           </footer>
         </article>
       ))
     }
   </div>
 </section>
-
-<script type="application/json" data-timeline-data set:html={storyData} is:inline></script>
-
-<!-- Popup cerita panjang. Satu dialog dipakai ulang untuk ketujuh kartu:
-     isinya ditulis ulang saat dibuka dari blok JSON di atas, jadi tidak ada
-     tujuh salinan markup. Elemen ber-`data-story-step` di bawah adalah urutan
-     yang dianimasikan masuk oleh timeline-path.ts. -->
-<div class="story" data-story-dialog hidden>
-  <button class="story-scrim" type="button" data-story-close aria-label="Tutup"></button>
-  <!-- `data-lenis-prevent`: panel ini punya scroll sendiri. Tanpa atribut itu
-       Lenis menelan wheel event-nya dan isi panel yang panjang tidak bisa
-       digulir sama sekali. -->
-  <div
-    class="story-panel card"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="story-title"
-    data-lenis-prevent
-  >
-    <button class="story-close" type="button" data-story-close aria-label="Tutup">
-      <Icon name="x" size={16} />
-    </button>
-
-    <header class="story-head" data-story-step>
-      <span class="tl-flag" data-story-flag>
-        <span class="tl-flag-dot" aria-hidden="true"></span>
-        <span data-story-flag-label></span>
-      </span>
-      <span class="tl-step" data-story-stepno></span>
-    </header>
-
-    <div class="story-hero" data-story-step>
-      <span class="story-year" data-story-year></span>
-      <div class="story-hero-text">
-        <h3 class="story-title" id="story-title" data-story-title></h3>
-        <span class="tl-age" data-story-age></span>
-      </div>
-    </div>
-
-    <p class="story-body" data-story-body data-story-step></p>
-
-    <ul class="story-metrics" data-story-metrics data-story-step></ul>
-
-    <section class="story-block" data-story-step>
-      <h4 class="story-label">Yang dikerjakan</h4>
-      <ul class="story-moves" data-story-moves></ul>
-    </section>
-
-    <p class="story-outcome" data-story-outcome data-story-step></p>
-
-    <ul class="story-tags" data-story-tags data-story-step></ul>
-  </div>
-</div>
