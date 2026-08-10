@@ -30,6 +30,15 @@ export interface Stat {
   label: string;
 }
 
+export interface ClientLogo {
+  name: string;
+  src: string;
+  shape: 'landscape' | 'square';
+  desktopWidth: number;
+  mobileWidth: number;
+  scale?: number;
+}
+
 /** Angka pendek di kartu & popup perjalanan. `value` ditulis apa adanya —
  *  boleh bersufiks ('950+', '50 pcs'), jadi jangan diperlakukan sebagai number. */
 export interface TimelineMetric {
@@ -153,18 +162,32 @@ export const stats: Stat[] = [
   { value: '12+', label: 'Years experience' },
 ];
 
-/** Berjalan di marquee sidebar — dua bendera, lalu lini layanan di bawahnya. */
-export const clients: string[] = [
-  'Custompedia Creative Group',
-  'Parcelin Creative Indonesia',
-  'Parcelinpack',
-  'KOL Management',
-  'Social Media Handling',
-  'Digital Advertising',
-  'Branding Activation',
-  'OOH & POI',
-  'Merchandise',
-  'Event Organizer',
+/** Logo klien yang berjalan terus-menerus di marquee sidebar. */
+export const clients: ClientLogo[] = [
+  { name: 'Pegipegi', src: '/images/pegipegi-logo_brandlogos.net_ys0wq.webp', shape: 'landscape', desktopWidth: 5.1, mobileWidth: 82 },
+  { name: 'GoTo', src: '/images/GoTo_logo.webp', shape: 'landscape', desktopWidth: 3.25, mobileWidth: 52, scale: 0.86 },
+  { name: 'Tokopedia', src: '/images/Logo-Tokopedia.webp', shape: 'landscape', desktopWidth: 4.6, mobileWidth: 74 },
+  { name: 'Roda Roda', src: '/images/Roda%20Roda%20Background%20Removed.webp', shape: 'landscape', desktopWidth: 4.35, mobileWidth: 70 },
+  { name: 'Provinsi Jawa Tengah', src: '/images/Coat_of_arms_of_Central_Java.svg.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 28 },
+  { name: 'Airbnb', src: '/images/airbnb-logo-png_seeklogo-284907.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 28 },
+  { name: 'BNI', src: '/images/BNI_logo.svg.webp', shape: 'landscape', desktopWidth: 4.35, mobileWidth: 70, scale: 0.9 },
+  { name: 'ByteDance', src: '/images/ByteDance_logo.webp', shape: 'landscape', desktopWidth: 5.5, mobileWidth: 88 },
+  { name: 'Pertamina', src: '/images/Pertamina_Logo.svg.webp', shape: 'landscape', desktopWidth: 4.5, mobileWidth: 72 },
+  { name: 'COSMAX', src: '/images/LOGO-CLIENT-HOME-PAGE-COSMAX-13.webp', shape: 'landscape', desktopWidth: 4.75, mobileWidth: 76 },
+  { name: 'HSB', src: '/images/cropped-cropped-Logo-Horizontal-Light-Blue.webp', shape: 'landscape', desktopWidth: 3.5, mobileWidth: 56, scale: 0.82 },
+  { name: 'Parcelin', src: '/images/LOGO%20PT%20PARCELIN%201.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 28 },
+  { name: 'Astra International', src: '/images/ASTRA_international.svg.webp', shape: 'landscape', desktopWidth: 6, mobileWidth: 96 },
+  { name: 'BTN', src: '/images/btn1-PNG.webp', shape: 'landscape', desktopWidth: 2.6, mobileWidth: 42, scale: 0.74 },
+  { name: 'Gojek', src: '/images/logo-gojek.webp', shape: 'landscape', desktopWidth: 3.75, mobileWidth: 60, scale: 0.9 },
+  { name: 'GoPay', src: '/images/gopay-logo_brandlogos.net_gph3u.webp', shape: 'landscape', desktopWidth: 4.75, mobileWidth: 76 },
+  { name: 'Kahf', src: '/images/kahf-logo-png_seeklogo-466184.webp', shape: 'landscape', desktopWidth: 3.1, mobileWidth: 50, scale: 0.86 },
+  { name: 'HM Sampoerna', src: '/images/logo-hm-sampoerna-115507099816te6s4zjge.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 28 },
+  { name: 'Kota Semarang', src: '/images/Lambang_Kota_Semarang%20%281%29.webp', shape: 'square', desktopWidth: 1.6, mobileWidth: 26 },
+  { name: 'Shopee', src: '/images/Shopee.svg.webp', shape: 'landscape', desktopWidth: 3.75, mobileWidth: 60 },
+  { name: 'Universitas Katolik Soegijapranata', src: '/images/Unika_Soegijapranata_Talenta_Propatria_et_Humaniora.webp', shape: 'landscape', desktopWidth: 2.9, mobileWidth: 46, scale: 0.86 },
+  { name: 'Creasa', src: '/images/CREASA%20LOGO%20NO%20BACKGROUND-01.webp', shape: 'landscape', desktopWidth: 3, mobileWidth: 48, scale: 0.84 },
+  { name: 'Iris', src: '/images/Logo%20Iris.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 28 },
+  { name: 'Gojek', src: '/images/Logo%20GoJek%203.webp', shape: 'landscape', desktopWidth: 4.5, mobileWidth: 72 },
 ];
 
 export const about = {

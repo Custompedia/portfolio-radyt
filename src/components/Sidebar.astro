@@ -136,8 +136,30 @@ import { brand, hero, nav, stats, clients } from '../data/site';
       <span class="nav-card-bg" data-ghost-fade></span>
       <div class="marquee" data-ghost-fade>
         <div class="marquee-track">
-          {clients.map((name) => <span class="marquee-item">{name}</span>)}
-          {clients.map((name) => <span class="marquee-item" aria-hidden="true">{name}</span>)}
+          <div class="marquee-group">
+            {
+              clients.map((client) => (
+                <span
+                  class:list={['marquee-item', `marquee-item--${client.shape}`]}
+                  style={`--logo-width-desktop:${client.desktopWidth}vw;--logo-width-mobile:${client.mobileWidth}px;--logo-scale:${client.scale ?? 1}`}
+                >
+                  <img class="marquee-logo" src={client.src} alt={client.name} loading="eager" decoding="async" />
+                </span>
+              ))
+            }
+          </div>
+          <div class="marquee-group" aria-hidden="true">
+            {
+              clients.map((client) => (
+                <span
+                  class:list={['marquee-item', `marquee-item--${client.shape}`]}
+                  style={`--logo-width-desktop:${client.desktopWidth}vw;--logo-width-mobile:${client.mobileWidth}px;--logo-scale:${client.scale ?? 1}`}
+                >
+                  <img class="marquee-logo" src={client.src} alt="" loading="eager" decoding="async" />
+                </span>
+              ))
+            }
+          </div>
         </div>
       </div>
     </div>
