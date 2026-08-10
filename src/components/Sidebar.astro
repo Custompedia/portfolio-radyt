@@ -48,96 +48,110 @@ import { brand, hero, nav, stats, clients } from '../data/site';
     <p class="nav-tagline" data-ghost="tagline" data-ghost-type="box">{brand.tagline}</p>
   </div>
 
-  <!-- Tiap statistik jadi kartu terpisah, bukan satu kartu dengan pemisah: di
-       hero masing-masing terbang dari posisi berbeda, jadi butuh lapisan bg
-       sendiri. Kalau statistiknya lebih dari satu, gap-nya nol dan sisi yang
-       bertemu kehilangan radius sehingga terbaca sebagai satu kartu dengan
-       garis pemisah di tengah. -->
-  <div class="nav-stats-row">
-    {
-      stats.map((stat, i) => (
-        <div class="nav-card nav-stat-card">
-          <span class="nav-card-bg" data-ghost={`stats-card-${i}`} data-ghost-type="background" />
-          {/* SATU elemen, dua susunan. Tata letak aslinya SEBARIS (bentuk
-              akhirnya di rail); di hero, ghost.ts menggeser kedua anaknya jadi
-              bertumpuk lalu menariknya balik sepanjang morph — jadi angkanya
-              benar-benar meluncur ke kiri dan labelnya turun ke sebelah
-              kanannya, bukan sekadar bertukar tampil. Lihat `data-ghost-type`
-              di bawah. */}
-          <div class="nav-stat" data-ghost={`stat-${i}`} data-ghost-type="stat">
-            <span class="nav-stat-value">{stat.value}</span>
-            <span class="nav-stat-label">
-              {
-                stat.label.split(' ').map((word) => (
-                  <span class="nav-stat-label-word">{word}</span>
-                ))
-              }
-            </span>
-          </div>
-        </div>
-      ))
-    }
-    {
-      stats.length > 1 && (
-        <span
-          class="nav-stats-sep"
-          aria-hidden="true"
-          data-tl-type="scroll"
-          data-tl-trigger="[data-hero]"
-          data-tl-start="39% top"
-          data-tl-end="41% top"
-          data-tl-from="{'opacity':0}"
-          data-tl-to="{'opacity':0.18}"
-          data-tl-desktop
-        />
-      )
-    }
-  </div>
-
-  <nav class="nav-card nav-menu" aria-label="Primary">
-    <span class="nav-card-bg" data-ghost-fade></span>
-    <ul>
+  <!-- Panel yang bisa dibuka/tutup di mobile (lihat mobile-menu.ts): brand +
+       tagline di atas dan tombol CTA di bawah SENGAJA di LUAR wrapper ini
+       (lihat komponen sebelum & sesudah blok ini) supaya keduanya tetap
+       terlihat sebagai topbar tetap terlepas dari status buka/tutup panel.
+       Di desktop wrapper ini `display:contents` — tidak mengubah apa pun,
+       anak-anaknya tetap ikut flex/gap milik `.sidebar` seperti sebelumnya. -->
+  <div class="sidebar-panel" data-sidebar-panel>
+    <!-- Tiap statistik jadi kartu terpisah, bukan satu kartu dengan pemisah: di
+         hero masing-masing terbang dari posisi berbeda, jadi butuh lapisan bg
+         sendiri. Kalau statistiknya lebih dari satu, gap-nya nol dan sisi yang
+         bertemu kehilangan radius sehingga terbaca sebagai satu kartu dengan
+         garis pemisah di tengah. -->
+    <div class="nav-stats-row">
       {
-        nav.map((item) => (
-          <li>
-            <a
-              class="nav-link"
-              href={item.href}
-              data-nav-link={item.id}
-              data-ghost={`nav-${item.id}`}
+        stats.map((stat, i) => (
+          <div class="nav-card nav-stat-card">
+            <span class="nav-card-bg" data-ghost={`stats-card-${i}`} data-ghost-type="background" />
+            {/* Di rail keduanya BERTUMPUK (angka di atas, label di bawah).
+                Kartu pertama tampil BERDAMPINGAN saat masih berukuran hero, dan
+                itu yang ditandai `data-ghost-alt`: ghost.ts mengukur susunan
+                bernama kelas itu satu frame, lalu menirunya dengan menggeser
+                kedua anaknya memakai transform sepanjang morph. Kartu kedua
+                tanpa atribut itu — susunannya sama di kedua tempat, jadi cukup
+                digeser dan diskalakan seperti ghost `box` biasa. */}
+            <div
+              class="nav-stat"
+              data-ghost={`stat-${i}`}
               data-ghost-type="box"
+              data-ghost-alt={i === 0 ? 'is-inline' : undefined}
             >
-              <span class="nav-link-bg" aria-hidden="true"></span>
-              <span class="nav-link-icon">
-                <Icon name={item.icon} size={14} />
+              <span class="nav-stat-value">{stat.value}</span>
+              <span class="nav-stat-label">
+                {
+                  stat.label.split(' ').map((word) => (
+                    <span class="nav-stat-label-word">{word}</span>
+                  ))
+                }
               </span>
-              <span class="nav-link-label">{item.label}</span>
-            </a>
-          </li>
+            </div>
+          </div>
         ))
       }
-    </ul>
-  </nav>
+      {
+        stats.length > 1 && (
+          <span
+            class="nav-stats-sep"
+            aria-hidden="true"
+            data-tl-type="scroll"
+            data-tl-trigger="[data-hero]"
+            data-tl-start="39% top"
+            data-tl-end="41% top"
+            data-tl-from="{'opacity':0}"
+            data-tl-to="{'opacity':0.18}"
+            data-tl-desktop
+          />
+        )
+      }
+    </div>
 
-  <div class="nav-card nav-clients">
-    <span class="nav-card-bg" data-ghost-fade></span>
-    <div class="marquee" data-ghost-fade>
-      <div class="marquee-track">
-        {clients.map((name) => <span class="marquee-item">{name}</span>)}
-        {clients.map((name) => <span class="marquee-item" aria-hidden="true">{name}</span>)}
+    <nav class="nav-card nav-menu" aria-label="Primary">
+      <span class="nav-card-bg" data-ghost-fade></span>
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                class="nav-link"
+                href={item.href}
+                data-nav-link={item.id}
+                data-ghost={`nav-${item.id}`}
+                data-ghost-type="box"
+              >
+                <span class="nav-link-bg" aria-hidden="true"></span>
+                <span class="nav-link-icon">
+                  <Icon name={item.icon} size={14} />
+                </span>
+                <span class="nav-link-label">{item.label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="nav-card nav-clients">
+      <span class="nav-card-bg" data-ghost-fade></span>
+      <div class="marquee" data-ghost-fade>
+        <div class="marquee-track">
+          {clients.map((name) => <span class="marquee-item">{name}</span>)}
+          {clients.map((name) => <span class="marquee-item" aria-hidden="true">{name}</span>)}
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="nav-card nav-email">
-    <span class="nav-card-bg" data-ghost-fade></span>
-    <button class="nav-email-btn" type="button" data-copy={brand.email} data-ghost-fade>
-      <span class="nav-email-text">{brand.email}</span>
-      <span class="nav-email-icon">
-        <Icon name="copy" size={14} />
-      </span>
-      <span class="nav-email-done" aria-live="polite"></span>
-    </button>
+    <div class="nav-card nav-email">
+      <span class="nav-card-bg" data-ghost-fade></span>
+      <button class="nav-email-btn" type="button" data-copy={brand.email} data-ghost-fade>
+        <span class="nav-email-text">{brand.email}</span>
+        <span class="nav-email-icon">
+          <Icon name="copy" size={14} />
+        </span>
+        <span class="nav-email-done" aria-live="polite"></span>
+      </button>
+    </div>
   </div>
 
   <a
@@ -154,6 +168,13 @@ import { brand, hero, nav, stats, clients } from '../data/site';
 </aside>
 
 <button class="mobile-menu-trigger" type="button" aria-label="Open menu" aria-expanded="false" data-menu-trigger>
-  <span></span>
-  <span></span>
+  <!-- Ikon grid 2x2, bukan hamburger dua garis — meniru chrome tombol menu
+       referensi. Silang buka/tutup digambar lewat ::before/::after di CSS,
+       bukan menata ulang keempat titik ini. -->
+  <span class="mobile-menu-trigger-grid" aria-hidden="true">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </span>
 </button>

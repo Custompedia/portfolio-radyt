@@ -143,9 +143,15 @@ export const hero = {
 /**
  * Angka besar di sidebar. `label` dirender satu baris utuh di bawah angkanya,
  * jadi tahan tetap pendek — dua kata pas, tiga kata mulai memaksa kartunya
- * melebar. Angkanya klaim publik Parcelin (950+ bisnis terlayani).
+ * melebar. `stats[0]` (950+) klaim publik Parcelin (bisnis terlayani);
+ * `stats[1]` (12+) angka lama jalan Custompedia+Parcelin gabungan (2014–2026,
+ * lihat `timeline`) — dua kartu ini yang mengisi pola dua-kartu di hero
+ * (satu kartu kecil, satu kartu besar), meniru referensi heynesh.com.
  */
-export const stats: Stat[] = [{ value: '950+', label: 'Businesses served' }];
+export const stats: Stat[] = [
+  { value: '950+', label: 'Businesses served' },
+  { value: '12+', label: 'Years experience' },
+];
 
 /** Berjalan di marquee sidebar — dua bendera, lalu lini layanan di bawahnya. */
 export const clients: string[] = [

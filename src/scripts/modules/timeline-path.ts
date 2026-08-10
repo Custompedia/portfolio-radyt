@@ -123,6 +123,40 @@ function buildFill(container: HTMLElement): void {
 }
 
 /**
+ * REL MOBILE — garis lurus di kiri kartu (digambar CSS, lihat sections.css).
+ *
+ * Yang diisi elemen yang SAMA dengan versi desktop, `[data-timeline-fill]`:
+ * di desktop ia pembungkus ber-`overflow:hidden` yang menyingkap path berkelok,
+ * di mobile ia batang lurus 3px di atas relnya. Karena yang di-scrub sama-sama
+ * TINGGI elemen itu, `FILL_STEPS` dipakai bersama — ritme "singgah di tiap
+ * simpul" jadi identik di kedua layout tanpa tabel kedua.
+ *
+ * Simpulnya tidak ikut ditween di sini: di mobile titik-titiknya digambar
+ * sebagai pseudo-element tiap kartu (`.timeline-card::before`), dan
+ * pseudo-element tidak bisa jadi target GSAP.
+ */
+function buildRailFill(container: HTMLElement): void {
+  const fill = $('[data-timeline-fill]', container);
+  if (!fill) return;
+
+  const tween = gsap.fromTo(
+    fill,
+    { height: '0%' },
+    {
+      keyframes: FILL_STEPS,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: container,
+        start: 'top 85%',
+        end: 'bottom 70%',
+        scrub: 1,
+      },
+    },
+  );
+  if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
+}
+
+/**
  * KEDALAMAN — kartu bergerak beda kecepatan.
  *
  * Dipakai `yPercent`, BUKAN `y`. Kartu sudah punya animasi masuk sendiri lewat
@@ -416,9 +450,16 @@ export const timelinePathModule: AnimationModule = {
     // ikut mematikan tombol "Baca selengkapnya".
     buildStory();
 
-    // Di bawah 768px dan pada reduced motion, kartunya kembali mengalir normal
-    // dan garisnya disembunyikan — tidak ada yang perlu ditempelkan.
-    if (!isDesktop() || prefersReducedMotion()) return;
+    // Reduced motion: tidak ada yang bergerak sama sekali. Relnya tetap
+    // tergambar lewat CSS, cuma tidak pernah terisi.
+    if (prefersReducedMotion()) return;
+
+    // Di bawah 768px kartunya kembali mengalir normal — tidak ada yang perlu
+    // ditempelkan ke simpul — tapi rel lurus di kirinya tetap ikut terisi.
+    if (!isDesktop()) {
+      buildRailFill(container);
+      return;
+    }
 
     anchorCards(container);
     buildFill(container);
@@ -429,6 +470,11 @@ export const timelinePathModule: AnimationModule = {
 
   destroy() {
     while (triggers.length) triggers.pop()?.kill();
+    // Tinggi terakhir ditulis GSAP sebagai style inline. Tanpa dibersihkan, rel
+    // mobile membeku di tinggi terakhirnya saat layar dilebarkan ke desktop
+    // (dan sebaliknya) — modul ini dibangun ulang tiap resize.
+    const fill = $<HTMLElement>('[data-timeline-fill]');
+    if (fill) gsap.set(fill, { clearProps: 'height' });
     // TIDAK di-null-kan: popup-nya dipasang sekali seumur halaman (`storyBound`),
     // jadi handle ini harus tetap hidup untuk destroy berikutnya.
     closeStory?.();

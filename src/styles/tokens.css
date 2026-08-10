@@ -159,8 +159,12 @@
      Batas amannya bergantung pada --hero-portrait-h: di dalam file fotonya ada
      margin kosong 1.76% tinggi di atas rambut, jadi ruang gerak ke atas kira-
      kira 1.76% × --hero-portrait-h (pada 150vh ≈ 2.6vh) sebelum ubun-ubunnya
-     ikut terpotong. */
-  --hero-portrait-top: -2vh;
+     ikut terpotong.
+     Angkanya disamakan dengan referensi: di sana ubun-ubun jatuh di 38px dari
+     tepi atas layar (4.9vh @782), sementara -2vh menaruh ubun-ubun kita di 8px
+     — kepalanya terbaca mepet, dan pita atas wordmark ikut habis tertutup
+     rambut. 2vh mengembalikan jarak itu ke ~39px. */
+  --hero-portrait-top: 2vh;
 
   /* Tepi KIRI kartu traits hero, dan sekaligus tepi kiri paragraf tagline di
      bawahnya (lewat ghost `tagline` di Hero.astro). Keduanya WAJIB memakai
@@ -334,5 +338,11 @@
     --ls-big: -0.02em;
     --ls-cta: -0.02em;
     --ls-lead: -0.01em;
+
+    /* Tinggi SEMUA kontrol di topbar mobile: pill brand, tombol CTA, dan
+       tombol menu. Satu angka dipakai bertiga — itu satu-satunya cara menjamin
+       ketiganya rata, karena tanpa `height` tinggi masing-masing lahir dari
+       padding + metrik font yang berbeda-beda. */
+    --topbar-ctl-h: 40px;
   }
 }

@@ -363,6 +363,15 @@
   height: var(--hero-btn-h);
 }
 
+/* Kartu statistik statis khusus mobile (lihat Hero.astro) — di desktop angka
+   yang sama sudah terbang lewat GhostEngine dari sidebar, jadi salinan ini
+   tidak pernah boleh tampil di sana. Diberi tempat di sini (bukan di dalam
+   media query) supaya "sembunyi di desktop" adalah DEFAULT, bukan sesuatu
+   yang harus diingat tiap kali breakpoint baru ditambahkan. */
+.hero-mobile-stat {
+  display: none;
+}
+
 /* Sidebar disembunyikan sampai GhostEngine selesai memasang posisi awalnya,
    supaya tidak terlihat "meloncat" dari kolom kiri ke posisi hero. */
 .js-loading .sidebar {
@@ -408,26 +417,151 @@
     padding-left: var(--gutter);
   }
 
-  /* Panel penuh, bukan dropdown: kalau tingginya mengikuti isi, konten halaman
-     tetap terlihat di bawahnya dan menu jadi sulit dibaca. */
+  /* Topbar tetap: brand pill + tombol CTA sejajar dengan tombol menu, selalu
+     terlihat terlepas dari status buka/tutup panel — meniru referensi
+     heynesh.com. Isinya cuma `.nav-top` (dikecilkan ke brand pill saja, lihat
+     di bawah) dan `.btn-primary`; sisanya (`.sidebar-panel`) mengambang penuh
+     layar dan diatur terpisah. */
   .sidebar {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    z-index: 80;
+    display: flex;
+    /* Reset eksplisit: aturan dasar (desktop) di atas menulis `column` untuk
+       rail, dan media query tidak otomatis membatalkan properti yang tidak
+       ditulis ulang di sini — tanpa baris ini topbar diam-diam tetap
+       menyusun turun dan `align-items:center` jadi menengahkan horizontal,
+       bukan vertikal. */
+    flex-direction: row;
     width: 100%;
-    height: 100dvh;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    /* Kanan disisakan 68px = lebar tombol menu (44px) + jarak fixed-nya dari
+       tepi (14px) + gap 10px — supaya CTA tidak pernah menabrak tombol menu
+       yang posisinya independen (`.mobile-menu-trigger`, fixed sendiri). */
+    padding: 14px 68px 14px var(--gutter);
+    transform: none;
+  }
+
+  /* Kartu beige & tagline tidak muncul di topbar referensi — yang tersisa
+     cuma pill brand kuning. z-index harus lebih tinggi dari `.sidebar-panel`
+     (70): keduanya anak `.sidebar`, dan tanpa ini panel yang ber-z-index
+     eksplisit menang atas item topbar yang z-index-nya `auto` — walau
+     `.sidebar` sendiri sudah z-index 80 terhadap ELEMEN LAIN DI HALAMAN, itu
+     tidak menentukan urutan ANTAR ANAKNYA sendiri. */
+  .nav-top {
+    position: relative;
+    z-index: 81;
+    display: flex;
+    padding: 0;
+    gap: 0;
+  }
+
+  .nav-top .nav-card-bg,
+  .nav-top .social,
+  .nav-top .nav-tagline {
+    display: none;
+  }
+
+  /* TINGGI KETIGA KONTROL TOPBAR DIPATOK SATU ANGKA.
+     Sebelumnya masing-masing tingginya lahir dari padding + metrik font-nya
+     sendiri: pill brand jadi ~34px, CTA ~33px, tombol menu 44px — bertingkat
+     dan terbaca miring. Dengan `height` eksplisit + `align-items:center`,
+     ketiganya rata berapa pun ukuran fontnya nanti. */
+  .brand,
+  .sidebar > .btn-primary,
+  .mobile-menu-trigger {
+    height: var(--topbar-ctl-h);
+  }
+
+  /* Tombol menu bujur sangkar — lebarnya ikut tinggi yang sama, kalau tidak ia
+     44x40 dan terbaca sebagai kotak yang sedikit rebah. */
+  .mobile-menu-trigger {
+    width: var(--topbar-ctl-h);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 14px;
+    font-size: 1.05rem;
+  }
+
+  /* Panel BUKAN penuh layar: tingginya mengikuti isi, jadi hero tetap terlihat
+     di bawahnya — persis referensi, di mana menu terbuka terbaca sebagai lembar
+     yang turun menutupi bagian ATAS halaman saja. Versi sebelumnya 100dvh dan
+     menyisakan setengah layar beige kosong di bawah kartu terakhir.
+     Wrapper ini yang menerima treatment "geser dari atas"; topbar (`.sidebar`
+     sendiri) tidak ikut ter-clip, lihat komentar Sidebar.astro. */
+  .sidebar-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 70;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: 100dvh;
+    gap: 8px;
     overflow-y: auto;
-    padding: 14px 14px 80px;
+    padding: 76px 14px 16px;
     background: var(--bg);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
     clip-path: inset(0 0 100% 0);
     transition: clip-path 0.5s var(--ease-out);
   }
 
-  .sidebar.is-open {
+  /* Urutan referensi: link → email → marquee klien. Diatur lewat `order`, bukan
+     dengan memindah markup, karena urutan DOM-nya sudah benar untuk rail
+     desktop (statistik di atas, email di bawah). */
+  .sidebar-panel .nav-menu {
+    order: 1;
+  }
+
+  .sidebar-panel .nav-email {
+    order: 2;
+  }
+
+  .sidebar-panel .nav-clients {
+    order: 3;
+  }
+
+  /* Angkanya sudah tampil mengambang di atas potret hero (`.hero-mobile-stat`),
+     jadi di dalam menu ia cuma pengulangan yang memakan satu layar penuh.
+     Referensi juga tidak menampilkannya di menu terbuka. */
+  .sidebar-panel .nav-stats-row {
+    display: none;
+  }
+
+  .sidebar.is-open .sidebar-panel {
     clip-path: inset(0 0 0 0);
+  }
+
+  /* Tombol CTA ikut jadi bagian topbar — dikecilkan ke ukuran pil compact
+     supaya sejajar tinggi dengan brand pill & tombol menu. z-index sama
+     alasannya dengan `.nav-top` di atas. */
+  .sidebar > .btn-primary {
+    position: relative;
+    z-index: 81;
+    flex: none;
+    margin-left: auto;
+    padding: 0 16px;
+    font-size: 0.8125rem;
   }
 
   .mobile-menu-trigger {
     display: flex;
+  }
+
+  /* Ikon link menu: 14px terlalu kecil di layar sentuh dan terbaca sebagai
+     noda, bukan ikon. Ukurannya ditulis di CSS supaya menimpa atribut
+     width/height bawaan <svg> dari Icon.astro. */
+  .nav-link-icon svg {
+    width: 17px;
+    height: 17px;
   }
 }
 
@@ -1708,8 +1842,24 @@
 
 @media (max-width: 767px), (prefers-reduced-motion: reduce) {
   .hero {
+    /* Jangkar untuk kartu-kartu yang mengambang di atas potret (lihat
+       `.hero-traits` & `.hero-mobile-stat-float` di bawah) — keduanya
+       `position:absolute` dan naik lewat rantai ancestor sampai ke sini,
+       karena `.hero-back`/`.hero-front` sendiri sengaja `position:static`. */
+    position: relative;
     height: auto;
+    /* 96px topbar tetap (tombol menu 44px + padding 14px atas-bawah) supaya
+       wordmark tidak pernah tertutup. */
     padding: 96px var(--gutter) 48px var(--content-left);
+  }
+
+  /* Jarak dari tepi ATAS `.hero` ke tepi atas potret: padding-top di atas,
+     lalu tinggi baris wordmark (satu baris, line-height 1 = tinggi font-nya
+     sendiri) plus margin-bottom-nya. Dipakai `.hero-traits` &
+     `.hero-mobile-stat-float` supaya keduanya start persis di tepi potret,
+     bukan angka yang ditulis lepas dua kali. */
+  :root {
+    --hero-mobile-portrait-top: calc(96px + (var(--wordmark-size) * 0.888) + 12px);
   }
 
   .hero-back,
@@ -1759,7 +1909,6 @@
   }
 
   .hero-headline,
-  .hero-traits,
   .hero-eyebrow,
   .hero-secondary {
     position: static;
@@ -1783,26 +1932,31 @@
     margin-bottom: 24px;
   }
 
-  /* Kaca taupe hanya masuk akal di atas potret. Di layout statis kartunya
-     duduk di atas latar terang, jadi ia kembali jadi kartu beige biasa. */
+  /* Kartu traits mengambang di pojok KIRI-atas potret, persis referensi —
+     bukan lagi kartu beige statis di bawah headline. Tetap kaca (`glass-card`
+     di markup) karena masih duduk di atas foto, sama seperti versi desktop. */
   .hero-traits {
+    position: absolute;
+    top: calc(var(--hero-mobile-portrait-top) + 14px);
+    left: var(--gutter);
     right: auto;
-    top: auto;
     bottom: auto;
+    z-index: 2;
+    max-width: 42vw;
     align-items: flex-start;
     gap: 8px;
-    padding: 18px 20px;
-    margin-bottom: 24px;
-    background: var(--card-bg);
-    border: var(--card-border);
+    padding: 14px 16px;
   }
 
-  /* Di luar hero bertumpuk, teks putih jatuh di atas latar terang. */
-  .hero-trait,
+  /* Headline tetap di latar terang biasa di bawah potret, jadi tetap hitam —
+     traits-nya sendiri TIDAK ikut disamakan lagi (masih putih, lihat di atas). */
   .hero-headline {
     color: var(--black);
   }
 
+  /* Ukurannya HANYA untuk trait. Menggabungkannya dengan .hero-headline di
+     selektor yang sama menimpa ukuran headline di atas dan mengecilkannya
+     jadi seukuran teks isi. */
   /* Ukurannya HANYA untuk trait. Menggabungkannya dengan .hero-headline di
      selektor yang sama menimpa ukuran headline di atas dan mengecilkannya
      jadi seukuran teks isi. */
@@ -1821,6 +1975,64 @@
     border-radius: 1.5px;
   }
 
+  /* Kartu tahun mengambang di pojok KANAN-atas potret — pasangan kartu
+     traits di seberangnya, keduanya start di tepi potret yang sama. */
+  .hero-mobile-stat {
+    display: flex;
+  }
+
+  .hero-mobile-stat-float {
+    position: absolute;
+    top: calc(var(--hero-mobile-portrait-top) + 14px);
+    right: var(--gutter);
+    z-index: 2;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 14px 18px;
+    text-align: center;
+  }
+
+  /* Kartu hitungan di bawah headline — kartu terang biasa, bukan kaca:
+     ia duduk di atas latar beige, bukan di atas foto. */
+  .hero-mobile-stat-inline {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+  }
+
+  .hero-mobile-stat-value {
+    color: var(--yellow);
+    font-size: 1.75rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-mobile-stat-float .hero-mobile-stat-value {
+    font-size: 2.25rem;
+  }
+
+  .hero-mobile-stat-label {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .hero-mobile-stat-float .hero-mobile-stat-label {
+    align-self: stretch;
+    width: 100%;
+    color: var(--white);
+    text-align: center;
+  }
+
+  .hero-mobile-stat-inline .hero-mobile-stat-label {
+    color: var(--fg);
+  }
+
   .hero-eyebrow {
     left: auto;
     top: auto;
@@ -1837,25 +2049,82 @@
 
   /* Kartu perjalanan kembali mengalir vertikal. Garis serpentine-nya bergantung
      penuh pada penempatan absolut, jadi ia ikut hilang — tanpa itu path yang
-     melar tetap tergambar di belakang tumpukan kartu. */
+     melar tetap tergambar di belakang tumpukan kartu.
+     Penggantinya rel LURUS di kiri: satu garis + satu titik per kartu, digambar
+     lewat pseudo-element (bukan SVG + timeline-path.ts, yang memang cuma masuk
+     akal untuk kelokan desktop). */
   .timeline {
+    --tl-rail: 34px; /* lebar rel di kiri kartu */
+    --tl-line-x: 7px; /* pusat garis, dihitung dari tepi kiri .timeline */
+    --tl-dot: 13px;
+
+    position: relative;
     display: flex;
     height: auto;
     flex-direction: column;
     gap: clamp(28px, 5vh, 64px);
+    padding-left: var(--tl-rail);
+  }
+
+  .timeline::before {
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: calc(var(--tl-line-x) - 1px);
+    width: 2px;
+    border-radius: 1px;
+    background: rgba(46, 32, 6, 0.28);
+    content: '';
   }
 
   .timeline-svg,
-  .timeline-fill,
   .timeline-dot {
     display: none;
   }
 
+  /* Batang terisi. Elemennya SAMA dengan versi desktop (`[data-timeline-fill]`)
+     — di sana ia pembungkus ber-`overflow:hidden` yang menyingkap path
+     berkelok, di sini ia batang lurus di atas relnya. Karena tinggi elemen ini
+     yang di-scrub di kedua kasus, ritme "singgah di tiap simpul" milik
+     FILL_STEPS berlaku sama tanpa kode kedua.
+     `max-height` menahannya berhenti sejajar ujung bawah rel: tingginya
+     dihitung terhadap .timeline yang penuh, sementara relnya disisipkan 10px
+     di atas dan di bawah. */
+  .timeline-fill {
+    top: 10px;
+    left: calc(var(--tl-line-x) - 1.5px);
+    right: auto;
+    z-index: 1;
+    width: 3px;
+    max-height: calc(100% - 20px);
+    border-radius: 2px;
+    background: rgba(17, 12, 2, 0.85);
+  }
+
   .timeline-card {
-    position: static;
+    position: relative;
     width: 100%;
     padding: 22px;
     box-shadow: 0 14px 30px -18px rgba(46, 32, 6, 0.5);
+  }
+
+  /* Titik sejajar dengan angka tahun di dalam kartu (padding 22px + separuh
+     tinggi angkanya), bukan di tengah kartu — tinggi kartu berbeda-beda
+     mengikuti panjang cerita, jadi tengah kartu bukan patokan yang stabil.
+     `left` negatif menariknya keluar kartu sampai duduk pas di atas garis:
+     mundur selebar rel, maju ke pusat garis, lalu mundur separuh titik. */
+  .timeline-card::before {
+    position: absolute;
+    /* 76px = pusat angka tahun diukur dari tepi atas kartu (padding 22 + baris
+       bendera 38 + separuh tinggi angka 26) dikurangi separuh tinggi titik. */
+    top: 76px;
+    left: calc(-1 * var(--tl-rail) + var(--tl-line-x) - (var(--tl-dot) + 4px) / 2);
+    width: var(--tl-dot);
+    height: var(--tl-dot);
+    border: 2px solid rgba(46, 32, 6, 0.5);
+    border-radius: 50%;
+    background: var(--bg);
+    content: '';
   }
 
   .tl-head {
@@ -2225,5 +2494,242 @@
 
   .story-title {
     font-size: 1.25rem;
+  }
+}
+
+/* ==========================================================================
+   HERO MOBILE — PANGGUNG SATU LAYAR
+
+   Blok LAYOUT STATIS di atas dipakai bersama oleh dua kondisi: layar sempit
+   DAN reduced-motion di desktop. Susunannya mengalir ke bawah supaya aman di
+   kedua kasus itu. Yang di bawah ini SENGAJA hanya `max-width: 767px`: ia
+   mengubah hero jadi panggung setinggi satu layar dengan potret memenuhi
+   lebar dan semua kartu mengambang di atasnya — komposisi khas layar sentuh
+   yang akan berantakan kalau ikut dipakai desktop reduced-motion.
+
+   Angka posisinya diturunkan dari hero mobile referensi (heynesh.com pada
+   425x870), dinyatakan dalam % supaya bilah URL browser yang muncul-hilang
+   tidak menggeser komposisinya:
+     wordmark  y 100   → 11.5%      kartu traits  y 295 → 34%
+     ubun-ubun y 105   → 12%        kartu tahun   y 355 → 41%
+     headline  y 505   → 58%        kartu angka   y 680 → 78%
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .hero {
+    /* Panggungnya setinggi layar; `svh` (bukan `vh`) supaya bilah URL yang
+       muncul-hilang tidak menggeser komposisi. Yang diukur dalam % di bawah
+       adalah isi panggung ini, jadi keduanya tidak bentrok. */
+    height: 100svh;
+    /* Potret sekarang JAUH lebih besar dari panggungnya (lihat .hero-portrait),
+       jadi bahu dan kakinya harus dipotong di sini. */
+    overflow: hidden;
+    /* Lantai untuk ponsel pendek: DIUKUR, bukan ditaksir. Tinggi kartu traits
+       (~176px pada 360px, "Custom Packaging" turun dua baris) dan headline
+       (~106px, tiga baris) itu tetap dalam px sementara jangkarnya % — jadi
+       di layar pendek keduanya saling mendekat. Pada 620px yang sempat dipakai
+       di sini, traits berakhir di 381 sementara headline mulai di 365: menimpa.
+       780px menyisakan ~27px celah di kasus tersempit; di bawah itu halaman
+       lebih baik sedikit lebih panjang dari layar daripada isinya bertindih. */
+    min-height: 780px;
+    padding: 0;
+  }
+
+  /* Potret memenuhi lebar layar — di rasio 810x1365, 78% menghasilkan lebar
+     yang praktis sama dengan lebar ponsel biasa (390-430px). Inilah bedanya
+     yang paling terasa dari versi sebelumnya (54vh, tinggi setengah layar). */
+  /* `left/right: 0` + gambar bermargin auto, BUKAN `left:50%` + translate:
+     kotak absolut yang cuma punya `left` lebarnya dibatasi sisa ruang di
+     kanannya (425 − 212 = 213px), dan `max-width:100%` dari reset lalu
+     memampatkan fotonya jadi gepeng. Dengan kotak selebar layar, gambar
+     memakai lebar alaminya (78% × 810/1365 ≈ selebar ponsel). */
+  .hero-portrait {
+    position: absolute;
+    /* 146%, bukan 78%: pada 78% kepalanya cuma 142px sementara di referensi
+       265px — subjeknya terbaca jauh di belakang. 146% menaikkannya ke ~265px,
+       dan konsekuensinya fotonya jadi ~750px lebar di layar 425px: bahunya
+       memang harus keluar layar, persis seperti referensi yang memakai potret
+       sebatas dada. `top` disetel supaya ubun-ubun tetap jatuh di ~12%. */
+    top: 9.5%;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 146%;
+    margin: 0;
+    transform: none;
+    /* Sisi bawah lebur ke latar. PERSENNYA RELATIF TINGGI FOTO (146% tinggi
+       hero), BUKAN tinggi hero — dan itu jebakannya: versi sebelumnya berhenti
+       di 52/74/90%, padahal tepi bawah hero baru jatuh di 62% tinggi foto. Jadi
+       saat `overflow:hidden` memotongnya, fotonya masih ~70% pekat dan garis
+       potongnya terlihat sebagai garis lurus keras.
+       Angka di bawah menuntaskan fade di 56% — sebelum garis potong itu — jadi
+       yang tersisa di tepi bawah benar-benar latar kosong.
+         33% ≈ y 500   mulai memudar
+         43% ≈ y 630   separuh
+         56% ≈ y 795   habis, masih di atas kaki hero (870) */
+    mask-image: linear-gradient(
+      to bottom,
+      #000 33%,
+      rgba(0, 0, 0, 0.55) 43%,
+      rgba(0, 0, 0, 0.18) 50%,
+      transparent 56%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 33%,
+      rgba(0, 0, 0, 0.55) 43%,
+      rgba(0, 0, 0, 0.18) 50%,
+      transparent 56%
+    );
+  }
+
+  /* `max-width:none` membatalkan reset global (`img{max-width:100%}`) — tanpa
+     itu foto yang lebih lebar dari layar dipampatkan jadi gepeng, bukan
+     dipotong. `flex:none` menjaga lebar alaminya di dalam flex container. */
+  .hero-portrait img {
+    max-width: none;
+    flex: none;
+  }
+
+  /* Buram yang menebal ke bawah. `backdrop-filter` mengaburkan apa yang
+     DILUKIS DI BELAKANGNYA — jadi foto ikut buram sementara kartu angka,
+     keterangan, dan tombol (z-index 3) tetap tajam di atasnya. */
+  .hero::after {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    /* Pita buram dimulai sedikit di ATAS titik fade foto (42% tinggi hero ≈
+       y 505) supaya fotonya sudah kabur duluan sebelum memudar — itu yang
+       membedakan "lebur" dari "dipotong lalu dihilangkan". */
+    height: 42%;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    mask-image: linear-gradient(to bottom, transparent, #000 45%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 45%);
+    content: '';
+    pointer-events: none;
+  }
+
+  .hero-wordmark {
+    position: absolute;
+    top: 9.5%;
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    /* Penuh dari gutter ke gutter, bukan 0.888 dari itu: di referensi wordmark
+       mobile juga berhenti tepat di kedua gutter. */
+    font-size: var(--wordmark-size);
+    /* Aturan desktop menengahkan tinta dengan `center` + padding kanan sebesar
+       side bearing. Di sini tintanya rata KIRI, jadi paddingnya dinolkan dan
+       bearing-nya dibayar lewat margin negatif — tanpa itu huruf R mulai ~5px
+       di dalam gutter sementara huruf A berhenti tepat di gutter kanan. */
+    justify-content: flex-start;
+    padding-right: 0;
+    margin: 0 0 0 calc(-1 * var(--wordmark-bearing-l) * var(--wordmark-size));
+  }
+
+  /* Kedua kartu memakai posisi referensi (425x870): traits x 45 y 295-455,
+     kartu tahun x 285-395 y 355-495. Traits sedikit masuk dari gutter — di
+     referensi ia memang tidak menempel tepi layar. */
+  /* Kartu digeser ke KIRI dan diturunkan sejauh mungkin supaya wajah subjek
+     tidak tertutup. `top`-nya tidak bisa satu angka: yang membatasi turunnya
+     adalah headline di 58.5%, sementara tinggi kartu tetap dalam px — di layar
+     pendek angka 40% membuat keduanya bertindih. `min()` mengambil yang lebih
+     tinggi antara 40% dan "tepat di atas headline", jadi ia turun sejauh yang
+     muat di layar itu dan berhenti sendiri sebelum menabrak. */
+  .hero-traits {
+    top: min(40%, calc(58.5% - 170px));
+    left: 3vw;
+    max-width: 36vw;
+    gap: 7px;
+    padding: 12px 14px;
+  }
+
+  /* Dikecilkan bersama kartunya — dan HANYA di sini, bukan di blok layout
+     statis di atas: blok itu dipakai juga oleh desktop reduced-motion, di mana
+     kartu traits mengalir di lebar penuh dan 13px terbaca terlalu kecil.
+     Pada 0.8125rem baris terpanjang ("Custom Packaging") 128px masih muat di
+     ruang teks 142px, jadi kelima baris tetap satu baris masing-masing. */
+  .hero-trait {
+    font-size: 0.8125rem;
+  }
+
+  .hero-trait-mark {
+    width: 7.5px;
+    height: 7.5px;
+  }
+
+  .hero-mobile-stat-float {
+    top: 41%;
+    width: 27vw;
+    padding: 14px 10px;
+  }
+
+  /* Angka tahun jadi elemen paling berat di paruh kanan, sama seperti "7+" di
+     referensi; labelnya turun dua baris mengikuti lebar kartu. */
+  .hero-mobile-stat-float .hero-mobile-stat-value {
+    font-size: 2.5rem;
+  }
+
+  /* Headline pindah KE ATAS potret dan jadi putih — di susunan lama ia duduk
+     di bawah foto dengan tinta hitam, dan itu yang bikin hero mobile terbaca
+     sebagai dua blok terpisah (foto, lalu teks) alih-alih satu komposisi. */
+  .hero-headline {
+    position: absolute;
+    top: 58.5%;
+    left: var(--gutter);
+    right: var(--gutter);
+    z-index: 3;
+    color: #f8f7f3;
+    font-size: clamp(2rem, 9.5vw, 3rem);
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+    margin: 0;
+  }
+
+  /* Kartu angka kedua ikut mengambang di atas foto, sebaris dengan tepi kiri
+     headline — pasangan visual "80+ Projects" di referensi. Jadi kaca, bukan
+     kartu terang, karena sekarang latarnya foto. */
+  .hero-mobile-stat-inline {
+    position: absolute;
+    top: 79%;
+    left: var(--gutter);
+    z-index: 3;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 10px 14px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur-soft));
+    -webkit-backdrop-filter: blur(var(--glass-blur-soft));
+    border-radius: var(--radius-lg);
+    margin: 0;
+  }
+
+  .hero-mobile-stat-inline .hero-mobile-stat-label {
+    color: var(--white);
+  }
+
+  /* Baris penutup hero: keterangan di kiri, tombol sekunder di kanan. Keduanya
+     dipatok ke KAKI panggung supaya tidak pernah bertabrakan dengan kartu di
+     atasnya berapa pun tinggi layarnya. */
+  .hero-eyebrow {
+    position: absolute;
+    bottom: 2.5%;
+    left: var(--gutter);
+    z-index: 3;
+    margin: 0;
+  }
+
+  /* Tidak ditampilkan di mobile: topbar sudah memegang satu CTA ("Let's Talk")
+     dan tautan Work ada di menu, jadi tombol ini cuma meramaikan sudut bawah
+     hero. Sudut itu di referensi memang hanya berisi satu baris keterangan.
+     Di desktop tombolnya tetap ada — aturan ini khusus `max-width: 767px`. */
+  .hero-secondary {
+    display: none;
   }
 }

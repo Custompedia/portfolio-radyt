@@ -14,6 +14,15 @@
   transform-origin: top left;
 }
 
+/* Wrapper murni struktural (lihat Sidebar.astro): memisahkan kartu-kartu yang
+   di mobile jadi isi panel slide-out dari `.nav-top` + tombol CTA yang tetap
+   jadi topbar. `display:contents` membuat wrapper ini tidak menghasilkan
+   kotak sendiri — anak-anaknya tetap ikut flex/gap `.sidebar` persis seperti
+   sebelum wrapper ini ada. Mobile override ada di sections.css. */
+.sidebar-panel {
+  display: contents;
+}
+
 .nav-card {
   position: relative;
   border-radius: var(--radius-sm);
@@ -123,22 +132,43 @@
   gap: 0;
 }
 
+/* Flex + center: tinggi baris ini ditentukan kartu yang isinya paling tinggi
+   (yang bertumpuk), jadi isi kartu satunya — yang cuma satu pita — akan
+   menempel ke ATAS dan menyisakan lubang di bawahnya. Diukur sebelum ini:
+   napas atas 18.8px, napas bawah 51px. Dengan `align-items:center` keduanya
+   duduk di tengah kotaknya masing-masing berapa pun selisih tingginya.
+   `.nav-card-bg` tidak terpengaruh: ia `position:absolute`, jadi keluar dari
+   alur flex. */
 .nav-stat-card {
   position: relative; /* jangkar untuk `.nav-stat-stack` yang absolut */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: 1;
   padding: 1.2vw 0.7vw;
 }
 
-/* `:not()`-nya penting: dengan satu statistik saja, kartu yang sama adalah
-   first- SEKALIGUS last-child — tanpa penjaga ini keempat sudutnya disiku dan
-   kartu tunggalnya kehilangan radius sama sekali. */
-.nav-stats-row > .nav-stat-card:first-child:not(:last-child) .nav-card-bg {
+/* Sisi yang BERTEMU disiku dan border-nya dibuang, jadi dua latar yang
+   bersebelahan terbaca sebagai SATU kartu dengan garis pemisah di tengah —
+   bukan dua kartu berjejeran. Latarnya tetap dua elemen karena di hero
+   masing-masing terbang dari kartu yang berbeda.
+
+   `-of-type`, BUKAN `-child`: `.nav-stats-sep` dirender setelah kedua kartu,
+   jadi kartu terakhir tidak pernah jadi `:last-child` dan aturan kedua di
+   bawah diam-diam tidak pernah kena — sudut kanan-atas/bawahnya tetap bulat
+   dan seam-nya terlihat sebagai celah. Span pemisah itu bukan `div`, jadi
+   `:last-of-type` menunjuk kartu terakhir dengan benar.
+
+   `:not()`-nya tetap penting: dengan satu statistik saja, kartu yang sama
+   adalah first- SEKALIGUS last-of-type — tanpa penjaga itu keempat sudutnya
+   disiku dan kartu tunggalnya kehilangan radius sama sekali. */
+.nav-stats-row > .nav-stat-card:first-of-type:not(:last-of-type) .nav-card-bg {
   border-right: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.nav-stats-row > .nav-stat-card:last-child:not(:first-child) .nav-card-bg {
+.nav-stats-row > .nav-stat-card:last-of-type:not(:first-of-type) .nav-card-bg {
   border-left: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
@@ -156,57 +186,59 @@
   pointer-events: none;
 }
 
-/* Lebarnya sepas isi, bukan selebar kartu. Morph menskalakan blok ini dengan
-   rasio lebar hero:sidebar — kalau lebarnya ikut kartu, jumlah kartu di rail
-   (satu vs dua) diam-diam mengubah besar angka di hero. Dengan fit-content
-   rasionya cuma bergantung pada teksnya sendiri. */
-/* DUA susunan untuk SATU elemen, dan itu disengaja.
+/* SATU susunan untuk kedua tempat: angka di atas, label di bawahnya, keduanya
+ * rata tengah — persis seperti rail referensi ("80+ / Projects" dan "7+ /
+ * Years of experience" sama-sama bertumpuk di dalam satu kartu berpembatas).
  *
- * Kartu hero bujur sangkar 11×11vw — di kotak itu angka dan label harus
- * BERTUMPUK, kalau berdampingan blok teksnya jadi pita tipis di tengah kotak
- * besar. Kartu rail lebar dan pendek — di situ justru harus SEBARIS.
+ * Dulu blok ini SEBARIS di rail dan BERTUMPUK di hero, dan ghost.ts punya satu
+ * tipe ghost khusus untuk menjembataninya (sudah dihapus bersama susunan
+ * sebarisnya — sekarang cukup tipe `box`). Susunan sebaris itu tidak pernah
+ * muat begitu statistiknya jadi dua: "950+ Businesses
+ * served" saja sudah 195px sementara separuh rail cuma 145px, jadi kedua kartu
+ * melar keluar rail dan menimpa isi halaman di sebelahnya. Bertumpuk, lebar
+ * bloknya cuma selebar kata terpanjang dan keduanya muat dengan sisa ruang.
  *
- * Tata letak ASLI-nya sebaris: itu bentuk akhirnya di rail, dan dialah yang
- * menentukan tinggi kartu rail. Susunan bertumpuk tidak pernah jadi tata letak
- * sungguhan — ghost.ts mengukurnya sekali lewat `.is-stacked` di bawah, lalu
- * menirunya dengan menggeser kedua anak memakai transform. Karena transform
- * bisa ditween (sementara `flex-direction` tidak), perpindahannya jadi gerakan
- * beneran: angkanya meluncur ke kiri, labelnya turun ke sebelah kanannya. */
+ * Lebarnya sepas isi, bukan selebar kartu: morph menskalakan blok ini dengan
+ * rasio lebar hero:rail, jadi kalau lebarnya ikut kartu, jumlah kartu di rail
+ * diam-diam ikut mengubah besar angka di hero. */
 .nav-stat {
   display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  gap: 0.5vw;
+  flex-direction: column;
+  align-items: center;
+  /* Rapat: angka dan label harus terbaca sebagai SATU blok. Kalau angka ini
+     berubah, `stat-0`/`stat-1` di Hero.astro ikut dihitung ulang — merekalah
+     yang menengahkan blok ini di dalam kartu hero. */
+  gap: 0.35vw;
   width: fit-content;
   margin-inline: auto;
   text-align: center;
   transform-origin: top left;
 }
 
-/* HANYA dipakai selama satu frame pengukuran oleh ghost.ts, tidak pernah
-   bertahan di DOM. Nilainya harus persis susunan yang mau ditiru di hero.
+/* SUSUNAN KEDUA, khusus kartu yang ditandai `data-ghost-alt="inline"`.
  *
- * JANGAN menimpa font-size/letter-spacing di sini. Yang benar-benar dirender
- * di hero selalu tipografi RAIL yang di-scale utuh oleh induknya; blok ini
- * cuma dipakai untuk mengukur POSISI tiap anak. Begitu ukurannya beda, dua
- * hal langsung meleset:
- *   1. skalanya (= lebar ghost ÷ lebar blok ini) dihitung dari lebar yang tak
- *      pernah dirender — versi lama memakai 7vw, blok terukur jadi 16.6vw,
- *      dan angkanya justru MENGECIL jadi 0.82× di kartu 15vw;
- *   2. jarak antar anak ikut salah, karena dy-nya lahir dari tinggi baris
- *      yang berbeda dari yang terlihat.
- * Cukup ubah arah flex dan gap-nya — keduanya berskala benar.
+ * Di RAIL kedua kartu bertumpuk (aturan di atas) — itu bentuk akhirnya, dan
+ * itu yang menentukan tinggi baris statistik. Di HERO kartu 950+ tampil
+ * BERDAMPINGAN: angka di kiri, label dua baris di kanannya.
  *
- * Gap-nya rapat: angka dan label harus terbaca sebagai SATU blok. Versi
- * sebelumnya memakai 2.9vw untuk merentangkan keduanya ke tepi atas dan bawah
- * kartu, dan hasilnya justru terbaca sebagai dua elemen tak berhubungan dengan
- * lubang di tengah. Ruang sisa kartu lebih baik jadi margin di luar blok.
- * Kalau angka ini berubah, `stat-0` di Hero.astro harus ikut dihitung ulang —
- * ia yang menengahkan blok ini secara vertikal. */
-.nav-stat.is-stacked {
-  flex-direction: column;
+ * Kelas ini TIDAK PERNAH bertahan di DOM: ghost.ts menempelkannya satu frame
+ * hanya untuk MENGUKUR, lalu melepasnya lagi dan meniru susunannya dengan
+ * menggeser tiap anak memakai transform — karena `flex-direction` tidak bisa
+ * ditween sementara transform bisa.
+ *
+ * JANGAN menimpa font-size di sini. Yang dirender di hero selalu tipografi
+ * RAIL yang di-scale utuh oleh induknya; blok ini cuma dipakai mengukur POSISI
+ * tiap anak, dan skalanya lahir dari LEBAR blok ini. Begitu ukurannya beda,
+ * skala dan jarak antar anak dua-duanya meleset. */
+.nav-stat.is-inline {
+  flex-direction: row;
   align-items: center;
-  gap: 0.35vw;
+  gap: 0.3vw;
+  text-align: left;
+}
+
+.nav-stat.is-inline .nav-stat-label {
+  align-items: flex-start;
 }
 
 /* Angka statistik kuning tebal, labelnya lebih tipis dan gelap di rail. */
@@ -218,15 +250,26 @@
   letter-spacing: -0.04em;
 }
 
+/* Tiap kata turun satu baris (kata-katanya sudah dipecah jadi span sendiri di
+   Sidebar.astro). Itu yang menahan lebar blok tetap selebar kata TERPANJANG,
+   bukan selebar kalimatnya — syarat supaya dua kartu muat berdampingan di
+   rail yang cuma 290.7px. */
 .nav-stat-label {
   display: flex;
-  flex-direction: row;
-  gap: 0.25em;
+  flex-direction: column;
+  align-items: flex-start;
   color: var(--fg);
   font-size: 0.9vw;
   font-weight: 700;
   line-height: 1.2;
   white-space: nowrap;
+}
+
+/* Kartu tahun bertumpuk: setiap kata harus berada di sumbu tengah yang sama
+   dengan angka, bukan rata ke sisi kiri blok kata terpanjang. */
+.nav-stats-row > .nav-stat-card:last-of-type:not(:first-of-type) .nav-stat-label {
+  align-items: center;
+  text-align: center;
 }
 
 /* --- Menu --- */
@@ -539,37 +582,76 @@
    MOBILE MENU
    ========================================================================== */
 
+/* Tombol persegi bulat krem dengan ikon grid 2×2 — chrome tombol menu
+   referensi, bukan lingkaran kuning dengan hamburger. Posisinya cocok dengan
+   padding topbar (`.sidebar { padding: 14px var(--gutter) }`), jadi keduanya
+   duduk di baris yang sama tanpa perlu jadi induk-anak DOM. */
 .mobile-menu-trigger {
   position: fixed;
   top: 14px;
   right: 14px;
   z-index: 90;
   display: none;
-  width: 46px;
-  height: 46px;
-  flex-direction: column;
+  width: 44px;
+  height: 44px;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  border-radius: 50%;
-  background: var(--yellow);
+  border-radius: var(--radius-lg);
+  background: var(--card-inner-alt);
 }
 
-.mobile-menu-trigger span {
-  display: block;
+/* Kotak 2×2, bukan empat titik. Versi sebelumnya 4px dengan gap 4px: pada
+   layar sentuh ukuran segitu tidak terbaca sebagai ikon menu sama sekali,
+   cuma noda. 6.5px dengan sudut 2px memberi bentuk kotak yang jelas dan
+   total ikonnya 16px — sepadan dengan ikon di dalam link menunya. */
+.mobile-menu-trigger-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 6.5px);
+  grid-template-rows: repeat(2, 6.5px);
+  gap: 3px;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.mobile-menu-trigger-grid span {
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 2px;
+  background: var(--black);
+}
+
+/* Silang buka/tutup: dua garis lewat pseudo-elemen, disembunyikan dan
+   diputar 45°/-45° dari tengah tombol sampai berimpit jadi X. */
+.mobile-menu-trigger::before,
+.mobile-menu-trigger::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: 18px;
   height: 2px;
   border-radius: 2px;
   background: var(--black);
-  transition: transform var(--dur) var(--ease-out);
+  content: '';
+  opacity: 0;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur) var(--ease-out);
 }
 
-.mobile-menu-trigger[aria-expanded='true'] span:first-child {
-  transform: translateY(3.5px) rotate(45deg);
+.mobile-menu-trigger[aria-expanded='true'] .mobile-menu-trigger-grid {
+  opacity: 0;
 }
 
-.mobile-menu-trigger[aria-expanded='true'] span:last-child {
-  transform: translateY(-3.5px) rotate(-45deg);
+.mobile-menu-trigger[aria-expanded='true']::before,
+.mobile-menu-trigger[aria-expanded='true']::after {
+  opacity: 1;
+}
+
+.mobile-menu-trigger[aria-expanded='true']::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.mobile-menu-trigger[aria-expanded='true']::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 /* ==========================================================================
