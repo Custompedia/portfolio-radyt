@@ -1,6 +1,6 @@
 import { ScrollTrigger } from '../core/gsap';
 import type { AnimationModule } from '../core/module';
-import { $$ } from '../core/utils';
+import { $$, isDesktop, prefersReducedMotion } from '../core/utils';
 
 /**
  * Sidebar mengambang di atas semua section, jadi warnanya harus ikut berganti
@@ -30,13 +30,14 @@ export const themeModule: AnimationModule = {
     overlapping = 0;
 
     for (const section of $$('[data-theme-section]')) {
+      const duration = isDesktop() && !prefersReducedMotion() ? Number(section.getAttribute('data-theme-duration')) : 0;
       triggers.push(
         ScrollTrigger.create({
           trigger: section,
           // Diukur dari titik tempat sidebar benar-benar berada, bukan dari
           // tepi viewport — kalau tidak, warnanya berganti terlalu cepat.
           start: 'top top+=80',
-          end: 'bottom top+=80',
+          end: Number.isFinite(duration) && duration > 0 ? `+=${window.innerHeight * duration}` : 'bottom top+=80',
           onToggle: (self) => {
             overlapping += self.isActive ? 1 : -1;
             overlapping = Math.max(0, overlapping);

@@ -11,8 +11,7 @@ import { horizontalModule } from './modules/horizontal';
 import { themeModule } from './modules/theme';
 import { timelinePathModule } from './modules/timeline-path';
 import { accordionModule } from './modules/accordion';
-import { testimonialSliderModule } from './modules/testimonial-slider';
-import { ctaChatModule } from './modules/cta-chat';
+import { packagingTestModule } from './modules/packaging-test';
 import { navActiveModule } from './modules/nav-active';
 import { workCardsModule } from './modules/work-cards';
 import { clipboardModule } from './modules/clipboard';
@@ -36,8 +35,7 @@ const modules: AnimationModule[] = [
   timelinePathModule,
   themeModule,
   accordionModule,
-  testimonialSliderModule,
-  ctaChatModule,
+  packagingTestModule,
   workCardsModule,
   navActiveModule,
   clipboardModule,

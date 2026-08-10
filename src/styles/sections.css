@@ -1405,276 +1405,367 @@
 }
 
 /* ==========================================================================
-   CTA
+   THE 7-SECOND TEST
    ========================================================================== */
 
-.cta {
-  padding: 10vw var(--gutter) 10vw var(--content-left);
+.packaging-test {
+  --box-size: clamp(200px, 18vw, 310px);
+  --box-depth: clamp(82px, 7vw, 122px);
+  position: relative;
+  min-height: 100dvh;
+  overflow: clip;
+  background: radial-gradient(circle at 51% 48%, #343434 0, #1a1a1a 28%, #090909 68%);
 }
 
-.cta-title {
-  font-size: var(--fs-cta);
-  font-weight: 700;
-  letter-spacing: var(--ls-cta);
-  line-height: var(--lh-one);
+.packaging-test-stage {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  padding: clamp(80px, 8vw, 150px) var(--gutter) clamp(54px, 6vw, 96px) var(--content-left);
 }
 
-.cta-line {
+.packaging-test-stage::before,
+.packaging-test-stage::after {
+  position: absolute;
+  z-index: -1;
+  width: 46vw;
+  height: 46vw;
+  border-radius: 50%;
+  background: rgba(255, 255, 35, 0.09);
+  filter: blur(80px);
+  content: '';
+}
+
+.packaging-test-stage::before {
+  top: -28vw;
+  right: -18vw;
+}
+
+.packaging-test-stage::after {
+  bottom: -36vw;
+  left: 25vw;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.packaging-test-copy {
+  position: relative;
+  z-index: 3;
+  width: min(37vw, 640px);
+}
+
+.packaging-test-label {
   display: block;
-  white-space: nowrap;
+  margin-bottom: clamp(18px, 1.6vw, 28px);
+  color: var(--yellow);
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-/* Dua baris terakhir dipudarkan hampir jadi latar. Itu yang memberi judulnya
-   arah: mata membaca dua baris gelap dulu, lalu meluncur turun ke tombol. */
-.cta-line--soft {
-  color: #ffffff;
-  opacity: 0.62;
+.packaging-test-title {
+  color: var(--white);
+  font-size: clamp(3.4rem, 5.65vw, 7rem);
+  font-weight: 900;
+  letter-spacing: -0.065em;
+  line-height: 0.88;
 }
 
-.cta-body {
+.packaging-test-title span,
+.packaging-test-outro p span {
+  display: block;
+}
+
+.packaging-test-intro {
+  max-width: 42ch;
+  margin-top: clamp(24px, 2.4vw, 42px);
+  color: rgba(255, 255, 255, 0.64);
+}
+
+.packaging-test-scene {
+  position: absolute;
+  top: 50%;
+  left: 64%;
+  z-index: 2;
+  width: min(48vw, 780px);
+  height: min(64vw, 880px);
+  transform: translate(-50%, -50%);
+  perspective: 1200px;
+}
+
+.packaging-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--box-size);
+  aspect-ratio: 1;
+  margin: calc(var(--box-size) / -2) 0 0 calc(var(--box-size) / -2);
+}
+
+.packaging-box-spin {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(-10deg) rotateY(-24deg);
+}
+
+.packaging-box-face {
+  position: absolute;
   display: flex;
-  max-width: 54ch;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.packaging-box-front {
   flex-direction: column;
   align-items: flex-start;
-  gap: 2.08vw;
-  margin-top: clamp(32px, 5vh, 56px);
-}
-
-/* --- Simulasi percakapan --- */
-
-.cta-chat {
-  display: flex;
-  align-items: center;
-  gap: 0.83vw;
-  flex-wrap: wrap;
-}
-
-.cta-chat-avatar {
-  flex: none;
-  width: 2.6vw;
-  height: 2.6vw;
-  min-width: 38px;
-  min-height: 38px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 25%, #8f8a76, #4a4740);
-}
-
-/* Titik-titik dan gelembung menempati sel grid yang sama, jadi pergantiannya
-   tidak menggeser tombol di sebelahnya. */
-.cta-chat-stack {
-  display: grid;
-  place-items: center start;
-}
-
-.cta-chat-typing,
-.cta-chat-bubble {
-  grid-area: 1 / 1;
-}
-
-.cta-chat-typing {
-  display: flex;
-  align-items: center;
-  gap: 0.28vw;
-  padding: 0.9vw 1.1vw;
-  border-radius: var(--radius-lg);
-  background: var(--card-inner);
-}
-
-.cta-chat-typing span {
-  width: 0.42vw;
-  height: 0.42vw;
-  min-width: 6px;
-  min-height: 6px;
-  border-radius: 50%;
-  background: var(--fg-muted);
-}
-
-.cta-chat-bubble {
-  padding: 0.7vw 1.1vw;
-  border-radius: var(--radius-lg);
-  background: var(--card-inner);
-  white-space: nowrap;
-}
-
-/* ==========================================================================
-   TESTIMONIALS
-   ========================================================================== */
-
-.testimonials {
-  position: relative;
-  padding: 10vw var(--gutter) 10vw var(--content-left);
-}
-
-.testimonials-head {
-  flex-direction: row;
-  align-items: flex-end;
   justify-content: space-between;
-  gap: 2.22vw;
-}
-
-.testimonials-head .label-pill {
-  margin-bottom: 1.39vw;
-}
-
-.testimonial-progress {
-  display: flex;
-  gap: 0.42vw;
-  padding: 0.69vw 0.97vw;
-  border-radius: var(--radius-pill);
-  background: var(--surface);
-}
-
-.testimonial-progress-bar {
-  width: 26px;
-  height: 4px;
-  border-radius: 2px;
-  background: var(--swiper-bullet);
-  transition:
-    width 0.45s var(--ease-out),
-    background-color 0.45s var(--ease-out);
-}
-
-.testimonial-progress-bar.is-active {
-  width: 48px;
-  background: var(--yellow);
-}
-
-.testimonial-swiper {
-  margin-top: clamp(36px, 5vh, 64px);
-  overflow: hidden;
-}
-
-/* `height: auto` pada slide + `height: 100%` pada kartu: Swiper memberi tiap
-   slide tinggi konten sendiri, dan tanpa dua baris ini kartu-kartu di satu
-   layar punya tinggi berbeda-beda. */
-.testimonial-card.swiper-slide {
-  display: flex;
-  width: min(33vw, 620px);
-  height: auto;
-  flex-direction: column;
-  gap: 1.39vw;
-  padding: 1.67vw;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-.testimonial-top {
-  display: flex;
-  justify-content: space-between;
-  gap: 1.39vw;
-}
-
-/* Kalimat pembuka pakai font body, bukan display — di referensi ia terbaca
-   sebagai kutipan yang ditebalkan, bukan sebagai judul. */
-.testimonial-headline {
-  max-width: 85%;
-  color: var(--fg-muted);
-  font-family: var(--font-label);
-  font-size: var(--fs-quote);
-  font-weight: 600;
-  line-height: 1.15;
-}
-
-.testimonial-quote-mark {
-  display: grid;
-  width: 2.2vw;
-  height: 2.2vw;
-  min-width: 30px;
-  min-height: 30px;
-  flex: none;
-  place-items: center;
-  border-radius: var(--radius-xs);
-  background: var(--yellow);
+  padding: 12% 11%;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: linear-gradient(135deg, #ffff5e 0%, var(--yellow) 47%, #e4e20d 100%);
   color: var(--black);
+  box-shadow: inset 12px 0 18px rgba(255, 255, 255, 0.18), inset -18px -18px 25px rgba(138, 136, 0, 0.18);
+  transform: translateZ(calc(var(--box-depth) / 2));
 }
 
-.testimonial-quote {
-  color: var(--fg);
-}
-
-.testimonial-author {
-  display: flex;
-  align-items: center;
-  gap: 0.97vw;
-  margin-top: auto;
-}
-
-/* Bentuk dan warnanya dulu dibagi dengan avatar kartu perjalanan; avatar itu
-   sudah dihapus (diganti chip bendera), jadi aturannya berdiri sendiri di sini. */
-.testimonial-avatar {
-  width: 4.44vw;
-  height: 4.44vw;
-  max-width: 68px;
-  max-height: 68px;
-  flex: none;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 25%, #8f8a76, #4a4740);
-}
-
-.testimonial-role {
-  display: block;
-  font-size: 0.86vw;
-  opacity: 0.65;
-}
-
-.testimonial-company {
-  display: block;
-  font-size: 0.86vw;
-  opacity: 0.65;
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
-/* Kursor drag: cakram kuning yang menggantikan kursor di dalam carousel. */
-.testimonial-swiper .swiper-wrapper {
-  cursor: none;
-}
-
-.testimonial-drag {
+.packaging-box-front::before,
+.packaging-box-front::after {
   position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 5;
-  display: grid;
-  width: clamp(2.55rem, 4.722vw, 5.665rem);
-  height: clamp(2.55rem, 4.722vw, 5.665rem);
-  place-items: center;
-  overflow: hidden;
-  border-radius: 50%;
-  background: var(--yellow);
-  color: var(--black);
+  background: var(--black);
+  content: '';
+}
+
+.packaging-box-front::before {
+  top: 29%;
+  right: 11%;
+  left: 11%;
+  height: 1px;
+  opacity: 0.4;
+}
+
+.packaging-box-front::after {
+  right: 11%;
+  bottom: 13%;
+  width: 36%;
+  height: 9%;
+  background: repeating-linear-gradient(90deg, var(--black) 0 3px, transparent 3px 6px);
+}
+
+.packaging-box-front b {
+  font-size: clamp(5rem, 10vw, 10rem);
+  font-weight: 900;
+  letter-spacing: -0.13em;
+  line-height: 0.7;
+}
+
+.packaging-box-front small {
   font-family: var(--font-label);
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  opacity: 0;
-  pointer-events: none;
+  font-size: clamp(0.52rem, 0.72vw, 0.8rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
 }
 
-/* Dua label ditumpuk dalam jendela setinggi satu baris; menekan menggeser
-   pasangannya satu baris ke atas. */
-.testimonial-drag-mask {
-  display: block;
-  height: 1em;
-  overflow: hidden;
-  line-height: 1;
+.packaging-box-back {
+  background: linear-gradient(135deg, #c7c500, #878600);
+  transform: rotateY(180deg) translateZ(calc(var(--box-depth) / 2));
 }
 
-.testimonial-drag-track {
+.packaging-box-right,
+.packaging-box-left {
+  top: 0;
+  left: calc((var(--box-size) - var(--box-depth)) / 2);
+  width: var(--box-depth);
+  background: linear-gradient(90deg, #d7d400, #9c9a00);
+}
+
+.packaging-box-right {
+  transform: rotateY(90deg) translateZ(calc(var(--box-size) / 2));
+}
+
+.packaging-box-left {
+  background: linear-gradient(90deg, #898700, #c3c100);
+  transform: rotateY(-90deg) translateZ(calc(var(--box-size) / 2));
+}
+
+.packaging-box-top,
+.packaging-box-bottom {
+  top: calc((var(--box-size) - var(--box-depth)) / 2);
+  left: 0;
+  height: var(--box-depth);
+  background: linear-gradient(180deg, #ffff5b, #cdca00);
+}
+
+.packaging-box-top {
+  transform: rotateX(90deg) translateZ(calc(var(--box-size) / 2));
+}
+
+.packaging-box-bottom {
+  background: #777500;
+  transform: rotateX(-90deg) translateZ(calc(var(--box-size) / 2));
+}
+
+.packaging-box-seal {
+  position: absolute;
+  top: 48%;
+  left: 0;
+  width: 100%;
+  height: 10%;
+  background: rgba(0, 0, 0, 0.15);
+  transform: translateZ(calc(var(--box-depth) / 2 + 1px));
+}
+
+.packaging-test-shadow {
+  position: absolute;
+  top: calc(50% + var(--box-size) * 0.48);
+  left: 50%;
+  width: calc(var(--box-size) * 1.05);
+  height: calc(var(--box-size) * 0.16);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.72);
+  filter: blur(18px);
+  transform: translateX(-50%);
+}
+
+.packaging-test-moments {
+  position: absolute;
+  right: max(var(--gutter), 4vw);
+  bottom: clamp(56px, 6vw, 104px);
+  z-index: 4;
+  width: min(21vw, 340px);
+}
+
+.packaging-test-moment {
   display: flex;
-  flex-direction: column;
-  transition: transform 0.3s var(--ease-out);
+  gap: clamp(12px, 1.1vw, 20px);
+  padding: clamp(14px, 1.2vw, 22px) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
 }
 
-.testimonial-drag-track span {
-  display: block;
-  height: 1em;
-  line-height: 1;
+.packaging-test-number {
+  color: var(--yellow);
+  font-family: var(--font-label);
+  font-size: clamp(0.66rem, 0.75vw, 0.86rem);
+  font-weight: 600;
 }
 
-.testimonial-drag.is-pressed .testimonial-drag-track {
-  transform: translateY(-1em);
+.packaging-test-moment-copy {
+  display: grid;
+  gap: 3px;
+}
+
+.packaging-test-moment strong {
+  color: var(--white);
+  font-family: var(--font-label);
+  font-size: clamp(0.82rem, 1vw, 1.12rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.packaging-test-moment-copy span {
+  color: rgba(255, 255, 255, 0.56);
+  font-size: clamp(0.75rem, 0.9vw, 1rem);
+  line-height: 1.35;
+}
+
+.packaging-test-outro {
+  position: absolute;
+  bottom: 12%;
+  left: var(--content-left);
+  z-index: 5;
+}
+
+.packaging-test-outro p {
+  margin-bottom: clamp(24px, 2vw, 36px);
+  color: var(--white);
+  font-size: clamp(2.35rem, 4.25vw, 5.5rem);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+}
+
+.packaging-test-outro p span:last-child {
+  color: var(--yellow);
+}
+
+.packaging-test-button {
+  padding: 1.1vw 1.7vw;
+  font-size: clamp(0.82rem, 1.05vw, 1.18rem);
+}
+
+@media (max-width: 1100px) {
+  .packaging-test-copy {
+    width: min(42vw, 600px);
+  }
+
+  .packaging-test-scene {
+    left: 66%;
+  }
+
+  .packaging-test-moments {
+    width: min(26vw, 300px);
+  }
+}
+
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .packaging-test {
+    min-height: 0;
+  }
+
+  .packaging-test-stage {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    padding: 88px var(--gutter) 72px;
+  }
+
+  .packaging-test-copy {
+    width: min(100%, 640px);
+  }
+
+  .packaging-test-title {
+    font-size: clamp(3rem, 13.5vw, 5.25rem);
+    line-height: 0.9;
+  }
+
+  .packaging-test-scene {
+    position: relative;
+    top: auto;
+    left: auto;
+    order: 2;
+    width: min(100%, 540px);
+    height: clamp(340px, 78vw, 470px);
+    margin: 10px auto 6px;
+    transform: none;
+  }
+
+  .packaging-test-moments {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    order: 3;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .packaging-test-moment {
+    padding: 16px 0;
+  }
+
+  .packaging-test-outro {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    order: 4;
+    margin-top: 54px;
+  }
+
+  .packaging-test-button {
+    padding: 15px 20px;
+  }
 }
 
 /* ==========================================================================
@@ -1765,11 +1856,12 @@
   padding: 15vw var(--gutter) 2vw var(--content-left);
 }
 
-/* Jawaban atas wordmark pembuka. `overflow: clip` mengurung jejak kursornya —
-   kartu yang dijatuhkan dekat tepi tidak boleh melebarkan dokumen. */
+/* Jawaban atas wordmark pembuka. Jejak dan labelnya boleh melampaui pita ini;
+   `pointer-events: none` di lapisan kartu menjaga area mouse tetap stabil. */
 .footer-wordmark-wrap {
   position: relative;
-  overflow: clip;
+  overflow: visible;
+  perspective: 1400px;
 }
 
 /* Tanpa `justify-content: space-between`: itu mendorong ® ke tepi kanan
@@ -1806,24 +1898,89 @@
 .trail-layer {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 3;
   pointer-events: none;
 }
 
-/* Sengaja lebih pendek dari pita wordmark-nya. Kartu setinggi pita akan
-   terpotong rata atas-bawah oleh `overflow: clip` dan terbaca sebagai balok,
-   bukan kartu yang berjatuhan. */
+/* Rasio lanskap memberi ruang bagi label yang keluar di bawah kartu tanpa
+   menutup keseluruhan wordmark. */
 .trail-tile {
   position: absolute;
   top: 0;
   left: 0;
-  width: 150px;
-  height: 205px;
+  width: clamp(150px, 13vw, 240px);
+  aspect-ratio: 1.15;
   border-radius: var(--radius);
-  background: linear-gradient(150deg, color-mix(in srgb, var(--tile) 55%, #ffffff 18%), var(--tile));
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-image:
+    linear-gradient(142deg, rgba(255, 255, 255, 0.2), transparent 42%),
+    linear-gradient(0deg, color-mix(in srgb, var(--tile) 36%, transparent), transparent 72%),
+    url('/images/packaging-trail-collage.webp');
+  background-position: center, center, var(--tile-position);
+  background-size: auto, auto, 300% 300%;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.36);
   opacity: 0;
+  overflow: visible;
+  transform-style: preserve-3d;
   will-change: transform, opacity;
+}
+
+.trail-tile::before {
+  position: absolute;
+  inset: 12%;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: calc(var(--radius) * 0.5);
+  content: '';
+}
+
+.trail-tile::after {
+  position: absolute;
+  right: 12%;
+  bottom: 13%;
+  width: 28%;
+  height: 8%;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.8) 0 2px, transparent 2px 5px);
+  content: '';
+}
+
+.trail-tile-label {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 8%;
+  display: grid;
+  gap: 2px;
+  min-width: max-content;
+  padding: 8px 10px 9px;
+  background: var(--yellow);
+  color: var(--black);
+  font-family: var(--font-label);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.trail-ripple {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: clamp(110px, 10vw, 180px);
+  aspect-ratio: 1;
+  border: 1px solid var(--yellow);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 8px rgba(255, 255, 35, 0.08);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.trail-tile-label strong {
+  font-size: clamp(0.72rem, 0.86vw, 1rem);
+  font-weight: 600;
+}
+
+.trail-tile-label small {
+  font-size: clamp(0.56rem, 0.62vw, 0.72rem);
+  letter-spacing: 0.07em;
+  opacity: 0.66;
+  text-transform: uppercase;
 }
 
 .cta-lead {
@@ -2339,23 +2496,14 @@
    ========================================================================== */
 
 @media (max-width: 1100px) {
-  .testimonials-head,
   .work-head {
     flex-direction: column;
     align-items: flex-start;
   }
 }
 
-@media (max-width: 900px) {
-  .testimonial-card.swiper-slide {
-    width: min(78vw, 520px);
-  }
-}
-
 @media (max-width: 767px) {
-  .section,
-  .cta,
-  .testimonials {
+  .section {
     padding: 64px var(--gutter);
   }
 
@@ -2381,15 +2529,6 @@
     scroll-snap-align: start;
   }
 
-  .cta-title {
-    font-size: clamp(2.5rem, 13vw, 4.5rem);
-  }
-
-  /* Penggalan tulisan tangan tidak muat di layar sempit. */
-  .cta-line {
-    white-space: normal;
-  }
-
   .pricing-wrap {
     padding: 10px;
   }
@@ -2400,8 +2539,7 @@
   }
 
   .pricing-icon,
-  .faq-icon,
-  .testimonial-quote-mark {
+  .faq-icon {
     width: 34px;
     height: 34px;
   }
@@ -2413,40 +2551,8 @@
   }
 
   .pricing-unit,
-  .pricing-foot,
-  .testimonial-role,
-  .testimonial-company {
+  .pricing-foot {
     font-size: 0.8125rem;
-  }
-
-  .cta-chat-typing,
-  .cta-chat-bubble {
-    padding: 10px 14px;
-  }
-
-  .cta-chat-typing span {
-    width: 6px;
-    height: 6px;
-  }
-
-  .testimonial-card.swiper-slide {
-    width: min(86vw, 460px);
-    gap: 16px;
-    padding: 22px 20px;
-  }
-
-  .testimonial-headline {
-    max-width: none;
-    font-size: 1.05rem;
-  }
-
-  .testimonial-avatar {
-    width: 46px;
-    height: 46px;
-  }
-
-  .testimonial-drag {
-    display: none;
   }
 
   /* Tanpa kursor tidak ada jejak untuk digambar; wordmark-nya tetap tampil. */

@@ -101,14 +101,6 @@ export interface WorkItem {
   videoWebm?: string;
 }
 
-export interface Testimonial {
-  headline: string;
-  quote: string;
-  name: string;
-  role: string;
-  company: string;
-}
-
 export interface FaqItem {
   question: string;
   answer: string;
@@ -367,6 +359,7 @@ export const work = {
       tags: ['Branding', 'Design', 'Guideline'],
       accent: '#3f2a1d',
       href: '#',
+      image: '/images/work-branding.webp',
     },
     {
       title: 'Social Media Handling',
@@ -375,6 +368,7 @@ export const work = {
       tags: ['Social Media', 'Content', 'Community'],
       accent: '#1f3340',
       href: '#',
+      image: '/images/work-social-media.webp',
     },
     {
       title: 'KOL Management',
@@ -383,6 +377,7 @@ export const work = {
       tags: ['KOL', 'Campaign', 'Report'],
       accent: '#4a2438',
       href: '#',
+      image: '/images/work-kol.webp',
     },
     {
       title: 'Digital Advertising',
@@ -391,6 +386,7 @@ export const work = {
       tags: ['Ads', 'Audit', 'Performance'],
       accent: '#101014',
       href: '#',
+      image: '/images/work-digital-ads.webp',
     },
     {
       title: 'Aktivasi, OOH & Event',
@@ -399,6 +395,7 @@ export const work = {
       tags: ['Activation', 'OOH', 'Event'],
       accent: '#3d2c56',
       href: '#',
+      image: '/images/work-activation-event.webp',
     },
     {
       title: 'Custom Box',
@@ -407,6 +404,7 @@ export const work = {
       tags: ['Packaging', 'Struktur', 'Cetak'],
       accent: '#14392c',
       href: '#',
+      image: '/images/work-custom-box.webp',
     },
     {
       title: 'Hampers & PR Package',
@@ -415,6 +413,7 @@ export const work = {
       tags: ['Hampers', 'PR Kit', 'Seasonal'],
       accent: '#2a2118',
       href: '#',
+      image: '/images/work-pr-hampers.webp',
     },
     {
       title: 'Kemasan UMKM, MOQ Rendah',
@@ -423,6 +422,7 @@ export const work = {
       tags: ['UMKM', 'MOQ Rendah', 'Konsultasi'],
       accent: '#241a2e',
       href: '#',
+      image: '/images/work-umkm-packaging.webp',
     },
     {
       title: 'Merchandise & Gift Set',
@@ -431,6 +431,7 @@ export const work = {
       tags: ['Merch', 'Packaging', 'Produksi'],
       accent: '#1b2a4a',
       href: '#',
+      image: '/images/work-merchandise.webp',
     },
     // `as`, bukan `satisfies`: satisfies mempertahankan tipe literal array ini,
     // jadi field media opsional (image/video/videoWebm) terbaca "tidak ada" di
@@ -439,88 +440,17 @@ export const work = {
 };
 
 export const cta = {
-  /** Dua baris pertama gelap, dua baris `soft` dipudarkan hampir jadi latar.
-   *  Empat baris total — itu yang memberi judulnya arah turun ke tombol. */
-  headline: ['Mereknya Rapi —', 'Tapi Apakah'],
-  headlineSoft: ['Kemasannya', 'Ikut Bicara?'],
-  body:
-    'Kirim kanal dan produk Anda. Kami baca mana yang sudah bekerja dan mana yang masih membocorkan penjualan — gratis, tanpa kewajiban lanjut.',
-  /** Isi gelembung chat. Harus berupa pertanyaan: tombol di sebelahnya baru
-   *  terbaca sebagai jawaban kalau ada yang ditanyakan lebih dulu. */
-  chat: 'Ada yang mau dibangun?',
-  chatCta: 'Ngobrol Yuk',
-};
-
-export const testimonials = {
-  label: 'Kata klien',
-  headline: ['Dari Mereka', 'yang Sudah Jalan'],
-  // TODO: ganti dengan testimoni asli beserta izin dari klien terkait.
-  items: [
-    {
-      headline: 'Ngerti bisnisnya, bukan cuma desainnya.',
-      quote:
-        'Yang bikin beda, mereka nanya soal margin dan stok dulu sebelum ngomongin konten. Jadi hasilnya nyambung ke penjualan, bukan cuma bagus dilihat.',
-      name: 'Nama Klien',
-      role: 'Owner',
-      company: 'F&B, Semarang',
-    },
-    {
-      headline: 'Kemasannya akhirnya nyambung sama mereknya.',
-      quote:
-        'Dulu logo kami rapi tapi dusnya polos beli jadi. Sekarang orang motret paketnya sendiri dan itu jadi promosi gratis buat kami.',
-      name: 'Nama Klien',
-      role: 'Founder',
-      company: 'Skincare lokal',
-    },
-    {
-      headline: 'Pesanan kecil tetap dilayani serius.',
-      quote:
-        'Kami cuma pesan beberapa ratus kotak dan tetap dapat sampel, revisi desain, dan penjelasan bahannya. Tempat lain langsung menolak di angka segitu.',
-      name: 'Nama Klien',
-      role: 'Pemilik',
-      company: 'UMKM makanan ringan',
-    },
-    {
-      headline: 'Laporannya jujur, termasuk yang gagal.',
-      quote:
-        'Pernah satu kampanye tidak jalan dan mereka bilang duluan sebelum kami tanya, lengkap dengan rencana perbaikannya. Itu yang bikin kami bertahan.',
-      name: 'Nama Klien',
-      role: 'Marketing Manager',
-      company: 'Ritel',
-    },
-    {
-      headline: 'Satu pintu untuk konten dan kemasan.',
-      quote:
-        'Konten, KOL, sampai dus kirimannya satu tim. Kami tidak perlu jadi penerjemah antara agensi dan percetakan lagi.',
-      name: 'Nama Klien',
-      role: 'General Manager',
-      company: 'E-commerce',
-    },
-    {
-      headline: 'PR package-nya bikin liputan datang sendiri.',
-      quote:
-        'Kotak peluncurannya dibuat supaya enak dibuka di depan kamera. Setengah penerima mengunggahnya tanpa kami minta.',
-      name: 'Nama Klien',
-      role: 'Brand Manager',
-      company: 'Fashion',
-    },
-    {
-      headline: 'Iklan jadi jauh lebih efisien.',
-      quote:
-        'Setelah audit, belanja iklan kami turun tapi penjualan tetap. Ternyata selama ini banyak yang terbuang di tempat yang salah.',
-      name: 'Nama Klien',
-      role: 'Owner',
-      company: 'Kesehatan',
-    },
-    {
-      headline: 'Partner jangka panjang.',
-      quote:
-        'Sudah tahun ketiga dan rasanya bukan seperti vendor. Mereka ingat konteks kami tanpa perlu dijelaskan ulang tiap kuartal.',
-      name: 'Nama Klien',
-      role: 'Co-Founder',
-      company: 'F&B',
-    },
-  ] satisfies Testimonial[],
+  label: 'The 7-second test',
+  headline: ['Sebelum dibuka,', 'kemasanmu sudah dinilai.'],
+  intro:
+    'Dalam beberapa detik, orang memutuskan: terlihat menarik, terasa meyakinkan, atau lewat begitu saja.',
+  moments: [
+    { number: '01', label: 'Dilihat', question: 'Apa yang orang tangkap dalam tiga detik?' },
+    { number: '02', label: 'Dipegang', question: 'Apakah rasanya sepadan dengan harganya?' },
+    { number: '03', label: 'Dibawa pulang', question: 'Layak difoto atau langsung dibuang?' },
+  ],
+  closing: ['Produkmu sudah punya cerita.', 'Jangan biarkan kemasannya diam.'],
+  action: 'Uji Kemasan Saya',
 };
 
 export const faq = {

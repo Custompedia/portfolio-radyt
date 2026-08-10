@@ -11,9 +11,8 @@
 import Icon from '../Icon.astro';
 import { brand, faq, work } from '../../data/site';
 
-/* Kartu jejak memakai warna aksen proyek. Selama belum ada aset gambar, inilah
-   placeholder-nya — dan warnanya tetap milik situs ini, bukan stok. */
-const trailTiles = work.items.map((item) => item.accent);
+const trailPositions = ['0% 0%', '50% 0%', '100% 0%', '0% 100%', '50% 100%', '100% 100%'];
+const trailTiles = work.items.map(({ title, kind, accent }, index) => ({ title, kind, accent, position: trailPositions[index % trailPositions.length] }));
 ---
 
 <footer class="site-footer" id="faq">
@@ -26,7 +25,17 @@ const trailTiles = work.items.map((item) => item.accent);
       >
     </p>
     <div class="trail-layer" data-trail-layer aria-hidden="true">
-      {trailTiles.map((accent) => <span class="trail-tile" data-trail-tile style={`--tile:${accent}`} />)}
+      {
+        trailTiles.map((tile) => (
+          <span class="trail-tile" data-trail-tile style={`--tile:${tile.accent};--tile-position:${tile.position}`}>
+            <span class="trail-tile-label">
+              <strong>{tile.title}</strong>
+              <small>{tile.kind}</small>
+            </span>
+          </span>
+        ))
+      }
+      <span class="trail-ripple" data-trail-ripple></span>
     </div>
   </div>
 

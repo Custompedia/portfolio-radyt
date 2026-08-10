@@ -1,48 +1,50 @@
 ---
-/**
- * Judul empat baris dengan dua baris terakhir dipudarkan, lalu simulasi
- * percakapan: avatar → titik-titik mengetik → gelembung pertanyaan → tombol.
- *
- * Rotator kata yang sebelumnya ada di sini dihapus. Ia menarik perhatian ke
- * satu kata yang berganti-ganti, sementara section ini justru harus mengarahkan
- * perhatian ke tombolnya.
- */
 import { brand, cta } from '../../data/site';
 ---
 
-<section class="section cta" data-cta>
-  <h2 class="cta-title">
-    {cta.headline.map((line) => <span class="cta-line" data-reveal>{line}</span>)}
-    {cta.headlineSoft.map((line) => <span class="cta-line cta-line--soft" data-reveal>{line}</span>)}
-  </h2>
+<section class="packaging-test theme-dark" data-packaging-test data-theme-section data-theme-duration="3.4" aria-labelledby="packaging-test-title">
+  <div class="packaging-test-stage">
+    <header class="packaging-test-copy">
+      <span class="packaging-test-label" data-packaging-intro>{cta.label}</span>
+      <h2 id="packaging-test-title" class="packaging-test-title">
+        {cta.headline.map((line) => <span data-packaging-intro>{line}</span>)}
+      </h2>
+      <p class="packaging-test-intro" data-packaging-intro>{cta.intro}</p>
+    </header>
 
-  <div class="cta-body">
-    <p class="cta-lead" data-reveal data-reveal-stagger="0.05">{cta.body}</p>
-
-    <!-- Urutannya dijalankan cta-chat.ts saat masuk viewport: titik-titik
-         berkedip dulu, baru gelembungnya menggantikan mereka, baru tombolnya. -->
-    <div class="cta-chat" data-cta-chat>
-      <span class="cta-chat-avatar" aria-hidden="true"></span>
-
-      <div class="cta-chat-stack">
-        <span class="cta-chat-typing" data-cta-typing aria-hidden="true">
-          <span></span>
-          <span></span>
-          <span></span>
-        </span>
-
-        <span class="cta-chat-bubble" data-cta-bubble>{cta.chat}</span>
+    <div class="packaging-test-scene" aria-hidden="true">
+      <div class="packaging-box" data-packaging-box>
+        <div class="packaging-box-spin" data-packaging-spin>
+          <span class="packaging-box-face packaging-box-front"><b>R</b><small>BRAND / PACK</small></span>
+          <span class="packaging-box-face packaging-box-back"></span>
+          <span class="packaging-box-face packaging-box-right"></span>
+          <span class="packaging-box-face packaging-box-left"></span>
+          <span class="packaging-box-face packaging-box-top"></span>
+          <span class="packaging-box-face packaging-box-bottom"></span>
+          <span class="packaging-box-seal"></span>
+        </div>
       </div>
+      <span class="packaging-test-shadow" data-packaging-shadow></span>
+    </div>
 
-      <a
-        class="btn cta-button"
-        href={brand.bookingUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-cta-button
-        data-button-hover
-      >
-        <span class="btn-label">{cta.chatCta}</span>
+    <ol class="packaging-test-moments" data-packaging-moments>
+      {
+        cta.moments.map((moment) => (
+          <li class="packaging-test-moment">
+            <span class="packaging-test-number">{moment.number}</span>
+            <span class="packaging-test-moment-copy">
+              <strong>{moment.label}</strong>
+              <span>{moment.question}</span>
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="packaging-test-outro" data-packaging-outro>
+      <p>{cta.closing.map((line) => <span>{line}</span>)}</p>
+      <a class="btn packaging-test-button" href={brand.bookingUrl} target="_blank" rel="noopener noreferrer" data-button-hover>
+        <span class="btn-label">{cta.action}</span>
       </a>
     </div>
   </div>
