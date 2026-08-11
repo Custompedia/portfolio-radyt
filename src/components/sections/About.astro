@@ -53,9 +53,15 @@ const entries = timeline.slice(0, nodes.length);
 <section class="section about" id="about">
   <header class="section-head about-head">
     <span class="label-pill" data-label-pill>{about.label}</span>
-    <h2 class="section-title h2-style" data-reveal>
-      {about.headline.map((line) => <span>{line}</span>)}
-    </h2>
+    <div class="about-title-row">
+      <h2 class="section-title h2-style" data-reveal>
+        {about.headline.map((line) => <span>{line}</span>)}
+      </h2>
+      <div class="about-brands" aria-label="Dua bisnis Radhyta">
+        <img class="about-brand about-brand--custompedia" src="/images/favicon.svg" alt="Custompedia" />
+        <img class="about-brand about-brand--parcelin" src="/images/Parcelinpack-transparent.png" alt="Parcelin" />
+      </div>
+    </div>
     <p class="section-intro" data-reveal data-reveal-stagger="0.05">{about.intro}</p>
   </header>
 

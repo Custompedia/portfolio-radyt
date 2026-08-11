@@ -672,7 +672,41 @@
    ========================================================================== */
 
 .about-head {
-  max-width: 46ch;
+  max-width: none;
+}
+
+.about-title-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(96px, 12vw, 240px);
+  width: 100%;
+}
+
+/* Dua mark selalu menjadi satu pasangan horizontal di kanan judul. Parcelin
+   memakai kanvas transparan yang lebih longgar, jadi kotaknya sengaja lebih
+   besar agar ukuran visual kedua logo terasa seimbang. */
+.about-brands {
+  display: flex;
+  flex: none;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: clamp(22px, 2vw, 38px);
+}
+
+.about-brand {
+  display: block;
+  flex: none;
+  object-fit: contain;
+}
+
+.about-brand--custompedia {
+  width: clamp(116px, 7.5vw, 150px);
+  height: clamp(116px, 7.5vw, 150px);
+}
+
+.about-brand--parcelin {
+  width: clamp(176px, 11vw, 220px);
+  height: clamp(176px, 11vw, 220px);
 }
 
 /* Tinggi dipatok eksplisit: kartu di dalamnya absolut, jadi tidak ada yang
@@ -1643,100 +1677,133 @@
 }
 
 .packaging-box-front {
-  flex-direction: column;
-  align-items: flex-start;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   overflow: hidden;
-  padding: 9% 8%;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  background:
-    radial-gradient(circle at 76% 34%, #e5c973 0 16%, transparent 16.5%),
-    radial-gradient(circle at 20% 78%, #dd705f 0 12%, transparent 12.5%),
-    linear-gradient(145deg, #0a1c49 0%, #123d85 100%);
-  color: #f4f0e7;
-  box-shadow: inset 10px 10px 20px rgba(255, 255, 255, 0.12), inset -16px -16px 24px rgba(0, 0, 0, 0.18);
+  padding: 8%;
+  border: 1px solid rgba(135, 190, 255, 0.52);
+  background: linear-gradient(135deg, #0f4794 0%, #0b2c65 48%, #06183d 100%);
+  box-shadow: inset 0 1px rgba(228, 245, 255, 0.42), inset 12px 12px 28px rgba(121, 183, 255, 0.11), inset -20px -20px 28px rgba(0, 10, 35, 0.26);
   transform: translateZ(calc(var(--box-depth) / 2));
 }
 
-.packaging-box-front::before,
-.packaging-box-front::after {
+.packaging-box-front::before {
   position: absolute;
-  background: var(--black);
+  top: -55%;
+  right: -18%;
+  width: 68%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(163, 209, 255, 0.2);
+  border-radius: 50%;
+  box-shadow: 0 0 0 24px rgba(163, 209, 255, 0.035), 0 0 0 48px rgba(163, 209, 255, 0.025);
   content: '';
 }
 
-.packaging-box-front::before {
-  top: 0;
-  right: 18%;
-  bottom: 0;
-  width: 15%;
-  background: linear-gradient(180deg, #e5c973, #ad7c39);
-}
-
-.packaging-box-front::after {
-  top: 20%;
-  right: 0;
-  left: 0;
-  height: 1px;
-  background: rgba(244, 240, 231, 0.35);
-}
-
-.packaging-box-edition,
-.packaging-box-partners {
-  position: relative;
-  z-index: 1;
+.packaging-box-meta,
+.packaging-box-footer,
+.packaging-box-back-note {
   font-family: var(--font-label);
   font-size: clamp(0.46rem, 0.62vw, 0.68rem);
   font-weight: 600;
   letter-spacing: 0.12em;
 }
 
-.packaging-box-edition {
-  color: rgba(244, 240, 231, 0.82);
+.packaging-box-meta {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+  color: rgba(225, 241, 255, 0.74);
 }
 
-.packaging-box-wordmark {
-  position: absolute;
-  top: 32%;
-  right: 39%;
+.packaging-box-artwork {
+  position: relative;
+  z-index: 1;
+  width: min(54%, 188px);
+  height: auto;
+  object-fit: contain;
+}
+
+.packaging-box-logo {
+  width: clamp(42px, 4vw, 66px);
+  height: auto;
+}
+
+.packaging-box-cover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 1.7vw, 30px);
+  margin: 5% 0;
+}
+
+.packaging-box-brand {
+  position: relative;
   z-index: 1;
   display: grid;
-  color: #f4f0e7;
-  font-size: clamp(1.7rem, 3.05vw, 3.3rem);
-  font-weight: 900;
-  letter-spacing: -0.11em;
-  line-height: 0.72;
-  text-align: right;
+  justify-items: center;
+  gap: 8px;
 }
 
-.packaging-box-wordmark span:nth-child(2) {
-  color: #e5c973;
-  text-shadow: -1px 0 #0a1c49, 0 1px #0a1c49, 1px 0 #0a1c49, 0 -1px #0a1c49;
+.packaging-box-brand span {
+  color: #f8f6f0;
+  font-family: var(--font-label);
+  font-size: clamp(0.38rem, 0.5vw, 0.56rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
 }
 
-.packaging-box-partners {
-  align-self: flex-end;
-  margin-top: auto;
-  color: rgba(244, 240, 231, 0.72);
-  text-align: right;
+.packaging-box-divider {
+  width: 1px;
+  height: clamp(68px, 7vw, 118px);
+  background: linear-gradient(180deg, transparent, #f8bd17 22%, #f8bd17 78%, transparent);
 }
 
-.packaging-box-mark {
-  position: absolute;
-  right: 8%;
-  bottom: 9%;
+.packaging-box-footer {
+  position: relative;
   z-index: 1;
-  color: #0a1c49;
-  font-size: clamp(1rem, 1.8vw, 1.85rem);
-  font-weight: 900;
-  letter-spacing: -0.12em;
-  line-height: 1;
+  grid-column: 1 / -1;
+  color: #f8bd17;
 }
 
 .packaging-box-back {
-  background:
-    radial-gradient(circle at 22% 23%, #e5c973 0 15%, transparent 15.5%),
-    linear-gradient(140deg, #cf6558 0%, #82254d 56%, #3e153e 100%);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 9%;
+  border: 1px solid rgba(176, 215, 255, 0.45);
+  background: linear-gradient(140deg, #0b2759 0%, #164d99 58%, #246bb6 100%);
   transform: rotateY(180deg) translateZ(calc(var(--box-depth) / 2));
+}
+
+.packaging-box-back-copy {
+  position: absolute;
+  top: 10%;
+  left: 9%;
+  display: grid;
+  color: #f8f6f0;
+  font-size: clamp(1.55rem, 3vw, 3.3rem);
+  font-weight: 900;
+  letter-spacing: -0.1em;
+  line-height: 0.74;
+}
+
+.packaging-box-back-logo {
+  width: min(35%, 130px);
+  padding: 10px;
+  border-radius: 50%;
+  background: #f8bd17;
+}
+
+.packaging-box-back-note {
+  position: absolute;
+  right: 9%;
+  bottom: 10%;
+  max-width: 18ch;
+  color: rgba(240, 248, 255, 0.82);
+  line-height: 1.35;
+  text-align: right;
 }
 
 .packaging-box-right,
@@ -1744,7 +1811,7 @@
   top: 0;
   left: calc((var(--box-width) - var(--box-depth)) / 2);
   width: var(--box-depth);
-  background: linear-gradient(90deg, #172544, #08152d);
+  background: linear-gradient(90deg, #123a7c, #081d4b);
 }
 
 .packaging-box-right {
@@ -1752,7 +1819,7 @@
 }
 
 .packaging-box-left {
-  background: linear-gradient(90deg, #08152d, #172544);
+  background: linear-gradient(90deg, #081d4b, #123a7c);
   transform: rotateY(-90deg) translateZ(calc(var(--box-width) / 2));
 }
 
@@ -1761,7 +1828,7 @@
   top: calc((var(--box-height) - var(--box-depth)) / 2);
   left: 0;
   height: var(--box-depth);
-  background: linear-gradient(180deg, #f4f0e7, #c8c0ad);
+  background: linear-gradient(180deg, #5c9ee0, #1d4f9c);
 }
 
 .packaging-box-top {
@@ -1769,7 +1836,7 @@
 }
 
 .packaging-box-bottom {
-  background: #08152d;
+  background: #071a42;
   transform: rotateX(-90deg) translateZ(calc(var(--box-height) / 2));
 }
 
@@ -2338,6 +2405,30 @@
     z-index: auto;
     margin-top: 0;
     padding-top: 64px;
+  }
+
+  .about-head {
+    display: flex;
+  }
+
+  .about-title-row {
+    display: contents;
+  }
+
+  .about-brands {
+    justify-content: start;
+    gap: 14px;
+    margin-top: 4px;
+  }
+
+  .about-brand--custompedia {
+    width: 72px;
+    height: 72px;
+  }
+
+  .about-brand--parcelin {
+    width: 108px;
+    height: 108px;
   }
 
   .hero-wordmark {
