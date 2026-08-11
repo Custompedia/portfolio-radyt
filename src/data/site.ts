@@ -101,9 +101,9 @@ export interface WorkItem {
   videoWebm?: string;
 }
 
-export interface FaqItem {
+export interface ContactPrompt {
   question: string;
-  answer: string;
+  message: string;
 }
 
 export const brand = {
@@ -454,49 +454,51 @@ export const cta = {
 };
 
 export const faq = {
-  label: 'FAQ',
-  headline: ['Ada yang', 'ingin ditanya?'],
-  items: [
+  label: 'Mulai dari sini',
+  headline: ['Ada yang ingin', 'kamu sampaikan?'],
+  intro: 'Pilih yang paling dekat dengan situasimu. Kami siapkan pesan awalnya, kamu tetap bisa mengubahnya sebelum dikirim.',
+  groups: [
     {
-      question: 'Custompedia dan Parcelin itu dua perusahaan berbeda?',
-      answer:
-        'Ya, dua badan usaha terpisah dengan tim produksinya masing-masing. Custompedia menangani merek dan kanalnya, Parcelin menangani kemasan dan barangnya. Yang menyatukan keduanya satu penanggung jawab, jadi Anda tidak perlu mengulang brief dua kali.',
+      title: 'Yang lagi kamu pikirkan',
+      items: [
+        {
+          question: 'Aku punya ide, tapi belum tahu mulai dari mana.',
+          message: 'Halo Mas Radhyta, saya punya ide untuk brand/produk, tapi belum tahu langkah awal yang paling tepat. Boleh diskusi singkat?',
+        },
+        {
+          question: 'Produknya sudah ada, tapi belum terasa seperti brand.',
+          message: 'Halo Mas Radhyta, produk saya sudah berjalan, tapi saya merasa identitas brand-nya belum kuat. Boleh diskusi tentang arah yang bisa dibenahi?',
+        },
+        {
+          question: 'Aku ingin produk ini lebih layak dijual atau dijadikan hadiah.',
+          message: 'Halo Mas Radhyta, saya ingin produk saya terasa lebih bernilai saat diterima pelanggan. Boleh diskusi soal pengalaman brand dan packaging-nya?',
+        },
+        {
+          question: 'Boleh ngobrol dulu tanpa langsung bikin brief?',
+          message: 'Halo Mas Radhyta, saya masih ingin memahami kebutuhan proyek saya dulu. Apakah boleh konsultasi singkat sebelum masuk ke brief?',
+        },
+      ] satisfies ContactPrompt[],
     },
     {
-      question: 'Bisa ambil salah satu saja?',
-      answer:
-        'Bisa. Banyak klien hanya memakai kemasan lewat Parcelin, atau hanya pengelolaan kanal lewat Custompedia. Paket gabungan ditawarkan kalau memang menghemat waktu Anda, bukan sebagai syarat.',
+      title: 'Tentang kerja bareng Custompedia',
+      items: [
+        {
+          question: 'Custompedia bisa bantu dari bagian mana?',
+          message: 'Halo Mas Radhyta, saya ingin tahu layanan Custompedia yang paling relevan untuk kebutuhan brand saya. Boleh diskusi?',
+        },
+        {
+          question: 'Bisa mulai dari branding saja?',
+          message: 'Halo Mas Radhyta, saya ingin mulai dari branding terlebih dahulu. Boleh diskusi ruang lingkup dan proses kerjanya?',
+        },
+        {
+          question: 'Sudah punya tim internal, apakah masih perlu Custompedia?',
+          message: 'Halo Mas Radhyta, tim internal kami sudah ada. Saya ingin tahu bagaimana Custompedia bisa melengkapi pekerjaan tim kami.',
+        },
+        {
+          question: 'Bisa kerja bareng dari luar Semarang?',
+          message: 'Halo Mas Radhyta, saya berada di luar Semarang dan ingin berdiskusi tentang kerja sama dengan Custompedia. Apakah prosesnya bisa dilakukan secara daring?',
+        },
+      ] satisfies ContactPrompt[],
     },
-    {
-      question: 'Berapa minimum order untuk kemasan?',
-      answer:
-        'Parcelin memang dibangun untuk MOQ rendah — usaha rumahan bisa masuk tanpa harus memesan puluhan ribu pieces. Angka pastinya tergantung bahan dan teknik cetak, jadi paling cepat dikonfirmasi lewat konsultasi singkat.',
-    },
-    {
-      question: 'Apa bedanya dengan agensi lain?',
-      answer:
-        'Kami mulai dari masalah bisnis, bukan dari ide konten. Setiap pekerjaan diikat ke satu angka yang mau digerakkan — penjualan, biaya akuisisi, atau pangsa perhatian di kategori Anda.',
-    },
-    {
-      question: 'Melayani klien di luar Semarang?',
-      answer:
-        'Ya. Basis kami di Semarang, tapi klien Parcelin tersebar dari UMKM daerah sampai perusahaan multinasional. Pertemuan rutin daring, kunjungan langsung saat produksi atau aktivasi.',
-    },
-    {
-      question: 'Berapa lama sampai kelihatan hasilnya?',
-      answer:
-        'Untuk kemasan, dari brief ke sampel biasanya hitungan minggu, tergantung bahan dan teknik cetak. Untuk kanal, perbaikan terasa di bulan pertama tapi pertumbuhan yang stabil butuh tiga sampai enam bulan — itu sebabnya retainer minimal tiga bulan.',
-    },
-    {
-      question: 'Sudah punya tim internal, masih perlu agensi?',
-      answer:
-        'Justru paling efektif begitu. Kami masuk sebagai strategi dan produksi, tim Anda pegang eksekusi harian. Banyak klien akhirnya jalan sendiri, dan itu bukan kegagalan.',
-    },
-    {
-      question: 'Bisa tanda tangan NDA?',
-      answer: 'Bisa. Kirim dokumen Anda sebelum pertemuan pertama, atau kami sediakan NDA dua arah.',
-    },
-    // Jumlahnya sengaja dijaga GENAP: grid FAQ dua kolom, jadi item ganjil
-    // terakhir akan berdiri sendirian di kolom kiri.
-  ] satisfies FaqItem[],
+  ],
 };

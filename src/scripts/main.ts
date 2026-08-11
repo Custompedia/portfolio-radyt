@@ -10,7 +10,6 @@ import { textRevealModule } from './modules/text-reveal';
 import { horizontalModule } from './modules/horizontal';
 import { themeModule } from './modules/theme';
 import { timelinePathModule } from './modules/timeline-path';
-import { accordionModule } from './modules/accordion';
 import { packagingTestModule } from './modules/packaging-test';
 import { navActiveModule } from './modules/nav-active';
 import { workCardsModule } from './modules/work-cards';
@@ -20,6 +19,7 @@ import { imageTrailModule } from './modules/image-trail';
 import { microModule } from './modules/micro';
 import { preloaderModule } from './modules/preloader';
 import { clientMarqueeModule } from './modules/client-marquee';
+import { contactPromptsModule } from './modules/contact-prompts';
 
 /**
  * Urutan penting: sidebar mengunci skalanya dulu, baru ghost boleh mengukur.
@@ -34,13 +34,13 @@ const modules: AnimationModule[] = [
   textRevealModule,
   timelinePathModule,
   themeModule,
-  accordionModule,
   packagingTestModule,
   workCardsModule,
   navActiveModule,
   clipboardModule,
   mobileMenuModule,
   clientMarqueeModule,
+  contactPromptsModule,
   imageTrailModule,
   microModule,
   preloaderModule,

@@ -44,32 +44,48 @@ const trailTiles = work.items.map(({ title, kind, accent }, index) => ({ title, 
     <h2 class="section-title h2-style" data-reveal>
       {faq.headline.map((line) => <span>{line}</span>)}
     </h2>
+    <p class="faq-intro" data-reveal>{faq.intro}</p>
   </header>
 
-  <div class="faq-grid">
+  <div class="faq-groups">
     {
-      faq.items.map((item, i) => (
-        <div
-          class="faq-item"
-          data-accordion
-          data-tl-from="{'opacity':0,'y':30}"
-          data-tl-to="{'opacity':1,'y':0,'duration':0.6}"
-          data-tl-start="top 92%"
-          data-tl-once
-        >
-          <h3>
-            <button class="faq-question" type="button" aria-expanded="false" aria-controls={`faq-panel-${i}`}>
-              <span>{item.question}</span>
-              <span class="faq-icon" aria-hidden="true">
-                <Icon name="plus" size={18} />
-              </span>
-            </button>
-          </h3>
-          <div class="faq-panel" id={`faq-panel-${i}`} data-accordion-panel>
-            <p>{item.answer}</p>
+      faq.groups.map((group) => (
+        <section class="faq-group" aria-labelledby={`faq-${group.title.replaceAll(' ', '-').toLowerCase()}`}>
+          <h3 id={`faq-${group.title.replaceAll(' ', '-').toLowerCase()}`}>{group.title}</h3>
+          <div class="faq-prompts">
+            {group.items.map((item) => (
+              <button
+                class="faq-prompt"
+                type="button"
+                data-contact-prompt
+                data-contact-title={item.question}
+                data-contact-message={item.message}
+              >
+                <span>{item.question}</span>
+                <Icon name="arrow" size={18} />
+              </button>
+            ))}
           </div>
-        </div>
+        </section>
       ))
     }
   </div>
+
+  <dialog class="contact-dialog" data-contact-dialog data-contact-whatsapp={brand.bookingUrl} aria-labelledby="contact-dialog-title">
+    <div class="contact-dialog-panel">
+      <form method="dialog">
+        <button class="contact-dialog-close" type="submit" aria-label="Tutup"><Icon name="x" size={18} /></button>
+      </form>
+      <span class="contact-dialog-label">Pesan untuk Mas Radhyta</span>
+      <h3 id="contact-dialog-title" data-contact-title></h3>
+      <label class="contact-dialog-message" for="contact-message">
+        <span>Edit jika diperlukan</span>
+        <textarea id="contact-message" rows="6" data-contact-message></textarea>
+      </label>
+      <a class="btn contact-dialog-send" href={brand.bookingUrl} target="_blank" rel="noopener noreferrer" data-contact-send>
+        <span class="btn-label">Kirim ke WhatsApp</span>
+        <Icon name="arrow" size={17} />
+      </a>
+    </div>
+  </dialog>
 </footer>

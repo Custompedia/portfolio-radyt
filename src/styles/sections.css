@@ -1864,13 +1864,10 @@
    FAQ
    ========================================================================== */
 
-/* Dua kolom, sama seperti referensi — auto-fit akan memecahnya jadi empat
-   kolom sempit di layar lebar dan pertanyaannya jadi sulit dipindai. */
-.faq-grid {
+.faq-groups {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: start;
-  gap: 0.83vw;
+  gap: clamp(18px, 2vw, 34px);
   margin-top: clamp(36px, 5vh, 64px);
 }
 
@@ -1878,63 +1875,169 @@
   margin-top: 5vw;
 }
 
-@media (max-width: 900px) {
-  .faq-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
+.faq-intro {
+  max-width: 56ch;
+  margin-top: 24px;
+  color: var(--fg-muted);
 }
 
-.faq-item {
+.faq-group {
   overflow: hidden;
   border-radius: var(--radius);
-  background: var(--card-bg);
+  background: #20201d;
 }
 
-.faq-question {
+.faq-group h3 {
+  padding: clamp(20px, 1.8vw, 30px) clamp(20px, 2vw, 34px);
+  color: var(--yellow);
+  font-family: var(--font-label);
+  font-size: clamp(0.75rem, 0.9vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.faq-prompts {
+  display: grid;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.faq-prompt {
   display: flex;
-  width: 100%;
+  min-height: clamp(74px, 6.5vw, 102px);
   align-items: center;
   justify-content: space-between;
-  gap: 1.39vw;
-  padding: 1.25vw 1.53vw;
+  gap: 20px;
+  padding: clamp(18px, 1.5vw, 26px) clamp(20px, 2vw, 34px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.92);
   text-align: left;
-  font-size: var(--fs-h3);
+  font-size: clamp(1rem, 1.18vw, 1.35rem);
   font-weight: 500;
   letter-spacing: var(--ls-toggle);
+  transition: color var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out);
 }
 
-.faq-question:hover .faq-icon {
-  background: var(--card-inner-hover);
+.faq-prompt:last-child {
+  border-bottom: 0;
 }
 
-.faq-icon {
-  display: grid;
+.faq-prompt svg {
   flex: none;
-  width: 2.2vw;
-  height: 2.2vw;
-  min-width: 30px;
-  min-height: 30px;
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.faq-prompt:hover {
+  background: #2d2c26;
+  color: var(--yellow);
+}
+
+.faq-prompt:hover svg {
+  transform: translate(3px, -3px);
+}
+
+.contact-dialog {
+  width: min(33rem, calc(100% - 2 * var(--gutter)));
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fg);
+}
+
+.contact-dialog::backdrop {
+  background: rgba(24, 23, 19, 0.38);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.contact-dialog-panel {
+  position: relative;
+  display: grid;
+  gap: clamp(16px, 1.5vw, 24px);
+  padding: clamp(24px, 2.2vw, 36px);
+  border: 1px solid rgba(25, 24, 20, 0.16);
+  background: #f1eee3;
+  box-shadow: 0 22px 70px rgba(27, 25, 18, 0.22);
+}
+
+.contact-dialog-close {
+  position: absolute;
+  top: clamp(18px, 1.8vw, 28px);
+  right: clamp(18px, 1.8vw, 28px);
+  display: grid;
+  width: 38px;
+  height: 38px;
   place-items: center;
   border-radius: 50%;
-  background: var(--card-inner);
-  transition:
-    transform 0.4s var(--ease-out),
-    background-color var(--dur) var(--ease-out);
+  background: rgba(25, 24, 20, 0.1);
+  transition: background-color var(--dur) var(--ease-out);
 }
 
-.faq-item.is-open .faq-icon {
-  transform: rotate(135deg);
+.contact-dialog-close:hover {
+  background: #1c1c1a;
+  color: var(--white);
 }
 
-.faq-panel {
-  overflow: hidden;
-  padding-inline: 1.53vw;
+.contact-dialog-label,
+.contact-dialog-message > span {
+  color: #6c6135;
+  font-family: var(--font-label);
+  font-size: clamp(0.68rem, 0.76vw, 0.82rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-.faq-panel p {
-  max-width: 52ch;
-  padding-bottom: 1.53vw;
-  color: var(--fg-muted);
+.contact-dialog h3 {
+  max-width: 17ch;
+  color: #1c1c1a;
+  font-size: clamp(1.7rem, 2.6vw, 2.7rem);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 0.94;
+}
+
+.contact-dialog-message {
+  display: grid;
+  gap: 12px;
+}
+
+.contact-dialog-message textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 16px;
+  border: 1px solid rgba(25, 24, 20, 0.18);
+  background: #fbfaf4;
+  color: #1c1c1a;
+  font: inherit;
+  line-height: 1.55;
+}
+
+.contact-dialog-message textarea:focus {
+  border-color: #6c6135;
+  outline: none;
+}
+
+.contact-dialog-send {
+  justify-self: end;
+  gap: 10px;
+  padding: 16px 20px;
+  background: #1c1c1a;
+  color: var(--white);
+}
+
+.contact-dialog-send:hover {
+  background: var(--yellow);
+  color: var(--black);
+}
+
+@media (max-width: 900px) {
+  .faq-groups {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* ==========================================================================
@@ -2630,8 +2733,7 @@
     padding: 20px 18px;
   }
 
-  .pricing-icon,
-  .faq-icon {
+  .pricing-icon {
     width: 34px;
     height: 34px;
   }
@@ -2664,18 +2766,17 @@
     font-size: calc(var(--wordmark-size) * 0.86);
   }
 
-  .faq-question {
-    gap: 14px;
-    padding: 18px 20px;
-    font-size: 1rem;
+  .contact-dialog-panel {
+    padding: 28px 22px 22px;
   }
 
-  .faq-panel {
-    padding-inline: 20px;
+  .contact-dialog h3 {
+    max-width: 14ch;
   }
 
-  .faq-panel p {
-    padding-bottom: 18px;
+  .contact-dialog-send {
+    width: 100%;
+    justify-content: center;
   }
 
   .story-panel {
