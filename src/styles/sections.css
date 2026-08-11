@@ -3236,15 +3236,54 @@
 }
 
 .timeline-card .tl-head {
+  align-items: center;
+  min-height: 28px;
   margin-bottom: 16px;
 }
 
-.timeline-card .tl-flag {
-  padding: 0;
-  border: 0;
+.tl-brands {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 0.7vw, 12px);
+}
+
+.tl-brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   color: rgba(46, 32, 6, 0.68);
+  font-family: var(--font-label);
   font-size: max(10px, 0.68vw);
+  font-weight: 600;
   letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tl-brand-lockup + .tl-brand-lockup {
+  padding-left: clamp(8px, 0.7vw, 12px);
+  border-left: 1px solid rgba(46, 32, 6, 0.16);
+}
+
+.tl-brand-mark {
+  display: block;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.tl-brand-lockup--parcelin .tl-brand-mark {
+  width: 30px;
+}
+
+.tl-card-index {
+  color: rgba(46, 32, 6, 0.38);
+  font-family: var(--font-label);
+  font-size: max(10px, 0.68vw);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1;
 }
 
 .timeline-card .timeline-year {
@@ -3312,6 +3351,28 @@
 
   .timeline-card .tl-head {
     margin-bottom: 14px;
+  }
+
+  .tl-brands {
+    gap: 8px;
+  }
+
+  .tl-brand-lockup {
+    gap: 6px;
+    font-size: 0.625rem;
+  }
+
+  .tl-brand-lockup + .tl-brand-lockup {
+    padding-left: 8px;
+  }
+
+  .tl-brand-mark {
+    width: 22px;
+    height: 22px;
+  }
+
+  .tl-brand-lockup--parcelin .tl-brand-mark {
+    width: 27px;
   }
 
   .timeline-card .timeline-year {

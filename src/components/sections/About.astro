@@ -111,9 +111,25 @@ const entries = timeline.slice(0, nodes.length);
               avatar abu-abu di versi sebelumnya — lingkaran itu tidak mewakili
               siapa pun dan cuma terbaca sebagai placeholder. */}
           <header class="tl-head">
-            <span class="tl-flag" data-flag={entry.flag}>
-              {timelineFlags[entry.flag]}
+            <span class="tl-brands" data-flag={entry.flag} aria-label={timelineFlags[entry.flag]}>
+              {
+                entry.flag !== 'parcelin' && (
+                  <span class="tl-brand-lockup tl-brand-lockup--custompedia">
+                    <img class="tl-brand-mark" src="/images/favicon.svg" alt="" aria-hidden="true" />
+                    <span>Custompedia</span>
+                  </span>
+                )
+              }
+              {
+                entry.flag !== 'custompedia' && (
+                  <span class="tl-brand-lockup tl-brand-lockup--parcelin">
+                    <img class="tl-brand-mark" src="/images/Parcelinpack-transparent.png" alt="" aria-hidden="true" />
+                    <span>Parcelin</span>
+                  </span>
+                )
+              }
             </span>
+            <span class="tl-card-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
           </header>
 
           <time class="timeline-year" datetime={entry.year} data-number-count={entry.year}>{entry.year}</time>
