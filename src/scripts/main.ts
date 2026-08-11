@@ -13,7 +13,6 @@ import { timelinePathModule } from './modules/timeline-path';
 import { packagingTestModule } from './modules/packaging-test';
 import { navActiveModule } from './modules/nav-active';
 import { workCardsModule } from './modules/work-cards';
-import { clipboardModule } from './modules/clipboard';
 import { mobileMenuModule } from './modules/mobile-menu';
 import { imageTrailModule } from './modules/image-trail';
 import { microModule } from './modules/micro';
@@ -37,7 +36,6 @@ const modules: AnimationModule[] = [
   packagingTestModule,
   workCardsModule,
   navActiveModule,
-  clipboardModule,
   mobileMenuModule,
   clientMarqueeModule,
   contactPromptsModule,

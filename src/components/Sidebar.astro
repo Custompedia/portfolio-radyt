@@ -166,13 +166,9 @@ import { brand, hero, nav, stats, clients } from '../data/site';
 
     <div class="nav-card nav-email">
       <span class="nav-card-bg" data-ghost-fade></span>
-      <button class="nav-email-btn" type="button" data-copy={brand.email} data-ghost-fade>
+      <a class="nav-email-btn" href={`mailto:${brand.email}`} data-ghost-fade>
         <span class="nav-email-text">{brand.email}</span>
-        <span class="nav-email-icon">
-          <Icon name="copy" size={14} />
-        </span>
-        <span class="nav-email-done" aria-live="polite"></span>
-      </button>
+      </a>
     </div>
   </div>
 

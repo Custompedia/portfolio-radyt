@@ -425,36 +425,8 @@
   transition: background-color var(--theme-dur) var(--ease-out);
 }
 
-.nav-email-btn:hover .nav-email-text {
-  opacity: 0.35;
-}
-
-.nav-email-text {
-  transition: opacity var(--dur-fast) var(--ease-out);
-}
-
-.nav-email-icon {
-  display: grid;
-  place-items: center;
-  opacity: 0.65;
-}
-
-.nav-email-done {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  border-radius: inherit;
-  background: var(--yellow);
-  color: var(--black);
-  font-weight: 700;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--dur-fast) var(--ease-out);
-}
-
-.nav-email-btn.is-copied .nav-email-done {
-  opacity: 1;
+.nav-email-btn:hover {
+  background: var(--surface-inner-hover);
 }
 
 /* --- Buttons --- */

@@ -86,7 +86,6 @@ export interface WorkItem {
   blurb: string;
   tags: string[];
   accent: string;
-  href: string;
   /**
    * Media kartu. Selama ketiganya kosong, kartu memakai mockup CSS di atas
    * warna `accent` sebagai placeholder — tidak ada gambar rusak, dan slot-nya
@@ -115,7 +114,7 @@ export const brand = {
   company: 'Custompedia Creative Group & Parcelin Creative Indonesia',
   city: 'Semarang, Indonesia',
   tagline: 'Build brands through Custompedia, then package them through Parcelin.',
-  email: 'hello@custompedia.id',
+  email: 'radhytam@gmail.com',
   phone: '+62 822-2617-1071',
   bookingUrl: 'https://wa.me/6282226171071',
   social: [
@@ -328,7 +327,7 @@ export const timeline: TimelineEntry[] = [
     flag: 'both',
     age: 'hari ini',
     metrics: [
-      { value: '2', label: 'Bendera berjalan' },
+      { value: '2500+', label: 'Projek selesai' },
       { value: '12', label: 'Tahun jalan' },
       { value: '1', label: 'Prinsip kerja' },
     ],
@@ -357,7 +356,6 @@ export const work = {
       blurb: 'Positioning, identitas visual, dan panduan merek yang bisa dipakai tim internal tanpa kami.',
       tags: ['Branding', 'Design', 'Guideline'],
       accent: '#3f2a1d',
-      href: '#',
       image: '/images/work-branding.webp',
     },
     {
@@ -366,7 +364,6 @@ export const work = {
       blurb: 'Pengelolaan kanal harian: perencanaan, produksi, publikasi, sampai balas komentar.',
       tags: ['Social Media', 'Content', 'Community'],
       accent: '#1f3340',
-      href: '#',
       image: '/images/work-social-media.webp',
     },
     {
@@ -375,7 +372,6 @@ export const work = {
       blurb: 'Pemilihan, negosiasi, dan pengukuran kreator — dinilai dari penjualan, bukan jumlah tayangan.',
       tags: ['KOL', 'Campaign', 'Report'],
       accent: '#4a2438',
-      href: '#',
       image: '/images/work-kol.webp',
     },
     {
@@ -384,7 +380,6 @@ export const work = {
       blurb: 'Iklan berbayar yang diikat ke satu angka bisnis, lengkap dengan audit belanja yang sudah jalan.',
       tags: ['Ads', 'Audit', 'Performance'],
       accent: '#101014',
-      href: '#',
       image: '/images/work-digital-ads.webp',
     },
     {
@@ -393,7 +388,6 @@ export const work = {
       blurb: 'Peluncuran, POI, papan luar ruang, dan event yang tersambung kembali ke kanal digital.',
       tags: ['Activation', 'OOH', 'Event'],
       accent: '#3d2c56',
-      href: '#',
       image: '/images/work-activation-event.webp',
     },
     {
@@ -402,7 +396,6 @@ export const work = {
       blurb: 'Kemasan produk yang dirancang dari ukuran barangnya, bukan dari cetakan yang kebetulan tersedia.',
       tags: ['Packaging', 'Struktur', 'Cetak'],
       accent: '#14392c',
-      href: '#',
       image: '/images/work-custom-box.webp',
     },
     {
@@ -411,7 +404,6 @@ export const work = {
       blurb: 'Paket kiriman untuk media dan mitra — dibuat supaya layak difoto begitu kotaknya dibuka.',
       tags: ['Hampers', 'PR Kit', 'Seasonal'],
       accent: '#2a2118',
-      href: '#',
       image: '/images/work-pr-hampers.webp',
     },
     {
@@ -420,7 +412,6 @@ export const work = {
       blurb: 'Pesanan kecil dengan mutu cetak yang sama — supaya usaha rumahan bisa masuk rak yang sama.',
       tags: ['UMKM', 'MOQ Rendah', 'Konsultasi'],
       accent: '#241a2e',
-      href: '#',
       image: '/images/work-umkm-packaging.webp',
     },
     {
@@ -429,7 +420,6 @@ export const work = {
       blurb: 'Barang jadi plus kemasannya dikerjakan sekaligus, jadi tidak ada dua vendor yang saling menunggu.',
       tags: ['Merch', 'Packaging', 'Produksi'],
       accent: '#1b2a4a',
-      href: '#',
       image: '/images/work-merchandise.webp',
     },
     // `as`, bukan `satisfies`: satisfies mempertahankan tipe literal array ini,

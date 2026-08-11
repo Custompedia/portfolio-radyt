@@ -31,7 +31,7 @@ import { work } from '../../data/site';
       <div class="work-track" data-work-track>
         {
           work.items.map((item, i) => (
-            <a class="work-card" href={item.href} style={`--accent:${item.accent}`} data-work-card>
+            <article class="work-card" style={`--accent:${item.accent}`} data-work-card>
               {item.image && <img class="work-poster" src={item.image} alt="" loading="lazy" decoding="async" />}
 
               {/* preload="none" + sumber lewat data-*: video baru diambil saat
@@ -88,7 +88,7 @@ import { work } from '../../data/site';
               </div>
 
               <span class="work-image-overlay" aria-hidden="true" />
-            </a>
+            </article>
           ))
         }
       </div>
