@@ -79,7 +79,7 @@ export async function createPediScene(canvas: HTMLCanvasElement, performanceLite
   });
   modelRoot.add(model);
 
-  let baseCameraZ = 5.75;
+  let baseCameraZ = 6.05;
   let closeCameraZ = CLOSE_Z;
   let activeFocus = 0;
 
@@ -97,7 +97,8 @@ export async function createPediScene(canvas: HTMLCanvasElement, performanceLite
     renderer.setSize(clientWidth, clientHeight, false);
     camera.aspect = clientWidth / clientHeight;
     const isCompactDesktop = window.innerWidth >= 768 && window.innerWidth <= 1100;
-    baseCameraZ = isCompactDesktop ? 7 : camera.aspect < 0.85 ? 6.25 : 5.75;
+    const isNarrowDesktop = window.innerWidth > 1100 && window.innerWidth <= 1400;
+    baseCameraZ = isCompactDesktop ? 7 : isNarrowDesktop ? 6.65 : camera.aspect < 0.85 ? 6.25 : 6.05;
     closeCameraZ = CLOSE_Z * Math.max(1, CLOSE_FRAMING_ASPECT / camera.aspect);
     updateCamera(activeFocus);
   };
