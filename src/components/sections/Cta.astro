@@ -2,7 +2,7 @@
 import { brand, cta } from '../../data/site';
 ---
 
-<section class="packaging-test theme-dark" data-packaging-test data-theme-section data-theme-duration="4.1" aria-labelledby="packaging-test-title">
+<section class="packaging-test theme-dark" data-packaging-test data-theme-section data-theme-duration="5.6" aria-labelledby="packaging-test-title">
   <div class="packaging-test-stage">
     <header class="packaging-test-copy">
       <span class="packaging-test-label" data-packaging-intro>{cta.label}</span>
@@ -15,32 +15,11 @@ import { brand, cta } from '../../data/site';
     <div class="packaging-test-scene" aria-hidden="true">
       <span class="packaging-arrival-line" data-packaging-arrival></span>
       <span class="packaging-scene-label" data-packaging-detail>MADE TO BE REMEMBERED</span>
-      <div class="packaging-box" data-packaging-box>
-        <div class="packaging-box-spin" data-packaging-spin>
-          <div class="packaging-box-face packaging-box-front">
-            <div class="packaging-box-meta"><span>PARCELIN CUSTOM PACK</span><span>EDITION 01</span></div>
-            <div class="packaging-box-cover">
-              <div class="packaging-box-brand">
-                <img class="packaging-box-logo" src="/images/favicon.svg" alt="" />
-                <span>CUSTOMPEDIA</span>
-              </div>
-              <span class="packaging-box-divider" aria-hidden="true"></span>
-              <img class="packaging-box-artwork" src="/images/Parcelinpack-transparent.webp" alt="" />
-            </div>
-            <span class="packaging-box-footer">PACKAGING, MADE PERSONAL.</span>
-          </div>
-          <div class="packaging-box-face packaging-box-back">
-            <div class="packaging-box-back-copy"><span>CUSTOM</span><span>PACK</span><span>STUDIO</span></div>
-            <img class="packaging-box-back-logo" src="/images/favicon.svg" alt="" />
-            <span class="packaging-box-back-note">MADE FOR THE MOMENT IT ARRIVES</span>
-          </div>
-          <span class="packaging-box-face packaging-box-right"></span>
-          <span class="packaging-box-face packaging-box-left"></span>
-          <span class="packaging-box-face packaging-box-top"></span>
-          <span class="packaging-box-face packaging-box-bottom"></span>
-        </div>
+      <div class="pedi-stage" data-pedi-stage data-state="loading">
+        <canvas class="pedi-canvas" data-pedi-canvas></canvas>
+        <span class="pedi-loader"></span>
       </div>
-      <span class="packaging-test-shadow" data-packaging-shadow></span>
+      <span class="pedi-shadow" data-pedi-shadow></span>
       <span class="packaging-scene-ring packaging-scene-ring-one" data-packaging-detail></span>
       <span class="packaging-scene-ring packaging-scene-ring-two" data-packaging-detail></span>
     </div>
