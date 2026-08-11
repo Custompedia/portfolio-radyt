@@ -440,17 +440,17 @@ export const work = {
 };
 
 export const cta = {
-  label: 'The 7-second test',
-  headline: ['Sebelum dibuka,', 'kemasanmu sudah dinilai.'],
+  label: 'The moment it lands',
+  headline: ['Bukan sekadar sampai.', 'Harus berkesan.'],
   intro:
-    'Dalam beberapa detik, orang memutuskan: terlihat menarik, terasa meyakinkan, atau lewat begitu saja.',
+    'Produk yang baik pantas hadir dengan cara yang membuat orang berhenti, memegangnya lebih lama, lalu ingin membagikannya.',
   moments: [
-    { number: '01', label: 'Dilihat', question: 'Apa yang orang tangkap dalam tiga detik?' },
-    { number: '02', label: 'Dipegang', question: 'Apakah rasanya sepadan dengan harganya?' },
-    { number: '03', label: 'Dibawa pulang', question: 'Layak difoto atau langsung dibuang?' },
+    { number: '01', label: 'Terlihat', question: 'Membuat orang berhenti sebelum mengenal produknya.' },
+    { number: '02', label: 'Dipegang', question: 'Membuat kualitasnya terasa, bukan sekadar terlihat.' },
+    { number: '03', label: 'Diingat', question: 'Membuat momen kecil layak dibawa pulang.' },
   ],
-  closing: ['Produkmu sudah punya cerita.', 'Jangan biarkan kemasannya diam.'],
-  action: 'Uji Kemasan Saya',
+  closing: ['Buat produkmu', 'terasa lebih bernilai.'],
+  action: 'Mulai diskusi proyek',
 };
 
 export const faq = {
