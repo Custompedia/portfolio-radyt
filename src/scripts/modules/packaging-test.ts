@@ -21,7 +21,8 @@ export const packagingTestModule: AnimationModule = {
     const shadow = $<HTMLElement>('[data-pedi-shadow]');
     const arrival = $<HTMLElement>('[data-packaging-arrival]');
     const outro = $<HTMLElement>('[data-packaging-outro]');
-    if (!section || !stage || !canvas || !shadow || !arrival || !outro) return;
+    const handoff = $<HTMLElement>('[data-packaging-handoff]');
+    if (!section || !stage || !canvas || !shadow || !arrival || !outro || !handoff) return;
 
     const run = ++generation;
     const intro = $$<HTMLElement>('[data-packaging-intro]', section);
@@ -73,6 +74,7 @@ export const packagingTestModule: AnimationModule = {
     gsap.set(arrival, { autoAlpha: 0, scaleX: 0.15, transformOrigin: 'right center' });
     gsap.set(stage, { autoAlpha: 0, scale: 0.72, xPercent: -145, yPercent: 12, rotation: -7, transformOrigin: '50% 72%' });
     gsap.set(shadow, { scaleX: 0.22, opacity: 0.06, xPercent: -118 });
+    gsap.set(handoff, { autoAlpha: 0, yPercent: 45 });
 
     timeline = gsap.timeline({
       defaults: { ease: 'power3.out' },
@@ -91,7 +93,7 @@ export const packagingTestModule: AnimationModule = {
     timeline
       .to(intro, { autoAlpha: 1, y: 0, duration: 0.55, stagger: 0.08 })
       .to(arrival, { autoAlpha: 0.9, scaleX: 1, duration: 0.42 }, 0.18)
-      .to(stage, { autoAlpha: 1, scale: 1, xPercent: 0, yPercent: 0, rotation: 0, duration: 0.92, ease: 'power4.out' }, 0.24)
+      .to(stage, { autoAlpha: 1, scale: 1, xPercent: 3, yPercent: 0, rotation: 0, duration: 0.92, ease: 'power4.out' }, 0.24)
       .to(shadow, { scaleX: 1, opacity: 0.62, xPercent: 0, duration: 0.72 }, 0.42)
       .to(arrival, { autoAlpha: 0, duration: 0.24 }, 0.86)
       .to(pose, { turn: 0, duration: 1.06, ease: 'power2.inOut' }, 0.62)
@@ -103,8 +105,10 @@ export const packagingTestModule: AnimationModule = {
       .to(outro, { autoAlpha: 1, y: 0, duration: 0.58 }, 3.08)
       .to(outro, { autoAlpha: 0, y: -22, duration: 0.36 }, 3.78)
       .to(shadow, { scaleX: 0.72, opacity: 0, duration: 0.4 }, 3.82)
+      .to(stage, { xPercent: 0, duration: 0.52, ease: 'power2.inOut' }, 3.82)
       .to(pose, { focus: 1, duration: 1.25, ease: 'power2.inOut' }, 4.18)
-      .to(pose, { focus: 1, duration: 0.62, ease: 'none' }, 5.43);
+      .to(pose, { focus: 1, duration: 0.62, ease: 'none' }, 5.43)
+      .to(handoff, { autoAlpha: 1, yPercent: 0, duration: 0.62, ease: 'power2.out' }, 5.43);
   },
 
   destroy() {
@@ -118,7 +122,7 @@ export const packagingTestModule: AnimationModule = {
     pedi = null;
     const stage = $<HTMLElement>('[data-pedi-stage]');
     if (stage) stage.dataset.state = 'loading';
-    $$<HTMLElement>('[data-packaging-test] [data-packaging-intro], [data-packaging-test] [data-packaging-detail], [data-packaging-test] .packaging-test-moment, [data-packaging-test] [data-packaging-outro], [data-packaging-test] [data-packaging-arrival], [data-packaging-test] [data-pedi-stage], [data-packaging-test] [data-pedi-shadow]').forEach((element) => {
+    $$<HTMLElement>('[data-packaging-test] [data-packaging-intro], [data-packaging-test] [data-packaging-detail], [data-packaging-test] .packaging-test-moment, [data-packaging-test] [data-packaging-outro], [data-packaging-test] [data-packaging-arrival], [data-packaging-test] [data-pedi-stage], [data-packaging-test] [data-pedi-shadow], [data-packaging-test] [data-packaging-handoff]').forEach((element) => {
       gsap.set(element, { clearProps: 'all' });
     });
   },

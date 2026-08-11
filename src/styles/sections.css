@@ -1580,7 +1580,7 @@
 .packaging-test-copy {
   position: relative;
   z-index: 3;
-  width: min(37vw, 640px);
+  width: min(30vw, 580px);
 }
 
 .packaging-test-label {
@@ -1596,7 +1596,7 @@
 
 .packaging-test-title {
   color: var(--white);
-  font-size: clamp(3.4rem, 5.65vw, 7rem);
+  font-size: clamp(3.4rem, 4.2vw, 5.15rem);
   font-weight: 900;
   letter-spacing: -0.065em;
   line-height: 0.88;
@@ -1737,7 +1737,7 @@
   right: max(var(--gutter), 4vw);
   bottom: clamp(56px, 6vw, 104px);
   z-index: 4;
-  width: min(21vw, 340px);
+  width: min(19vw, 320px);
 }
 
 .packaging-test-moment {
@@ -1779,12 +1779,13 @@
   bottom: 12%;
   left: var(--content-left);
   z-index: 5;
+  width: min(30vw, 580px);
 }
 
 .packaging-test-outro p {
   margin-bottom: clamp(24px, 2vw, 36px);
   color: var(--white);
-  font-size: clamp(2.35rem, 4.25vw, 5.5rem);
+  font-size: clamp(2.35rem, 3.45vw, 4.25rem);
   font-weight: 900;
   letter-spacing: -0.06em;
   line-height: 0.9;
@@ -1797,6 +1798,31 @@
 .packaging-test-button {
   padding: 1.1vw 1.7vw;
   font-size: clamp(0.82rem, 1.05vw, 1.18rem);
+}
+
+.packaging-test-handoff {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 6;
+  height: clamp(110px, 15vh, 170px);
+  background: linear-gradient(to bottom, rgba(213, 207, 190, 0), var(--bg) 88%);
+  pointer-events: none;
+}
+
+@media (min-width: 1101px) and (max-width: 1400px) {
+  .packaging-test-copy {
+    width: 27vw;
+  }
+
+  .packaging-test-title {
+    font-size: clamp(3.25rem, 4vw, 3.5rem);
+  }
+
+  .packaging-test-moments {
+    width: 16.5vw;
+  }
 }
 
 @media (max-width: 1100px), (prefers-reduced-motion: reduce) {
@@ -1866,11 +1892,16 @@
     bottom: auto;
     left: auto;
     order: 4;
+    width: 100%;
     margin-top: 54px;
   }
 
   .packaging-test-button {
     padding: 15px 20px;
+  }
+
+  .packaging-test-handoff {
+    display: none;
   }
 }
 
@@ -2094,6 +2125,17 @@
 .site-footer {
   position: relative;
   padding: 15vw var(--gutter) 2vw var(--content-left);
+}
+
+.site-footer::before {
+  position: absolute;
+  top: -3px;
+  right: 0;
+  left: 0;
+  height: 4px;
+  background: var(--bg);
+  content: '';
+  pointer-events: none;
 }
 
 /* Jawaban atas wordmark pembuka. Jejak dan labelnya boleh melampaui pita ini;
