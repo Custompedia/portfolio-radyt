@@ -2024,6 +2024,7 @@
   margin: auto;
   padding: 0;
   border: 0;
+  overflow: visible;
   background: transparent;
   color: var(--fg);
 }
@@ -2036,12 +2037,29 @@
 
 .contact-dialog-panel {
   position: relative;
+  z-index: 1;
   display: grid;
   gap: clamp(16px, 1.5vw, 24px);
   padding: clamp(24px, 2.2vw, 36px);
   border: 1px solid rgba(25, 24, 20, 0.16);
   background: #f1eee3;
   box-shadow: 0 22px 70px rgba(27, 25, 18, 0.22);
+}
+
+.contact-dialog-origin {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+  box-shadow: 0 22px 70px rgba(27, 25, 18, 0.22);
+}
+
+.contact-dialog-origin-ink {
+  position: absolute;
+  inset: 0;
+  background: #20201d;
+  opacity: 0;
 }
 
 .contact-dialog-close {
