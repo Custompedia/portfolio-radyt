@@ -19,12 +19,14 @@ import { $$, isDesktop, parseVars } from '../core/utils';
  */
 
 const created: ScrollTrigger[] = [];
+const completedOnce = new WeakSet<Element>();
 
 function build(el: HTMLElement): void {
   if (el.hasAttribute('data-tl-desktop') && !isDesktop()) return;
 
   const scrubbed = el.dataset.tlType === 'scroll';
   const once = el.hasAttribute('data-tl-once');
+  if (once && completedOnce.has(el)) return;
 
   const triggerSelector = el.dataset.tlTrigger;
   const trigger = triggerSelector ? document.querySelector(triggerSelector) : el;
@@ -43,6 +45,7 @@ function build(el: HTMLElement): void {
     scrub: scrubbed ? 1 : false,
     toggleActions: scrubbed ? undefined : once ? 'play none none none' : 'play none none reverse',
     once: once || undefined,
+    onEnter: once ? () => completedOnce.add(el) : undefined,
   };
 
   const tween = gsap.fromTo(targets, fromVars, {
@@ -63,6 +66,8 @@ function build(el: HTMLElement): void {
  * dilihat daripada menge-tween nilai teksnya.
  */
 function buildCounter(el: HTMLElement): void {
+  if (completedOnce.has(el)) return;
+
   const raw = el.dataset.numberCount ?? el.textContent?.trim() ?? '';
   if (!raw) return;
 
@@ -100,7 +105,12 @@ function buildCounter(el: HTMLElement): void {
   if (tracks.length === 0) return;
 
   const timeline = gsap.timeline({
-    scrollTrigger: { trigger: el, start: 'top 90%', once: true },
+    scrollTrigger: {
+      trigger: el,
+      start: 'top 90%',
+      once: true,
+      onEnter: () => completedOnce.add(el),
+    },
   });
 
   tracks.forEach((track, i) => {
