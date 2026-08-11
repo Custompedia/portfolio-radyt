@@ -13,6 +13,16 @@ export const isDesktop = (): boolean => window.innerWidth >= DESKTOP_BREAKPOINT;
 export const prefersReducedMotion = (): boolean =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/** Efek visual mahal tetap ada, tetapi diringankan saat perangkat memberi sinyal resource terbatas. */
+export const isPerformanceConstrained = (): boolean => {
+  const navigatorWithMemory = navigator as Navigator & { deviceMemory?: number };
+  return (
+    window.matchMedia('(update: slow)').matches ||
+    navigator.hardwareConcurrency <= 4 ||
+    (navigatorWithMemory.deviceMemory ?? Infinity) <= 4
+  );
+};
+
 export function debounce<A extends unknown[]>(fn: (...args: A) => void, delay = 150) {
   let timer: number | undefined;
   return (...args: A) => {

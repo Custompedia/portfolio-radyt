@@ -1553,6 +1553,22 @@
   content: '';
 }
 
+.performance-lite .packaging-test-stage::before,
+.performance-lite .packaging-test-stage::after,
+.performance-lite .packaging-test-shadow {
+  filter: none;
+}
+
+.performance-lite .hero::after,
+.performance-lite .hero-trait-card,
+.performance-lite .sidebar,
+.performance-lite .nav-card,
+.performance-lite .contact-prompt,
+.performance-lite .timeline-dialog {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
 .packaging-test-stage::before {
   top: -28vw;
   right: -18vw;

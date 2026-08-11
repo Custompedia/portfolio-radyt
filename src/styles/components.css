@@ -350,6 +350,8 @@
 .marquee {
   overflow: hidden;
   transform-origin: top left;
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
 }
 
 .marquee-track {
@@ -373,7 +375,7 @@
   width: var(--logo-width-desktop);
   height: 1.5vw;
   place-items: center;
-  opacity: 0;
+  opacity: 0.82;
 }
 
 .marquee-item--square {

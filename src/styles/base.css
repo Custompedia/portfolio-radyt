@@ -297,3 +297,9 @@ html.lenis body {
     display: none;
   }
 }
+
+/* Seluruh gerak dan hierarki visual tetap dipertahankan; hanya lapisan yang
+   memaksa repaint besar dimatikan ketika perangkat teridentifikasi terbatas. */
+.performance-lite .grain {
+  display: none;
+}

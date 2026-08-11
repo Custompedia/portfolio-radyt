@@ -1,7 +1,7 @@
 import { ScrollTrigger } from './core/gsap';
 import type { AnimationModule } from './core/module';
 import { getLenis, initAnchorLinks, initSmoothScroll } from './core/smooth-scroll';
-import { debounce, isDesktop, prefersReducedMotion, whenFontsReady } from './core/utils';
+import { debounce, isDesktop, isPerformanceConstrained, prefersReducedMotion, whenFontsReady } from './core/utils';
 
 import { sidebarModule } from './modules/sidebar';
 import { ghostModule } from './modules/ghost';
@@ -17,7 +17,6 @@ import { mobileMenuModule } from './modules/mobile-menu';
 import { imageTrailModule } from './modules/image-trail';
 import { microModule } from './modules/micro';
 import { preloaderModule } from './modules/preloader';
-import { clientMarqueeModule } from './modules/client-marquee';
 import { contactPromptsModule } from './modules/contact-prompts';
 
 /**
@@ -37,7 +36,6 @@ const modules: AnimationModule[] = [
   workCardsModule,
   navActiveModule,
   mobileMenuModule,
-  clientMarqueeModule,
   contactPromptsModule,
   imageTrailModule,
   microModule,
@@ -92,6 +90,8 @@ const handleResize = debounce(() => {
 }, 150);
 
 async function boot(): Promise<void> {
+  document.documentElement.classList.toggle('performance-lite', isPerformanceConstrained());
+
   // Pengukuran ghost hanya sahih pada scroll nol — jangan biarkan browser
   // memulihkan posisi scroll lama saat reload.
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';

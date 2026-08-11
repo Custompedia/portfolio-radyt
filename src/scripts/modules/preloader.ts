@@ -53,18 +53,17 @@ export const preloaderModule: AnimationModule = {
 
     const el = stage();
     gsap.set([el.portrait, el.traits].filter(Boolean), { autoAlpha: 0 });
-    gsap.set(el.portrait, { scale: 0.88, filter: 'blur(20px)', transformOrigin: 'center bottom' });
+    gsap.set(el.portrait, { scale: 0.88, transformOrigin: 'center bottom' });
     // Separator tumbuh dari tinggi nol, bukan memudar — garisnya seolah
     // ditarik keluar di antara label.
     gsap.set(el.navSeps, { height: 0 });
-    gsap.set(el.headlineLines, { autoAlpha: 0, scale: 0.9, filter: 'blur(10px)' });
-    gsap.set(el.traits, { filter: 'blur(8px)' });
+    gsap.set(el.headlineLines, { autoAlpha: 0, scale: 0.9 });
     // Link nav & tombol utama sudah dipegang transform-nya oleh GhostEngine,
     // jadi di sini hanya opacity + blur yang disentuh — scale akan bentrok.
-    gsap.set(el.navLinks, { autoAlpha: 0, filter: 'blur(6px)' });
-    gsap.set(el.statCards, { autoAlpha: 0, filter: 'blur(8px)' });
-    gsap.set(el.buttons, { autoAlpha: 0, filter: 'blur(10px)' });
-    gsap.set(el.paragraphs, { autoAlpha: 0, filter: 'blur(6px)' });
+    gsap.set(el.navLinks, { autoAlpha: 0 });
+    gsap.set(el.statCards, { autoAlpha: 0 });
+    gsap.set(el.buttons, { autoAlpha: 0 });
+    gsap.set(el.paragraphs, { autoAlpha: 0 });
 
     timeline = gsap.timeline({ delay: 0.15 });
 
@@ -80,28 +79,28 @@ export const preloaderModule: AnimationModule = {
     timeline.addLabel('hero', 1.4);
 
     timeline
-      .to(el.portrait, { autoAlpha: 1, scale: 1, filter: 'blur(0px)', duration: 1.1, ease: 'power2.out' }, 'hero')
+      .to(el.portrait, { autoAlpha: 1, scale: 1, duration: 1.1, ease: 'power2.out' }, 'hero')
       .to(
         el.headlineLines,
-        { autoAlpha: 1, scale: 1, filter: 'blur(0px)', duration: 1, stagger: 0.1, ease: 'power2.out' },
+        { autoAlpha: 1, scale: 1, duration: 1, stagger: 0.1, ease: 'power2.out' },
         'hero+=0.3',
       )
-      .to(el.navLinks, { autoAlpha: 1, filter: 'blur(0px)', duration: 0.5, ease: 'power2.out' }, 'hero+=0.6')
+      .to(el.navLinks, { autoAlpha: 1, duration: 0.5, ease: 'power2.out' }, 'hero+=0.6')
       .to(el.navSeps, { height: '0.8vw', duration: 0.2, ease: 'power2.out' }, 'hero+=0.6')
       .to(
         el.statCards,
-        { autoAlpha: 1, filter: 'blur(0px)', duration: 0.9, stagger: 0.1, ease: 'power2.out' },
+        { autoAlpha: 1, duration: 0.9, stagger: 0.1, ease: 'power2.out' },
         'hero+=0.6',
       )
-      .to(el.traits, { autoAlpha: 1, filter: 'blur(0px)', duration: 0.9, ease: 'power2.out' }, 'hero+=0.9')
+      .to(el.traits, { autoAlpha: 1, duration: 0.9, ease: 'power2.out' }, 'hero+=0.9')
       .to(
         el.buttons,
-        { autoAlpha: 1, filter: 'blur(0px)', duration: 0.8, stagger: 0.08, ease: 'power2.out' },
+        { autoAlpha: 1, duration: 0.8, stagger: 0.08, ease: 'power2.out' },
         'hero+=1.25',
       )
       .to(
         el.paragraphs,
-        { autoAlpha: 1, filter: 'blur(0px)', duration: 0.7, stagger: 0.1, ease: 'power2.out' },
+        { autoAlpha: 1, duration: 0.7, stagger: 0.1, ease: 'power2.out' },
         'hero+=1.65',
       );
   },
