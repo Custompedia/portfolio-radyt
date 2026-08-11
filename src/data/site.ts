@@ -356,7 +356,7 @@ export const work = {
       blurb: 'Positioning, identitas visual, dan panduan merek yang bisa dipakai tim internal tanpa kami.',
       tags: ['Branding', 'Design', 'Guideline'],
       accent: '#3f2a1d',
-      image: '/images/work-branding.webp',
+      image: '/images/work-branding-natural.webp',
     },
     {
       title: 'Social Media Handling',
@@ -372,7 +372,7 @@ export const work = {
       blurb: 'Pemilihan, negosiasi, dan pengukuran kreator — dinilai dari penjualan, bukan jumlah tayangan.',
       tags: ['KOL', 'Campaign', 'Report'],
       accent: '#4a2438',
-      image: '/images/work-kol.webp',
+      image: '/images/work-kol-natural.webp',
     },
     {
       title: 'Digital Advertising',
@@ -380,7 +380,7 @@ export const work = {
       blurb: 'Iklan berbayar yang diikat ke satu angka bisnis, lengkap dengan audit belanja yang sudah jalan.',
       tags: ['Ads', 'Audit', 'Performance'],
       accent: '#101014',
-      image: '/images/work-digital-ads.webp',
+      image: '/images/work-digital-ads-natural.webp',
     },
     {
       title: 'Aktivasi, OOH & Event',
@@ -388,7 +388,7 @@ export const work = {
       blurb: 'Peluncuran, POI, papan luar ruang, dan event yang tersambung kembali ke kanal digital.',
       tags: ['Activation', 'OOH', 'Event'],
       accent: '#3d2c56',
-      image: '/images/work-activation-event.webp',
+      image: '/images/work-activation-event-natural.webp',
     },
     {
       title: 'Custom Box',
@@ -412,7 +412,7 @@ export const work = {
       blurb: 'Pesanan kecil dengan mutu cetak yang sama — supaya usaha rumahan bisa masuk rak yang sama.',
       tags: ['UMKM', 'MOQ Rendah', 'Konsultasi'],
       accent: '#241a2e',
-      image: '/images/work-umkm-packaging.webp',
+      image: '/images/work-umkm-packaging-natural.webp',
     },
     {
       title: 'Merchandise & Gift Set',
