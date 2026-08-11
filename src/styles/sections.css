@@ -438,10 +438,9 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    /* Kanan disisakan 68px = lebar tombol menu (44px) + jarak fixed-nya dari
-       tepi (14px) + gap 10px — supaya CTA tidak pernah menabrak tombol menu
-       yang posisinya independen (`.mobile-menu-trigger`, fixed sendiri). */
-    padding: 14px 68px 14px var(--gutter);
+    /* Ruang kanan mengikuti capsule menu: CTA tidak pernah masuk ke bawah
+       kontrol fixed, bahkan pada layar 320px. */
+    padding: 14px 106px 14px var(--gutter);
     transform: none;
   }
 
@@ -476,10 +475,9 @@
     height: var(--topbar-ctl-h);
   }
 
-  /* Tombol menu bujur sangkar — lebarnya ikut tinggi yang sama, kalau tidak ia
-     44x40 dan terbaca sebagai kotak yang sedikit rebah. */
+  /* Lebar capsule mengikuti isi label + ikon, bukan rasio kotak. */
   .mobile-menu-trigger {
-    width: var(--topbar-ctl-h);
+    width: 76px;
   }
 
   .brand {
@@ -489,12 +487,8 @@
     font-size: 1.05rem;
   }
 
-  /* Panel BUKAN penuh layar: tingginya mengikuti isi, jadi hero tetap terlihat
-     di bawahnya — persis referensi, di mana menu terbuka terbaca sebagai lembar
-     yang turun menutupi bagian ATAS halaman saja. Versi sebelumnya 100dvh dan
-     menyisakan setengah layar beige kosong di bawah kartu terakhir.
-     Wrapper ini yang menerima treatment "geser dari atas"; topbar (`.sidebar`
-     sendiri) tidak ikut ter-clip, lihat komentar Sidebar.astro. */
+  /* Panel tetap mengikuti isi, tetapi diperlakukan seperti halaman navigasi
+     tersendiri: hitam pekat, satu aksen kuning, dan tanpa tumpukan kartu. */
   .sidebar-panel {
     position: fixed;
     top: 0;
@@ -505,11 +499,16 @@
     flex-direction: column;
     width: 100%;
     max-height: 100dvh;
-    gap: 8px;
+    --fg: #f5f3ea;
+    --surface: transparent;
+    --surface-border: transparent;
+    --surface-inner: transparent;
+    --surface-inner-alt: transparent;
+    gap: 0;
     overflow-y: auto;
-    padding: 76px 14px 16px;
-    background: var(--bg);
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+    padding: 86px 20px 20px;
+    background: var(--work-bg);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
     clip-path: inset(0 0 100% 0);
     transition: clip-path 0.5s var(--ease-out);
   }
@@ -536,6 +535,79 @@
     display: none;
   }
 
+  .sidebar-panel .nav-card {
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .sidebar-panel .nav-card-bg {
+    border: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .sidebar-panel .nav-menu ul {
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .sidebar-panel .nav-link {
+    width: 100%;
+    min-height: 58px;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 0;
+    color: var(--white);
+    font-size: clamp(1.18rem, 5.2vw, 1.55rem);
+    letter-spacing: -0.02em;
+  }
+
+  .sidebar-panel .nav-link-bg,
+  .sidebar-panel .nav-link:hover .nav-link-bg,
+  .sidebar-panel .nav-link.is-active .nav-link-bg,
+  .sidebar-panel .nav-link.is-active:hover .nav-link-bg {
+    background: transparent;
+  }
+
+  .sidebar-panel .nav-link:hover,
+  .sidebar-panel .nav-link.is-active {
+    color: var(--yellow);
+  }
+
+  .sidebar-panel .nav-link-icon {
+    display: grid;
+    width: 24px;
+    place-items: center;
+    opacity: 0.78;
+  }
+
+  .sidebar-panel .nav-email {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .sidebar-panel .nav-email-btn {
+    padding: 12px 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--white);
+    font-size: 0.9375rem;
+  }
+
+  .sidebar-panel .nav-clients {
+    margin-top: 12px;
+    padding: 16px 0 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .sidebar-panel .marquee-logo {
+    filter: grayscale(1) brightness(0) invert(1);
+    opacity: 0.58;
+  }
+
   .sidebar.is-open .sidebar-panel {
     clip-path: inset(0 0 0 0);
   }
@@ -554,6 +626,13 @@
 
   .mobile-menu-trigger {
     display: flex;
+  }
+
+  @media (max-width: 360px) {
+    .sidebar > .btn-primary {
+      padding: 0 12px;
+      font-size: 0.75rem;
+    }
   }
 
   /* Ikon link menu: 14px terlalu kecil di layar sentuh dan terbaca sebagai
@@ -1415,7 +1494,9 @@
   position: relative;
   min-height: 100dvh;
   overflow: clip;
-  background: radial-gradient(circle at 51% 48%, #343434 0, #1a1a1a 28%, #090909 68%);
+  background:
+    radial-gradient(circle at 51% 72%, #343434 0, #1a1a1a 28%, rgba(9, 9, 9, 0) 68%),
+    linear-gradient(to bottom, #222222 0, #1a1a1a 26%, #090909 70%);
 }
 
 .packaging-test-stage {
@@ -2920,16 +3001,12 @@
     left: var(--gutter);
     right: var(--gutter);
     width: auto;
-    /* Penuh dari gutter ke gutter, bukan 0.888 dari itu: di referensi wordmark
-       mobile juga berhenti tepat di kedua gutter. */
-    font-size: var(--wordmark-size);
-    /* Aturan desktop menengahkan tinta dengan `center` + padding kanan sebesar
-       side bearing. Di sini tintanya rata KIRI, jadi paddingnya dinolkan dan
-       bearing-nya dibayar lewat margin negatif — tanpa itu huruf R mulai ~5px
-       di dalam gutter sementara huruf A berhenti tepat di gutter kanan. */
+    /* Sedikit lebih kecil dari ruang gutter supaya tetap punya napas visual
+       ketika layar sangat sempit atau font selesai dimuat terlambat. */
+    font-size: calc(var(--wordmark-size) * 0.95);
     justify-content: flex-start;
     padding-right: 0;
-    margin: 0 0 0 calc(-1 * var(--wordmark-bearing-l) * var(--wordmark-size));
+    margin: 0;
   }
 
   /* Kedua kartu memakai posisi referensi (425x870): traits x 45 y 295-455,

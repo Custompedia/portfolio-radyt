@@ -13,7 +13,7 @@ import Icon from './Icon.astro';
 import { brand, hero, nav, stats, clients } from '../data/site';
 ---
 
-<aside class="sidebar" data-sidebar>
+<aside id="mobile-navigation" class="sidebar" data-sidebar>
   <div class="nav-card nav-top">
     <span class="nav-card-bg" data-ghost-fade></span>
     <!-- Pill ini adalah TITIK MENDARAT wordmark raksasa. Jendelanya 36.7%–40%
@@ -189,13 +189,19 @@ import { brand, hero, nav, stats, clients } from '../data/site';
   </a>
 </aside>
 
-<button class="mobile-menu-trigger" type="button" aria-label="Open menu" aria-expanded="false" data-menu-trigger>
-  <!-- Ikon grid 2x2, bukan hamburger dua garis — meniru chrome tombol menu
-       referensi. Silang buka/tutup digambar lewat ::before/::after di CSS,
-       bukan menata ulang keempat titik ini. -->
-  <span class="mobile-menu-trigger-grid" aria-hidden="true">
-    <span></span>
-    <span></span>
+<button
+  class="mobile-menu-trigger"
+  type="button"
+  aria-label="Open menu"
+  aria-expanded="false"
+  aria-controls="mobile-navigation"
+  data-menu-trigger
+>
+  <span class="mobile-menu-trigger-label" aria-hidden="true">
+    <span class="mobile-menu-trigger-label-menu">Menu</span>
+    <span class="mobile-menu-trigger-label-close">Close</span>
+  </span>
+  <span class="mobile-menu-trigger-icon" aria-hidden="true">
     <span></span>
     <span></span>
   </span>

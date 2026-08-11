@@ -128,7 +128,6 @@ export const nav: NavItem[] = [
   { id: 'home', label: 'Home', href: '#home', icon: 'home' },
   { id: 'about', label: 'Journey', href: '#about', icon: 'user' },
   { id: 'work', label: 'Work', href: '#work', icon: 'briefcase' },
-  { id: 'clients', label: 'Clients', href: '#clients', icon: 'people' },
   { id: 'faq', label: 'FAQ', href: '#faq', icon: 'question' },
 ];
 

@@ -631,76 +631,97 @@
    MOBILE MENU
    ========================================================================== */
 
-/* Tombol persegi bulat krem dengan ikon grid 2×2 — chrome tombol menu
-   referensi, bukan lingkaran kuning dengan hamburger. Posisinya cocok dengan
-   padding topbar (`.sidebar { padding: 14px var(--gutter) }`), jadi keduanya
-   duduk di baris yang sama tanpa perlu jadi induk-anak DOM. */
+/* Kontrol navigasi adalah capsule berlabel, bukan ikon generik. Garis kedua
+   sengaja lebih pendek agar siluetnya terasa khas bahkan sebelum dibuka. */
 .mobile-menu-trigger {
   position: fixed;
   top: 14px;
   right: 14px;
   z-index: 90;
   display: none;
-  width: 44px;
+  width: 76px;
   height: 44px;
   align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-lg);
-  background: var(--card-inner-alt);
-}
-
-/* Kotak 2×2, bukan empat titik. Versi sebelumnya 4px dengan gap 4px: pada
-   layar sentuh ukuran segitu tidak terbaca sebagai ikon menu sama sekali,
-   cuma noda. 6.5px dengan sudut 2px memberi bentuk kotak yang jelas dan
-   total ikonnya 16px — sepadan dengan ikon di dalam link menunya. */
-.mobile-menu-trigger-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 6.5px);
-  grid-template-rows: repeat(2, 6.5px);
-  gap: 3px;
-  transition: opacity var(--dur-fast) var(--ease-out);
-}
-
-.mobile-menu-trigger-grid span {
-  width: 6.5px;
-  height: 6.5px;
-  border-radius: 2px;
-  background: var(--black);
-}
-
-/* Silang buka/tutup: dua garis lewat pseudo-elemen, disembunyikan dan
-   diputar 45°/-45° dari tengah tombol sampai berimpit jadi X. */
-.mobile-menu-trigger::before,
-.mobile-menu-trigger::after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 18px;
-  height: 2px;
-  border-radius: 2px;
-  background: var(--black);
-  content: '';
-  opacity: 0;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 11px 0 13px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  background: var(--dark);
+  color: var(--white);
+  overflow: hidden;
   transition:
-    opacity var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.mobile-menu-trigger:active {
+  transform: scale(0.96);
+}
+
+.mobile-menu-trigger-label {
+  font-family: var(--font-label);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.mobile-menu-trigger-label-close {
+  display: none;
+}
+
+.mobile-menu-trigger-icon {
+  display: grid;
+  gap: 5px;
+  width: 16px;
+  transition:
     transform var(--dur) var(--ease-out);
 }
 
-.mobile-menu-trigger[aria-expanded='true'] .mobile-menu-trigger-grid {
-  opacity: 0;
+.mobile-menu-trigger-icon span {
+  display: block;
+  width: 16px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: currentColor;
+  transition: transform var(--dur) var(--ease-out);
 }
 
-.mobile-menu-trigger[aria-expanded='true']::before,
-.mobile-menu-trigger[aria-expanded='true']::after {
-  opacity: 1;
+.mobile-menu-trigger-icon span:last-child {
+  width: 10px;
+  margin-left: auto;
 }
 
-.mobile-menu-trigger[aria-expanded='true']::before {
-  transform: translate(-50%, -50%) rotate(45deg);
+.mobile-menu-trigger[aria-expanded='true'] {
+  border-color: var(--yellow);
+  background: var(--yellow);
+  color: var(--black);
 }
 
-.mobile-menu-trigger[aria-expanded='true']::after {
-  transform: translate(-50%, -50%) rotate(-45deg);
+.mobile-menu-trigger[aria-expanded='true'] .mobile-menu-trigger-label-menu {
+  display: none;
+}
+
+.mobile-menu-trigger[aria-expanded='true'] .mobile-menu-trigger-label-close {
+  display: inline;
+}
+
+.mobile-menu-trigger[aria-expanded='true'] .mobile-menu-trigger-icon {
+  gap: 0;
+}
+
+.mobile-menu-trigger[aria-expanded='true'] .mobile-menu-trigger-icon span {
+  width: 16px;
+  transform: translateY(0.75px) rotate(45deg);
+}
+
+.mobile-menu-trigger[aria-expanded='true'] .mobile-menu-trigger-icon span:last-child {
+  margin-left: 0;
+  transform: translateY(-0.75px) rotate(-45deg);
 }
 
 /* ==========================================================================
