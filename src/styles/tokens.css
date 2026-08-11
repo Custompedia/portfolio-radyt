@@ -286,27 +286,10 @@
   color: var(--fg);
 }
 
-/* Heading gradient-clip. Selector `.line` wajib diduplikasi: SplitText
-   membungkus ulang tiap baris jadi elemen sendiri, dan tanpa aturan kedua
-   background-clip milik induk tidak diwarisi — teksnya jadi transparan total.
-   ------------------------------------------------------------------------
-   `:not(:has(.line))` pada induk BUKAN kosmetik. Setelah SplitText jalan, tiap
-   baris duduk di dalam `.line-mask` ber-`overflow:hidden`. Gradien milik INDUK
-   tetap dilukis dengan bentuk potongan seluruh teks keturunannya, dan lukisan
-   itu TIDAK ikut terpotong mask — hasilnya salinan kedua huruf yang bocor di
-   atas mask dan terbaca sebagai baris hantu di atas judul. Begitu barisnya
-   ada, induk berhenti melukis dan hanya `.line` yang mewarnai; sebelum
-   SplitText jalan (mis. prefers-reduced-motion, yang mematikan modul reveal)
-   induknya yang mengambil alih, jadi judulnya tidak pernah kehilangan gradien.
-   Kedua varian memakai penjaga yang sama — keduanya dipasang di heading
-   ber-`data-reveal`, jadi keduanya kena masalah yang sama. */
+/* Selector `.line` juga diperlukan setelah SplitText membungkus tiap baris. */
 .h2-style:not(:has(.line)),
 .h2-style .line {
-  background: linear-gradient(266deg, #3d3d3d 11.86%, #000000 92.59%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: var(--black);
 }
 
 .h2-style-white:not(:has(.line)),
