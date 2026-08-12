@@ -32,7 +32,16 @@ import { work } from '../../data/site';
         {
           work.items.map((item, i) => (
             <article class="work-card" style={`--accent:${item.accent}`} data-work-card>
-              {item.image && <img class="work-poster" src={item.image} alt="" loading="lazy" decoding="async" />}
+              {item.image && (
+                <img
+                  class="work-poster"
+                  src={item.image}
+                  alt=""
+                  loading="eager"
+                  fetchpriority="low"
+                  decoding="async"
+                />
+              )}
 
               {/* preload="none" + sumber lewat data-*: video baru diambil saat
                   kartunya benar-benar mendekat, bukan sembilan sekaligus di

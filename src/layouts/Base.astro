@@ -54,6 +54,7 @@ const socialImage = new URL('/images/radyta-og.jpg', Astro.url).href;
     <link rel="preload" href="/fonts/satoshi-700.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/satoshi-900.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/images/pedi.glb" as="fetch" crossorigin fetchpriority="high" />
 
     <!-- Harus inline dan di <head>: GhostEngine hanya bisa mengukur posisi awal
          saat scroll benar-benar nol. Modul yang di-defer sudah terlambat —

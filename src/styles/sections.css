@@ -1624,47 +1624,6 @@
   perspective: 1200px;
 }
 
-.packaging-arrival-line {
-  position: absolute;
-  top: 50%;
-  right: 48%;
-  width: min(35vw, 520px);
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--yellow));
-  transform: translateY(-50%);
-}
-
-.packaging-scene-label {
-  position: absolute;
-  top: 15%;
-  right: 18%;
-  color: var(--yellow);
-  font-family: var(--font-label);
-  font-size: clamp(0.58rem, 0.7vw, 0.78rem);
-  font-weight: 600;
-  letter-spacing: 0.16em;
-}
-
-.packaging-scene-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.packaging-scene-ring-one {
-  width: min(31vw, 460px);
-  aspect-ratio: 1;
-}
-
-.packaging-scene-ring-two {
-  width: min(44vw, 640px);
-  aspect-ratio: 1;
-  border-color: rgba(255, 255, 35, 0.18);
-}
-
 .pedi-stage {
   position: absolute;
   inset: 1% 0 5%;
@@ -1855,23 +1814,6 @@
     height: clamp(340px, 78vw, 470px);
     margin: 10px auto 6px;
     transform: none;
-  }
-
-  .packaging-arrival-line,
-  .packaging-scene-label,
-  .packaging-scene-ring {
-    opacity: 1;
-  }
-
-  .packaging-arrival-line {
-    top: 52%;
-    right: 50%;
-    width: 52%;
-  }
-
-  .packaging-scene-label {
-    top: 10%;
-    right: 0;
   }
 
   .packaging-test-moments {
