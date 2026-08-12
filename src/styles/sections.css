@@ -1624,6 +1624,40 @@
   perspective: 1200px;
 }
 
+.pedi-orbits {
+  position: absolute;
+  top: 49%;
+  left: 50%;
+  z-index: 1;
+  width: min(44vw, 640px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.pedi-orbit {
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 50%;
+}
+
+.pedi-orbit--inner {
+  inset: 22%;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.pedi-orbit--middle {
+  inset: 10%;
+  border-color: rgba(255, 255, 35, 0.17);
+  box-shadow: 0 0 42px rgba(255, 255, 35, 0.035);
+}
+
+.pedi-orbit--outer {
+  inset: 0;
+  border-color: rgba(255, 255, 255, 0.075);
+}
+
 .pedi-stage {
   position: absolute;
   inset: 1% 0 5%;
@@ -1816,6 +1850,12 @@
     transform: none;
   }
 
+  .pedi-orbits {
+    top: 50%;
+    width: min(92vw, 430px);
+    opacity: 0.78;
+  }
+
   .packaging-test-moments {
     position: relative;
     right: auto;
@@ -1882,13 +1922,13 @@
 }
 
 .faq-group {
-  overflow: hidden;
-  border-radius: var(--radius);
-  background: #20201d;
+  overflow: visible;
 }
 
 .faq-group h3 {
   padding: clamp(20px, 1.8vw, 30px) clamp(20px, 2vw, 34px);
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: #20201d;
   color: var(--yellow);
   font-family: var(--font-label);
   font-size: clamp(0.75rem, 0.9vw, 1rem);
@@ -1910,6 +1950,7 @@
   gap: 20px;
   padding: clamp(18px, 1.5vw, 26px) clamp(20px, 2vw, 34px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background: #20201d;
   color: rgba(255, 255, 255, 0.92);
   text-align: left;
   font-size: clamp(1rem, 1.18vw, 1.35rem);
@@ -1920,6 +1961,7 @@
 
 .faq-prompt:last-child {
   border-bottom: 0;
+  border-radius: 0 0 var(--radius) var(--radius);
 }
 
 .faq-prompt svg {
@@ -2066,6 +2108,7 @@
    sudah permanen di sidebar. Yang tersisa adalah wordmark penutup dan FAQ. */
 .site-footer {
   position: relative;
+  overflow-x: clip;
   padding: 15vw var(--gutter) 2vw var(--content-left);
 }
 

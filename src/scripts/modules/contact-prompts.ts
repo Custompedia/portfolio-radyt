@@ -4,11 +4,62 @@ import { $, $$, prefersReducedMotion } from '../core/utils';
 import { getLenis } from '../core/smooth-scroll';
 
 const cleanups: Array<() => void> = [];
+const entrances: gsap.core.Timeline[] = [];
+const edgeSlots = [0.14, 0.32, 0.5, 0.68, 0.86];
 
 export const contactPromptsModule: AnimationModule = {
   name: 'contact-prompts',
+  rebuildOnResize: true,
 
   init() {
+    if (window.innerWidth > 900 && !prefersReducedMotion()) {
+      for (const group of $$<HTMLElement>('[data-contact-group]')) {
+        const items = $$<HTMLElement>('[data-contact-entrance]', group);
+        const side = group.dataset.contactSide === 'right' ? 'right' : 'left';
+        const direction = side === 'left' ? -1 : 1;
+        const groupTop = group.getBoundingClientRect().top;
+
+        const timeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: group,
+            start: 'top 100%',
+            end: 'clamp(top 46%)',
+            scrub: 0.65,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        items.forEach((item, index) => {
+          const rect = item.getBoundingClientRect();
+          const startY = window.innerHeight * (edgeSlots[index] ?? 0.5) - (window.innerHeight + rect.top - groupTop);
+          gsap.set(item, {
+            x: side === 'left' ? -rect.right - 32 : window.innerWidth - rect.left + 32,
+            y: startY,
+            rotation: direction * (2 - index) * 1.2,
+            force3D: true,
+          });
+
+          const start = index * 0.5;
+          timeline
+            .to(item, {
+              x: direction * 48,
+              y: (2 - index) * 12,
+              rotation: direction * 0.45,
+              duration: 0.72,
+              ease: 'power2.inOut',
+            }, start)
+            .to(item, {
+              x: 0,
+              y: 0,
+              rotation: 0,
+              duration: 0.28,
+              ease: 'power3.out',
+            }, start + 0.72);
+        });
+        entrances.push(timeline);
+      }
+    }
+
     const dialog = $<HTMLDialogElement>('[data-contact-dialog]');
     const title = $<HTMLElement>('[data-contact-title]', dialog ?? document);
     const message = $<HTMLTextAreaElement>('[data-contact-message]', dialog ?? document);
@@ -182,6 +233,12 @@ export const contactPromptsModule: AnimationModule = {
   },
 
   destroy() {
+    while (entrances.length) {
+      const timeline = entrances.pop();
+      timeline?.scrollTrigger?.kill();
+      timeline?.kill();
+    }
+    gsap.set($$('[data-contact-entrance]'), { clearProps: 'transform,opacity,visibility' });
     while (cleanups.length) cleanups.pop()?.();
   },
 };

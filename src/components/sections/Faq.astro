@@ -49,14 +49,20 @@ const trailTiles = work.items.map(({ title, kind, accent }, index) => ({ title, 
 
   <div class="faq-groups">
     {
-      faq.groups.map((group) => (
-        <section class="faq-group" aria-labelledby={`faq-${group.title.replaceAll(' ', '-').toLowerCase()}`}>
-          <h3 id={`faq-${group.title.replaceAll(' ', '-').toLowerCase()}`}>{group.title}</h3>
+      faq.groups.map((group, groupIndex) => (
+        <section
+          class="faq-group"
+          aria-labelledby={`faq-${group.title.replaceAll(' ', '-').toLowerCase()}`}
+          data-contact-group
+          data-contact-side={groupIndex === 0 ? 'left' : 'right'}
+        >
+          <h3 id={`faq-${group.title.replaceAll(' ', '-').toLowerCase()}`} data-contact-entrance>{group.title}</h3>
           <div class="faq-prompts">
             {group.items.map((item) => (
               <button
                 class="faq-prompt"
                 type="button"
+                data-contact-entrance
                 data-contact-prompt
                 data-contact-title={item.question}
                 data-contact-message={item.message}
