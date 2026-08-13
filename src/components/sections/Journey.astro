@@ -1,0 +1,120 @@
+---
+/**
+ * Garis perjalanan digambar TANGAN, bukan dihitung dari posisi kartu.
+ *
+ * Versi sebelumnya membangun bezier dari rect tiap kartu — hasilnya garis yang
+ * selalu "benar" tapi tak pernah punya karakter: lengkungnya seragam dan
+ * ayunannya sekecil jarak antar kartu. Referensinya justru sebaliknya: satu
+ * path tetap yang menyapu nyaris ke dua tepi, lalu KARTU-nya yang dipasang
+ * menempel ke simpul path itu (lihat modules/timeline-path.ts).
+ *
+ * Simpul dan path lahir dari daftar `nodes` yang sama, jadi keduanya tidak
+ * mungkin lepas sinkron.
+ */
+import { journey } from '../../data/site';
+
+const VB_W = 1000;
+
+/**
+ * Jarak antar simpul dalam koordinat viewBox. Angka ini yang menentukan tinggi
+ * seluruh section (lihat `--timeline-h` di sections.css): tiap ruas harus lebih
+ * tinggi daripada kartunya, kalau tidak kartu ke-N menabrak kartu berikutnya.
+ */
+const NODE_GAP = 290;
+const FIRST_Y = 380;
+
+/**
+ * x/y dalam koordinat viewBox; `side` menentukan kartu duduk di kiri atau kanan
+ * simpul. Kartu digantung DI ATAS simpulnya (sudut bawahnya yang menempel),
+ * jadi simpul pertama harus turun setidaknya setinggi satu kartu — kalau tidak
+ * kartu pertama terdorong ke tepi atas dan menabrak kartu kedua.
+ *
+ * Simpul dibangkitkan dari jumlah entri, bukan ditulis satu per satu: daftarnya
+ * tumbuh dari tujuh jadi sembilan bab, dan dua daftar yang harus dijaga sama
+ * panjang adalah dua tempat untuk lupa. Simpul TERAKHIR ditarik ke tengah
+ * supaya garisnya berakhir di poros halaman, bukan menggantung di satu tepi.
+ */
+const nodes = journey.entries.map((_, i) => {
+  const last = i === journey.entries.length - 1;
+  const right = i % 2 === 0;
+  return {
+    x: last ? 620 : right ? 880 : 140,
+    y: FIRST_Y + i * NODE_GAP,
+    side: (right ? 'right' : 'left') as 'right' | 'left',
+  };
+});
+
+const VB_H = nodes[nodes.length - 1]!.y + 80;
+
+/**
+ * Tiap ruas adalah satu kubik dengan titik kendali yang menahan arah horizontal
+ * di kedua ujungnya — itulah yang membuat garisnya berayun lebar, bukan
+ * memotong lurus dari simpul ke simpul.
+ */
+const path = nodes
+  .map((node, i) => {
+    if (i === 0) return `M ${node.x} ${node.y}`;
+    const prev = nodes[i - 1]!;
+    const reach = (node.y - prev.y) * 0.53;
+    return `C ${prev.x} ${prev.y + reach}, ${node.x} ${node.y - reach}, ${node.x} ${node.y}`;
+  })
+  .join(' ');
+---
+
+<section class="section journey" id="journey">
+  <header class="section-head journey-head">
+    <span class="label-pill" data-label-pill>{journey.eyebrow}</span>
+    <h2 class="section-title h2-style" data-reveal>{journey.headline}</h2>
+  </header>
+
+  <div class="timeline" data-timeline style={`--timeline-nodes:${nodes.length}`}>
+    <!-- Hanya SATU salinan path, dan ia dipotong oleh pembungkus ber-`height`
+         yang di-scrub. Dulu ada salinan kedua di bawahnya sebagai jejak samar
+         sepanjang penuh — itu dihapus dengan sengaja: begitu jalur di depan
+         sudah kelihatan, garisnya cuma terbaca "terisi", bukan sedang
+         digambar. Di depan progress sekarang benar-benar kosong. -->
+    <div class="timeline-fill" data-timeline-fill aria-hidden="true">
+      <svg class="timeline-svg" viewBox={`0 0 ${VB_W} ${VB_H}`} preserveAspectRatio="none" fill="none">
+        <path class="timeline-lit" d={path} stroke-width="2.5" stroke-linecap="round"></path>
+      </svg>
+    </div>
+
+    {/* Simpul TIDAK ikut di dalam SVG. SVG-nya di-stretch (preserveAspectRatio
+        "none") supaya path mengisi kotak apa pun, dan stretch itu mengubah
+        lingkaran jadi elips. Sebagai elemen HTML yang diposisikan persen, titik
+        ini tetap bulat sempurna sambil duduk di koordinat yang sama. */}
+    {
+      nodes.map((node, i) => (
+        <span
+          class="timeline-dot"
+          data-timeline-node={i}
+          aria-hidden="true"
+          style={`left:${(node.x / VB_W) * 100}%;top:${(node.y / VB_H) * 100}%`}
+        />
+      ))
+    }
+
+    {
+      journey.entries.map((entry, i) => (
+        <article
+          class="timeline-card card"
+          data-timeline-card={i}
+          data-side={nodes[i]!.side}
+          data-tl-from="{'opacity':0,'y':'8%','scale':0.96}"
+          data-tl-to="{'opacity':1,'y':'0%','scale':1,'duration':0.8,'delay':0.12,'ease':'power3.out'}"
+          data-tl-start="top 88%"
+          data-tl-once
+        >
+          {/* Nomor bab menggantikan chip bendera dan baris angka yang dulu ada
+              di sini: handoff meminta seluruh mini-stat dibuang karena tidak
+              ada sumbernya, dan menyebut perusahaan dua kali (chip + kalimat)
+              hanya mengulang isi deskripsinya. */}
+          <span class="tl-card-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <time class="timeline-year" datetime={entry.year} data-number-count={entry.year}>{entry.year}</time>
+          <h3 class="timeline-title">{entry.title}</h3>
+          <p class="timeline-body">{entry.body}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

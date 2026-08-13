@@ -114,6 +114,16 @@
   transform: translateY(-0.13vw);
 }
 
+/* Kartu sosial khusus mobile — lihat komentarnya di Sidebar.astro. Di desktop
+   baris sosial yang dipakai adalah yang di `.nav-top`. */
+.nav-social-card {
+  display: none;
+}
+
+.social-label {
+  display: none;
+}
+
 .nav-tagline {
   grid-column: 1 / -1;
   color: var(--fg);
@@ -217,31 +227,6 @@
   transform-origin: top left;
 }
 
-/* SUSUNAN KEDUA, khusus kartu yang ditandai `data-ghost-alt="inline"`.
- *
- * Di RAIL kedua kartu bertumpuk (aturan di atas) — itu bentuk akhirnya, dan
- * itu yang menentukan tinggi baris statistik. Di HERO kartu 950+ tampil
- * BERDAMPINGAN: angka di kiri, label dua baris di kanannya.
- *
- * Kelas ini TIDAK PERNAH bertahan di DOM: ghost.ts menempelkannya satu frame
- * hanya untuk MENGUKUR, lalu melepasnya lagi dan meniru susunannya dengan
- * menggeser tiap anak memakai transform — karena `flex-direction` tidak bisa
- * ditween sementara transform bisa.
- *
- * JANGAN menimpa font-size di sini. Yang dirender di hero selalu tipografi
- * RAIL yang di-scale utuh oleh induknya; blok ini cuma dipakai mengukur POSISI
- * tiap anak, dan skalanya lahir dari LEBAR blok ini. Begitu ukurannya beda,
- * skala dan jarak antar anak dua-duanya meleset. */
-.nav-stat.is-inline {
-  flex-direction: row;
-  align-items: center;
-  gap: 0.3vw;
-  text-align: left;
-}
-
-.nav-stat.is-inline .nav-stat-label {
-  align-items: flex-start;
-}
 
 /* Angka statistik kuning tebal, labelnya lebih tipis dan gelap di rail. */
 .nav-stat-value {
@@ -461,6 +446,10 @@
   position: relative;
   z-index: 1;
   display: block;
+  /* Label tombol utama sekarang "Chat on WhatsApp" — dua kata yang boleh
+     membungkus akan menaikkan tinggi tombol dan merusak morph tipe `size`,
+     yang menganimasikan tinggi kotaknya. */
+  white-space: nowrap;
   transition: transform var(--dur-fast) var(--ease-out);
 }
 
@@ -743,6 +732,35 @@
     width: 30px;
     height: 30px;
     border-radius: 8px;
+  }
+
+  /* Di panel, ikon tidak lagi berdiri sendiri: ia berpasangan dengan namanya
+     supaya baris ini terbaca sebagai daftar kontak, bukan tiga kotak abu. */
+  .nav-social-card {
+    display: block;
+    padding: 10px;
+  }
+
+  .social--panel {
+    gap: 8px;
+  }
+
+  .social--panel .social-link {
+    width: auto;
+    height: 40px;
+    flex: 1;
+    grid-auto-flow: column;
+    gap: 8px;
+    padding: 0 12px;
+    place-items: center;
+  }
+
+  .social--panel .social-label {
+    display: block;
+    font-family: var(--font-label);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1;
   }
 
   .nav-tagline {

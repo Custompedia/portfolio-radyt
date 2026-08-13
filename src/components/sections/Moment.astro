@@ -1,0 +1,66 @@
+---
+/**
+ * Jeda visual antara The Work dan CTA penutup — scene 3D "Pedi".
+ *
+ * Bukan salah satu dari tujuh section handoff dan sengaja tidak menawarkan apa
+ * pun: tidak ada tombol di sini, supaya satu-satunya ajakan di kaki halaman
+ * tetap tombol WhatsApp di section terakhir.
+ *
+ * `id` diperlukan meski section ini tidak punya menu sendiri — modules/
+ * nav-active.ts memakainya untuk tetap menyalakan "Contact" saat scene ini
+ * lewat, bukan meninggalkan "Work" menyala di section yang bukan Work.
+ */
+import { moment } from '../../data/site';
+---
+
+<section
+  class="packaging-test theme-dark"
+  id="moment"
+  data-packaging-test
+  data-theme-section
+  data-theme-duration="5.6"
+  aria-labelledby="packaging-test-title"
+>
+  <div class="packaging-test-stage">
+    <header class="packaging-test-copy">
+      <span class="packaging-test-label" data-packaging-intro>{moment.eyebrow}</span>
+      <h2 id="packaging-test-title" class="packaging-test-title">
+        {moment.headline.map((line) => <span data-packaging-intro>{line}</span>)}
+      </h2>
+      <p class="packaging-test-intro" data-packaging-intro>{moment.intro}</p>
+    </header>
+
+    <div class="packaging-test-scene" aria-hidden="true">
+      <div class="pedi-orbits" data-pedi-orbits>
+        <span class="pedi-orbit pedi-orbit--inner"></span>
+        <span class="pedi-orbit pedi-orbit--middle"></span>
+        <span class="pedi-orbit pedi-orbit--outer"></span>
+      </div>
+      <div class="pedi-stage" data-pedi-stage data-state="loading">
+        <canvas class="pedi-canvas" data-pedi-canvas></canvas>
+        <span class="pedi-loader"></span>
+      </div>
+      <span class="pedi-shadow" data-pedi-shadow></span>
+    </div>
+
+    <ol class="packaging-test-moments" data-packaging-moments>
+      {
+        moment.beats.map((beat) => (
+          <li class="packaging-test-moment">
+            <span class="packaging-test-number">{beat.number}</span>
+            <span class="packaging-test-moment-copy">
+              <strong>{beat.label}</strong>
+              <span>{beat.body}</span>
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="packaging-test-outro" data-packaging-outro>
+      <p>{moment.closing.map((line) => <span>{line}</span>)}</p>
+    </div>
+
+    <div class="packaging-test-handoff" data-packaging-handoff aria-hidden="true"></div>
+  </div>
+</section>

@@ -9,7 +9,6 @@
  * site.ts. Selama belum ada aset asli, mockup CSS yang tampil — bukan gambar
  * rusak, dan markup-nya tidak perlu diubah saat asetnya masuk.
  */
-import Icon from '../Icon.astro';
 import { work } from '../../data/site';
 ---
 
@@ -19,7 +18,7 @@ import { work } from '../../data/site';
   <div class="work-sticky" data-work-sticky>
     <header class="work-head">
       <div class="work-head-left">
-        <span class="label-pill" data-label-pill>{work.label}</span>
+        <span class="label-pill" data-label-pill>{work.eyebrow}</span>
         <h2 class="section-title h2-style-white" data-reveal>
           {work.headline.map((line) => <span>{line}</span>)}
         </h2>
@@ -83,16 +82,10 @@ import { work } from '../../data/site';
                 <div class="work-card-body">
                   <span class="work-card-kind">{item.kind}</span>
                   <h3 class="work-card-title">{item.title}</h3>
+                  {/* Tidak ada tombol panah: kartu ini tidak punya halaman
+                      detail dan tidak pernah punya `href`, jadi panah di
+                      sudutnya cuma menjanjikan tujuan yang tidak ada. */}
                   <p class="work-card-blurb">{item.blurb}</p>
-                  <span class="work-card-arrow">
-                    {/* Dua ikon bertumpuk di jendela ber-overflow-hidden: saat
-                        hover keduanya digeser diagonal, jadi panah lama keluar
-                        dan panah baru masuk dari sudut berlawanan. */}
-                    <span class="work-card-arrow-slide">
-                      <Icon name="arrow" size={16} />
-                      <Icon name="arrow" size={16} />
-                    </span>
-                  </span>
                 </div>
               </div>
 

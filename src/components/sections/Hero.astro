@@ -1,17 +1,19 @@
 ---
 /**
  * Hero berisi dua hal:
- *  1. konten yang memang hanya milik hero (wordmark, potret, headline, traits),
+ *  1. konten yang memang hanya milik hero (wordmark, potret, kolom teks),
  *  2. penanda posisi untuk elemen sidebar — kotak `.ghost` tak terlihat untuk
- *     kartu, dan baris label transparan untuk navigasi. Lihat modules/ghost.ts.
+ *     kartu & tombol, dan baris label transparan untuk navigasi. Lihat
+ *     modules/ghost.ts.
  *
  * Dipecah jadi DUA lapisan sticky karena sidebar (z-index 60) harus berada
- * di ATAS potret tapi di BAWAH headline & kartu traits — persis seperti
- * referensi, di mana baris navigasi tersembunyi di belakang konten tengah.
+ * di ATAS potret tapi di BAWAH kolom teks — persis seperti referensi, di mana
+ * baris navigasi tersembunyi di belakang konten.
  *
- * Posisi ghost ditulis dalam vw/vh lewat custom property supaya komposisinya
- * ikut menyesuaikan ukuran layar tanpa media query berlapis. Angkanya diukur
- * langsung dari hero referensi pada 1492x882.
+ * SUSUNAN: potret duduk di paruh KANAN layar dan seluruh teks berdiri di kolom
+ * KIRI. Tidak ada satu pun teks yang menumpang di atas wajah — itu syarat dari
+ * handoff, dan itu pula yang membuat kolom kiri boleh jadi satu kolom mengalir
+ * (`.hero-copy`) alih-alih enam elemen yang masing-masing dijangkar sendiri.
  *
  * Wordmark raksasa MENGERUT ke pill brand di pojok kiri atas saat scroll
  * (lihat buildWordmarkMorph di modules/ghost.ts). Yang terbang bukan elemen
@@ -32,144 +34,65 @@ interface GhostBox {
 }
 
 /**
- * Hanya elemen yang memang terlihat di hero referensi yang diberi ghost:
- * kartu statistik, tombol utama, dan teks blurb. Navigasi punya jalurnya
- * sendiri (baris label transparan di bawah). Sisanya — logo, ikon sosial,
- * kartu email, marquee klien — sengaja tidak punya posisi hero: mereka
- * fade-in selama morph lewat `data-ghost-fade`.
+ * KARTU STATISTIK — tinggal SATU di hero.
+ *
+ * Handoff membatasi bukti di hero jadi satu angka saja (12+ tahun) dan
+ * melarang menambah hitungan klien, proyek, atau perusahaan di sana. Kartu
+ * kedua di rail ("3 Companies") karena itu tidak punya asal-usul di hero: ia
+ * ikut kelompok `data-ghost-fade` dan menyala saat rail merakit diri.
+ *
+ * Geometri kartu yang tersisa diambil dari kartu besar hero referensi
+ * (heynesh.com, viewport 1568x782, lewat getBoundingClientRect): w 9.62vw,
+ * h 10.44vw — kotak, bukan pita lebar. Posisinya digeser ke kanan sampai duduk
+ * di pundak kiri subjek, jadi ia melayang di atas potret dan bukan di atas
+ * kolom teks.
  */
-/**
- * PASANGAN KARTU STATISTIK — geometrinya DIUKUR LANGSUNG dari hero referensi
- * (heynesh.com, viewport 1568x782, lewat getBoundingClientRect):
- *
- *   kartu atas  ".nav-webflow-bg"     x 17.87vw  w 14.89vw  h  7.25vw
- *   jarak                                                     1.575vw
- *   kartu bawah ".nav-experience-bg"  x 20.95vw  w  9.62vw  h 10.44vw
- *
- * Dua hal yang khas dan sengaja ditiru: kartu ATAS lebar-pendek sementara
- * kartu BAWAH kotak, dan kartu bawah menjorok ~3vw ke kanan — bukan rata kiri
- * satu kolom seperti versi sebelumnya.
- *
- * Bentuk itu mengikuti ISI masing-masing, bukan sebaliknya (lihat `.nav-stat`
- * di components.css):
- *   kartu atas  isinya BERDAMPINGAN — "950+" lalu "Businesses / served" di
- *               kanannya, jadi kotaknya memang harus lebar-pendek;
- *   kartu bawah isinya BERTUMPUK — "12+" besar di atas labelnya, jadi kotaknya
- *               kotak. Ukuran 9.62 x 10.44vw persis angka referensi.
- * Lebar kartu atas dibuat sedikit lebih lega agar angka dan label tidak terasa
- * sesak, sementara anchor kiri dan posisi vertikalnya tetap sama.
- */
-const STAT_SM_X = 21.75;
-const STAT_SM_W = 12;
-const STAT_SM_H = 4.8;
-const STAT_GAP = 3.2;
-const STAT_BIG_X = 23.1;
-const STAT_BIG_W = 9.62;
-const STAT_BIG_H = 10.44;
+const STAT_W = 9.62;
+const STAT_H = 10.44;
+const STAT_X = 46.5;
 
 /**
- * Tepi atas kartu atas. Di referensi kartu ini SEJAJAR dengan baris navigasi
- * (tepi atas kartu 457px, tepi atas nav 455px) — baris nav lewat di sepertiga
- * atas kartu, dan itu yang bikin keduanya terbaca sebagai satu baris.
- * Karena itu jangkarnya --hero-nav-top, bukan angka vh lepas: nav dan kartu
- * tidak mungkin lagi lepas sinkron saat wordmark berganti ukuran.
- *
- * `min(...)` cuma jaring pengaman layar lebar-pendek: kalau pasangan kartu
- * (18.44vw) tidak lagi muat di bawah nav, kartunya naik supaya kakinya tetap
- * di dalam layar.
+ * Tepi atas kartu, dijangkar ke kaki wordmark (--hero-nav-top) dan bukan ke
+ * angka vh lepas: wordmark, baris nav, dan kartu ini harus turun-naik bersama
+ * saat lebar layar berubah. `min(...)` cuma jaring pengaman layar lebar-pendek
+ * supaya kaki kartu tetap di dalam layar.
  */
-const STAT_PAIR_H = STAT_SM_H + STAT_GAP + STAT_BIG_H;
-/**
- * Kartu tidak lagi sejajar baris nav seperti referensi: keduanya digeser turun
- * dan ke kanan supaya duduk di atas TUBUH subjek — kartu atas di pundak kiri,
- * kartu bawah di siku kiri. Karena itu jangkarnya nav-top + 4vw.
- *
- * Tepi kanan pasangan tetap berada di sekitar kolom headline; pelebaran kartu
- * atas berhenti di 33.75vw agar isi dapat membesar tanpa mengubah anchor kirinya.
- */
-const statsSmY = `min(calc(var(--hero-nav-top) + 4vw), calc(97vh - ${STAT_PAIR_H}vw))`;
-const statsBigY = `calc(${statsSmY} + ${STAT_SM_H + STAT_GAP}vw)`;
+const statY = `min(calc(var(--hero-nav-top) + 5.5vw), calc(94vh - ${STAT_H}vw))`;
 
 /**
- * Lebar blok angka di dalam tiap kartu. Ghost `stat-*` menentukan SKALA blok
- * (lebar ghost ÷ lebar aslinya di rail, lihat buildTween), jadi angka inilah
- * yang menentukan besar teks di hero — bukan font-size di components.css.
+ * Lebar blok angka di dalam kartu. Ghost `stat-1` menentukan SKALA blok (lebar
+ * ghost ÷ lebar aslinya di rail, lihat buildTween), jadi angka inilah yang
+ * menentukan besar teks di hero — bukan font-size di components.css.
  *
- * Yang diukur adalah susunan sebagaimana blok itu tampil DI HERO — bukan di
- * rail. Keduanya beda bentuk karena susunannya memang beda (lihat `.nav-stat`
- * dan `.nav-stat.is-inline` di components.css):
- *   stats[0] `is-inline` (berdampingan)  9.232vw lebar, tinggi 0.2338 × lebar
- *   stats[1] bawaan      (bertumpuk)     4.606vw lebar, tinggi 0.9353 × lebar
- * Lebar yang dipilih di bawah menyisakan napas seimbang di kartunya:
- *   9.4vw  → tinggi 2.20vw di kartu 12 x 4.8vw
- *   6.8vw  → tinggi 6.36vw di kartu 9.62 x 10.44vw
- *
- * Angka di kartu bawah jadi jauh lebih besar (~45px lawan ~27px) — itu yang
- * bikin pasangan ini terbaca sebagai satu kartu kecil dan satu kartu utama,
- * sama seperti "80+ Projects" dan "7+ Years" di referensi.
+ * DIUKUR pada susunan bertumpuk "12+ / Years" sebagaimana ia tampil di rail:
+ * lebar 3.29vw, tinggi 0.9091 × lebar. Kalau label di site.ts diganti, kedua
+ * angka ini WAJIB diukur ulang — keduanya milik string itu, bukan konstanta.
  */
-const STAT_SM_TEXT_W = 9.4;
-const STAT_SM_TEXT_H = STAT_SM_TEXT_W * 0.2338;
-const STAT_BIG_TEXT_W = 6.8;
-const STAT_BIG_TEXT_H = STAT_BIG_TEXT_W * 0.9353;
+const STAT_TEXT_W = 6.6;
+const STAT_TEXT_ASPECT = 0.9091;
+const STAT_TEXT_H = STAT_TEXT_W * STAT_TEXT_ASPECT;
 
+/**
+ * Hanya elemen yang memang terlihat di hero yang diberi ghost: kartu statistik
+ * dan tombol utama. Navigasi punya jalurnya sendiri (baris label transparan di
+ * `.hero-front`), dan tombol utama malah tidak dijangkar di sini sama sekali —
+ * kotaknya ikut mengalir di dalam `.hero-copy` (lihat `.ghost--flow`), jadi ia
+ * tidak bisa lepas sinkron dari teks di atasnya. Sisanya — logo, ikon sosial,
+ * kartu email, marquee klien — sengaja tidak punya posisi hero: mereka fade-in
+ * selama morph lewat `data-ghost-fade`.
+ *
+ * `x`/`y` menentukan sudut kiri-atas blok, `w` menentukan skalanya; `h` tidak
+ * dibaca engine dan diisi apa adanya sebagai dokumentasi.
+ */
 const ghosts: GhostBox[] = [
-  /*
-   * URUTAN KARTU IKUT URUTAN DI RAIL, dan itu bukan kebetulan.
-   *
-   * Di rail kedua kartu berdampingan: stats[0] di KIRI, stats[1] di KANAN.
-   * Kalau di hero urutannya dibalik (kartu atas = stats[1], seperti versi
-   * sebelumnya), pembacaannya ikut terbalik saat morph — angka yang tadinya di
-   * atas mendarat di kanan dan yang di bawah mendarat di kiri, jadi keduanya
-   * terlihat BERTUKAR TEMPAT di tengah scroll. Dengan atas = stats[0], urutan
-   * baca hero (atas→bawah) sama dengan urutan rail (kiri→kanan) dan lintasan
-   * keduanya tidak pernah bersilangan.
-   *
-   * Kebetulan ini juga pasangan yang sama dengan referensi: kartu kecil di atas
-   * memegang angka hitungan ("80+ Projects" di sana, "950+ Businesses served"
-   * di sini), kartu besar di bawah memegang angka tahun.
-   */
-  { id: 'stats-card-0', x: `${STAT_SM_X}vw`, y: statsSmY, w: `${STAT_SM_W}vw`, h: `${STAT_SM_H}vw` },
-  /*
-   * Blok angka. `w` menentukan SKALA blok (lebar ghost ÷ lebar aslinya di rail,
-   * lihat buildTween), `x`/`y` menentukan sudut kiri-atasnya. `h` tidak dibaca
-   * engine — diisi apa adanya sebagai dokumentasi.
-   *
-   * x/y menengahkan blok itu di dalam kartunya: separuh sisa lebar di kiri,
-   * separuh sisa tinggi di atas. Kartu ini TIDAK berisi logo seperti versi
-   * referensi, jadi bloknya berdiri sendiri di tengah alih-alih mepet kanan.
-   */
-  {
-    id: 'stat-0',
-    x: `${STAT_SM_X + (STAT_SM_W - STAT_SM_TEXT_W) / 2}vw`,
-    y: `calc(${statsSmY} + ${(STAT_SM_H - STAT_SM_TEXT_H) / 2}vw)`,
-    w: `${STAT_SM_TEXT_W}vw`,
-    h: `${STAT_SM_TEXT_H}vw`,
-  },
-
-  // Kartu bawah — kotak dan menjorok ke kanan, lihat komentar geometri di
-  // atas. Blok angkanya bertumpuk, ditengahkan dengan cara yang sama.
-  { id: 'stats-card-1', x: `${STAT_BIG_X}vw`, y: statsBigY, w: `${STAT_BIG_W}vw`, h: `${STAT_BIG_H}vw` },
+  { id: 'stats-card-1', x: `${STAT_X}vw`, y: statY, w: `${STAT_W}vw`, h: `${STAT_H}vw` },
   {
     id: 'stat-1',
-    x: `${STAT_BIG_X + (STAT_BIG_W - STAT_BIG_TEXT_W) / 2}vw`,
-    y: `calc(${statsBigY} + ${(STAT_BIG_H - STAT_BIG_TEXT_H) / 2}vw)`,
-    w: `${STAT_BIG_TEXT_W}vw`,
-    h: `${STAT_BIG_TEXT_H}vw`,
+    x: `${STAT_X + (STAT_W - STAT_TEXT_W) / 2}vw`,
+    y: `calc(${statY} + ${(STAT_H - STAT_TEXT_H) / 2}vw)`,
+    w: `${STAT_TEXT_W}vw`,
+    h: `${STAT_TEXT_H}vw`,
   },
-
-  {
-    id: 'cta-primary',
-    x: 'calc(50vw - var(--hero-btn-w) - 0.28vw)',
-    // Sepasang dengan `.hero-secondary`, yang memakai token yang sama.
-    y: 'var(--hero-cta-top)',
-    w: 'var(--hero-btn-w)',
-    h: 'var(--hero-btn-h)',
-  },
-
-  // `x` sengaja token, bukan angka: tepi kirinya harus lurus dengan kartu
-  // traits di atasnya, dan keduanya membaca --hero-traits-left.
-  { id: 'tagline', x: 'var(--hero-traits-left)', y: '87vh', w: '22.8vw', h: '7.4vh' },
 ];
 
 /**
@@ -177,13 +100,14 @@ const ghosts: GhostBox[] = [
  * belahan ini, label tengah tertutup kepala dan tidak terbaca sama sekali.
  *
  * Belahannya DUA-TIGA, sama seperti referensi ("HOME | ABOUT ME" di kiri,
- * "SERVICES | CLIENTS | FAQ" di kanan), dan itu wajib: kolom kartu statistik
- * mulai di 17.87vw, sementara grup kiri berisi tiga label berhenti di 22.7vw —
- * label ketiga ("WORK") persis tertimpa kartu atas. Dengan dua label grup kiri
- * berhenti di ~15vw dan kartunya berdiri bebas, seperti di referensi.
+ * "SERVICES | CLIENTS | FAQ" di kanan) — dan dengan lima menu pembagiannya
+ * jatuh persis di situ tanpa perlu angka tambahan.
  */
 const navLeft = nav.slice(0, 2);
 const navRight = nav.slice(2);
+
+/** Kartu tahun mobile memakai stat yang sama dengan kartu hero desktop. */
+const heroStat = stats.find((stat) => stat.inHero);
 ---
 
 <section class="hero" id="home" data-hero>
@@ -246,10 +170,10 @@ const navRight = nav.slice(2);
          lewat `[data-ghost]`; markup ini SENGAJA tidak punya atribut itu jadi
          tidak pernah ikut terukur atau dobel dengan kartu asli di sidebar. -->
     {
-      stats[1] && (
+      heroStat && (
         <div class="hero-mobile-stat hero-mobile-stat-float glass-card">
-          <span class="hero-mobile-stat-value">{stats[1].value}</span>
-          <span class="hero-mobile-stat-label">{stats[1].label}</span>
+          <span class="hero-mobile-stat-value">{heroStat.value}</span>
+          <span class="hero-mobile-stat-label">{heroStat.label}</span>
         </div>
       )
     }
@@ -316,9 +240,6 @@ const navRight = nav.slice(2);
                   data-tl-desktop
                 />
               )}
-              {/* Ikon ikut dirender walau tak terlihat: kotak label harus
-                  persis seukuran link sidebar, kalau tidak rasio lebarnya
-                  bukan 1 dan navigasi ikut mengecil saat terbang ke hero. */}
               <span class="hero-nav-link" data-ghost-target={`nav-${item.id}`}>
                 <span class="hero-nav-icon">
                   <Icon name={item.icon} size={14} />
@@ -331,80 +252,62 @@ const navRight = nav.slice(2);
       </div>
     </div>
 
-    <h1
-      class="hero-headline"
+    <!-- Satu kolom mengalir, bukan enam elemen yang dijangkar sendiri-sendiri.
+         Karena tidak ada lagi teks yang harus menghindari wajah, urutan bacanya
+         bisa diserahkan ke aliran normal — dan seluruh blok keluar layar
+         sebagai SATU gerakan, bukan lima yang kebetulan sinkron. -->
+    <div
+      class="hero-copy"
       data-tl-type="scroll"
       data-tl-trigger="[data-hero]"
-      data-tl-start="5% top"
-      data-tl-end="10% top"
+      data-tl-start="4% top"
+      data-tl-end="11% top"
       data-tl-from="{'opacity':1,'yPercent':0}"
-      data-tl-to="{'yPercent':-100,'autoAlpha':0}"
+      data-tl-to="{'yPercent':-60,'autoAlpha':0}"
       data-tl-desktop
     >
-      {hero.headline.map((line) => <span class="hero-headline-line">{line}</span>)}
-    </h1>
+      <p class="hero-eyebrow">{hero.eyebrow}</p>
 
-    <!-- Kartu hitungan compact di bawah headline — HANYA terlihat di mobile,
-         sama seperti kartu tahun di atas potret. Lihat catatan pada kartu
-         pertama soal kenapa tidak ada atribut `data-ghost*` di sini. -->
-    {
-      stats[0] && (
-        <div class="hero-mobile-stat hero-mobile-stat-inline card">
-          <span class="hero-mobile-stat-value">{stats[0].value}</span>
-          <span class="hero-mobile-stat-label">{stats[0].label}</span>
-        </div>
-      )
-    }
+      <!-- Nama versi terbaca. Wordmark raksasa di latar hanya memuat "RADHYTA",
+           jadi tanpa baris ini nama lengkapnya tidak pernah muncul utuh. -->
+      <p class="hero-name">{hero.name}</p>
 
-    <!-- Kartu traits tidak sekadar memudar: ia mengerut ke arah kiri-atas,
-         seolah ditarik masuk ke rail. -->
-    <div
-      class="hero-traits glass-card"
+      <h1 class="hero-headline">
+        {hero.headline.map((line) => <span class="hero-headline-line">{line}</span>)}
+      </h1>
+
+      <p class="hero-subheadline">{hero.subheadline}</p>
+
+      <!-- CTA primer = tombol solid (elemen aslinya di rail, yang terbang ke
+           kotak di bawah). CTA sekunder = teks berpanah, BUKAN tombol kedua. -->
+      <div class="hero-cta-row">
+        <span class="ghost ghost--flow" data-ghost-target="cta-primary"></span>
+        <a class="hero-secondary" href={hero.ctaSecondary.href} data-button-hover>
+          <span>{hero.ctaSecondary.label}</span>
+          <Icon name="arrow" size={16} />
+        </a>
+      </div>
+    </div>
+
+    <!-- Satu baris, dipisah titik tengah. Bukan chip, bukan grid. -->
+    <p
+      class="hero-brands"
       data-tl-type="scroll"
       data-tl-trigger="[data-hero]"
-      data-tl-start="5% top"
-      data-tl-end="20% top"
-      data-tl-from="{'opacity':1,'scale':1,'x':0,'y':0}"
-      data-tl-to="{'scale':0.3,'autoAlpha':0,'x':'-25vw','y':'-5vw'}"
+      data-tl-start="4% top"
+      data-tl-end="11% top"
+      data-tl-from="{'opacity':1,'y':0}"
+      data-tl-to="{'y':'2vw','autoAlpha':0}"
       data-tl-desktop
     >
       {
-        hero.traits.map((trait) => (
-          <span class="hero-trait">
-            <span class="hero-trait-mark" aria-hidden="true" />
-            {trait}
-          </span>
+        hero.brands.map((name, i) => (
+          <>
+            {i > 0 && <span class="hero-brands-sep" aria-hidden="true">·</span>}
+            <span>{name}</span>
+          </>
         ))
       }
-    </div>
-
-    <p
-      class="hero-eyebrow"
-      data-tl-type="scroll"
-      data-tl-trigger="[data-hero]"
-      data-tl-start="5% top"
-      data-tl-end="10% top"
-      data-tl-from="{'opacity':1,'yPercent':0}"
-      data-tl-to="{'yPercent':-100,'autoAlpha':0}"
-      data-tl-desktop
-    >
-      <span>{hero.eyebrow}</span>
-      <span>{hero.eyebrowSecond}</span>
     </p>
-
-    <a
-      class="btn hero-secondary"
-      href={hero.ctaSecondary.href}
-      data-tl-type="scroll"
-      data-tl-trigger="[data-hero]"
-      data-tl-start="5% top"
-      data-tl-end="12% top"
-      data-tl-from="{'opacity':1}"
-      data-tl-to="{'y':'2vw','autoAlpha':0}"
-      data-tl-desktop
-      data-button-hover
-    >
-      <span class="btn-label">{hero.ctaSecondary.label}</span>
-    </a>
   </div>
 </section>

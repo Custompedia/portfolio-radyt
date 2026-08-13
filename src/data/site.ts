@@ -2,20 +2,15 @@
  * SATU-SATUNYA sumber konten situs. Ganti isi file ini dan seluruh halaman ikut
  * berubah — tidak perlu menyentuh markup atau kode animasi.
  *
- * Konten disusun dari informasi publik atas DUA bisnis yang dipegang Radhyta
- * Mukhsin:
+ * Isinya mengikuti `radhytam-copy-handoff.md` (12 Agustus 2026, status final).
+ * Dua aturan bahasa dari handoff dipegang di seluruh file ini:
  *
- *   Custompedia Creative Group (PT) — agensi kreatif & marketing di Semarang.
- *     Layanan publiknya: KOL Management, Social Media Handling, Digital
- *     Advertising, Design & Content, Branding Activation, POI, OOH,
- *     Merchandise, Event Organizer. Tagline resmi: "Deliver Your Brand Vision".
+ *   1. Judul, eyebrow, dan label section ditulis BAHASA INGGRIS.
+ *   2. Body dan paragraf ditulis BAHASA INDONESIA resmi — lugas, kalimat pendek.
+ *      Jangan mencampur keduanya di dalam satu paragraf.
  *
- *   Parcelin Creative Indonesia (PT) / Parcelinpack — creative packaging,
- *     berdiri 2017, klaim publiknya 950+ bisnis terlayani, MOQ rendah, melayani
- *     UMKM sampai perusahaan multinasional. Lini produk: custom box, kemasan
- *     produk, hampers, PR package, merchandise.
- *
- * Yang belum terkonfirmasi ditandai TODO — mohon dicek sebelum rilis.
+ * Nama orang ditulis lengkap "Radhyta Mahenda Mukhsin" di mana pun ia muncul,
+ * dan perusahaan cetaknya dieja "Creasa" (bukan "CREASA").
  */
 
 export interface NavItem {
@@ -23,11 +18,23 @@ export interface NavItem {
   label: string;
   href: string;
   icon: string;
+  /**
+   * Section yang diwakili item ini. Satu menu boleh menaungi lebih dari satu
+   * section — "Work" menaungi Network & Reach dan The Work. Dibaca
+   * modules/nav-active.ts untuk menyalakan menu sesuai posisi scroll.
+   */
+  sections: string[];
 }
 
 export interface Stat {
   value: string;
   label: string;
+  /**
+   * Kartu ini punya posisi awal di hero dan diterbangkan ke rail oleh
+   * modules/ghost.ts. Tepat SATU stat boleh menyalakannya — handoff membatasi
+   * bukti di hero jadi satu angka. Sisanya muncul saat rail merakit diri.
+   */
+  inHero?: boolean;
 }
 
 export interface ClientLogo {
@@ -39,46 +46,20 @@ export interface ClientLogo {
   scale?: number;
 }
 
-/** Angka pendek di kartu & popup perjalanan. `value` ditulis apa adanya —
- *  boleh bersufiks ('950+', '50 pcs'), jadi jangan diperlakukan sebagai number. */
-export interface TimelineMetric {
-  value: string;
-  label: string;
-}
-
-export interface TimelineEntry {
+/** Satu bab perjalanan. Sengaja hanya tiga field: handoff meminta seluruh
+ *  mini-stat lama dibuang karena tidak ada sumbernya. */
+export interface JourneyEntry {
   year: string;
   title: string;
   body: string;
-  /** Bendera yang mengerjakan bab ini — menentukan warna chip di kartu. */
-  flag: TimelineFlag;
-  age: string;
-  /**
-   * Tiga angka: dua pertama tampil di kartu, ketiganya tampil di popup.
-   * Urutkan dari yang paling kuat.
-   */
-  metrics: [TimelineMetric, TimelineMetric, TimelineMetric];
-  /** Apa yang benar-benar dikerjakan di bab ini — kalimat pendek, bukan paragraf. */
-  moves: string[];
-  /** Satu kalimat akibat: apa yang berubah setelah bab ini. */
-  outcome: string;
-  tags: string[];
-  /**
-   * Versi panjang yang muncul di popup "Baca selengkapnya". Kalau kosong,
-   * popup jatuh ke `body` — isinya jadi sama persis dengan kartunya.
-   */
-  story?: string;
 }
 
-export type TimelineFlag = 'custompedia' | 'parcelin' | 'both';
-
-/** Nama panjang tiap bendera. Dipisah dari entri supaya penulisannya tidak
- *  pernah berbeda antar tahun. */
-export const timelineFlags: Record<TimelineFlag, string> = {
-  custompedia: 'Custompedia',
-  parcelin: 'Parcelin',
-  both: 'Custompedia × Parcelin',
-};
+/** Kartu Section 04. Formatnya seragam: nama · label · deskripsi. */
+export interface Company {
+  name: string;
+  label: string;
+  description: string;
+}
 
 export interface WorkItem {
   title: string;
@@ -100,260 +81,241 @@ export interface WorkItem {
   videoWebm?: string;
 }
 
-export interface ContactPrompt {
-  question: string;
-  message: string;
+export interface ContactChannel {
+  label: string;
+  href: string;
+  icon: string;
 }
 
 export const brand = {
   name: 'RADHYTA',
   symbol: '®',
-  person: 'Radhyta Mukhsin',
+  person: 'Radhyta Mahenda Mukhsin',
   /** Ikut jadi <title> halaman, jadi ditahan tetap pendek. */
-  role: 'Owner Custompedia · Co-Founder Parcelin',
-  company: 'Custompedia Creative Group & Parcelin Creative Indonesia',
-  city: 'Semarang, Indonesia',
-  tagline: 'Build brands through Custompedia, then package them through Parcelin.',
+  role: 'Serial Entrepreneur',
   email: 'radhytam@gmail.com',
-  phone: '+62 822-2617-1071',
-  bookingUrl: 'https://wa.me/6282226171071',
-  social: [
-    { label: 'Instagram', href: 'https://www.instagram.com/radhytam/', icon: 'instagram' },
-    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/radhyta-mukhsin-4602138a/', icon: 'linkedin' },
-  ],
+  whatsappUrl: 'https://wa.me/6282226171071',
+  instagramUrl: 'https://www.instagram.com/radhytam/',
+  tiktokUrl: 'https://www.tiktok.com/@radhytam',
+  linkedinUrl: 'https://www.linkedin.com/in/radhyta-mukhsin-4602138a/',
 } as const;
 
+/**
+ * Ikon sosial di sidebar. WhatsApp sengaja TIDAK ikut di sini: ia sudah jadi
+ * tombol utama di kaki rail, dan menaruhnya dua kali membuat dua tombol
+ * WhatsApp berdampingan. Email juga punya kartunya sendiri di bawah marquee.
+ */
+export const social: ContactChannel[] = [
+  { label: 'Instagram', href: brand.instagramUrl, icon: 'instagram' },
+  { label: 'TikTok', href: brand.tiktokUrl, icon: 'tiktok' },
+  { label: 'LinkedIn', href: brand.linkedinUrl, icon: 'linkedin' },
+];
+
+/**
+ * Lima menu. `sections` yang menentukan kapan menu menyala — bukan `href` —
+ * karena About dan Work masing-masing menaungi dua section.
+ */
 export const nav: NavItem[] = [
-  { id: 'home', label: 'Home', href: '#home', icon: 'home' },
-  { id: 'about', label: 'Journey', href: '#about', icon: 'user' },
-  { id: 'work', label: 'Work', href: '#work', icon: 'briefcase' },
-  { id: 'faq', label: 'Contact', href: '#faq', icon: 'people' },
+  { id: 'home', label: 'Home', href: '#home', icon: 'home', sections: ['home'] },
+  { id: 'about', label: 'About', href: '#about', icon: 'user', sections: ['about', 'companies'] },
+  { id: 'journey', label: 'Journey', href: '#journey', icon: 'layers', sections: ['journey'] },
+  { id: 'work', label: 'Work', href: '#work', icon: 'briefcase', sections: ['network', 'work'] },
+  { id: 'contact', label: 'Contact', href: '#contact', icon: 'people', sections: ['moment', 'contact'] },
 ];
 
 export const hero = {
-  eyebrow: 'Creative agency &',
-  eyebrowSecond: 'creative packaging.',
-  headline: ['Merek dibangun,', 'kemasannya', 'ikut bicara.'],
-  traits: ['Branding', 'Social & KOL', 'Digital Ads', 'Custom Packaging', 'Activation'],
-  ctaPrimary: { label: "Let's Talk", href: brand.bookingUrl },
-  ctaSecondary: { label: 'See Work', href: '#work' },
+  eyebrow: 'Serial Entrepreneur',
+  /** Nama versi terbaca. Wordmark raksasa di latar hanya memuat "RADHYTA",
+   *  jadi tanpa baris ini nama lengkapnya tidak pernah muncul utuh. */
+  name: 'RADHYTA MAHENDA MUKHSIN',
+  headline: ['Building companies', 'from zero', 'since 2014.'],
+  subheadline: 'Creative agency, packaging and printing. From Semarang.',
+  /** Satu baris dipisah titik tengah — bukan chip, bukan grid. */
+  brands: ['Custompedia', 'Parcelin', 'Creasa', 'Voca', 'But Gawe'],
+  ctaPrimary: { label: 'Chat on WhatsApp', href: brand.whatsappUrl },
+  ctaSecondary: { label: 'See the journey', href: '#journey' },
 };
 
 /**
- * Angka besar di sidebar. `label` dirender satu baris utuh di bawah angkanya,
- * jadi tahan tetap pendek — dua kata pas, tiga kata mulai memaksa kartunya
- * melebar. `stats[0]` (950+) klaim publik Parcelin (bisnis terlayani);
- * `stats[1]` (12+) angka lama jalan Custompedia+Parcelin gabungan (2014–2026,
- * lihat `timeline`) — dua kartu ini yang mengisi pola dua-kartu di hero
- * (satu kartu kecil, satu kartu besar), meniru referensi heynesh.com.
+ * Angka besar di rail. `label` dirender satu baris utuh di bawah angkanya, jadi
+ * tahan tetap SATU kata — dua kata mulai memaksa kartunya melebar.
+ *
+ * Hanya `stats[1]` yang punya posisi di hero: handoff membatasi bukti di hero
+ * jadi satu angka saja (12+ tahun) dan melarang menambah hitungan klien,
+ * proyek, atau perusahaan di sana. `stats[0]` muncul pertama kali di rail.
  */
 export const stats: Stat[] = [
-  { value: '950+', label: 'Businesses served' },
-  { value: '12+', label: 'Years experience' },
+  { value: '3', label: 'Companies' },
+  { value: '12+', label: 'Years', inHero: true },
 ];
 
-/** Logo klien yang berjalan terus-menerus di marquee sidebar. */
+/**
+ * Logo klien — dipakai bersama oleh marquee sidebar dan baris "Trusted by" di
+ * Section 05. Isinya hanya hubungan langsung yang bisa dipertanggungjawabkan;
+ * handoff melarang logo lama yang hubungannya tidak jelas (Airbnb, ByteDance,
+ * Pertamina, Astra, HM Sampoerna, Shopee, Cosmax, Kahf, Pegipegi, BTN).
+ *
+ * TODO aset: Bank Jateng, PLN, Time International, Mondelez, Paragon Corp, dan
+ * Unilever ada di shortlist handoff tapi filenya belum masuk ke public/images.
+ */
 export const clients: ClientLogo[] = [
-  { name: 'Pegipegi', src: '/images/pegipegi-logo_brandlogos.net_ys0wq.webp', shape: 'landscape', desktopWidth: 5.1, mobileWidth: 82 },
+  { name: 'Gojek', src: '/images/logo-gojek.webp', shape: 'landscape', desktopWidth: 3.75, mobileWidth: 60, scale: 0.9 },
   { name: 'GoTo', src: '/images/GoTo_logo.webp', shape: 'landscape', desktopWidth: 3.25, mobileWidth: 52, scale: 0.86 },
   { name: 'Tokopedia', src: '/images/Logo-Tokopedia.webp', shape: 'landscape', desktopWidth: 4.6, mobileWidth: 74 },
+  { name: 'Pemprov Jawa Tengah', src: '/images/Coat_of_arms_of_Central_Java.svg.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 28, scale: 0.65 },
   { name: 'Roda Roda', src: '/images/Roda%20Roda%20Background%20Removed.webp', shape: 'landscape', desktopWidth: 4.35, mobileWidth: 70 },
-  { name: 'Provinsi Jawa Tengah', src: '/images/Coat_of_arms_of_Central_Java.svg.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 28, scale: 0.65 },
-  { name: 'Airbnb', src: '/images/airbnb-logo-png_seeklogo-284907.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 28 },
-  { name: 'BNI', src: '/images/BNI_logo.svg.webp', shape: 'landscape', desktopWidth: 4.35, mobileWidth: 70, scale: 0.9 },
-  { name: 'ByteDance', src: '/images/ByteDance_logo.webp', shape: 'landscape', desktopWidth: 5.5, mobileWidth: 88 },
-  { name: 'Pertamina', src: '/images/Pertamina_Logo.svg.webp', shape: 'landscape', desktopWidth: 4.5, mobileWidth: 72 },
-  { name: 'COSMAX', src: '/images/LOGO-CLIENT-HOME-PAGE-COSMAX-13.webp', shape: 'landscape', desktopWidth: 4.75, mobileWidth: 76 },
-  { name: 'HSB', src: '/images/cropped-cropped-Logo-Horizontal-Light-Blue.webp', shape: 'landscape', desktopWidth: 3.5, mobileWidth: 56, scale: 0.82 },
-  { name: 'Parcelin', src: '/images/LOGO%20PT%20PARCELIN%201.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 28 },
-  { name: 'Astra International', src: '/images/ASTRA_international.svg.webp', shape: 'landscape', desktopWidth: 6, mobileWidth: 96 },
-  { name: 'BTN', src: '/images/btn1-PNG.webp', shape: 'landscape', desktopWidth: 2.6, mobileWidth: 42, scale: 0.74 },
-  { name: 'Gojek', src: '/images/logo-gojek.webp', shape: 'landscape', desktopWidth: 3.75, mobileWidth: 60, scale: 0.9 },
-  { name: 'GoPay', src: '/images/gopay-logo_brandlogos.net_gph3u.webp', shape: 'landscape', desktopWidth: 4.75, mobileWidth: 76 },
-  { name: 'Kahf', src: '/images/kahf-logo-png_seeklogo-466184.webp', shape: 'landscape', desktopWidth: 3.1, mobileWidth: 50, scale: 0.86 },
-  { name: 'HM Sampoerna', src: '/images/logo-hm-sampoerna-115507099816te6s4zjge.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 28 },
-  { name: 'Kota Semarang', src: '/images/Lambang_Kota_Semarang%20%281%29.webp', shape: 'square', desktopWidth: 1.6, mobileWidth: 26, scale: 0.65 },
-  { name: 'Shopee', src: '/images/Shopee.svg.webp', shape: 'landscape', desktopWidth: 3.75, mobileWidth: 60 },
-  { name: 'Universitas Katolik Soegijapranata', src: '/images/Unika_Soegijapranata_Talenta_Propatria_et_Humaniora.webp', shape: 'landscape', desktopWidth: 2.9, mobileWidth: 46, scale: 0.86 },
-  { name: 'Creasa', src: '/images/CREASA%20LOGO%20NO%20BACKGROUND-01.webp', shape: 'landscape', desktopWidth: 3, mobileWidth: 48, scale: 0.84 },
-  { name: 'Iris', src: '/images/Logo%20Iris.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 28 },
-  { name: 'Gojek', src: '/images/Logo%20GoJek%203.webp', shape: 'landscape', desktopWidth: 4.5, mobileWidth: 72 },
 ];
 
+/**
+ * Section 02. Sisi personal dan cerita perintis dilebur ke sini — tidak ada
+ * section terpisah untuk keduanya.
+ */
 export const about = {
-  label: 'Dua bisnis, satu meja',
-  headline: ['Tentang Radhyta', '& Dua Bisnisnya'],
-  intro:
-    'Custompedia membangun mereknya, Parcelin mengemasnya. Keduanya berangkat dari Semarang dan berjalan dari satu meja yang sama.',
+  eyebrow: 'Three Companies, One Desk',
+  headline: 'About Radhyta',
+  paragraphs: [
+    'Radhyta membangun tiga perusahaan dari Semarang: Custompedia untuk branding dan pemasaran, Parcelin untuk kemasan, dan Creasa untuk percetakan. Dimulai dari satu meja pada 2014, kini melayani klien di seluruh Indonesia.',
+    'Semuanya dimulai dari nol. Dari berjualan baju online pada 2014, lalu merchandise custom, sampai menjadi tiga perusahaan. Tidak ada yang diwarisi, semuanya dirintis dari awal.',
+    'Titik terberat datang pada 2020. Pandemi menghentikan lini merchandise yang selama ini menopang. Alih-alih berhenti, Custompedia berubah total menjadi creative agency, dan dari penjualan hampers lahir Parcelin. Perusahaan yang hari ini punya enam unit bisnis berawal dari masa paling sulit.',
+    'Di luar pekerjaannya, Radhyta seorang suami dan ayah. Menyempatkan waktu untuk gym, menikmati perjalanan ke tempat baru, dan seorang pencinta hewan. Tetap berpijak di Semarang, kota tempat semuanya dimulai.',
+  ],
+  /** Harus TIGA — versi sebelumnya hanya memuat Custompedia dan Parcelin. */
+  logos: [
+    { name: 'Custompedia', src: '/images/favicon.svg' },
+    { name: 'Parcelin', src: '/images/Parcelinpack-transparent.webp' },
+    { name: 'Creasa', src: '/images/CREASA%20LOGO%20NO%20BACKGROUND-01.webp' },
+  ],
 };
 
 /**
- * TODO: hanya tahun 2017 (berdirinya Parcelin) dan angka 950+ bisnis yang
- * terkonfirmasi dari informasi publik. Tahun pada entri lain adalah perkiraan
- * urutan cerita, dan SELURUH `metrics` selain 950+ adalah angka contoh
- * (mock) untuk mengisi tampilan — mohon dikoreksi sebelum rilis.
+ * Section 03. Menggantikan timeline lama SELURUHNYA — tahun di versi lama
+ * memang salah (2014 Custompedia, 2017 Parcelin).
+ *
+ * Enam unit bisnis Parcelin sengaja tidak dirinci di sini; rincian bidang ada
+ * di `companies`.
  */
-export const timeline: TimelineEntry[] = [
-  {
-    year: '2014',
-    title: 'Custompedia mulai di Semarang',
-    body: 'Satu meja, satu laptop, dan klien pertama yang percaya sebelum ada portofolio yang bisa ditunjukkan.',
-    flag: 'custompedia',
-    age: '12 tahun lalu',
-    metrics: [
-      { value: '1', label: 'Klien pertama' },
-      { value: '2', label: 'Orang di tim' },
-      { value: '0', label: 'Kantor' },
-    ],
-    moves: [
-      'Menerima pekerjaan desain satu per satu, tanpa perantara.',
-      'Menjawab sendiri semua pertanyaan klien, dari brief sampai revisi.',
-      'Menyimpan tiap hasil kerja jadi portofolio pertama.',
-    ],
-    outcome: 'Kebiasaan "yang dijanjikan harus selesai" jadi standar internal sejak hari pertama.',
-    tags: ['Desain grafis', 'Freelance', 'Semarang'],
-    story:
-      'Custompedia berangkat dari pekerjaan desain yang datang satu-satu, tanpa kantor dan tanpa tim. Klien pertama tidak membeli portofolio — mereka membeli kesediaan untuk mengangkat telepon dan menyelesaikan urusan. Cara kerja itu yang kemudian jadi standar internal: apa pun skala proyeknya, yang dijanjikan harus selesai.',
-  },
-  {
-    year: '2016',
-    title: 'Dari desain ke strategi merek',
-    body: 'Klien tidak butuh konten bagus — mereka butuh konten yang menjual. Sejak itu setiap pekerjaan dimulai dari brief bisnis.',
-    flag: 'custompedia',
-    age: '10 tahun lalu',
-    metrics: [
-      { value: '100%', label: 'Proyek dibuka dari brief bisnis' },
-      { value: '12', label: 'Merek ditangani' },
-      { value: '3', label: 'Layanan inti' },
-    ],
-    moves: [
-      'Menyusun brief bisnis wajib: siapa pembelinya, berapa marginnya, apa hambatannya.',
-      'Menghentikan pekerjaan desain yang tidak punya target penjualan.',
-      'Menambah riset pasar kecil sebelum eksekusi visual.',
-    ],
-    outcome: 'Custompedia berhenti menjual jasa desain dan mulai menjual arah.',
-    tags: ['Strategi merek', 'Brief bisnis', 'Riset'],
-    story:
-      'Titik baliknya sederhana: beberapa desain yang paling dibanggakan ternyata tidak menggerakkan penjualan sama sekali. Sejak itu setiap proyek dibuka dengan pertanyaan bisnis — siapa yang beli, berapa marginnya, apa yang menghambat orang membeli — sebelum satu pun visual dibuat. Custompedia berhenti menjual jasa desain dan mulai menjual arah.',
-  },
-  {
-    year: '2017',
-    title: 'Parcelin Creative Indonesia berdiri',
-    body: 'Banyak klien punya merek rapi tapi kemasannya asal. Parcelin lahir untuk menutup jarak antara identitas merek dan barang yang dipegang pembeli.',
-    flag: 'parcelin',
-    age: '9 tahun lalu',
-    metrics: [
-      { value: '2017', label: 'Tahun berdiri' },
-      { value: '5', label: 'Jenis kemasan' },
-      { value: '1', label: 'Lini produksi sendiri' },
-    ],
-    moves: [
-      'Memetakan pabrik, material, dan toleransi cetak yang bisa dipegang.',
-      'Membuat lini kedua sebagai badan usaha sendiri, bukan cabang agensi.',
-      'Menyusun alur baku: brief → mockup → sampel → produksi.',
-    ],
-    outcome: 'Merek yang rapi di layar berhenti rontok saat produknya sampai di tangan pembeli.',
-    tags: ['Custom box', 'Produksi', 'Kemasan'],
-    story:
-      'Parcelin berdiri pada 2017 sebagai lini kedua, bukan cabang agensi. Alasannya datang dari lapangan: merek yang sudah dibangun rapi di layar sering rontok begitu produknya sampai di tangan pembeli dengan kemasan seadanya. Menangani kemasan berarti menangani pabrik, material, dan toleransi cetak — disiplin yang sama sekali berbeda dari kerja kreatif, dan justru itu yang membuatnya berkembang jadi bisnis sendiri.',
-  },
-  {
-    year: '2019',
-    title: 'Layanan agensi jadi utuh',
-    body: 'KOL, iklan berbayar, OOH, sampai event masuk satu atap. Satu klien bisa ditangani dari strategi sampai eksekusi tanpa dioper ke pihak lain.',
-    flag: 'custompedia',
-    age: '7 tahun lalu',
-    metrics: [
-      { value: '9', label: 'Layanan satu atap' },
-      { value: '40+', label: 'KOL aktif' },
-      { value: '1', label: 'Tim untuk semua kanal' },
-    ],
-    moves: [
-      'Menarik KOL management, iklan berbayar, OOH, dan event ke dalam satu tim.',
-      'Menyatukan pelaporan semua kanal dalam satu format.',
-      'Menghapus perpindahan tangan antar vendor di tengah kampanye.',
-    ],
-    outcome: 'Klien berhenti jadi penerjemah antar vendor — pesan mereknya tidak berubah bentuk.',
-    tags: ['KOL', 'Digital ads', 'OOH', 'Event'],
-    story:
-      'Menambah layanan bukan soal memperbanyak daftar harga, tapi soal memperpendek rantai. Ketika KOL, iklan, produksi konten, OOH, dan event ditangani tim yang sama, klien berhenti jadi penerjemah antar vendor — dan pesan mereknya tidak berubah bentuk di setiap perpindahan tangan.',
-  },
-  {
-    year: '2021',
-    title: 'MOQ rendah untuk UMKM',
-    body: 'Kemasan bagus selama ini terkunci di pesanan besar. Parcelin membuka pintu untuk pesanan kecil tanpa menurunkan mutu cetak.',
-    flag: 'parcelin',
-    age: '5 tahun lalu',
-    metrics: [
-      { value: '50 pcs', label: 'MOQ terendah' },
-      { value: '70%', label: 'Klien dari UMKM' },
-      { value: '4 hari', label: 'Sampel sampai di tangan' },
-    ],
-    moves: [
-      'Menggabung jadwal produksi beberapa pesanan kecil jadi satu batch.',
-      'Menurunkan MOQ tanpa memangkas mutu cetak.',
-      'Menyiapkan template ukuran siap pakai untuk pesanan pertama.',
-    ],
-    outcome: 'Usaha rumahan bisa memakai kotak setara merek besar, dan layak masuk rak yang sama.',
-    tags: ['MOQ rendah', 'UMKM', 'Batch produksi'],
-    story:
-      'Hambatan terbesar UMKM bukan selera, tapi minimum order. Menurunkan MOQ berarti menata ulang cara produksi dijadwalkan dan digabung, bukan sekadar memangkas angka di penawaran. Hasilnya: usaha rumahan bisa memakai kotak yang setara dengan merek besar, dan itu yang membuat produk mereka layak masuk rak yang sama.',
-  },
-  {
-    year: '2024',
-    title: '950+ bisnis lewat Parcelin',
-    body: 'Dari usaha rumahan sampai perusahaan multinasional — kemasan produk, hampers, PR package, dan merchandise.',
-    flag: 'parcelin',
-    age: '2 tahun lalu',
-    metrics: [
-      { value: '950+', label: 'Bisnis terlayani' },
-      { value: '34', label: 'Kota tujuan kirim' },
-      { value: '12', label: 'Jenis industri' },
-    ],
-    moves: [
-      'Melayani warung satu gerai dan perusahaan multinasional di lini yang sama.',
-      'Merapikan proses supaya tidak patah di pesanan kecil.',
-      'Menambah lini hampers, PR package, dan merchandise.',
-    ],
-    outcome: 'Rentangnya — bukan besarnya — yang memaksa prosesnya rapi.',
-    tags: ['Hampers', 'PR package', 'Merchandise'],
-    story:
-      'Angka 950+ menarik bukan karena besarnya, tapi karena rentangnya: warung kopi satu gerai dan perusahaan multinasional dilayani lini produksi yang sama. Rentang itu memaksa prosesnya rapi — brief, mockup, sampel, produksi — karena proses yang hanya jalan untuk klien besar akan langsung patah di pesanan kecil.',
-  },
-  {
-    year: '2026',
-    title: 'Masih di jalur yang sama',
-    body: 'Dua bendera, satu prinsip: merek dibangun dari masalah bisnisnya, dan diselesaikan sampai ke barang yang dipegang pembeli.',
-    flag: 'both',
-    age: 'hari ini',
-    metrics: [
-      { value: '2500+', label: 'Projek selesai' },
-      { value: '12', label: 'Tahun jalan' },
-      { value: '1', label: 'Prinsip kerja' },
-    ],
-    moves: [
-      'Menjalankan Custompedia dan Parcelin berdampingan dari satu meja.',
-      'Menguji di mana otomasi dan AI benar-benar memangkas pekerjaan berulang.',
-      'Menutup pekerjaan sampai ke barang yang dipegang pembeli.',
-    ],
-    outcome: 'Satu mengurus bagaimana merek dibaca, satu mengurus bagaimana merek dipegang.',
-    tags: ['Branding', 'Packaging', 'Otomasi'],
-    story:
-      'Hari ini Custompedia dan Parcelin berjalan berdampingan: satu mengurus bagaimana merek dibaca, satu mengurus bagaimana merek dipegang. Yang sedang dicari sekarang adalah di mana otomasi dan AI benar-benar memangkas pekerjaan berulang — dan di mana ia cuma menambah ramai tanpa menambah hasil.',
-  },
-];
+export const journey = {
+  eyebrow: 'Since 2014',
+  headline: 'From an online shop to three companies',
+  entries: [
+    {
+      year: '2014',
+      title: 'The first online shop',
+      body: 'Radhyta dan pasangannya memulai bisnis online: konveksi dan dropship baju, dijalankan sepenuhnya secara digital.',
+    },
+    {
+      year: '2016',
+      title: 'Custompedia begins',
+      body: 'Custompedia dimulai dengan menjual merchandise custom secara digital, dan sempat dikenal luas sebagai brand custom gift saat itu.',
+    },
+    {
+      year: '2018',
+      title: 'First agency client: Gojek',
+      body: 'Gojek meminta Custompedia menangani branding dan media sosial, setelah melihat cara Custompedia memasarkan produknya sendiri.',
+    },
+    {
+      year: '2020',
+      title: 'Pivot to a creative agency',
+      body: 'Pandemi menghentikan lini merchandise. Custompedia beralih penuh menjadi creative agency, dan Parcelin lahir dari penjualan hampers.',
+    },
+    {
+      year: '2021',
+      title: 'Parcelin expands',
+      body: 'Parcelin melebar dari hampers ke kemasan dan percetakan.',
+    },
+    {
+      year: '2023',
+      title: 'National GoFood vendor',
+      body: 'Custompedia menjadi vendor branding GoFood untuk seluruh Indonesia, sekaligus menangani berbagai brand activation Gojek di banyak kota.',
+    },
+    {
+      year: '2024',
+      title: 'Nine cities, one team',
+      body: 'Seluruh akun media sosial Gojek regional — Semarang, Solo, Bandung, Yogyakarta, Makassar, Palembang, Batam, Padang, dan Kalimantan — dikelola Custompedia.',
+    },
+    {
+      year: '2025',
+      title: 'A group and a new company',
+      body: 'Parcelin berkembang menjadi enam unit bisnis, dan Creasa berdiri sebagai perusahaan percetakan online.',
+    },
+    {
+      year: '2026',
+      title: 'Two new ventures',
+      body: 'Custompedia menambah dua unit: But Gawe untuk brand activation dan Voca untuk KOL management.',
+    },
+  ] satisfies JourneyEntry[],
+};
 
-export const work = {
-  label: 'Karya pilihan',
-  headline: ['Dibangun untuk', 'Bertumbuh'],
-  intro:
-    'Dua lini kerja, satu penanggung jawab: Custompedia menangani merek dan kanalnya, Parcelin menangani kemasan dan barangnya.',
-  // TODO: ganti judul kartu dengan nama klien asli setelah dapat izin publikasi.
+/**
+ * Section 04. Dua aturan keras dari handoff: jangan sebut nama unit
+ * (parcelinpack, Voca, But Gawe), dan jangan sebut kepemilikan atau peran
+ * (founder, co-founder, owner). Cukup level perusahaan.
+ */
+export const companies = {
+  eyebrow: 'The Companies',
+  headline: 'Three companies, one desk',
+  intro: 'Tiga perusahaan dengan bidang yang berbeda, dibangun sejak 2014.',
   items: [
     {
-      title: 'Branding & Identitas',
+      name: 'Custompedia Creative Group',
+      label: 'Creative agency',
+      description: 'Branding, media sosial, produksi visual, iklan digital, KOL, dan brand activation.',
+    },
+    {
+      name: 'Parcelin Creative Indonesia',
+      label: 'Creative packaging',
+      description: 'Kemasan, cetak, dan produksi untuk bisnis, dari UMKM sampai perusahaan besar.',
+    },
+    {
+      name: 'Creasa — Creative Supply Asia',
+      label: 'Online retail printing',
+      description: 'Layanan cetak ritel online.',
+    },
+  ] satisfies Company[],
+};
+
+/**
+ * Section 05. `outlook` adalah ASPIRASI, bukan pencapaian — karena itu ia
+ * menyebut "Asia Tenggara" dan bukan negara tertentu, dan tidak boleh
+ * ditumpangkan ke peta. Belum ada klien di sana.
+ *
+ * Tidak ada ajakan referral dan tidak ada daftar industri: sengaja dihilangkan
+ * agar section ini tetap relevan untuk komunitas mana pun.
+ */
+export const network = {
+  eyebrow: 'Network & Reach',
+  headline: 'Business runs on relationships',
+  intro: 'Selain membangun bisnis, Radhyta aktif di komunitas bisnis dan menjaga jaringan yang terus berkembang.',
+  activeLabel: 'Active in',
+  active: [
+    'BNI Lighthouse',
+    'HIPMI Jateng',
+    'Yuk Bisnis',
+    'Moslem Entrepreneurs Semarang',
+    'Karang Taruna Jateng',
+  ],
+  trustedLabel: 'Trusted by',
+  outlookLabel: 'Setting sights on Southeast Asia',
+  outlook: 'Berbasis di Semarang, melayani klien di seluruh Indonesia, dan menyiapkan langkah berikutnya ke Asia Tenggara.',
+};
+
+/**
+ * Section 06. Kartu TIDAK punya halaman detail, jadi tidak ada tombol panah dan
+ * tidak ada anchor — hanya foto, judul, dan deskripsi.
+ *
+ * TODO aset: kartu Creasa belum punya foto. Selama `image` kosong, Work.astro
+ * jatuh ke mockup CSS di atas `accent`, bukan gambar rusak.
+ */
+export const work = {
+  eyebrow: 'The Work',
+  headline: ['Built to', 'grow'],
+  intro:
+    'Custompedia menangani merek dan kanalnya. Parcelin menangani kemasan dan barangnya. Creasa mengurus percetakan.',
+  items: [
+    {
+      title: 'Branding & Identity',
       kind: 'Custompedia',
-      blurb: 'Positioning, identitas visual, dan panduan merek yang bisa dipakai tim internal tanpa kami.',
+      blurb: 'Positioning, identitas visual, dan panduan merek yang bisa dipakai tim internal secara mandiri.',
       tags: ['Branding', 'Design', 'Guideline'],
       accent: '#3f2a1d',
       image: '/images/work-branding-natural.webp',
@@ -361,7 +323,7 @@ export const work = {
     {
       title: 'Social Media Handling',
       kind: 'Custompedia',
-      blurb: 'Pengelolaan kanal harian: perencanaan, produksi, publikasi, sampai balas komentar.',
+      blurb: 'Perencanaan, produksi, publikasi, sampai membalas komentar. Pengelolaan kanal harian.',
       tags: ['Social Media', 'Content', 'Community'],
       accent: '#1f3340',
       image: '/images/work-social-media.webp',
@@ -369,7 +331,7 @@ export const work = {
     {
       title: 'KOL Management',
       kind: 'Custompedia',
-      blurb: 'Pemilihan, negosiasi, dan pengukuran kreator — dinilai dari penjualan, bukan jumlah tayangan.',
+      blurb: 'Pemilihan, negosiasi, dan pengukuran kreator. Hasilnya dinilai dari penjualan, bukan jumlah tayangan.',
       tags: ['KOL', 'Campaign', 'Report'],
       accent: '#4a2438',
       image: '/images/work-kol-natural.webp',
@@ -377,23 +339,23 @@ export const work = {
     {
       title: 'Digital Advertising',
       kind: 'Custompedia',
-      blurb: 'Iklan berbayar yang diikat ke satu angka bisnis, lengkap dengan audit belanja yang sudah jalan.',
+      blurb: 'Iklan berbayar yang diikat ke satu target bisnis, lengkap dengan audit belanja iklan yang sudah berjalan.',
       tags: ['Ads', 'Audit', 'Performance'],
       accent: '#101014',
       image: '/images/work-digital-ads-natural.webp',
     },
     {
-      title: 'Aktivasi, OOH & Event',
+      title: 'Activation, OOH & Event',
       kind: 'Custompedia',
-      blurb: 'Peluncuran, POI, papan luar ruang, dan event yang tersambung kembali ke kanal digital.',
+      blurb: 'Peluncuran, papan luar ruang, dan event yang tersambung kembali ke kanal digital.',
       tags: ['Activation', 'OOH', 'Event'],
       accent: '#3d2c56',
       image: '/images/work-activation-event-natural.webp',
     },
     {
-      title: 'Custom Box',
+      title: 'Custom Packaging',
       kind: 'Parcelin',
-      blurb: 'Kemasan produk yang dirancang dari ukuran barangnya, bukan dari cetakan yang kebetulan tersedia.',
+      blurb: 'Kemasan yang dirancang dari ukuran barangnya, bukan dari cetakan yang kebetulan tersedia.',
       tags: ['Packaging', 'Struktur', 'Cetak'],
       accent: '#14392c',
       image: '/images/work-custom-box.webp',
@@ -401,26 +363,25 @@ export const work = {
     {
       title: 'Hampers & PR Package',
       kind: 'Parcelin',
-      blurb: 'Paket kiriman untuk media dan mitra — dibuat supaya layak difoto begitu kotaknya dibuka.',
+      blurb: 'Paket kiriman untuk media dan mitra, dibuat agar layak difoto begitu kotaknya dibuka.',
       tags: ['Hampers', 'PR Kit', 'Seasonal'],
       accent: '#2a2118',
       image: '/images/work-pr-hampers.webp',
     },
     {
-      title: 'Kemasan UMKM, MOQ Rendah',
+      title: 'UMKM Packaging',
       kind: 'Parcelin',
-      blurb: 'Pesanan kecil dengan mutu cetak yang sama — supaya usaha rumahan bisa masuk rak yang sama.',
+      blurb: 'Pesanan kecil dengan mutu cetak yang sama, agar usaha rumahan bisa masuk rak yang sama.',
       tags: ['UMKM', 'MOQ Rendah', 'Konsultasi'],
       accent: '#241a2e',
       image: '/images/work-umkm-packaging-natural.webp',
     },
     {
-      title: 'Merchandise & Gift Set',
-      kind: 'Custompedia × Parcelin',
-      blurb: 'Barang jadi plus kemasannya dikerjakan sekaligus, jadi tidak ada dua vendor yang saling menunggu.',
-      tags: ['Merch', 'Packaging', 'Produksi'],
+      title: 'Online Retail Printing',
+      kind: 'Creasa',
+      blurb: 'Layanan cetak ritel online untuk kebutuhan cepat dan bervolume.',
+      tags: ['Cetak', 'Ritel', 'Online'],
       accent: '#1b2a4a',
-      image: '/images/work-merchandise.webp',
     },
     // `as`, bukan `satisfies`: satisfies mempertahankan tipe literal array ini,
     // jadi field media opsional (image/video/videoWebm) terbaca "tidak ada" di
@@ -428,66 +389,38 @@ export const work = {
   ] as WorkItem[],
 };
 
-export const cta = {
-  label: 'The moment it lands',
+/**
+ * Jeda visual antara The Work dan CTA penutup — scene 3D "Pedi". Bukan salah
+ * satu dari tujuh section handoff; ia tidak menawarkan apa pun dan sengaja
+ * TIDAK punya tombol sendiri, supaya satu-satunya ajakan di kaki halaman tetap
+ * tombol WhatsApp di section terakhir.
+ */
+export const moment = {
+  eyebrow: 'The Moment It Lands',
   headline: ['Bukan sekadar sampai.', 'Harus berkesan.'],
   intro:
-    'Produk yang baik pantas hadir dengan cara yang membuat orang berhenti, memegangnya lebih lama, lalu ingin membagikannya.',
-  moments: [
-    { number: '01', label: 'Terlihat', question: 'Membuat orang berhenti sebelum mengenal produknya.' },
-    { number: '02', label: 'Dipegang', question: 'Membuat kualitasnya terasa, bukan sekadar terlihat.' },
-    { number: '03', label: 'Diingat', question: 'Membuat momen kecil layak dibawa pulang.' },
+    'Barang yang baik pantas sampai dengan cara yang membuat orang berhenti, memegangnya lebih lama, lalu ingin membagikannya.',
+  beats: [
+    { number: '01', label: 'Terlihat', body: 'Membuat orang berhenti sebelum mengenal produknya.' },
+    { number: '02', label: 'Dipegang', body: 'Membuat kualitasnya terasa, bukan sekadar terlihat.' },
+    { number: '03', label: 'Diingat', body: 'Membuat momen kecil layak dibawa pulang.' },
   ],
-  closing: ['Buat produkmu', 'terasa lebih bernilai.'],
-  action: 'Mulai diskusi proyek',
+  closing: ['Dari merek', 'sampai ke tangan pembeli.'],
 };
 
-export const faq = {
-  label: 'Mulai dari sini',
-  headline: ['Ada yang ingin', 'kamu sampaikan?'],
-  intro: 'Pilih yang paling dekat dengan situasimu. Kami siapkan pesan awalnya, kamu tetap bisa mengubahnya sebelum dikirim.',
-  groups: [
-    {
-      title: 'Yang lagi kamu pikirkan',
-      items: [
-        {
-          question: 'Aku punya ide, tapi belum tahu mulai dari mana.',
-          message: 'Halo Mas Radhyta, saya punya ide untuk brand/produk, tapi belum tahu langkah awal yang paling tepat. Boleh diskusi singkat?',
-        },
-        {
-          question: 'Produknya sudah ada, tapi belum terasa seperti brand.',
-          message: 'Halo Mas Radhyta, produk saya sudah berjalan, tapi saya merasa identitas brand-nya belum kuat. Boleh diskusi tentang arah yang bisa dibenahi?',
-        },
-        {
-          question: 'Aku ingin produk ini lebih layak dijual atau dijadikan hadiah.',
-          message: 'Halo Mas Radhyta, saya ingin produk saya terasa lebih bernilai saat diterima pelanggan. Boleh diskusi soal pengalaman brand dan packaging-nya?',
-        },
-        {
-          question: 'Boleh ngobrol dulu tanpa langsung bikin brief?',
-          message: 'Halo Mas Radhyta, saya masih ingin memahami kebutuhan proyek saya dulu. Apakah boleh konsultasi singkat sebelum masuk ke brief?',
-        },
-      ] satisfies ContactPrompt[],
-    },
-    {
-      title: 'Tentang kerja bareng Custompedia',
-      items: [
-        {
-          question: 'Custompedia bisa bantu dari bagian mana?',
-          message: 'Halo Mas Radhyta, saya ingin tahu layanan Custompedia yang paling relevan untuk kebutuhan brand saya. Boleh diskusi?',
-        },
-        {
-          question: 'Bisa mulai dari branding saja?',
-          message: 'Halo Mas Radhyta, saya ingin mulai dari branding terlebih dahulu. Boleh diskusi ruang lingkup dan proses kerjanya?',
-        },
-        {
-          question: 'Sudah punya tim internal, apakah masih perlu Custompedia?',
-          message: 'Halo Mas Radhyta, tim internal kami sudah ada. Saya ingin tahu bagaimana Custompedia bisa melengkapi pekerjaan tim kami.',
-        },
-        {
-          question: 'Bisa kerja bareng dari luar Semarang?',
-          message: 'Halo Mas Radhyta, saya berada di luar Semarang dan ingin berdiskusi tentang kerja sama dengan Custompedia. Apakah prosesnya bisa dilakukan secara daring?',
-        },
-      ] satisfies ContactPrompt[],
-    },
-  ],
+/**
+ * Section 07 — penutup halaman. Menggantikan QnA picker lama sepenuhnya: satu
+ * blok bersih berisi eyebrow, headline, body, SATU tombol, dan baris kontak
+ * alternatif. Tidak ada picker di section mana pun lagi.
+ */
+export const contact = {
+  eyebrow: "Let's Talk",
+  headline: 'Punya bisnis yang ingin dibangun atau dikemas?',
+  body: 'Dari branding sampai kemasan, atau sekadar ingin berkenalan lebih dulu.',
+  button: { label: 'Chat on WhatsApp', href: brand.whatsappUrl },
+  alt: [
+    { label: 'Instagram', href: brand.instagramUrl, icon: 'instagram' },
+    { label: 'TikTok', href: brand.tiktokUrl, icon: 'tiktok' },
+    { label: 'Email', href: `mailto:${brand.email}`, icon: 'mail' },
+  ] satisfies ContactChannel[],
 };

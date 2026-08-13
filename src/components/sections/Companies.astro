@@ -1,0 +1,38 @@
+---
+/**
+ * Section 04 — The Companies.
+ *
+ * Tiga kartu dengan format seragam: nama · label · deskripsi. Tidak ada nama
+ * unit dan tidak ada peran/kepemilikan di sini — aturannya dipegang di
+ * `companies` (site.ts), bukan di markup ini.
+ */
+import { companies } from '../../data/site';
+---
+
+<section class="section companies" id="companies">
+  <header class="section-head companies-head">
+    <span class="label-pill" data-label-pill>{companies.eyebrow}</span>
+    <h2 class="section-title h2-style" data-reveal>{companies.headline}</h2>
+    <p class="section-intro" data-reveal data-reveal-stagger="0.05">{companies.intro}</p>
+  </header>
+
+  <ol class="company-grid">
+    {
+      companies.items.map((company, i) => (
+        <li
+          class="company-card card"
+          data-tl-from="{'opacity':0,'y':'12%'}"
+          data-tl-to="{'opacity':1,'y':'0%','duration':0.7,'ease':'power3.out'}"
+          data-tl-start="top 88%"
+          data-tl-stagger="0.08"
+          data-tl-once
+        >
+          <span class="company-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="company-name">{company.name}</h3>
+          <span class="company-label">{company.label}</span>
+          <p class="company-description">{company.description}</p>
+        </li>
+      ))
+    }
+  </ol>
+</section>

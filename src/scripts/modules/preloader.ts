@@ -12,8 +12,8 @@ import { $, $$, isDesktop } from '../core/utils';
  *         sementara huruf-hurufnya naik dari balik mask satu per satu
  *         (stagger 0.2 — inilah "R  A  D  Y  T" yang muncul berurutan);
  *   1.0s  wordmark memanjat dari tengah layar ke posisinya di puncak hero;
- *   1.4s  hero merakit diri sebagai kaskade: potret → headline → link nav →
- *         kartu → tombol → paragraf, masing-masing keluar dari blur.
+ *   1.4s  hero merakit diri sebagai kaskade: potret → eyebrow & nama →
+ *         headline → link nav → kartu → tombol → paragraf.
  *
  * Yang membuatnya tidak terasa datar adalah tumpang tindihnya: tiap kelompok
  * mulai saat kelompok sebelumnya baru setengah jalan, jadi gerakannya
@@ -22,16 +22,22 @@ import { $, $$, isDesktop } from '../core/utils';
 
 let timeline: gsap.core.Timeline | null = null;
 
-/** Semua yang harus tersembunyi dulu, lalu dimunculkan berurutan. */
+/** Semua yang harus tersembunyi dulu, lalu dimunculkan berurutan.
+ *
+ * `statCards` sengaja hanya mengambil kartu ber-`data-ghost` — yaitu kartu yang
+ * benar-benar punya posisi di hero. Kartu rail yang tidak muncul di hero
+ * (`data-ghost-fade`) opacity-nya milik fade morph di ghost.ts; kalau intro
+ * ikut menaikkannya ke 1, kartu itu tampil di pojok kiri atas sejak frame
+ * pertama, jauh sebelum rail-nya ada. */
 const stage = () => ({
   portrait: $('.hero-portrait'),
   headlineLines: $$('.hero-headline-line'),
   navLinks: $$('.nav-link'),
   navSeps: $$('.hero-nav-sep'),
-  statCards: [...$$('.nav-stat-card .nav-card-bg'), ...$$('.nav-stat')],
-  traits: $('.hero-traits'),
+  statCards: $$('.nav-stat-card [data-ghost]'),
+  lead: [$('.hero-eyebrow'), $('.hero-name')].filter(Boolean) as HTMLElement[],
   buttons: [$('.btn-primary'), $('.hero-secondary')].filter(Boolean) as HTMLElement[],
-  paragraphs: [$('.hero-eyebrow'), $('.nav-tagline')].filter(Boolean) as HTMLElement[],
+  paragraphs: [$('.hero-subheadline'), $('.hero-brands')].filter(Boolean) as HTMLElement[],
 });
 
 export const preloaderModule: AnimationModule = {
@@ -52,8 +58,7 @@ export const preloaderModule: AnimationModule = {
     gsap.set(letters, { yPercent: 110 });
 
     const el = stage();
-    gsap.set([el.portrait, el.traits].filter(Boolean), { autoAlpha: 0 });
-    gsap.set(el.portrait, { scale: 0.88, transformOrigin: 'center bottom' });
+    gsap.set(el.portrait, { autoAlpha: 0, scale: 0.88, transformOrigin: 'center bottom' });
     // Separator tumbuh dari tinggi nol, bukan memudar — garisnya seolah
     // ditarik keluar di antara label.
     gsap.set(el.navSeps, { height: 0 });
@@ -63,6 +68,7 @@ export const preloaderModule: AnimationModule = {
     gsap.set(el.navLinks, { autoAlpha: 0 });
     gsap.set(el.statCards, { autoAlpha: 0 });
     gsap.set(el.buttons, { autoAlpha: 0 });
+    gsap.set(el.lead, { autoAlpha: 0 });
     gsap.set(el.paragraphs, { autoAlpha: 0 });
 
     timeline = gsap.timeline({ delay: 0.15 });
@@ -80,6 +86,9 @@ export const preloaderModule: AnimationModule = {
 
     timeline
       .to(el.portrait, { autoAlpha: 1, scale: 1, duration: 1.1, ease: 'power2.out' }, 'hero')
+      // Eyebrow dan nama mendahului headline: ketiganya satu blok di kolom
+      // kiri, dan blok itu harus terbaca dari atas ke bawah.
+      .to(el.lead, { autoAlpha: 1, duration: 0.6, stagger: 0.08, ease: 'power2.out' }, 'hero+=0.15')
       .to(
         el.headlineLines,
         { autoAlpha: 1, scale: 1, duration: 1, stagger: 0.1, ease: 'power2.out' },
@@ -92,7 +101,6 @@ export const preloaderModule: AnimationModule = {
         { autoAlpha: 1, duration: 0.9, stagger: 0.1, ease: 'power2.out' },
         'hero+=0.6',
       )
-      .to(el.traits, { autoAlpha: 1, duration: 0.9, ease: 'power2.out' }, 'hero+=0.9')
       .to(
         el.buttons,
         { autoAlpha: 1, duration: 0.8, stagger: 0.08, ease: 'power2.out' },

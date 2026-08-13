@@ -184,58 +184,78 @@
   opacity: 0.35;
 }
 
-/* Headline rata kiri di kolom tengah, di depan dada — hanya di situ siluet
-   subjeknya cukup lebar sehingga teks terang terbaca penuh. */
-/* Anggaran horizontal baris tengah hero, dalam vw:
+/* KOLOM TEKS HERO
  *
- *   18.5  tepi kiri kartu statistik
- * + 11.0  lebar kartu statistik           → berakhir di 29.5
- * +  4.0  jarak
- * + 37.0  headline  (batas font 4.70vw × 7.874 lebar-em baris terpanjang)
- * +  1.5  jarak
- * + 13.6  kartu traits  (tepi kirinya dipatok 72vw, lurus dengan tagline)
- * + 14.4  tepi kanan
- *   ————
- *   99.2  (+0.8 lebar scrollbar)
+ * Satu kolom mengalir di paruh KIRI layar; potret duduk di paruh kanan. Karena
+ * tidak ada lagi teks yang harus menghindari wajah, tidak ada lagi enam elemen
+ * yang masing-masing dijangkar ke koordinat sendiri — urutannya diserahkan ke
+ * aliran normal, dan satu-satunya angka yang perlu benar adalah tepi kiri,
+ * tepi atas, dan lebarnya.
  *
- * Baris terpanjang sekarang "Merek dibangun," — 7.874 lebar-em pada w900,
- * DIUKUR di browser, bukan ditaksir. Angka 6.9 pada versi lama sudah tidak
- * berlaku sejak teksnya berganti, dan cap 4.9vw yang lahir darinya membuat
- * headline menabrak kartu traits di layar tinggi; yang menyelamatkannya cuma
- * cap 8.4vh yang kebetulan lebih ketat. Cap vw di bawah ini yang benar.
+ * Anggaran horizontal, dalam vw @1568:
  *
- * Kiri digeser 35.54 → 33.5vw: murni untuk melebarkan kolom headline. 33.5vw
- * masih aman di dalam siluet potret (tepi kirinya 31.25vw) — di luar itu teks
- * terangnya jatuh ke latar terang dan hilang.
- *
- * Cap headline turun 4.85 → 4.70vw karena kartu traits digeser ke kiri supaya
- * lurus dengan tagline: kolomnya berkurang 1.2vw, dan jarak 1.5vw ke kartu itu
- * yang menjaga keduanya tidak bersenggolan di layar tinggi.
+ *    1.4  gutter kiri (sejajar tinta wordmark dan label nav di atasnya)
+ * + 41.0  kolom teks                        → berakhir di 42.4
+ * +  4.1  jarak
+ * +  9.6  kartu statistik (di pundak kiri subjek, di atas potret)
+ * ————
+ *   56.1  — potret mulai di 45vw, jadi kartu memang melayang di atasnya
+ *          sementara kolom teks tidak pernah menyentuhnya.
  */
-.hero-headline {
+.hero-copy {
   position: absolute;
-  left: 33.5vw;
-  /* 51vh = setinggi leher subjek: tepat di bawah kaki huruf wordmark, dan
-     menembus pita navigasi hero (56.6–61.3vh) lewat celah tengahnya yang
-     memang kosong — grup nav kiri berhenti di 28.8vw, grup kanan mulai di
-     74.7vw, sedangkan headline paling lebar berakhir di 71.7vw. */
-  top: var(--hero-h1-top);
+  left: var(--hero-copy-left);
+  /* Dijangkar ke kaki wordmark, bukan angka vh lepas: wordmark, baris nav, dan
+     kolom ini harus turun-naik bersama saat lebar layar berubah. */
+  top: var(--hero-copy-top);
+  display: flex;
+  width: var(--hero-copy-w);
+  flex-direction: column;
+  align-items: flex-start;
+  /* Jarak antar baris ikut TINGGI layar, bukan lebarnya: di layar lebar-pendek
+     jarak dalam vw membengkak justru ketika tingginya paling sempit. */
+  gap: clamp(10px, 1.55vh, 22px);
+}
+
+/* Eyebrow dan nama satu kelompok — keduanya label kecil dan dibaca sebagai
+   satu blok pengenal, jadi jarak di antaranya jauh lebih rapat daripada jarak
+   antar baris kolomnya. */
+.hero-eyebrow + .hero-name {
+  margin-top: calc(6px - clamp(10px, 1.55vh, 22px));
+}
+
+.hero-eyebrow {
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+
+/* Nama lengkap versi terbaca. Wordmark raksasa di latar cuma memuat "RADHYTA",
+   jadi baris inilah satu-satunya tempat nama utuhnya benar-benar muncul. */
+.hero-name {
+  font-family: var(--font-label);
+  font-size: max(12px, 0.93vw);
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.hero-headline {
   display: flex;
   flex-direction: column;
-  color: #f8f7f3;
-  /* Tiga batas sekaligus (lihat --hero-h1-size di tokens.css):
-       6.5rem   langit-langit mutlak di layar sangat besar
-       11.5vh   tiga baris + jarak nafas sebelum tombol
-       4.70vw   baris terpanjang harus muat di 37.0vw yang tersedia
-                (37.0 ÷ 7.874 lebar-em baris terpanjang)
-     Tombol CTA menurunkan posisinya dari rumus yang sama, jadi keduanya tidak
-     mungkin lepas sinkron. */
+  /* Tiga batasnya ada di --hero-h1-size (tokens.css) — di situ juga alasannya. */
   font-size: var(--hero-h1-size);
   font-weight: 900;
   /* Satoshi Black merapat sendiri pada ukuran display; -0.02em menutup celah
      yang tersisa dan sekalian membeli ~0.3em lebar untuk baris terpanjang. */
   letter-spacing: -0.02em;
   line-height: var(--lh-h1);
+  margin: 0;
 }
 
 /* Pemenggalan barisnya ditulis tangan di site.ts. `nowrap` menjaga penggalan
@@ -246,128 +266,73 @@
   white-space: nowrap;
 }
 
-/* Padding & gap diukur dari kartu trait referensi: 24.9px atas/bawah/kiri,
-   34.2px kanan, gap 12.4px @1492 — kanan memang lebih lebar daripada kiri.
-   Lebarnya sengaja dibiarkan mengikuti isi: "Digital Activation" tidak muat
-   kalau lebar 11.5vw referensi dipaksakan, dan tanpa dipaksa pun hasilnya
-   mendarat di ~11.5vw. Dipatok lewat `left`, BUKAN `right`: yang harus lurus
-   adalah tepi KIRI-nya dengan paragraf tagline tepat di bawahnya (ghost
-   `tagline`, yang membaca token yang sama). Dengan `right`, tepi kiri ikut
-   bergeser setiap isi kartunya berubah panjang dan kelurusan itu diam-diam
-   hilang. */
-/* Tinggi kartu = tinggi isinya, tanpa rasio yang dipaksakan. Dijangkar dari
-   KAKI, bukan kepala: yang harus tetap adalah jarak ke paragraf tagline di
-   bawahnya, sementara tinggi kartu sendiri ikut berubah kalau daftar traits
-   di site.ts ditambah atau dikurangi. */
-.hero-traits {
-  position: absolute;
-  left: var(--hero-traits-left);
-  bottom: 15vh;
-  display: flex;
-  flex-direction: column;
-  gap: 0.83vw;
-  padding: 1.67vw 2.29vw 1.67vw 1.67vw;
+.hero-subheadline {
+  max-width: 44ch;
+  color: var(--fg-muted);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
 }
 
-/* Kartu traits melayang di atas bagian gelap foto, jadi teksnya putih. */
-.hero-trait {
+.hero-cta-row {
   display: flex;
   align-items: center;
-  gap: 0.66vw;
-  color: var(--white);
-  font-size: 0.93vw;
-  /* 900, bukan 700: teks putih kecil di atas foto berkontras rendah kehilangan
-     bobotnya, jadi ia butuh satu tingkat lebih tebal daripada teks yang duduk
-     di atas latar polos. */
-  font-weight: 900;
-  /* 1.25, bukan 1.5: tinggi kartu ini ditentukan isinya (semua vw) sementara
-     posisinya dipatok vh. Di layar pendek yang 1.5 membuat kaki kartu turun
-     sampai menabrak paragraf tagline di 87vh. */
-  line-height: 1.25;
+  gap: 1.6vw;
+  margin-top: 0.4vw;
 }
 
-/* Tiap trait dapat bentuk penanda sendiri — masih titik kuning padat, cuma
-   siluetnya bergantian, supaya lima baris ini terbaca sebagai daftar berisi
-   dan bukan lima salinan dari satu baris.
-   Semuanya digambar dengan clip-path pada kotak yang sama, jadi tidak ada
-   aset, font ikon, atau emoji yang perlu diunduh. */
-/* KOTAKNYA sama besar untuk kelima baris — itu yang menjaga tepi kiri teks
-   tetap lurus satu kolom. Yang membedakan bobot optis tiap bentuk diurus
-   `scale`, yang tidak mengubah ruang yang dipakai elemen. Kalau ukurannya
-   yang diutak-atik (versi pertama), tepi kiri labelnya ragged 2–3px. */
-.hero-trait-mark {
+/* Kotak pengukur tombol utama IKUT MENGALIR di dalam kolom, bukan dijangkar ke
+   koordinat sendiri. Itu yang menjamin tombol mendarat tepat di bawah teks
+   berapa pun tinggi headline-nya — dulu keduanya dihubungkan rantai token
+   (--hero-h1-bottom → --hero-cta-top) yang harus dijaga tangan. */
+.ghost--flow {
+  position: static;
   flex: none;
-  width: 0.95vw;
-  height: 0.95vw;
-  border-radius: 50%;
-  background: var(--yellow);
-  /* Lingkaran memenuhi kotaknya sendiri, jadi ia perlu dikecilkan agar tidak
-     terbaca paling berat di antara kelimanya. */
-  transform: scale(0.83);
-}
-
-/* Belah ketupat */
-.hero-trait:nth-child(2) .hero-trait-mark {
-  border-radius: 0;
-  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
-  transform: none;
-}
-
-/* Segitiga */
-.hero-trait:nth-child(3) .hero-trait-mark {
-  border-radius: 0;
-  clip-path: polygon(50% 4%, 96% 92%, 4% 92%);
-  transform: none;
-}
-
-/* Kotak bersudut tumpul */
-.hero-trait:nth-child(4) .hero-trait-mark {
-  border-radius: 0.14vw;
-  transform: scale(0.78);
-}
-
-/* Kilau empat sudut */
-.hero-trait:nth-child(5) .hero-trait-mark {
-  border-radius: 0;
-  clip-path: polygon(
-    50% 0,
-    62% 38%,
-    100% 50%,
-    62% 62%,
-    50% 100%,
-    38% 62%,
-    0 50%,
-    38% 38%
-  );
-  transform: none;
-}
-
-.hero-eyebrow {
-  position: absolute;
-  left: 3.4vw;
-  top: 90vh;
-  display: flex;
-  flex-direction: column;
-  color: var(--black);
-  font-size: var(--fs-body);
-  line-height: 1.45;
-}
-
-.hero-secondary {
-  position: absolute;
-  left: calc(50vw + 0.28vw);
-  /* Ikut tepi bawah headline, bukan angka mati — lihat --hero-cta-top. Ghost
-     tombol primer di Hero.astro memakai token yang sama supaya sepasang. */
-  top: var(--hero-cta-top);
   width: var(--hero-btn-w);
   height: var(--hero-btn-h);
 }
 
-/* Kartu statistik statis khusus mobile (lihat Hero.astro) — di desktop angka
-   yang sama sudah terbang lewat GhostEngine dari sidebar, jadi salinan ini
-   tidak pernah boleh tampil di sana. Diberi tempat di sini (bukan di dalam
-   media query) supaya "sembunyi di desktop" adalah DEFAULT, bukan sesuatu
-   yang harus diingat tiap kali breakpoint baru ditambahkan. */
+/* CTA sekunder = teks berpanah, BUKAN tombol kedua. */
+.hero-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5vw;
+  color: var(--fg);
+  font-family: var(--font-label);
+  font-size: max(13px, 1.02vw);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.hero-secondary svg {
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.hero-secondary:hover svg {
+  transform: translate(2px, -2px);
+}
+
+/* Satu baris nama merek di kaki hero — bukan chip, bukan grid. */
+.hero-brands {
+  position: absolute;
+  left: var(--hero-copy-left);
+  bottom: 4.5vh;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6vw;
+  font-family: var(--font-label);
+  font-size: max(11px, 0.8vw);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.hero-brands-sep {
+  opacity: 0.4;
+}
+
 .hero-mobile-stat {
   display: none;
 }
@@ -668,7 +633,7 @@
 }
 
 /* ==========================================================================
-   ABOUT / TIMELINE
+   ABOUT
    ========================================================================== */
 
 .about-head {
@@ -709,18 +674,57 @@
   height: clamp(176px, 11vw, 220px);
 }
 
+/* Logo Creasa kanvasnya lanskap (3045x1474), bukan bujur sangkar seperti dua
+   lainnya — tingginya karena itu dibiarkan mengikuti rasio. */
+.about-brand--creasa {
+  width: clamp(150px, 9.5vw, 190px);
+  height: auto;
+}
+
+/* Empat paragraf dalam dua kolom dua baris. Urutannya berarti (tiga
+   perusahaan → mental perintis → masa pandemi → di luar bisnis), jadi
+   `grid-auto-flow` dibiarkan baris demi baris: kolom kiri dibaca lebih dulu
+   secara horizontal, sama seperti urutan di site.ts. */
+.about-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 72vw;
+  margin-top: clamp(40px, 5vh, 84px);
+  gap: clamp(22px, 2.2vw, 44px) clamp(36px, 4.5vw, 88px);
+}
+
+.about-body p {
+  color: var(--fg-muted);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+/* Paragraf pembuka memegang isi utamanya (tiga perusahaan, tahun mulai,
+   jangkauan), jadi ia satu tingkat lebih tegas daripada tiga sisanya. */
+.about-body p:first-child {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   THE JOURNEY
+   ========================================================================== */
+
+
 /* Tinggi dipatok eksplisit: kartu di dalamnya absolut, jadi tidak ada yang
    mendorong tinggi container. Angkanya diambil dari jarak antar simpul —
-   tujuh simpul di sepanjang ~15.4% viewBox masing-masing, jadi ~490px per
-   ruas pada layar penuh, cukup untuk kartu setinggi ~440px. */
+   SEMBILAN simpul, masing-masing 10.4% viewBox (290 dari 2780, lihat
+   Journey.astro), jadi ~465px per ruas pada layar penuh. Kartu sekarang cuma
+   berisi nomor bab, tahun, judul, dan satu paragraf (~270px), jadi ruasnya
+   masih menyisakan napas dua kali lipat tinggi kartu. */
 .timeline {
   /* Tinggi ditulis SEKALI di sini dan dipinjam oleh `.timeline-fill
      .timeline-svg` di bawah. Keduanya wajib sama persis: kalau salinan yang
      dipotong lebih pendek, path-nya memampat alih-alih tersingkap. Angkanya
-     naik dari 225vw seiring kartu bertambah tinggi (baris angka + chip
-     bendera) — jarak antar simpul harus tetap melebihi tinggi kartu, kalau
-     tidak kartu ke-N menabrak kartu berikutnya. */
-  --timeline-h: clamp(3000px, 252vw, 4200px);
+     naik dari 252vw karena jumlah babnya naik dari tujuh ke sembilan — jarak
+     antar simpul harus tetap melebihi tinggi kartu, kalau tidak kartu ke-N
+     menabrak kartu berikutnya. */
+  --timeline-h: clamp(3000px, 290vw, 4800px);
 
   position: relative;
   height: var(--timeline-h);
@@ -810,73 +814,12 @@
   box-shadow: 0 1.8vw 3.4vw -1.4vw rgba(46, 32, 6, 0.55);
 }
 
-/* --- Baris penanda kartu --- */
-
-.tl-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.83vw;
-  margin-bottom: 1.1vw;
-}
-
-.tl-flag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45vw;
-  padding: 0.32vw 0.75vw 0.38vw;
-  border: 1px solid var(--label-border);
-  border-radius: var(--radius-pill);
-  font-family: var(--font-label);
-  font-size: max(10px, 0.72vw);
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  line-height: 1;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-/* Satu-satunya pembeda warna antar bendera. Kuning merek dipakai untuk
-   Custompedia, taupe gelap untuk Parcelin, dan keduanya bersama memakai
-   gradien dari yang satu ke yang lain — tidak ada warna baru yang masuk. */
-.tl-flag-dot {
-  width: 0.5vw;
-  height: 0.5vw;
-  min-width: 6px;
-  min-height: 6px;
-  flex: none;
-  border-radius: 50%;
-  background: var(--yellow);
-}
-
-.tl-flag[data-flag='parcelin'] .tl-flag-dot {
-  background: #4a4740;
-}
-
-.tl-flag[data-flag='both'] .tl-flag-dot {
-  background: linear-gradient(135deg, var(--yellow) 45%, #4a4740 55%);
-}
-
-.tl-step {
-  flex: none;
-  font-family: var(--font-label);
-  font-size: max(10px, 0.72vw);
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  opacity: 0.55;
-}
-
-.tl-step span {
-  opacity: 0.6;
-}
-
 .timeline-year {
   display: flex;
   align-items: flex-start;
   color: var(--yellow);
-  /* Diturunkan dari --fs-year (yang tetap dipakai popup): dengan baris angka
-     dan chip bendera ikut masuk ke kartu, ukuran popup membuat kartunya lebih
-     tinggi dari jarak antar simpul. */
+  /* Angkanya tetap elemen terberat di kartu, tapi dibatasi supaya tinggi kartu
+     tidak pernah melewati jarak antar simpul. */
   font-size: clamp(2.75rem, 4.3vw, 4.75rem);
   font-weight: 900;
   letter-spacing: -0.05em;
@@ -902,331 +845,15 @@
 
 /* --- Dua angka di kaki kartu --- */
 
-.tl-metrics {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin: 1.2vw 0 0;
-  padding: 0;
-  border-top: 1px solid rgba(46, 32, 6, 0.14);
-  gap: 0.83vw;
-  list-style: none;
-}
-
-.tl-metrics li {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15vw;
-  padding-top: 0.9vw;
-}
-
-/* Angka kedua diberi garis pemisah, bukan kotak sendiri — kartunya sudah
-   punya cukup tepi. */
-.tl-metrics li + li {
-  padding-left: 0.83vw;
-  border-left: 1px solid rgba(46, 32, 6, 0.14);
-}
-
-.tl-metrics strong {
-  font-size: max(15px, 1.25vw);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-
-.tl-metrics span {
-  color: var(--fg-muted);
-  font-size: max(11px, 0.78vw);
-  line-height: 1.3;
-}
-
-.timeline-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.83vw;
-  margin-top: 1.3vw;
-}
-
-.tl-age {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.42vw;
-  color: var(--fg-muted);
-  font-size: max(11px, 0.85vw);
-  line-height: 1.3;
-}
-
-.tl-age::before {
-  width: 0.36vw;
-  height: 0.36vw;
-  min-width: 5px;
-  min-height: 5px;
-  border-radius: 50%;
-  background: currentColor;
-  content: '';
-  opacity: 0.5;
-}
-
-.timeline-more {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.42vw;
-  margin-left: auto;
-  padding: 0.7vw 1.1vw;
-  border: 1px solid rgba(54, 54, 54, 0.15);
-  border-radius: var(--radius-lg);
-  background: var(--surface-inner);
-  font-size: max(12px, 0.93vw);
-  font-weight: 700;
-  white-space: nowrap;
-  transition:
-    background-color var(--dur) var(--ease-out),
-    border-color var(--dur) var(--ease-out);
-}
-
-.timeline-more:hover,
-.timeline-card:hover .timeline-more {
-  border-color: rgba(46, 32, 6, 0.3);
-  background: var(--yellow);
-}
-
-/* Panahnya maju sedikit saat kartunya disorot — isyarat "ada isinya di dalam"
-   tanpa menambah teks. */
-.timeline-more svg {
-  transition: transform var(--dur) var(--ease-out);
-}
-
-.timeline-card:hover .timeline-more svg {
-  transform: translate(2px, -2px);
-}
 
 /* --- Popup cerita --- */
 
-.story {
-  position: fixed;
-  inset: 0;
-  z-index: 120;
-  display: grid;
-  place-items: center;
-  padding: var(--gutter);
-}
-
-.story[hidden] {
-  display: none;
-}
-
-.story-scrim {
-  position: absolute;
-  inset: 0;
-  background: rgba(19, 19, 19, 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  cursor: pointer;
-}
-
-.story-panel {
-  position: relative;
-  display: flex;
-  width: min(52rem, 100%);
-  max-height: 86vh;
-  flex-direction: column;
-  overflow-y: auto;
-  padding: 2.4vw;
-  gap: 1.4vw;
-  /* Panel duduk di atas scrim gelap, jadi ia memakai beige pekat, bukan
-     kaca setengah tembus seperti kartu di atas halaman. */
-  background: var(--panel-bg);
-}
-
-/* Panel adalah kolom flex ber-max-height: begitu isinya melewati 86vh, tiap
-   anak boleh menyusut. Yang ber-`overflow:hidden` (grid angka) menyusut sampai
-   NOL karena min-height otomatisnya jadi 0 — barisnya lenyap dan hanya
-   menyisakan garis 1px. Isi panel digulir, bukan diperas. */
-.story-panel > * {
-  flex: none;
-}
-
-.story-close {
-  position: absolute;
-  top: 1.2vw;
-  right: 1.2vw;
-  display: grid;
-  width: 2.4vw;
-  height: 2.4vw;
-  min-width: 34px;
-  min-height: 34px;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--surface-inner);
-}
-
-.story-head {
-  display: flex;
-  align-items: center;
-  gap: 0.83vw;
-  /* Tombol tutup duduk absolut di kanan atas — beri ruang supaya nomor bab
-     tidak merangkak ke bawahnya. */
-  padding-right: 3.2vw;
-}
-
-.story-hero {
-  display: flex;
-  align-items: flex-end;
-  gap: 1.2vw;
-}
-
-.story-hero-text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4vw;
-  /* Judul panjang harus membungkus, bukan mendorong tahun keluar panel. */
-  min-width: 0;
-}
-
-.story-year {
-  display: block;
-  flex: none;
-  color: var(--yellow);
-  font-size: var(--fs-year);
-  font-weight: 900;
-  letter-spacing: -0.05em;
-  line-height: 0.85;
-  text-shadow: 0 0.08vw 0 rgba(46, 32, 6, 0.18);
-}
-
-.story-title {
-  margin: 0;
-  font-size: clamp(1.25rem, 1.9vw, 2.4rem);
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.story-body {
-  max-width: 62ch;
-  color: var(--fg-muted);
-}
 
 /* --- Tiga angka --- */
 
-.story-metrics {
-  display: grid;
-  margin: 0;
-  padding: 0;
-  gap: 1px;
-  grid-template-columns: repeat(3, 1fr);
-  /* Gap 1px di atas latar gelap = garis pemisah, tanpa border per sel yang
-     akan menumpuk jadi dua garis di tengah. */
-  background: rgba(46, 32, 6, 0.14);
-  border: 1px solid rgba(46, 32, 6, 0.14);
-  border-radius: var(--radius);
-  list-style: none;
-  overflow: hidden;
-}
-
-.story-metrics li {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25vw;
-  padding: 1.1vw;
-  background: var(--surface-inner);
-}
-
-.story-metrics strong {
-  font-size: clamp(1.1rem, 1.7vw, 2rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-
-.story-metrics span {
-  color: var(--fg-muted);
-  font-size: max(11px, 0.8vw);
-  line-height: 1.3;
-}
 
 /* --- Daftar "Yang dikerjakan" --- */
 
-.story-block {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7vw;
-}
-
-.story-label {
-  margin: 0;
-  font-family: var(--font-label);
-  font-size: max(10px, 0.75vw);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  opacity: 0.55;
-  text-transform: uppercase;
-}
-
-.story-moves {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  flex-direction: column;
-  gap: 0.6vw;
-  list-style: none;
-}
-
-.story-moves li {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.7vw;
-  color: var(--fg-muted);
-}
-
-/* Penanda bulat kuning, bukan bullet browser — bullet default tidak bisa
-   diwarnai sejajar dengan sisa halaman. */
-.story-moves li::before {
-  width: 0.5vw;
-  height: 0.5vw;
-  min-width: 7px;
-  min-height: 7px;
-  /* Didorong ke bawah setinggi setengah baris supaya sejajar dengan huruf
-     pertama, bukan dengan tepi atas kotak barisnya. */
-  margin-top: 0.55em;
-  flex: none;
-  border-radius: 50%;
-  background: var(--yellow);
-  box-shadow: 0 0 0 1px rgba(46, 32, 6, 0.25);
-  content: '';
-}
-
-.story-outcome {
-  margin: 0;
-  padding: 1.1vw 1.3vw;
-  border-left: 3px solid var(--yellow);
-  border-radius: var(--radius-xs);
-  background: var(--surface-inner);
-  font-size: max(13px, 1.05vw);
-  font-weight: 500;
-  line-height: 1.5;
-}
-
-.story-tags {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  flex-wrap: wrap;
-  gap: 0.5vw;
-  list-style: none;
-}
-
-.story-tags li {
-  padding: 0.32vw 0.75vw 0.38vw;
-  border: 1px solid var(--label-border);
-  border-radius: var(--radius-pill);
-  font-family: var(--font-label);
-  font-size: max(10px, 0.72vw);
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  line-height: 1;
-  opacity: 0.7;
-  text-transform: uppercase;
-}
 
 /* ==========================================================================
    WORK — horizontal scroll
@@ -1432,57 +1059,8 @@
   color: rgba(255, 255, 255, 0.8);
   font-size: 0.93vw;
   line-height: 1.45;
-  padding-right: clamp(2.5rem, 3.47vw, 4rem);
 }
 
-.work-card-arrow {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  display: grid;
-  width: clamp(1.75rem, 2.5vw, 2.75rem);
-  height: clamp(1.75rem, 2.5vw, 2.75rem);
-  place-items: center;
-  border-radius: 50%;
-  background: var(--yellow);
-  color: var(--black);
-  transition:
-    background-color 0.35s var(--ease-out),
-    color 0.35s var(--ease-out);
-}
-
-/* Jendela setinggi satu ikon berisi dua ikon bertumpuk. Hover menggeser
-   pasangannya secara diagonal, jadi panah lama keluar lewat kanan-atas dan
-   penggantinya masuk dari kiri-bawah. */
-.work-card-arrow-slide {
-  display: grid;
-  width: 1.25vw;
-  height: 1.25vw;
-  overflow: hidden;
-}
-
-.work-card-arrow-slide svg {
-  grid-area: 1 / 1;
-  width: 100%;
-  height: 100%;
-  transition: margin 0.25s var(--ease-out);
-}
-
-.work-card-arrow-slide svg:first-child {
-  margin: 0 0 0 0;
-}
-
-.work-card-arrow-slide svg:last-child {
-  margin: 100% 0 0 -100%;
-}
-
-.work-card:hover .work-card-arrow-slide svg:first-child {
-  margin: -100% 0 0 100%;
-}
-
-.work-card:hover .work-card-arrow-slide svg:last-child {
-  margin: 0 0 0 -100%;
-}
 
 /* Sorot lewat pengurangan: hover kartu mana pun MEREDUPKAN semua kartu, lalu
    pembatalannya hanya untuk yang di-hover. Jauh lebih terarah daripada
@@ -1502,19 +1080,163 @@
     opacity: 1;
   }
 
-  .work-track:hover .work-card .work-card-arrow {
-    background: var(--work-arrow-idle-bg);
-    color: var(--work-arrow-idle-fg);
-  }
 
   .work-track .work-card:hover .work-image-overlay {
     opacity: 0;
   }
 
-  .work-track .work-card:hover .work-card-arrow {
-    background: var(--yellow);
-    color: var(--black);
-  }
+}
+
+/* ==========================================================================
+   THE COMPANIES
+   ========================================================================== */
+
+.companies-head .section-intro {
+  max-width: 44ch;
+}
+
+/* Tiga kartu sejajar. `1fr` dan bukan `auto`: deskripsi ketiganya jauh berbeda
+   panjang (Creasa cuma satu kalimat), dan kolom yang mengikuti isi membuat
+   kartu ketiga menciut jadi separuh lebar tetangganya. */
+.company-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: clamp(40px, 5vh, 84px) 0 0;
+  padding: 0;
+  gap: clamp(16px, 1.6vw, 32px);
+  list-style: none;
+}
+
+.company-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(24px, 2.2vw, 40px);
+  gap: 0.5vw;
+}
+
+.company-index {
+  font-family: var(--font-label);
+  font-size: max(10px, 0.68vw);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  opacity: 0.4;
+}
+
+.company-name {
+  margin-top: clamp(24px, 2.4vw, 44px);
+  font-size: clamp(1.15rem, 1.32vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* Label bidang, bukan jabatan: handoff melarang menyebut peran atau
+   kepemilikan di section ini. */
+.company-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28vw 0.83vw 0.34vw;
+  border: 1px solid var(--label-border);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-label);
+  font-size: max(10px, 0.72vw);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.company-description {
+  margin-top: 0.4vw;
+  color: var(--fg-muted);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+/* ==========================================================================
+   NETWORK & REACH
+   ========================================================================== */
+
+.network-head .section-intro {
+  max-width: 48ch;
+}
+
+.network-body {
+  display: flex;
+  flex-direction: column;
+  margin-top: clamp(40px, 5vh, 84px);
+  gap: clamp(36px, 4vh, 72px);
+}
+
+.network-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(14px, 1.4vw, 26px);
+}
+
+.network-label {
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+/* Satu baris dipisah titik tengah, sama seperti baris merek di hero — bukan
+   chip dan bukan daftar bernomor. */
+.network-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7vw;
+  font-size: clamp(1rem, 1.32vw, 1.6rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+.network-sep {
+  opacity: 0.35;
+}
+
+.network-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  gap: clamp(24px, 3vw, 60px);
+  list-style: none;
+}
+
+/* Lebar per logo dibawa masing-masing lewat custom property (lihat
+   Network.astro): tiap file punya ruang kosong berbeda di kanvasnya, jadi satu
+   ukuran seragam membuat sebagian terlihat jauh lebih berat dari yang lain. */
+.network-logo img {
+  display: block;
+  width: var(--logo-width-desktop);
+  height: auto;
+  transform: scale(var(--logo-scale, 1));
+}
+
+.network-logo--square img {
+  width: auto;
+  height: var(--logo-width-desktop);
+}
+
+/* Bagian ketiga = ASPIRASI, bukan pencapaian. Karena itu ia paragraf biasa
+   dengan label di atasnya, bukan peta atau daftar negara. */
+.network-outlook {
+  max-width: 44ch;
+  color: var(--fg-muted);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
 }
 
 /* ==========================================================================
@@ -1557,11 +1279,9 @@
 }
 
 .performance-lite .hero::after,
-.performance-lite .hero-trait-card,
 .performance-lite .sidebar,
 .performance-lite .nav-card,
-.performance-lite .contact-prompt,
-.performance-lite .timeline-dialog {
+.performance-lite .glass-card {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
@@ -1788,10 +1508,6 @@
   color: var(--yellow);
 }
 
-.packaging-test-button {
-  padding: 1.1vw 1.7vw;
-  font-size: clamp(0.82rem, 1.05vw, 1.18rem);
-}
 
 .packaging-test-handoff {
   position: absolute;
@@ -1878,9 +1594,6 @@
     margin-top: 54px;
   }
 
-  .packaging-test-button {
-    padding: 15px 20px;
-  }
 
   .packaging-test-handoff {
     display: none;
@@ -1901,211 +1614,12 @@
 }
 
 /* ==========================================================================
-   FAQ
-   ========================================================================== */
-
-.faq-groups {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(18px, 2vw, 34px);
-  margin-top: clamp(36px, 5vh, 64px);
-}
-
-.faq-head {
-  margin-top: 5vw;
-}
-
-.faq-intro {
-  max-width: 56ch;
-  margin-top: 24px;
-  color: var(--fg-muted);
-}
-
-.faq-group {
-  overflow: visible;
-}
-
-.faq-group h3 {
-  padding: clamp(20px, 1.8vw, 30px) clamp(20px, 2vw, 34px);
-  border-radius: var(--radius) var(--radius) 0 0;
-  background: #20201d;
-  color: var(--yellow);
-  font-family: var(--font-label);
-  font-size: clamp(0.75rem, 0.9vw, 1rem);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.faq-prompts {
-  display: grid;
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-.faq-prompt {
-  display: flex;
-  min-height: clamp(74px, 6.5vw, 102px);
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: clamp(18px, 1.5vw, 26px) clamp(20px, 2vw, 34px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  background: #20201d;
-  color: rgba(255, 255, 255, 0.92);
-  text-align: left;
-  font-size: clamp(1rem, 1.18vw, 1.35rem);
-  font-weight: 500;
-  letter-spacing: var(--ls-toggle);
-  transition: color var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out);
-}
-
-.faq-prompt:last-child {
-  border-bottom: 0;
-  border-radius: 0 0 var(--radius) var(--radius);
-}
-
-.faq-prompt svg {
-  flex: none;
-  transition: transform var(--dur) var(--ease-out);
-}
-
-.faq-prompt:hover {
-  background: #2d2c26;
-  color: var(--yellow);
-}
-
-.faq-prompt:hover svg {
-  transform: translate(3px, -3px);
-}
-
-.contact-dialog {
-  width: min(33rem, calc(100% - 2 * var(--gutter)));
-  max-width: none;
-  max-height: none;
-  margin: auto;
-  padding: 0;
-  border: 0;
-  overflow: visible;
-  background: transparent;
-  color: var(--fg);
-}
-
-.contact-dialog::backdrop {
-  background: rgba(24, 23, 19, 0.38);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-
-.contact-dialog-panel {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: clamp(16px, 1.5vw, 24px);
-  padding: clamp(24px, 2.2vw, 36px);
-  border: 1px solid rgba(25, 24, 20, 0.16);
-  background: #f1eee3;
-  box-shadow: 0 22px 70px rgba(27, 25, 18, 0.22);
-}
-
-.contact-dialog-origin {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
-  pointer-events: none;
-  box-shadow: 0 22px 70px rgba(27, 25, 18, 0.22);
-}
-
-.contact-dialog-origin-ink {
-  position: absolute;
-  inset: 0;
-  background: #20201d;
-  opacity: 0;
-}
-
-.contact-dialog-close {
-  position: absolute;
-  top: clamp(18px, 1.8vw, 28px);
-  right: clamp(18px, 1.8vw, 28px);
-  display: grid;
-  width: 38px;
-  height: 38px;
-  place-items: center;
-  border-radius: 50%;
-  background: rgba(25, 24, 20, 0.1);
-  transition: background-color var(--dur) var(--ease-out);
-}
-
-.contact-dialog-close:hover {
-  background: #1c1c1a;
-  color: var(--white);
-}
-
-.contact-dialog-label,
-.contact-dialog-message > span {
-  color: #6c6135;
-  font-family: var(--font-label);
-  font-size: clamp(0.68rem, 0.76vw, 0.82rem);
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.contact-dialog h3 {
-  max-width: 17ch;
-  color: #1c1c1a;
-  font-size: clamp(1.7rem, 2.6vw, 2.7rem);
-  font-weight: 900;
-  letter-spacing: -0.06em;
-  line-height: 0.94;
-}
-
-.contact-dialog-message {
-  display: grid;
-  gap: 12px;
-}
-
-.contact-dialog-message textarea {
-  width: 100%;
-  resize: vertical;
-  padding: 16px;
-  border: 1px solid rgba(25, 24, 20, 0.18);
-  background: #fbfaf4;
-  color: #1c1c1a;
-  font: inherit;
-  line-height: 1.55;
-}
-
-.contact-dialog-message textarea:focus {
-  border-color: #6c6135;
-  outline: none;
-}
-
-.contact-dialog-send {
-  justify-self: end;
-  gap: 10px;
-  padding: 16px 20px;
-  background: #1c1c1a;
-  color: var(--white);
-}
-
-.contact-dialog-send:hover {
-  background: var(--yellow);
-  color: var(--black);
-}
-
-@media (max-width: 900px) {
-  .faq-groups {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* ==========================================================================
    FOOTER
    ========================================================================== */
 
-/* Footer tidak punya blok kontak, bar copyright, atau baris sosial: semuanya
-   sudah permanen di sidebar. Yang tersisa adalah wordmark penutup dan FAQ. */
+/* Footer tidak punya bar copyright atau baris sosial berlapis: semuanya sudah
+   permanen di sidebar. Yang tersisa adalah wordmark penutup dan satu blok
+   CTA. */
 .site-footer {
   position: relative;
   overflow-x: clip;
@@ -2157,6 +1671,81 @@
 .footer-wordmark-symbol {
   font-size: 0.22em;
   line-height: 1;
+}
+
+/* --- Blok CTA penutup ---
+   Menggantikan picker QnA lama (dua kolom, delapan opsi, dialog pesan siap
+   kirim). Satu blok, satu tombol, satu baris kontak alternatif. */
+
+.contact-block {
+  display: flex;
+  max-width: min(64ch, 58vw);
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: clamp(48px, 7vh, 110px);
+  gap: clamp(18px, 1.8vw, 32px);
+}
+
+.contact-headline {
+  /* Lebih kecil dari --fs-h2: headline ini satu KALIMAT penuh, bukan dua-tiga
+     kata seperti judul section lain, dan pada ukuran itu ia turun lima baris. */
+  max-width: 20ch;
+  font-size: clamp(2rem, 3.4vw, 4rem);
+  font-weight: 900;
+  letter-spacing: -0.015em;
+  line-height: var(--lh-h2);
+}
+
+.contact-body {
+  color: var(--fg-muted);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.contact-button {
+  margin-top: 0.6vw;
+}
+
+/* Kontak alternatif — baris, bukan tombol kedua: satu-satunya tombol di
+   section ini adalah WhatsApp di atasnya. */
+.contact-alt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0.6vw 0 0;
+  padding: 0;
+  gap: clamp(18px, 2vw, 40px);
+  list-style: none;
+}
+
+.contact-alt a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5vw;
+  font-family: var(--font-label);
+  font-size: max(13px, 1vw);
+  font-weight: 600;
+  line-height: 1;
+  transition: opacity var(--dur) var(--ease-out);
+}
+
+.contact-alt a:hover {
+  opacity: 0.6;
+}
+
+/* Tombol WhatsApp rail disembunyikan selama section ini terlihat — kalau
+   tidak, ada dua tombol WhatsApp bersamaan di layar. Kelasnya dipasang
+   modules/nav-active.ts. */
+.at-contact .sidebar > .btn-primary {
+  /* `!important` di sini bukan kemalasan: opacity tombol ini ditulis GSAP
+     sebagai style INLINE (intro memunculkannya, ghost.ts memudarkannya
+     sepanjang morph), dan style inline mengalahkan kelas biasa. */
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.sidebar > .btn-primary {
+  transition: opacity var(--dur) var(--ease-out);
 }
 
 /* Kartu jejak. `pointer-events: none` pada lapisannya wajib — kalau tidak,
@@ -2267,8 +1856,8 @@
 @media (max-width: 767px), (prefers-reduced-motion: reduce) {
   .hero {
     /* Jangkar untuk kartu-kartu yang mengambang di atas potret (lihat
-       `.hero-traits` & `.hero-mobile-stat-float` di bawah) — keduanya
-       `position:absolute` dan naik lewat rantai ancestor sampai ke sini,
+       `.hero-mobile-stat-float` di bawah) — ia `position:absolute` dan naik
+       lewat rantai ancestor sampai ke sini,
        karena `.hero-back`/`.hero-front` sendiri sengaja `position:static`. */
     position: relative;
     height: auto;
@@ -2279,9 +1868,8 @@
 
   /* Jarak dari tepi ATAS `.hero` ke tepi atas potret: padding-top di atas,
      lalu tinggi baris wordmark (satu baris, line-height 1 = tinggi font-nya
-     sendiri) plus margin-bottom-nya. Dipakai `.hero-traits` &
-     `.hero-mobile-stat-float` supaya keduanya start persis di tepi potret,
-     bukan angka yang ditulis lepas dua kali. */
+     sendiri) plus margin-bottom-nya. Dipakai `.hero-mobile-stat-float` supaya
+     ia start persis di tepi potret, bukan angka yang ditulis lepas dua kali. */
   :root {
     --hero-mobile-portrait-top: calc(96px + (var(--wordmark-size) * 0.888) + 12px);
   }
@@ -2337,6 +1925,16 @@
     height: 108px;
   }
 
+  .about-brand--creasa {
+    width: 104px;
+  }
+
+  .about-body {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: none;
+    margin-top: 28px;
+  }
+
   .hero-wordmark {
     position: static;
     /* Lebih kecil dari desktop karena di sini wordmark rata kiri di dalam
@@ -2356,10 +1954,13 @@
     margin: 0 auto 24px;
   }
 
-  .hero-headline,
-  .hero-eyebrow,
-  .hero-secondary {
+  /* Di desktop kolom teks dan baris merek dipatok ke koordinat absolut. Di
+     layout statis semua patokan itu dilepas dan keduanya ikut mengalir. */
+  .hero-copy,
+  .hero-brands {
     position: static;
+    width: auto;
+    gap: 14px;
   }
 
   /* Baris ini hanya penanda tata letak untuk morph. Tanpa morph ia tidak punya
@@ -2368,63 +1969,37 @@
     display: none;
   }
 
-  /* Di desktop headline dipatok ke koordinat absolut. Di layout statis semua
-     patokan itu harus dilepas — kalau tidak teksnya keluar layar. */
   .hero-headline {
-    left: auto;
-    top: auto;
-    width: auto;
     align-items: flex-start;
     text-align: left;
     font-size: clamp(2.25rem, 11vw, 3.5rem);
-    margin-bottom: 24px;
+    margin: 0;
   }
 
-  /* Kartu traits mengambang di pojok KIRI-atas potret, persis referensi —
-     bukan lagi kartu beige statis di bawah headline. Tetap kaca (`glass-card`
-     di markup) karena masih duduk di atas foto, sama seperti versi desktop. */
-  .hero-traits {
-    position: absolute;
-    top: calc(var(--hero-mobile-portrait-top) + 14px);
-    left: var(--gutter);
-    right: auto;
-    bottom: auto;
-    z-index: 2;
-    max-width: 42vw;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 14px 16px;
+  .hero-cta-row {
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 6px;
   }
 
-  /* Headline tetap di latar terang biasa di bawah potret, jadi tetap hitam —
-     traits-nya sendiri TIDAK ikut disamakan lagi (masih putih, lihat di atas). */
-  .hero-headline {
-    color: var(--black);
+  /* Tanpa morph tidak ada yang mengukur kotak ini, dan kotak setinggi tombol
+     yang kosong cuma menyisakan lubang di antara headline dan tautannya. */
+  .ghost--flow {
+    display: none;
   }
 
-  /* Ukurannya HANYA untuk trait. Menggabungkannya dengan .hero-headline di
-     selektor yang sama menimpa ukuran headline di atas dan mengecilkannya
-     jadi seukuran teks isi. */
-  /* Ukurannya HANYA untuk trait. Menggabungkannya dengan .hero-headline di
-     selektor yang sama menimpa ukuran headline di atas dan mengecilkannya
-     jadi seukuran teks isi. */
-  .hero-trait {
+  .hero-secondary {
     font-size: 0.95rem;
   }
 
-  /* Cuma kotaknya yang dikecilkan; clip-path dan scale tiap bentuk diwarisi
-     dari aturan desktop karena keduanya relatif terhadap kotak ini. */
-  .hero-trait-mark {
-    width: 8.5px;
-    height: 8.5px;
+  .hero-brands {
+    flex-direction: row;
+    gap: 8px;
+    font-size: 0.6875rem;
   }
 
-  .hero-trait:nth-child(4) .hero-trait-mark {
-    border-radius: 1.5px;
-  }
-
-  /* Kartu tahun mengambang di pojok KANAN-atas potret — pasangan kartu
-     traits di seberangnya, keduanya start di tepi potret yang sama. */
+  /* Kartu tahun mengambang di pojok KANAN-atas potret — satu-satunya angka di
+     hero, sama seperti versi desktop. */
   .hero-mobile-stat {
     display: flex;
   }
@@ -2442,15 +2017,6 @@
     text-align: center;
   }
 
-  /* Kartu hitungan di bawah headline — kartu terang biasa, bukan kaca:
-     ia duduk di atas latar beige, bukan di atas foto. */
-  .hero-mobile-stat-inline {
-    flex-direction: row;
-    align-items: baseline;
-    gap: 8px;
-    padding: 12px 16px;
-    margin-bottom: 20px;
-  }
 
   .hero-mobile-stat-value {
     color: var(--yellow);
@@ -2477,23 +2043,7 @@
     text-align: center;
   }
 
-  .hero-mobile-stat-inline .hero-mobile-stat-label {
-    color: var(--fg);
-  }
 
-  .hero-eyebrow {
-    left: auto;
-    top: auto;
-    margin-bottom: 20px;
-  }
-
-  .hero-secondary {
-    left: auto;
-    top: auto;
-    width: auto;
-    height: auto;
-    align-self: flex-start;
-  }
 
   /* Kartu perjalanan kembali mengalir vertikal. Garis serpentine-nya bergantung
      penuh pada penempatan absolut, jadi ia ikut hilang — tanpa itu path yang
@@ -2563,9 +2113,10 @@
      mundur selebar rel, maju ke pusat garis, lalu mundur separuh titik. */
   .timeline-card::before {
     position: absolute;
-    /* 76px = pusat angka tahun diukur dari tepi atas kartu (padding 22 + baris
-       bendera 38 + separuh tinggi angka 26) dikurangi separuh tinggi titik. */
-    top: 76px;
+    /* 60px = pusat angka tahun diukur dari tepi atas kartu (padding 22 + baris
+       nomor bab 12 + jaraknya 1 + separuh tinggi angka 25) dikurangi separuh
+       tinggi titik. */
+    top: 60px;
     left: calc(-1 * var(--tl-rail) + var(--tl-line-x) - (var(--tl-dot) + 4px) / 2);
     width: var(--tl-dot);
     height: var(--tl-dot);
@@ -2575,25 +2126,6 @@
     content: '';
   }
 
-  .tl-head {
-    margin-bottom: 14px;
-  }
-
-  .tl-flag,
-  .tl-step,
-  .story-tags li {
-    font-size: 0.6875rem;
-  }
-
-  .tl-flag {
-    gap: 6px;
-    padding: 5px 10px 6px;
-  }
-
-  .tl-flag-dot {
-    width: 7px;
-    height: 7px;
-  }
 
   .timeline-year {
     font-size: 3rem;
@@ -2604,130 +2136,6 @@
     font-size: 1.25rem;
   }
 
-  .tl-metrics {
-    margin-top: 16px;
-    gap: 12px;
-  }
-
-  .tl-metrics li {
-    gap: 3px;
-    padding-top: 14px;
-  }
-
-  .tl-metrics li + li {
-    padding-left: 12px;
-  }
-
-  .tl-metrics strong {
-    font-size: 1.0625rem;
-  }
-
-  .tl-metrics span,
-  .tl-age {
-    font-size: 0.75rem;
-  }
-
-  .timeline-meta {
-    gap: 12px;
-    margin-top: 18px;
-  }
-
-  /* `gap` dalam vw jatuh ke ~2px di layar sempit — titik penanda menempel di
-     hurufnya. */
-  .tl-age,
-  .timeline-more {
-    gap: 6px;
-  }
-
-  .tl-age::before {
-    width: 5px;
-    height: 5px;
-  }
-
-  .timeline-more {
-    padding: 10px 14px;
-    font-size: 0.8125rem;
-  }
-
-  .story-panel {
-    padding: 24px;
-    gap: 18px;
-  }
-
-  .story-close {
-    top: 14px;
-    right: 14px;
-  }
-
-  .story-head {
-    padding-right: 44px;
-  }
-
-  /* Di layar sempit tahun raksasa dan judul tidak muat bersebelahan. */
-  .story-hero {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .story-hero-text {
-    gap: 6px;
-  }
-
-  .story-title {
-    margin: 0;
-    font-size: 1.25rem;
-  }
-
-  /* Tiga kolom angka jadi 12ch per sel — dipatahkan jadi satu kolom. */
-  .story-metrics {
-    grid-template-columns: 1fr;
-  }
-
-  .story-metrics li {
-    flex-direction: row;
-    align-items: baseline;
-    padding: 14px 16px;
-    gap: 10px;
-  }
-
-  .story-metrics span {
-    font-size: 0.8125rem;
-  }
-
-  .story-block {
-    gap: 10px;
-  }
-
-  .story-label {
-    font-size: 0.6875rem;
-  }
-
-  .story-moves {
-    gap: 10px;
-  }
-
-  .story-moves li {
-    gap: 10px;
-  }
-
-  .story-moves li::before {
-    width: 7px;
-    height: 7px;
-  }
-
-  .story-outcome {
-    padding: 14px 16px;
-    font-size: 0.9375rem;
-  }
-
-  .story-tags {
-    gap: 8px;
-  }
-
-  .story-tags li {
-    padding: 5px 10px 6px;
-  }
 
   /* Galeri proyek jadi scroller horizontal biasa — tetap bisa dijangkau tanpa
      scroll-jacking. */
@@ -2773,13 +2181,8 @@
 
   .work-card-blurb {
     font-size: 0.875rem;
-    padding-right: 48px;
   }
 
-  .work-card-arrow-slide {
-    width: 16px;
-    height: 16px;
-  }
 }
 
 /* ==========================================================================
@@ -2796,6 +2199,46 @@
 @media (max-width: 767px) {
   .section {
     padding: 64px var(--gutter);
+  }
+
+  .company-grid {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 28px;
+  }
+
+  .network-body {
+    margin-top: 28px;
+    gap: 36px;
+  }
+
+  .network-list {
+    font-size: 1.0625rem;
+    gap: 8px;
+  }
+
+  /* Lebar logo pindah ke padanan mobile-nya; tanpa ini logo memakai angka vw
+     desktop dan tiga di antaranya melebihi lebar layar. */
+  .network-logos {
+    gap: 24px;
+  }
+
+  .network-logo img {
+    width: var(--logo-width-mobile);
+  }
+
+  .network-logo--square img {
+    width: auto;
+    height: var(--logo-width-mobile);
+  }
+
+  .contact-block {
+    max-width: none;
+    margin-top: 40px;
+    gap: 18px;
+  }
+
+  .contact-alt {
+    gap: 18px;
   }
 
   .work {
@@ -2862,34 +2305,6 @@
     font-size: calc(var(--wordmark-size) * 0.86);
   }
 
-  .contact-dialog-panel {
-    padding: 28px 22px 22px;
-  }
-
-  .contact-dialog h3 {
-    max-width: 14ch;
-  }
-
-  .contact-dialog-send {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .story-panel {
-    padding: 24px;
-    gap: 14px;
-  }
-
-  .story-close {
-    top: 14px;
-    right: 14px;
-    width: 34px;
-    height: 34px;
-  }
-
-  .story-title {
-    font-size: 1.25rem;
-  }
 }
 
 /* ==========================================================================
@@ -2905,9 +2320,8 @@
    Angka posisinya diturunkan dari hero mobile referensi (heynesh.com pada
    425x870), dinyatakan dalam % supaya bilah URL browser yang muncul-hilang
    tidak menggeser komposisinya:
-     wordmark  y 100   → 11.5%      kartu traits  y 295 → 34%
-     ubun-ubun y 105   → 12%        kartu tahun   y 355 → 41%
-     headline  y 505   → 58%        kartu angka   y 680 → 78%
+     wordmark  y 100   → 11.5%      kartu tahun  y 355 → 41%
+     ubun-ubun y 105   → 12%        kolom teks   y 505 → 55%
    ========================================================================== */
 
 @media (max-width: 767px) {
@@ -2919,13 +2333,12 @@
     /* Potret sekarang JAUH lebih besar dari panggungnya (lihat .hero-portrait),
        jadi bahu dan kakinya harus dipotong di sini. */
     overflow: hidden;
-    /* Lantai untuk ponsel pendek: DIUKUR, bukan ditaksir. Tinggi kartu traits
-       (~176px pada 360px, "Custom Packaging" turun dua baris) dan headline
-       (~106px, tiga baris) itu tetap dalam px sementara jangkarnya % — jadi
-       di layar pendek keduanya saling mendekat. Pada 620px yang sempat dipakai
-       di sini, traits berakhir di 381 sementara headline mulai di 365: menimpa.
-       780px menyisakan ~27px celah di kasus tersempit; di bawah itu halaman
-       lebih baik sedikit lebih panjang dari layar daripada isinya bertindih. */
+    /* Lantai untuk ponsel pendek: kolom teks (eyebrow + nama + headline tiga
+       baris + subheadline + tautan ≈ 260px pada 360px) tingginya tetap dalam
+       px sementara jangkarnya %, jadi di layar pendek ia mendekati kartu tahun
+       di atasnya dan baris merek di kakinya. 780px menyisakan napas di kasus
+       tersempit; di bawah itu halaman lebih baik sedikit lebih panjang dari
+       layar daripada isinya bertindih. */
     min-height: 780px;
     padding: 0;
   }
@@ -3024,37 +2437,7 @@
     margin: 0;
   }
 
-  /* Kedua kartu memakai posisi referensi (425x870): traits x 45 y 295-455,
-     kartu tahun x 285-395 y 355-495. Traits sedikit masuk dari gutter — di
-     referensi ia memang tidak menempel tepi layar. */
-  /* Kartu digeser ke KIRI dan diturunkan sejauh mungkin supaya wajah subjek
-     tidak tertutup. `top`-nya tidak bisa satu angka: yang membatasi turunnya
-     adalah headline di 58.5%, sementara tinggi kartu tetap dalam px — di layar
-     pendek angka 40% membuat keduanya bertindih. `min()` mengambil yang lebih
-     tinggi antara 40% dan "tepat di atas headline", jadi ia turun sejauh yang
-     muat di layar itu dan berhenti sendiri sebelum menabrak. */
-  .hero-traits {
-    top: min(40%, calc(58.5% - 170px));
-    left: 3vw;
-    max-width: 36vw;
-    gap: 7px;
-    padding: 12px 14px;
-  }
-
-  /* Dikecilkan bersama kartunya — dan HANYA di sini, bukan di blok layout
-     statis di atas: blok itu dipakai juga oleh desktop reduced-motion, di mana
-     kartu traits mengalir di lebar penuh dan 13px terbaca terlalu kecil.
-     Pada 0.8125rem baris terpanjang ("Custom Packaging") 128px masih muat di
-     ruang teks 142px, jadi kelima baris tetap satu baris masing-masing. */
-  .hero-trait {
-    font-size: 0.8125rem;
-  }
-
-  .hero-trait-mark {
-    width: 7.5px;
-    height: 7.5px;
-  }
-
+  /* Kartu tahun memakai posisi referensi (425x870): x 285-395, y 355-495. */
   .hero-mobile-stat-float {
     top: 41%;
     width: 27vw;
@@ -3067,61 +2450,48 @@
     font-size: 2.5rem;
   }
 
-  /* Headline pindah KE ATAS potret dan jadi putih — di susunan lama ia duduk
-     di bawah foto dengan tinta hitam, dan itu yang bikin hero mobile terbaca
-     sebagai dua blok terpisah (foto, lalu teks) alih-alih satu komposisi. */
-  .hero-headline {
+  /* Seluruh kolom teks pindah KE ATAS potret dan jadi putih — di susunan lama
+     ia duduk di bawah foto dengan tinta hitam, dan itu yang bikin hero mobile
+     terbaca sebagai dua blok terpisah (foto, lalu teks) alih-alih satu
+     komposisi. */
+  .hero-copy {
     position: absolute;
-    top: 58.5%;
+    /* 57%, bukan 55%: pada 55% baris nama menyentuh dagu subjek. */
+    top: 57%;
     left: var(--gutter);
     right: var(--gutter);
+    width: auto;
     z-index: 3;
+    gap: 10px;
     color: #f8f7f3;
-    font-size: clamp(2rem, 9.5vw, 3rem);
     text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
-    margin: 0;
   }
 
-  /* Kartu angka kedua ikut mengambang di atas foto, sebaris dengan tepi kiri
-     headline — pasangan visual "80+ Projects" di referensi. Jadi kaca, bukan
-     kartu terang, karena sekarang latarnya foto. */
-  .hero-mobile-stat-inline {
-    position: absolute;
-    top: 79%;
-    left: var(--gutter);
-    z-index: 3;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-    padding: 10px 14px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur-soft));
-    -webkit-backdrop-filter: blur(var(--glass-blur-soft));
-    border-radius: var(--radius-lg);
-    margin: 0;
+  .hero-headline {
+    font-size: clamp(2rem, 9.5vw, 3rem);
   }
 
-  .hero-mobile-stat-inline .hero-mobile-stat-label {
-    color: var(--white);
+  .hero-subheadline {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.9375rem;
   }
 
-  /* Baris penutup hero: keterangan di kiri, tombol sekunder di kanan. Keduanya
-     dipatok ke KAKI panggung supaya tidak pernah bertabrakan dengan kartu di
-     atasnya berapa pun tinggi layarnya. */
-  .hero-eyebrow {
+  /* Tautan "See the journey" tetap ada di mobile — ia satu-satunya jalan cepat
+     ke bagian Journey selain menu, dan sebagai teks berpanah ia tidak
+     bersaing dengan tombol WhatsApp di topbar. */
+  .hero-secondary {
+    color: #f8f7f3;
+  }
+
+  /* Baris merek dipatok ke KAKI panggung supaya tidak pernah bertabrakan
+     dengan kolom teks di atasnya berapa pun tinggi layarnya. */
+  .hero-brands {
     position: absolute;
     bottom: 2.5%;
     left: var(--gutter);
+    right: var(--gutter);
     z-index: 3;
     margin: 0;
-  }
-
-  /* Tidak ditampilkan di mobile: topbar sudah memegang satu CTA ("Let's Talk")
-     dan tautan Work ada di menu, jadi tombol ini cuma meramaikan sudut bawah
-     hero. Sudut itu di referensi memang hanya berisi satu baris keterangan.
-     Di desktop tombolnya tetap ada — aturan ini khusus `max-width: 767px`. */
-  .hero-secondary {
-    display: none;
   }
 }
 
@@ -3141,49 +2511,12 @@
   box-shadow: 0 20px 42px -28px rgba(46, 32, 6, 0.68);
 }
 
-.timeline-card .tl-head {
-  align-items: center;
-  min-height: 28px;
-  margin-bottom: 16px;
-}
 
-.tl-brands {
-  display: flex;
-  align-items: center;
-  gap: clamp(8px, 0.7vw, 12px);
-}
-
-.tl-brand-lockup {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  color: rgba(46, 32, 6, 0.68);
-  font-family: var(--font-label);
-  font-size: max(10px, 0.68vw);
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  line-height: 1;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.tl-brand-lockup + .tl-brand-lockup {
-  padding-left: clamp(8px, 0.7vw, 12px);
-  border-left: 1px solid rgba(46, 32, 6, 0.16);
-}
-
-.tl-brand-mark {
-  display: block;
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-}
-
-.tl-brand-lockup--parcelin .tl-brand-mark {
-  width: 30px;
-}
-
+/* Berdiri sendiri di atas angka tahun — dulu ia separuh kanan dari baris
+   penanda bersama chip bendera, dan baris itu sudah dibuang. */
 .tl-card-index {
+  display: block;
+  margin-bottom: 0.6vw;
   color: rgba(46, 32, 6, 0.38);
   font-family: var(--font-label);
   font-size: max(10px, 0.68vw);
@@ -3223,31 +2556,6 @@
   line-height: 1.5;
 }
 
-.timeline-card .tl-metrics {
-  margin-top: 20px;
-  padding-top: 14px;
-}
-
-.timeline-card .tl-metrics li {
-  gap: 4px;
-  padding-top: 0;
-}
-
-.timeline-card .tl-metrics strong {
-  font-size: clamp(1.2rem, 1.35vw, 1.5rem);
-}
-
-.timeline-card .tl-metrics span {
-  font-size: max(11px, 0.78vw);
-}
-
-.timeline-card .timeline-meta {
-  margin-top: 18px;
-}
-
-.timeline-card .tl-age::before {
-  display: none;
-}
 
 @media (max-width: 767px) {
   .timeline {
@@ -3278,31 +2586,6 @@
     box-shadow: 0 18px 36px -26px rgba(46, 32, 6, 0.58);
   }
 
-  .timeline-card .tl-head {
-    margin-bottom: 14px;
-  }
-
-  .tl-brands {
-    gap: 8px;
-  }
-
-  .tl-brand-lockup {
-    gap: 6px;
-    font-size: 0.625rem;
-  }
-
-  .tl-brand-lockup + .tl-brand-lockup {
-    padding-left: 8px;
-  }
-
-  .tl-brand-mark {
-    width: 22px;
-    height: 22px;
-  }
-
-  .tl-brand-lockup--parcelin .tl-brand-mark {
-    width: 27px;
-  }
 
   .timeline-card .timeline-year {
     font-size: 3.1rem;
@@ -3316,14 +2599,10 @@
     font-size: 0.95rem;
   }
 
-  .timeline-card .tl-metrics,
-  .timeline-card .timeline-meta {
-    margin-top: 18px;
-  }
 
   .timeline-card::before {
     /* Titik sengaja berada di pusat angka tahun, bukan di tepi atasnya. */
-    top: 82px;
+    top: 66px;
     border-color: rgba(46, 32, 6, 0.62);
     background: var(--yellow);
     box-shadow: 0 0 0 4px var(--bg);

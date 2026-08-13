@@ -10,7 +10,7 @@
  * anak-anak yang jadi saudara, bukan keturunan.
  */
 import Icon from './Icon.astro';
-import { brand, hero, nav, stats, clients } from '../data/site';
+import { brand, clients, hero, nav, social, stats } from '../data/site';
 ---
 
 <aside id="mobile-navigation" class="sidebar" data-sidebar>
@@ -36,16 +36,22 @@ import { brand, hero, nav, stats, clients } from '../data/site';
     >
       <span class="brand-name" data-brand-name>{brand.name}</span><span class="brand-symbol">{brand.symbol}</span>
     </a>
+    {/* Kontak adalah panel yang dicari orang untuk menghubungi, jadi ikonnya
+        sengaja jauh lebih besar dari versi sebelumnya (13px) — dan tidak lagi
+        disembunyikan di mobile. */}
     <div class="social" data-ghost-fade>
       {
-        brand.social.map((item) => (
+        social.map((item) => (
           <a class="social-link" href={item.href} target="_blank" rel="noopener noreferrer" aria-label={item.label}>
-            <Icon name={item.icon} size={13} />
+            <Icon name={item.icon} size={18} />
           </a>
         ))
       }
     </div>
-    <p class="nav-tagline" data-ghost="tagline" data-ghost-type="box">{brand.tagline}</p>
+    {/* Keterangan di bawah nama. Tidak punya kotak asal di hero — seluruh teks
+        hero sekarang berdiri di satu kolom kiri, jadi baris ini ikut kelompok
+        yang menyala saat rail merakit diri. */}
+    <p class="nav-tagline" data-ghost-fade>Serial entrepreneur, Semarang</p>
   </div>
 
   <!-- Panel yang bisa dibuka/tutup di mobile (lihat mobile-menu.ts): brand +
@@ -64,20 +70,19 @@ import { brand, hero, nav, stats, clients } from '../data/site';
       {
         stats.map((stat, i) => (
           <div class="nav-card nav-stat-card">
-            <span class="nav-card-bg" data-ghost={`stats-card-${i}`} data-ghost-type="background" />
-            {/* Di rail keduanya BERTUMPUK (angka di atas, label di bawah).
-                Kartu pertama tampil BERDAMPINGAN saat masih berukuran hero, dan
-                itu yang ditandai `data-ghost-alt`: ghost.ts mengukur susunan
-                bernama kelas itu satu frame, lalu menirunya dengan menggeser
-                kedua anaknya memakai transform sepanjang morph. Kartu kedua
-                tanpa atribut itu — susunannya sama di kedua tempat, jadi cukup
-                digeser dan diskalakan seperti ghost `box` biasa. */}
-            <div
-              class="nav-stat"
-              data-ghost={`stat-${i}`}
-              data-ghost-type="box"
-              data-ghost-alt={i === 0 ? 'is-inline' : undefined}
-            >
+            {/* Hanya kartu ber-`inHero` yang punya kotak asal di hero dan
+                diterbangkan ke sini; sisanya menyala di tempat bersama elemen
+                rail lain yang memang tidak muncul di hero. Susunannya BERTUMPUK
+                (angka di atas, label di bawah) di kedua tempat, jadi cukup
+                digeser dan diskalakan seperti ghost biasa — tidak ada lagi
+                susunan alternatif yang harus diukur satu frame. */}
+            <span
+              class="nav-card-bg"
+              data-ghost={stat.inHero ? `stats-card-${i}` : undefined}
+              data-ghost-type={stat.inHero ? 'background' : undefined}
+              data-ghost-fade={stat.inHero ? undefined : true}
+            />
+            <div class="nav-stat" data-ghost={stat.inHero ? `stat-${i}` : undefined} data-ghost-type="box" data-ghost-fade={stat.inHero ? undefined : true}>
               <span class="nav-stat-value">{stat.value}</span>
               <span class="nav-stat-label">
                 {
@@ -117,6 +122,7 @@ import { brand, hero, nav, stats, clients } from '../data/site';
                 class="nav-link"
                 href={item.href}
                 data-nav-link={item.id}
+                data-nav-sections={item.sections.join(' ')}
                 data-ghost={`nav-${item.id}`}
                 data-ghost-type="box"
               >
@@ -169,6 +175,25 @@ import { brand, hero, nav, stats, clients } from '../data/site';
       <a class="nav-email-btn" href={`mailto:${brand.email}`} data-ghost-fade>
         <span class="nav-email-text">{brand.email}</span>
       </a>
+    </div>
+
+    {/* Salinan khusus mobile — di sana `.nav-top` menyusut jadi topbar setinggi
+        40px yang sudah penuh oleh pill brand, tombol WhatsApp, dan tombol menu,
+        jadi baris sosial di atas TIDAK muat dan disembunyikan. Tanpa salinan
+        ini Instagram, TikTok, dan LinkedIn hilang sama sekali di ponsel.
+        Sengaja tanpa atribut `data-ghost*`: elemen ini tidak pernah ada di
+        desktop, jadi ia tidak boleh ikut terukur GhostEngine. */}
+    <div class="nav-card nav-social-card">
+      <div class="social social--panel">
+        {
+          social.map((item) => (
+            <a class="social-link" href={item.href} target="_blank" rel="noopener noreferrer" aria-label={item.label}>
+              <Icon name={item.icon} size={18} />
+              <span class="social-label">{item.label}</span>
+            </a>
+          ))
+        }
+      </div>
     </div>
   </div>
 

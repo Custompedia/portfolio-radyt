@@ -3,9 +3,12 @@ import Base from '../layouts/Base.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Hero from '../components/sections/Hero.astro';
 import About from '../components/sections/About.astro';
+import Journey from '../components/sections/Journey.astro';
+import Companies from '../components/sections/Companies.astro';
+import Network from '../components/sections/Network.astro';
 import Work from '../components/sections/Work.astro';
-import Cta from '../components/sections/Cta.astro';
-import Faq from '../components/sections/Faq.astro';
+import Moment from '../components/sections/Moment.astro';
+import Contact from '../components/sections/Contact.astro';
 ---
 
 <Base>
@@ -13,10 +16,14 @@ import Faq from '../components/sections/Faq.astro';
   <main>
     <Hero />
     <About />
+    <Journey />
+    <Companies />
+    <Network />
     <Work />
-    <Cta />
+    <!-- Jeda visual, bukan section handoff: scene 3D tanpa tawaran apa pun. -->
+    <Moment />
   </main>
-  <!-- Faq merangkap footer: wordmark penutup + akordeon, lalu halaman selesai.
-       Kontak dan sosial tinggal permanen di sidebar. -->
-  <Faq />
+  <!-- Contact merangkap footer: wordmark penutup + satu blok CTA, lalu halaman
+       selesai. Kontak dan sosial tetap permanen di sidebar. -->
+  <Contact />
 </Base>

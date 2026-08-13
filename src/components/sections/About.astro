@@ -1,156 +1,43 @@
 ---
 /**
- * Garis perjalanan digambar TANGAN, bukan dihitung dari posisi kartu.
+ * Section 02 — About.
  *
- * Versi sebelumnya membangun bezier dari rect tiap kartu — hasilnya garis yang
- * selalu "benar" tapi tak pernah punya karakter: lengkungnya seragam dan
- * ayunannya sekecil jarak antar kartu. Referensinya justru sebaliknya: satu
- * path tetap yang menyapu nyaris ke dua tepi, lalu KARTU-nya yang dipasang
- * menempel ke simpul path itu (lihat modules/timeline-path.ts).
+ * Sisi personal dan cerita perintis dilebur ke sini; keduanya tidak lagi punya
+ * section sendiri. Empat paragrafnya berurutan dan tidak boleh ditukar: tiga
+ * perusahaan → mental perintis → masa pandemi → di luar bisnis.
  *
- * Simpul dan path lahir dari daftar `nodes` yang sama, jadi keduanya tidak
- * mungkin lepas sinkron.
+ * Section inilah yang ditarik naik menimpa hero (`.about` di sections.css),
+ * jadi ia harus tetap section pertama sesudah Hero.
  */
-import { about, timeline, timelineFlags } from '../../data/site';
+import { about } from '../../data/site';
 
-const VB_W = 1000;
-const VB_H = 2200;
-
-/**
- * x/y dalam koordinat viewBox; `side` menentukan kartu duduk di kiri atau kanan
- * simpul. Kartu digantung DI ATAS simpulnya (sudut bawahnya yang menempel),
- * jadi simpul pertama harus turun setidaknya setinggi satu kartu — kalau tidak
- * kartu pertama terdorong ke tepi atas dan menabrak kartu kedua.
- */
-const nodes = [
-  { x: 880, y: 380, side: 'right' },
-  { x: 140, y: 670, side: 'left' },
-  { x: 880, y: 960, side: 'right' },
-  { x: 140, y: 1250, side: 'left' },
-  { x: 880, y: 1540, side: 'right' },
-  { x: 140, y: 1830, side: 'left' },
-  { x: 620, y: 2120, side: 'right' },
-] as const;
-
-/**
- * Tiap ruas adalah satu kubik dengan titik kendali yang menahan arah horizontal
- * di kedua ujungnya — itulah yang membuat garisnya berayun lebar, bukan
- * memotong lurus dari simpul ke simpul.
- */
-const path = nodes
-  .map((node, i) => {
-    if (i === 0) return `M ${node.x} ${node.y}`;
-    const prev = nodes[i - 1]!;
-    const reach = (node.y - prev.y) * 0.53;
-    return `C ${prev.x} ${prev.y + reach}, ${node.x} ${node.y - reach}, ${node.x} ${node.y}`;
-  })
-  .join(' ');
-
-const entries = timeline.slice(0, nodes.length);
-
+/** Kelas per logo dipakai untuk menyeimbangkan ukuran optis — tiga kanvas
+ *  logonya punya rasio ruang kosong yang berbeda-beda. */
+const slug = (name: string): string => name.toLowerCase();
 ---
 
 <section class="section about" id="about">
   <header class="section-head about-head">
-    <span class="label-pill" data-label-pill>{about.label}</span>
+    <span class="label-pill" data-label-pill>{about.eyebrow}</span>
     <div class="about-title-row">
-      <h2 class="section-title h2-style" data-reveal>
-        {about.headline.map((line) => <span>{line}</span>)}
-      </h2>
-      <div class="about-brands" aria-label="Dua bisnis Radhyta">
-        <img class="about-brand about-brand--custompedia" src="/images/favicon.svg" alt="Custompedia" />
-        <img class="about-brand about-brand--parcelin" src="/images/Parcelinpack-transparent.webp" alt="Parcelin" />
+      <h2 class="section-title h2-style" data-reveal>{about.headline}</h2>
+      <div class="about-brands" aria-label="Tiga perusahaan Radhyta">
+        {
+          about.logos.map((logo) => (
+            <img
+              class:list={['about-brand', `about-brand--${slug(logo.name)}`]}
+              src={logo.src}
+              alt={logo.name}
+              loading="lazy"
+              decoding="async"
+            />
+          ))
+        }
       </div>
     </div>
-    <p class="section-intro" data-reveal data-reveal-stagger="0.05">{about.intro}</p>
   </header>
 
-  <div class="timeline" data-timeline>
-    <!-- Hanya SATU salinan path, dan ia dipotong oleh pembungkus ber-`height`
-         yang di-scrub. Dulu ada salinan kedua di bawahnya sebagai jejak samar
-         sepanjang penuh — itu dihapus dengan sengaja: begitu jalur di depan
-         sudah kelihatan, garisnya cuma terbaca "terisi", bukan sedang
-         digambar. Di depan progress sekarang benar-benar kosong. -->
-    <div class="timeline-fill" data-timeline-fill aria-hidden="true">
-      <svg class="timeline-svg" viewBox={`0 0 ${VB_W} ${VB_H}`} preserveAspectRatio="none" fill="none">
-        <path class="timeline-lit" d={path} stroke-width="2.5" stroke-linecap="round"></path>
-      </svg>
-    </div>
-
-    {/* Simpul TIDAK ikut di dalam SVG. SVG-nya di-stretch (preserveAspectRatio
-        "none") supaya path mengisi kotak apa pun, dan stretch itu mengubah
-        lingkaran jadi elips. Sebagai elemen HTML yang diposisikan persen, titik
-        ini tetap bulat sempurna sambil duduk di koordinat yang sama. */}
-    {/* Tidak ada titik yang berjalan di ujung garis. Versi sebelumnya punya
-        satu, tapi di antara simpul-simpul kuning ia cuma terbaca sebagai
-        noda hitam yang nyangkut di tengah lengkungan. */}
-    {
-      nodes.map((node, i) => (
-        <span
-          class="timeline-dot"
-          data-timeline-node={i}
-          aria-hidden="true"
-          style={`left:${(node.x / VB_W) * 100}%;top:${(node.y / VB_H) * 100}%`}
-        />
-      ))
-    }
-
-    {
-      entries.map((entry, i) => (
-        <article
-          class="timeline-card card"
-          data-timeline-card={i}
-          data-side={nodes[i]!.side}
-          data-tl-from="{'opacity':0,'y':'8%','scale':0.96}"
-          data-tl-to="{'opacity':1,'y':'0%','scale':1,'duration':0.8,'delay':0.12,'ease':'power3.out'}"
-          data-tl-start="top 88%"
-          data-tl-once
-        >
-          {/* Baris penanda: bendera mana yang mengerjakan bab ini, dan bab
-              keberapa dari tujuh. Keduanya menggantikan sepasang lingkaran
-              avatar abu-abu di versi sebelumnya — lingkaran itu tidak mewakili
-              siapa pun dan cuma terbaca sebagai placeholder. */}
-          <header class="tl-head">
-            <span class="tl-brands" data-flag={entry.flag} aria-label={timelineFlags[entry.flag]}>
-              {
-                entry.flag !== 'parcelin' && (
-                  <span class="tl-brand-lockup tl-brand-lockup--custompedia">
-                    <img class="tl-brand-mark" src="/images/favicon.svg" alt="" aria-hidden="true" />
-                    <span>Custompedia</span>
-                  </span>
-                )
-              }
-              {
-                entry.flag !== 'custompedia' && (
-                  <span class="tl-brand-lockup tl-brand-lockup--parcelin">
-                    <img class="tl-brand-mark" src="/images/Parcelinpack-transparent.webp" alt="" aria-hidden="true" />
-                    <span>Parcelin</span>
-                  </span>
-                )
-              }
-            </span>
-            <span class="tl-card-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-          </header>
-
-          <time class="timeline-year" datetime={entry.year} data-number-count={entry.year}>{entry.year}</time>
-          <h3 class="timeline-title">{entry.title}</h3>
-          <p class="timeline-body">{entry.body}</p>
-
-          {/* Dua angka teratas menjaga kartu tetap ringkas dan mudah dipindai. */}
-          <ul class="tl-metrics">
-            {entry.metrics.slice(0, 2).map((metric) => (
-              <li>
-                <strong>{metric.value}</strong>
-                <span>{metric.label}</span>
-              </li>
-            ))}
-          </ul>
-
-          <footer class="timeline-meta">
-            <span class="tl-age">{entry.age}</span>
-          </footer>
-        </article>
-      ))
-    }
+  <div class="about-body">
+    {about.paragraphs.map((paragraph) => <p data-reveal data-reveal-stagger="0.04">{paragraph}</p>)}
   </div>
 </section>

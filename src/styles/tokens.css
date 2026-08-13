@@ -40,17 +40,11 @@
      taupe transparan, bukan beige solid seperti kartu section. */
   --glass-bg: rgba(194, 184, 172, 0.45);
   --glass-blur: 20px;
-  --glass-blur-soft: 15px;
 
   /* Permukaan khusus per-section */
-  /* Beige pekat untuk panel modal yang duduk di atas scrim gelap — di situ
-     kaca setengah tembus seperti kartu di badan halaman tidak terbaca. */
-  --panel-bg: #e4e0ce;
   --work-bg: linear-gradient(#000000, #222222 44%);
   --work-scrim: linear-gradient(rgba(0, 0, 0, 0.3), rgba(51, 51, 51, 0.03) 50%, rgba(0, 0, 0, 0.4));
   --work-dim: rgba(0, 0, 0, 0.6);
-  --work-arrow-idle-bg: #2f2f2f;
-  --work-arrow-idle-fg: #8c8c8c;
   --timeline-stroke: linear-gradient(
     rgba(46, 32, 6, 0.49),
     rgba(46, 32, 6, 0.27) 44%,
@@ -98,8 +92,7 @@
      ~104px — masih paling besar di halaman, tapi sekelas dengan judul section
      lain (88px), bukan dua kali lipatnya. */
   --fs-cta: clamp(3.5rem, 5.6vw, 6.5rem); /* lh 1    w700 */
-  --fs-lead: clamp(2rem, 3.2vw, 3.5rem); /* lh 1    w700 — paragraf What You Get */
-  --fs-year: clamp(4rem, 5.56vw, 6.25rem); /* lh 1    w700 kuning */
+  --fs-lead: clamp(2rem, 3.2vw, 3.5rem); /* lh 1    w700 — paragraf What You Get */ /* lh 1    w700 kuning */
   --fs-stat: clamp(4rem, 5.69vw, 6.25rem); /* lh 0.9  w700 */
   --fs-work-title: clamp(1.25rem, 1.94vw, 3rem); /* lh 1    w500 */
   --fs-h3: clamp(0.75rem, 1.32vw, 1.75rem); /* lh 1.4  w500 */
@@ -146,12 +139,14 @@
 
   /* Geser potret mendatar. Negatif = ke kiri, positif = ke kanan; 0 berarti
      kotak fotonya persis di tengah layar.
-     Ini murni koreksi OPTIS, bukan perbaikan centering: fotonya sendiri sudah
-     center (subjek jatuh di 405 dari lebar 810), tapi posenya menyerong dan
-     bahu kirinya menjulur lebih jauh, jadi massa visualnya terbaca condong ke
-     kanan. Hanya berlaku di desktop — di mobile potret jadi elemen alir dan
+     BUKAN lagi koreksi optis kecil seperti versi sebelumnya (-3vw): handoff
+     meminta potret pindah ke paruh KANAN supaya seluruh teks bisa berdiri di
+     satu kolom kiri tanpa menumpang di atas wajah. Pada 14vw pusat kotak foto
+     jatuh di 67vw dan tepi kirinya di ~45vw — tepat di kanan kolom teks
+     (berakhir 42.4vw) dengan sisa napas untuk kartu statistik di pundaknya.
+     Hanya berlaku di desktop — di mobile potret jadi elemen alir dan
      dipusatkan oleh `margin: 0 auto`. */
-  --hero-portrait-x: -3vw;
+  --hero-portrait-x: 14vw;
 
   /* Jarak tepi ATAS kotak foto ke tepi atas layar — knob naik-turun potret.
      Kecilkan / buat negatif = potret naik. Sebelumnya angka ini terkunci di
@@ -166,29 +161,30 @@
      rambut. 2vh mengembalikan jarak itu ke ~39px. */
   --hero-portrait-top: 2vh;
 
-  /* Tepi KIRI kartu traits hero, dan sekaligus tepi kiri paragraf tagline di
-     bawahnya (lewat ghost `tagline` di Hero.astro). Keduanya WAJIB memakai
-     token ini: kelurusan tepi kiri mereka itu yang bikin sudut kanan hero
-     terbaca sebagai satu blok, dan dulu angkanya ditulis dua kali sehingga
-     menggeser salah satunya diam-diam merusak kelurusan itu.
-     Kecilkan = kedua-duanya bergeser ke kiri. */
-  --hero-traits-left: 69vw;
+  /* KOLOM TEKS HERO — satu-satunya tempat geometri kolom kiri ditulis.
+     Dipakai bersama oleh `.hero-copy` dan baris merek di kakinya, jadi tepi
+     kirinya tidak mungkin lepas sinkron.
+
+     Tepi atasnya dijangkar ke kaki wordmark (--hero-nav-top) plus tinggi baris
+     nav, bukan angka vh lepas: ketiganya harus turun-naik bersama saat lebar
+     layar berubah. */
+  --hero-copy-left: var(--gutter);
+  --hero-copy-top: calc(var(--hero-nav-top) + 2.8vw);
+  --hero-copy-w: min(41vw, 720px);
 
   /* Ukuran kedua tombol hero. Dipakai bersama oleh ghost tombol CTA
-     (tipe `size`) dan tombol sekunder statis, jadi keduanya dijamin identik. */
-  --hero-btn-w: max(160px, 10.5vw);
+     (tipe `size`) dan kotak pengukurnya di kolom teks, jadi keduanya dijamin
+     identik. */
+  --hero-btn-w: max(220px, 14.1vw);
   /* 3.28vw = 49px @1492 — tinggi tombol hero referensi, diukur langsung.
-     3.9vw sebelumnya membuat tombolnya 9px lebih tinggi dari aslinya. */
+     3.9vw sebelumnya membuat tombolnya 9px lebih tinggi dari aslinya.
+     Lebarnya naik dari 10.5vw karena labelnya berganti dari "Let's Talk" ke
+     "Chat on WhatsApp". DIUKUR pada 1568: label itu 169.4px = 10.8vw, dan
+     dengan padding 1.5vw di kedua sisinya tombol butuh 13.8vw. 14.1vw memberi
+     sisa 0.3vw — tanpa itu `overflow:hidden` milik `.btn` memotong huruf
+     terakhirnya. */
   --hero-btn-h: 3.28vw;
 
-  /* Geometri headline hero, dipakai bersama oleh headline-nya sendiri DAN oleh
-     tombol CTA di bawahnya. Sebelumnya tombol dipatok mati di 89.8vh: angka itu
-     lahir dari kasus terburuk (layar lebar-pendek, headline mentok cap 11.5vh
-     dan berakhir di 86.5vh). Di layar normal headline berhenti jauh lebih
-     tinggi, dan tombolnya tertinggal dengan jurang ~9vh di tengahnya.
-     Dengan menurunkan tepi bawah headline dari rumusnya, jarak itu jadi tetap
-     3.2vh di SEMUA rasio — dan kasus terburuk tetap aman karena rumus yang
-     sama ikut melar. */
   /* Ukuran wordmark raksasa, dan SATU-SATUNYA tempat angkanya ditulis.
    *
    * Ketiga angka di bawah diukur di browser pada "RADHYTA" (Satoshi 900,
@@ -210,9 +206,7 @@
    *
    * Ukurannya lalu diturunkan dari ruang yang benar-benar tersedia — lebar
    * layar dikurangi gutter kiri-kanan — supaya wordmark BERHENTI tepat di
-   * gutter alih-alih terpotong tepi layar. Versi sebelumnya menulis 21.4vw
-   * lepas, yang berarti pas 100vw, dan kedua ujungnya hilang tergunting.
-   * Baris navigasi dan versi mobile menurunkan nilainya dari sini. */
+   * gutter alih-alih terpotong tepi layar. */
   --wordmark-ink: 4.6405;
   --wordmark-bearing-l: 0.0625;
   --wordmark-size: calc((100vw - 2 * var(--gutter)) / var(--wordmark-ink));
@@ -224,12 +218,15 @@
      hurufnya tanpa ada yang mengingatkan. */
   --hero-nav-top: calc(0.852 * var(--wordmark-size) + 0.7vw);
 
-  --hero-h1-top: 51vh;
-  --hero-h1-size: min(6.5rem, 11.5vh, 4.7vw);
-  /* 3 baris × line-height 1.03 (--lh-h1). Ditulis eksplisit, bukan lewat
-     var(--lh-h1), supaya terbaca sebagai "tinggi tiga baris" saat dibaca. */
-  --hero-h1-bottom: calc(var(--hero-h1-top) + 3 * 1.03 * var(--hero-h1-size));
-  --hero-cta-top: calc(var(--hero-h1-bottom) + 3.2vh);
+  /* Tiga batas headline hero:
+       6.5rem  langit-langit mutlak di layar sangat besar
+       7vh     kolom kiri sekarang memuat lima baris (eyebrow, nama, headline,
+               subheadline, tombol) di bawah wordmark yang memakan ~45vh —
+               DIUKUR: pada 782px tinggi, 7vh memberi headline 169px dan
+               menyisakan ~30px napas sebelum baris merek di kaki hero
+       4.1vw   baris terpanjang ("Building companies", 18 karakter w900) harus
+               muat di --hero-copy-w = 41vw */
+  --hero-h1-size: min(6.5rem, 7vh, 4.1vw);
 
   /* Tangga radius. `.83vw` adalah radius rumah — kartu, tombol, kartu work.
      `.56vw` yang lebih rapat dipakai panel sidebar dan kartu kaca hero. */
@@ -259,6 +256,21 @@
   --dur-fast: 0.2s;
   --dur: 0.4s;
   --theme-dur: 0.3s;
+}
+
+/* Layar lebar-pendek (rasio ≳ 2.15). Di sini wordmark full-bleed tingginya
+   ~46vh dan kolom teks di bawahnya tidak lagi muat sampai kaki hero — DIUKUR
+   pada 1920x780: kaki baris tombol jatuh di 764px sementara baris merek mulai
+   di 729px, jadi keduanya bertindih. Membatasi wordmark ke 34vh mengembalikan
+   ~116px ke kolom teks. Konsekuensinya wordmark berhenti sebelum gutter di
+   rasio seperti itu, dan itu memang disengaja: wordmark yang tidak menyisakan
+   ruang untuk isinya bukan lagi latar, ia penghalang.
+   `min-width` menjaga aturan ini tidak ikut kena ponsel lanskap, yang punya
+   susunan hero-nya sendiri. */
+@media (min-aspect-ratio: 43/20) and (min-width: 768px) {
+  :root {
+    --wordmark-size: 34vh;
+  }
 }
 
 /* Sidebar / komponen apa pun yang sedang menimpa section gelap. */
