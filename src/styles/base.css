@@ -65,7 +65,10 @@ html {
   /* Firefox, dan Chrome 121+ yang mengutamakan properti standar ini di atas
      pseudo-element ::-webkit-scrollbar di bawah. */
   scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) transparent;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  /* Peralihan terang <-> gelap terjadi saat section gelap masuk; tanpa ini
+     lajur scrollbar berkedip berganti warna. */
+  transition: scrollbar-color 0.35s var(--ease-out);
 }
 
 /* Chrome/Safari lama. Duplikat yang disengaja: browser baru memakai blok di
@@ -76,7 +79,8 @@ html::-webkit-scrollbar {
 }
 
 html::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--scrollbar-track);
+  transition: background 0.35s var(--ease-out);
 }
 
 html::-webkit-scrollbar-thumb {

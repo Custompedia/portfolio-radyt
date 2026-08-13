@@ -167,9 +167,23 @@ export const clients: ClientLogo[] = [
  * section terpisah untuk keduanya.
  */
 export const about = {
+  eyebrow: 'Three Companies, One Desk',
   headline: 'About Radhyta',
-  lead: 'Berawal dari toko online pada 2014, Radhyta Mahenda Mukhsin membangun bisnis dari Semarang dengan tetap dekat pada masalah, proses, dan orang-orang yang mempercayakan pekerjaannya.',
-  body: 'Dari sana lahir Custompedia, Parcelin, dan Creasa. Tiga bisnis dengan medan berbeda, tetapi satu prinsip yang sama: pekerjaan harus jelas arahnya, rapi eksekusinya, dan berguna bagi orang yang menerimanya.',
+  lead: 'Berawal dari satu meja pada 2014, Radhyta membangun Custompedia, Parcelin, dan Creasa dari Semarang. Kini, ketiganya melayani bisnis di seluruh Indonesia.',
+  stories: [
+    {
+      title: 'Built from zero',
+      body: 'Semuanya dimulai dari nol. Dari berjualan baju online, lalu merchandise custom, hingga berkembang menjadi tiga perusahaan. Tidak ada yang diwarisi. Semuanya dirintis dari awal.',
+    },
+    {
+      title: 'The turning point',
+      body: 'Titik terberat datang pada 2020, saat pandemi menghentikan lini merchandise yang selama ini menopang bisnis. Dari situ, Custompedia bertransformasi menjadi creative agency dan Parcelin lahir dari penjualan hampers. Masa sulit tersebut menjadi awal dari pertumbuhan baru.',
+    },
+    {
+      title: 'Beyond the work',
+      body: 'Di luar pekerjaan, Radhyta adalah seorang suami dan ayah. Ia meluangkan waktu untuk gym, menjelajah tempat baru, dan merawat kecintaannya pada hewan. Semarang tetap menjadi tempat semuanya dimulai.',
+    },
+  ],
   location: 'Semarang, Indonesia',
 };
 

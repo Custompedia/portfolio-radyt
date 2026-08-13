@@ -21,6 +21,22 @@ export const brandStagesModule: AnimationModule = {
           ease: 'power4.out',
           scrollTrigger: { trigger: profile, start: 'top 78%', once: true },
         });
+
+        const growth = $<HTMLElement>('[data-about-growth]', profile);
+        const rings = growth ? $$<SVGCircleElement>('[data-growth-ring]', growth) : [];
+        const marks = growth ? $$<SVGCircleElement>('[data-growth-mark]', growth) : [];
+        const core = growth ? $<SVGCircleElement>('[data-growth-core]', growth) : null;
+        if (growth && core && rings.length) {
+          rings.forEach((ring) => {
+            const length = ring.getTotalLength();
+            gsap.set(ring, { strokeDasharray: length, strokeDashoffset: length });
+          });
+
+          gsap.timeline({ scrollTrigger: { trigger: profile, start: 'top 76%', end: 'bottom 34%', scrub: 0.7 } })
+            .fromTo(core, { scale: 0.35, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.18, ease: 'power2.out' })
+            .to(rings, { strokeDashoffset: 0, stagger: 0.14, duration: 0.62, ease: 'power2.inOut' }, '-=0.08')
+            .from(marks, { scale: 0, autoAlpha: 0, stagger: 0.09, duration: 0.18, ease: 'back.out(1.4)' }, '-=0.18');
+        }
       }
 
       const about = $<HTMLElement>('[data-about-stories]');

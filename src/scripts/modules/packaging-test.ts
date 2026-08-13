@@ -19,8 +19,7 @@ export const packagingTestModule: AnimationModule = {
     const canvas = $<HTMLCanvasElement>('[data-pedi-canvas]');
     const shadow = $<HTMLElement>('[data-pedi-shadow]');
     const outro = $<HTMLElement>('[data-packaging-outro]');
-    const handoff = $<HTMLElement>('[data-packaging-handoff]');
-    if (!section || !stage || !canvas || !shadow || !outro || !handoff) return;
+    if (!section || !stage || !canvas || !shadow || !outro) return;
 
     const run = ++generation;
     const intro = $$<HTMLElement>('[data-packaging-intro]', section);
@@ -63,7 +62,6 @@ export const packagingTestModule: AnimationModule = {
     gsap.set(outro, { autoAlpha: 0, y: 28 });
     gsap.set(stage, { autoAlpha: 0, scale: 0.72, xPercent: -145, yPercent: 12, rotation: -7, transformOrigin: '50% 72%' });
     gsap.set(shadow, { scaleX: 0.22, opacity: 0.06, xPercent: -118 });
-    gsap.set(handoff, { autoAlpha: 0, yPercent: 45 });
 
     timeline = gsap.timeline({
       defaults: { ease: 'power3.out' },
@@ -76,6 +74,17 @@ export const packagingTestModule: AnimationModule = {
         pin: true,
         anticipatePin: 1,
         invalidateOnRefresh: true,
+        /**
+         * Pin ini menyisipkan spacer ~5040px yang mendorong TURUN semua section
+         * di bawahnya — terutama The Work, yang tingginya sendiri diatur dari
+         * JS. Tanpa prioritas ini ScrollTrigger menyegarkan trigger Work lebih
+         * dulu (modul horizontal init lebih awal), memakai posisi dokumen yang
+         * belum memperhitungkan spacer, dan rentang geser horizontalnya jatuh
+         * ~5040px terlalu tinggi: kartu selesai bergeser saat section-nya masih
+         * di bawah layar, lalu diam mentok begitu user benar-benar sampai.
+         * DIUKUR: start 11837 (salah) vs 16788 (posisi dokumen sebenarnya).
+         */
+        refreshPriority: 1,
       },
     });
 
@@ -95,8 +104,7 @@ export const packagingTestModule: AnimationModule = {
       .to(shadow, { scaleX: 0.72, opacity: 0, duration: 0.4 }, 3.82)
       .to(stage, { xPercent: 0, duration: 0.52, ease: 'power2.inOut' }, 3.82)
       .to(pose, { focus: 1, duration: 1.25, ease: 'power2.inOut' }, 4.18)
-      .to(pose, { focus: 1, duration: 0.62, ease: 'none' }, 5.43)
-      .to(handoff, { autoAlpha: 1, yPercent: 0, duration: 0.62, ease: 'power2.out' }, 5.43);
+      .to(pose, { focus: 1, duration: 0.62, ease: 'none' }, 5.43);
   },
 
   destroy() {
@@ -108,7 +116,7 @@ export const packagingTestModule: AnimationModule = {
     pedi = null;
     const stage = $<HTMLElement>('[data-pedi-stage]');
     if (stage) stage.dataset.state = 'loading';
-    $$<HTMLElement>('[data-packaging-test] [data-packaging-intro], [data-packaging-test] .packaging-test-moment, [data-packaging-test] [data-packaging-outro], [data-packaging-test] [data-pedi-orbits], [data-packaging-test] [data-pedi-stage], [data-packaging-test] [data-pedi-shadow], [data-packaging-test] [data-packaging-handoff]').forEach((element) => {
+    $$<HTMLElement>('[data-packaging-test] [data-packaging-intro], [data-packaging-test] .packaging-test-moment, [data-packaging-test] [data-packaging-outro], [data-packaging-test] [data-pedi-orbits], [data-packaging-test] [data-pedi-stage], [data-packaging-test] [data-pedi-shadow]').forEach((element) => {
       gsap.set(element, { clearProps: 'all' });
     });
   },

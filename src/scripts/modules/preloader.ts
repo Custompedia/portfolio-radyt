@@ -22,6 +22,33 @@ import { $, $$, isDesktop } from '../core/utils';
 
 let timeline: gsap.core.Timeline | null = null;
 
+/**
+ * Intro adalah pembuka halaman, bukan reaksi terhadap viewport: kesempatannya
+ * cuma satu, saat boot. Tanpa penjaga ini, setiap init() ulang akan
+ * menyembunyikan lagi potret dan menerbangkan lagi wordmark dari luar layar,
+ * menabrak apa pun yang sedang dilihat user.
+ *
+ * Disegel oleh main.ts di akhir boot(), BUKAN sekadar oleh init(): kalau
+ * halaman dibuka di lebar mobile, intro tidak pernah jalan (`desktopOnly`),
+ * dan tanpa segel itu memperlebar jendela melewati 768px akan memutar intro
+ * penuh di tengah halaman yang sudah dibaca.
+ */
+let spent = false;
+
+/**
+ * Majukan intro ke akhirnya. Dipakai main.ts sebelum membangun ulang modul:
+ * ghost mengukur wordmark di posisi istirahatnya, dan posisi itu baru sahih
+ * setelah intro tuntas.
+ */
+export function finishIntro(): void {
+  timeline?.progress(1);
+}
+
+/** Tutup kesempatan intro. Dipanggil sekali di akhir boot(). */
+export function sealIntro(): void {
+  spent = true;
+}
+
 /** Semua yang harus tersembunyi dulu, lalu dimunculkan berurutan.
  *
  * `statCards` sengaja hanya mengambil kartu ber-`data-ghost` — yaitu kartu yang
@@ -30,6 +57,8 @@ let timeline: gsap.core.Timeline | null = null;
  * ikut menaikkannya ke 1, kartu itu tampil di pojok kiri atas sejak frame
  * pertama, jauh sebelum rail-nya ada. */
 const stage = () => ({
+  wordmark: $('[data-hero-wordmark]'),
+  letters: $$('[data-wordmark-letter]'),
   portrait: $('.hero-portrait'),
   headlineLines: $$('.hero-headline-line'),
   navLinks: $$('.nav-link'),
@@ -47,9 +76,10 @@ export const preloaderModule: AnimationModule = {
   skipOnReducedMotion: true,
 
   init() {
-    const wordmark = $('[data-hero-wordmark]');
-    const letters = $$('[data-wordmark-letter]');
-    if (!wordmark || letters.length === 0 || !isDesktop()) return;
+    const el = stage();
+    const { wordmark, letters } = el;
+    if (!wordmark || letters.length === 0 || !isDesktop() || spent) return;
+    spent = true;
 
     const rect = wordmark.getBoundingClientRect();
     const xToCenter = window.innerWidth / 2 - (rect.left + rect.width / 2);
@@ -58,7 +88,6 @@ export const preloaderModule: AnimationModule = {
     gsap.set(wordmark, { x: window.innerWidth, y: yToCenter, autoAlpha: 1 });
     gsap.set(letters, { yPercent: 110 });
 
-    const el = stage();
     gsap.set(el.portrait, { autoAlpha: 0, scale: 0.88, transformOrigin: 'center bottom' });
     // Separator tumbuh dari tinggi nol, bukan memudar — garisnya seolah
     // ditarik keluar di antara label.
@@ -119,5 +148,25 @@ export const preloaderModule: AnimationModule = {
   destroy() {
     timeline?.kill();
     timeline = null;
+
+    // Membunuh timeline tidak mengembalikan apa pun — inline style hasil
+    // gsap.set() di init() tetap menempel. Kalau teardown terjadi di tengah
+    // intro (mis. lebar jatuh di bawah breakpoint), elemen hero tersangkut di
+    // autoAlpha: 0 dan hero versi mobile tampil kosong.
+    //
+    // Dibersihkan per-properti, BUKAN clearProps: 'all': `.hero-portrait`,
+    // nav link, dan tombol transform-nya dipegang GhostEngine dan style-engine,
+    // dan menghapusnya di sini akan membatalkan pekerjaan modul lain.
+    const el = stage();
+    gsap.set([el.wordmark, ...el.letters].filter(Boolean) as HTMLElement[], {
+      clearProps: 'opacity,visibility,x,y,yPercent',
+    });
+    gsap.set(el.portrait, { clearProps: 'opacity,visibility,scale,transformOrigin' });
+    gsap.set(el.navSeps, { clearProps: 'height' });
+    gsap.set(el.headlineLines, { clearProps: 'opacity,visibility,scale' });
+    gsap.set(el.statCards, { clearProps: 'opacity,visibility,filter' });
+    gsap.set([...el.navLinks, ...el.lead, ...el.buttons, ...el.supporting, ...el.paragraphs], {
+      clearProps: 'opacity,visibility',
+    });
   },
 };

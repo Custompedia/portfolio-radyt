@@ -1317,9 +1317,10 @@
   position: relative;
   min-height: 100dvh;
   overflow: clip;
-  background:
-    radial-gradient(circle at 51% 72%, #343434 0, #1a1a1a 28%, rgba(9, 9, 9, 0) 68%),
-    linear-gradient(to bottom, #222222 0, #1a1a1a 26%, #090909 70%);
+  /* Dasar yang sama persis dengan The Work di bawahnya — lihat --dark-bg.
+     Kedalaman ruangnya datang dari blob blur di .packaging-test-stage, bukan
+     dari gradient latar, supaya perbatasan kedua section tidak berjahit. */
+  background: var(--dark-bg);
 }
 
 .packaging-test-stage {
@@ -1364,7 +1365,9 @@
 .packaging-test-stage::after {
   bottom: -36vw;
   left: 25vw;
-  background: rgba(255, 255, 255, 0.045);
+  /* Biru redup, BUKAN putih: blob ini duduk di kaki scene, tepat di tempat
+     Pedi berhenti, dan putih beralpha di situ terbaca sebagai kabut pucat. */
+  background: rgba(110, 134, 255, 0.06);
 }
 
 .packaging-test-copy {
@@ -1579,17 +1582,6 @@
 }
 
 
-.packaging-test-handoff {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 6;
-  height: clamp(110px, 15vh, 170px);
-  background: linear-gradient(to bottom, rgba(241, 243, 247, 0), var(--bg) 88%);
-  pointer-events: none;
-}
-
 @media (min-width: 1101px) and (max-width: 1400px) {
   .packaging-test-copy {
     width: 27vw;
@@ -1662,11 +1654,6 @@
     order: 4;
     width: 100%;
     margin-top: 54px;
-  }
-
-
-  .packaging-test-handoff {
-    display: none;
   }
 }
 
@@ -2690,54 +2677,264 @@
    ========================================================================== */
 
 .about-head {
-  display: block;
+  display: grid;
+  gap: clamp(14px, 1.2vw, 20px);
+}
+
+.about-eyebrow {
+  color: var(--blue);
+  font-family: var(--font-label);
+  font-size: clamp(0.72rem, 0.8vw, 0.92rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .about-head .section-title {
   max-width: none;
   margin: 0;
   color: var(--fg);
-  font-size: clamp(3.6rem, 6.3vw, 8rem);
+  font-size: clamp(2.5rem, 4.6vw, 5.6rem);
   font-weight: 900;
   letter-spacing: -0.07em;
   line-height: 0.9;
 }
 
-.about-story {
-  margin-top: clamp(42px, 5vw, 88px);
+/* Mask reveal perlu ruang untuk ascender dan descender font display ini.
+   Padding dan margin saling meniadakan, jadi tinta tidak terpotong tanpa
+   menambah jarak heading ke konten berikutnya. */
+.about-head .line-mask {
+  padding: 0.08em 0 0.14em;
+  margin: -0.08em 0 -0.14em;
+}
+
+/* --- Panggung -------------------------------------------------------------
+
+   Dua bentuk dari markup yang sama:
+
+   1. DEFAULT (tanpa JS / mobile / reduced motion) — semuanya mengalir ke
+      bawah dan terbaca berurutan. Ini yang ada di CSS dasar di bawah.
+   2. `.about--staged` — dipasang about-story.ts di desktop. Panggungnya
+      menempel selama section dilewati dan ketiga chapter ditumpuk di titik
+      yang sama, bergantian dimunculkan oleh GSAP.
+
+   Urutannya sengaja begitu: bentuk statis adalah kebenaran dasarnya, versi
+   bergerak adalah peningkatan di atasnya. Kalau modulnya gagal init, halaman
+   tetap utuh. */
+
+.about-stage {
+  position: relative;
+  margin-top: clamp(24px, 2.7vw, 42px);
+}
+
+.about-glow {
+  position: absolute;
+  z-index: 0;
+  top: 12%;
+  left: 58%;
+  width: min(52vw, 720px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.16), rgba(59, 130, 246, 0) 68%);
+  filter: blur(40px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.about-intro {
+  position: relative;
+  z-index: 2;
+  max-width: 46ch;
+}
+
+.about-location {
+  display: block;
+  margin-bottom: clamp(14px, 1.6vw, 24px);
+  color: var(--blue);
+  font-family: var(--font-label);
+  font-size: clamp(0.68rem, 0.75vw, 0.84rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .about-lead {
-  max-width: 24ch;
   margin: 0;
   color: var(--fg);
-  font-size: clamp(1.7rem, 2.8vw, 3.65rem);
+  font-size: clamp(1.38rem, 1.85vw, 2.35rem);
   font-weight: 500;
   letter-spacing: -0.045em;
   line-height: 1.08;
 }
 
-.about-detail {
-  display: grid;
-  max-width: 50ch;
-  margin-top: clamp(38px, 4vw, 72px);
-  gap: 20px;
+.about-chapters {
+  position: relative;
+  z-index: 1;
+  margin-top: clamp(34px, 3.2vw, 56px);
 }
 
-.about-detail p {
+.about-chapter + .about-chapter {
+  margin-top: clamp(38px, 4vw, 64px);
+}
+
+.about-chapter-figure {
+  display: block;
+  color: rgba(var(--ink-rgb), 0.1);
+  font-size: clamp(3.4rem, 7vw, 8rem);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 0.82;
+}
+
+.about-chapter-title {
+  margin: 0 0 14px;
+  color: var(--fg);
+  font-size: clamp(1.35rem, 2.4vw, 2.9rem);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+}
+
+.about-chapter-text {
+  max-width: 52ch;
   margin: 0;
   color: var(--fg-muted);
-  font-size: clamp(1.08rem, 1.32vw, 1.62rem);
-  line-height: 1.42;
+  font-size: clamp(0.94rem, 1.05vw, 1.18rem);
+  line-height: 1.5;
 }
 
-.about-detail span {
-  color: var(--blue);
-  font-family: var(--font-label);
-  font-size: clamp(0.76rem, 0.82vw, 0.96rem);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+/* Rel progres hanya berarti saat chapter benar-benar bergantian. */
+.about-rail {
+  display: none;
+}
+
+/* --- Bentuk panggung (desktop, gerak penuh) ------------------------------- */
+
+/* Tinggi section-nya diatur about-story.ts (satu viewport per babak), jadi
+   padding vertikalnya harus nol — kalau tidak, hitungan tinggi itu meleset
+   sebesar padding dan babak terakhir terpotong. */
+.about--staged {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.about--staged .about-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  margin-top: 0;
+}
+
+.about--staged .about-head {
+  position: absolute;
+  top: clamp(48px, 7vh, 96px);
+  left: 0;
+}
+
+/* Intro dan chapter menempati KOTAK YANG SAMA, jadi pergantiannya terasa
+   sebagai satu tempat yang isinya berganti — bukan halaman yang menggulung. */
+.about--staged .about-intro,
+.about--staged .about-chapter {
+  position: absolute;
+  top: 54%;
+  left: 0;
+  margin-top: 0;
+  transform: translateY(-50%);
+}
+
+.about--staged .about-intro {
+  width: min(52vw, 820px);
+}
+
+/* Dua kolom: kolom baca di kiri, angka babak sebagai jangkar visual di kanan.
+   Tanpa jangkar kanan, seluruh separuh layar itu kosong dan panggungnya
+   terbaca sebagai halaman yang belum selesai dimuat. */
+.about--staged .about-chapter {
+  right: var(--gutter);
+  display: grid;
+  align-items: center;
+  gap: clamp(24px, 4vw, 72px);
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+/* Dibuat statis supaya chapter di dalamnya berpatokan pada panggung, bukan
+   pada pembungkus setinggi nol ini. */
+.about--staged .about-chapters {
+  position: static;
+  margin-top: 0;
+}
+
+/* Angka babak jadi jangkar kolom kanan. Warnanya biru sangat encer, bukan
+   abu-abu: satu-satunya benda besar di panggung ini sebaiknya membawa warna
+   merek, bukan menambah abu-abu di atas latar yang sudah abu. */
+/* Kolom dipatok eksplisit, bukan mengikuti urutan DOM: di markup angka ditulis
+   lebih dulu (ia milik <article> yang sama dan aria-hidden), tapi di layar ia
+   harus duduk di KANAN kolom baca. */
+.about--staged .about-chapter-figure {
+  grid-column: 2;
+  color: rgba(30, 58, 138, 0.09);
+  font-size: clamp(9rem, 19vw, 22rem);
+  line-height: 0.7;
+  justify-self: end;
+  pointer-events: none;
+  user-select: none;
+}
+
+.about--staged .about-chapter-body {
+  position: relative;
+  z-index: 1;
+  max-width: min(46vw, 700px);
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.about--staged .about-chapter-title {
+  font-size: clamp(2.2rem, 4.1vw, 4.6rem);
+  letter-spacing: -0.05em;
+}
+
+.about--staged .about-chapter-text {
+  max-width: 46ch;
+  font-size: clamp(1rem, 1.18vw, 1.32rem);
+  line-height: 1.55;
+}
+
+/* Di kaki kolom baca, bukan menempel di tepi layar: rel ini menerangkan
+   "babak ke berapa dari tiga" untuk teks di atasnya, jadi ia harus terbaca
+   sebagai bagian dari kolom itu. */
+.about--staged .about-rail {
+  position: absolute;
+  bottom: clamp(48px, 8vh, 104px);
+  left: 0;
+  display: flex;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.about-rail-step {
+  overflow: hidden;
+  width: clamp(44px, 4.6vw, 74px);
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(var(--ink-rgb), 0.12);
+}
+
+.about-rail-step span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--blue);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+@media (max-width: 900px) {
+  .about-chapter-figure {
+    font-size: clamp(2.8rem, 12vw, 4.4rem);
+  }
 }
 
 .timeline {
@@ -2957,20 +3154,23 @@
 
 @media (max-width: 767px) {
   .about-head .section-title {
-    font-size: clamp(3.4rem, 15vw, 5rem);
+    font-size: clamp(2.5rem, 12vw, 4rem);
   }
 
-  .about-story {
-    margin-top: 36px;
+  .about-stage {
+    margin-top: 32px;
   }
 
   .about-lead {
     font-size: clamp(1.6rem, 8.2vw, 2.6rem);
   }
 
-  .about-detail {
-    margin-top: 34px;
-    gap: 16px;
+  .about-chapters {
+    margin-top: 42px;
+  }
+
+  .about-chapter-title {
+    margin-bottom: 10px;
   }
 
   .network-company-logos,

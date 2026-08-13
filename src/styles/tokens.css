@@ -43,12 +43,15 @@
      putih di atas off-white butuh keduanya — border saja terbaca datar. */
   --card-shadow: 0 1px 2px rgba(var(--ink-rgb), 0.05), 0 10px 28px -14px rgba(var(--ink-rgb), 0.16);
 
-  /* Surface: kartu saat sidebar melewati section gelap */
-  --card-bg-dark: rgba(29, 29, 29, 0.6);
+  /* Surface: kartu saat sidebar melewati section gelap. Hue-nya diturunkan
+     dari --dark-bg yang sama, bukan abu-abu netral — sidebar mengambang tepat
+     di atas section itu, dan abu-abu netral di atas dasar kebiruan terbaca
+     sebagai tempelan yang warnanya meleset. */
+  --card-bg-dark: rgba(22, 22, 28, 0.6);
   --card-border-dark: 1px solid rgba(255, 255, 255, 0.1);
-  --card-inner-dark: rgba(57, 57, 57, 0.9);
-  --card-inner-alt-dark: #393939;
-  --card-inner-hover-dark: rgba(94, 94, 94, 0.5);
+  --card-inner-dark: rgba(44, 44, 54, 0.9);
+  --card-inner-alt-dark: #2c2c36;
+  --card-inner-hover-dark: rgba(78, 78, 92, 0.5);
   --card-shadow-dark: 0 10px 30px -18px rgba(0, 0, 0, 0.7);
 
   /* Kaca hero — kartu statistik melayang di atas potret, jadi ia putih
@@ -56,15 +59,25 @@
   --glass-bg: rgba(255, 255, 255, 0.5);
   --glass-blur: 20px;
 
+  /* Dasar gelap tunggal untuk SEMUA section gelap (The Moment / Pedi dan The
+     Work). Sengaja rata, bukan gradient: kedua section itu bersebelahan
+     langsung, dan dua gradient berbeda selalu meninggalkan garis sambung yang
+     terlihat di perbatasannya. Satu warna rata = tidak ada sambungan. */
+  --dark-bg: #0d0d11;
+
   /* Permukaan khusus per-section */
-  --work-bg: linear-gradient(#000000, #222222 44%);
+  --work-bg: var(--dark-bg);
   --work-scrim: linear-gradient(rgba(0, 0, 0, 0.3), rgba(51, 51, 51, 0.03) 50%, rgba(0, 0, 0, 0.4));
   --work-dim: rgba(0, 0, 0, 0.6);
 
-  /* Scrollbar halaman. Track-nya SENGAJA transparan: yang terlihat di
-     belakangnya adalah section yang sedang lewat — off-white di sebagian besar
-     halaman, hitam saat Work — jadi ia ikut berganti warna tanpa satu baris JS
-     pun. Thumb-nya tinta beralpha supaya terbaca di kedua latar itu. */
+  /* Scrollbar halaman.
+     Track transparan TIDAK menampilkan section yang sedang lewat: lajur
+     scrollbar ada di luar kotak konten, jadi yang tembus di belakangnya adalah
+     latar kanvas (--bg, off-white) yang dipropagasi dari <body> — tetap terang
+     bahkan saat seluruh layar sedang gelap, dan itulah pita putih kontras di
+     tepi kanan. Karena itu track-nya diwarnai eksplisit dan ikut dibalik oleh
+     theme.ts lewat .is-dark-scroll di bawah. */
+  --scrollbar-track: transparent;
   --scrollbar-thumb: rgba(var(--ink-rgb), 0.22);
   --scrollbar-thumb-hover: rgba(var(--ink-rgb), 0.4);
 
@@ -256,6 +269,16 @@
   :root {
     --wordmark-size: 34vh;
   }
+}
+
+/* Dipasang theme.ts di <html> selama section gelap menguasai layar. Hanya
+   menyentuh scrollbar — token permukaan sengaja TIDAK ikut dibalik di sini,
+   karena selector ini kena seluruh halaman dan akan menggelapkan juga kartu
+   section terang yang masih terlihat. */
+.is-dark-scroll {
+  --scrollbar-track: var(--dark-bg);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.22);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.42);
 }
 
 /* Sidebar / komponen apa pun yang sedang menimpa section gelap. */

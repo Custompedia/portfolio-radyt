@@ -2,22 +2,61 @@
 /**
  * Section 02 — About.
  *
- * Cerita ringkas tentang Radhyta dan bisnis yang dibangunnya.
+ * Tiga chapter bergantian menguasai satu panggung yang menempel di layar,
+ * bukan tiga kolom yang dibaca sekaligus. Kronologi tahun SENGAJA tidak ada di
+ * sini — itu tugas section Journey; About memegang hook eyebrow-nya: tiga
+ * perusahaan yang dijalankan dari satu meja.
+ *
+ * Markup default-nya adalah versi statis (judul, intro, lalu tiga chapter
+ * mengalir berurutan). modules/about-story.ts yang mengangkatnya jadi panggung
+ * sticky dengan menambahkan `.about--staged`, dan hanya di desktop tanpa
+ * reduced-motion. Artinya tanpa JS, di mobile, atau saat user meminta gerak
+ * minimum, section ini tetap terbaca utuh — bukan layar kosong.
+ *
+ * Judul ikut masuk ke dalam panggung supaya seluruh komposisi menempel sebagai
+ * satu kesatuan; kalau judul ditinggal di luar, panggung baru mulai menempel
+ * setelah judul tergulung habis dan hitungan scroll-nya meleset setinggi judul.
  */
 import { about } from '../../data/site';
 ---
 
-<section class="section about" id="about">
-  <header class="section-head about-head">
-    <h2 class="section-title h2-style" data-reveal>{about.headline}</h2>
-  </header>
+<section class="section about" id="about" data-about>
+  <div class="about-stage" data-about-stage>
+    <!-- Cahaya yang ikut berpindah tiap chapter berganti; memberi kedalaman
+         pada panggung yang isinya nyaris seluruhnya tipografi. -->
+    <span class="about-glow" data-about-glow aria-hidden="true"></span>
 
-  <div class="about-story" data-about-profile>
-    <p class="about-lead" data-reveal="chars" data-reveal-stagger="0.008">{about.lead}</p>
-  </div>
+    <header class="section-head about-head">
+      <span class="about-eyebrow">{about.eyebrow}</span>
+      <h2 class="section-title h2-style" data-reveal>{about.headline}</h2>
+    </header>
 
-  <div class="about-detail" data-about-stories>
-    <p data-about-story>{about.body}</p>
-    <span data-about-story>{about.location}</span>
+    <div class="about-intro" data-about-intro>
+      <span class="about-location">{about.location}</span>
+      <p class="about-lead">{about.lead}</p>
+    </div>
+
+    <div class="about-chapters">
+      {
+        about.stories.map((story, index) => (
+          <article class="about-chapter" data-about-chapter>
+            {/* Angka raksasa di belakang teks. aria-hidden: "01" sudah
+                tersirat dari urutan artikelnya dan hanya jadi kebisingan
+                kalau ikut dibacakan. */}
+            <span class="about-chapter-figure" aria-hidden="true">0{index + 1}</span>
+            <div class="about-chapter-body">
+              <h3 class="about-chapter-title" data-about-title>{story.title}</h3>
+              <p class="about-chapter-text" data-about-text>{story.body}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <ol class="about-rail" data-about-rail aria-hidden="true">
+      {about.stories.map(() => (
+        <li class="about-rail-step"><span data-about-rail-fill /></li>
+      ))}
+    </ol>
   </div>
 </section>
