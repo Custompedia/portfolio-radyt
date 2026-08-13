@@ -148,11 +148,11 @@
    Ketiganya harus dibayar balik supaya glif — bukan kotaknya — yang mendarat
    di gutter. Di kanan hanya ada padding 0.79vw yang mengikuti teks. */
 .hero-nav-group:first-child {
-  margin-left: calc(var(--gutter) - 1.25vw - 14px);
+  margin-left: calc(var(--gutter) - 0.6vw);
 }
 
 .hero-nav-group:last-child {
-  margin-right: calc(var(--gutter) - 0.79vw);
+  margin-right: calc(var(--gutter) + 0.2vw);
 }
 
 .hero-nav-group {
