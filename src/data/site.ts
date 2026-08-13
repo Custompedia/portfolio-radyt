@@ -129,7 +129,7 @@ export const hero = {
   eyebrowSecond: 'Semarang',
   headline: ['BUILDING BUSINESSES.', 'CREATING IMPACT.', 'SINCE 2014.'],
   subheadline: 'Creative agency and creative packaging from Semarang.',
-  traits: ['Custompedia', 'Parcelin', 'Creasa', 'Voca'],
+  traits: ['Custompedia', 'Parcelin', 'Creasa', 'Voca', 'But Gawe'],
   ctaPrimary: { label: "Let's Talk", href: brand.whatsappUrl },
   ctaSecondary: { label: 'See Work', href: '#work' },
 };
@@ -168,22 +168,10 @@ export const clients: ClientLogo[] = [
  */
 export const about = {
   headline: 'About Radhyta',
-  intro: 'Aku Radhyta Mahenda Mukhsin. Sejak 2014, aku membangun bisnis dari Semarang dengan cara yang paling aku percaya: turun langsung, mendengar lebih dekat, lalu mengubah ide menjadi sesuatu yang benar-benar berguna.',
-  statement: 'Buatku, membangun bisnis bukan soal terlihat paling besar. Ini tentang membuat karya yang tepat, merawat hubungan, dan berani memulai lagi.',
-  facts: [
-    {
-      value: '2014',
-      label: 'Aku memulai dari toko online.',
-    },
-    {
-      value: 'Semarang',
-      label: 'Rumah sekaligus titik berangkatku.',
-    },
-    {
-      value: '3',
-      label: 'Bisnis yang tumbuh dari proses.',
-    },
-  ],
+  lead: 'Berawal dari toko online pada 2014, Radhyta Mahenda Mukhsin membangun bisnis dari Semarang dengan tetap dekat pada masalah, proses, dan orang-orang yang mempercayakan pekerjaannya.',
+  body: 'Dari sana lahir Custompedia, Parcelin, dan Creasa. Tiga bisnis dengan medan berbeda, tetapi satu prinsip yang sama: pekerjaan harus jelas arahnya, rapi eksekusinya, dan berguna bagi orang yang menerimanya.',
+  since: 'Since',
+  location: 'Semarang, Indonesia',
 };
 
 /**

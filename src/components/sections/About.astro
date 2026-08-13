@@ -2,8 +2,7 @@
 /**
  * Section 02 — About.
  *
- * Sisi personal Radhyta. Konten memakai sudut pandang orang pertama agar
- * halaman ini terasa sebagai portfolio founder, bukan profil korporat.
+ * Cerita ringkas tentang Radhyta dan bisnis yang dibangunnya.
  */
 import { about } from '../../data/site';
 ---
@@ -13,31 +12,16 @@ import { about } from '../../data/site';
     <h2 class="section-title h2-style" data-reveal>{about.headline}</h2>
   </header>
 
-  <div class="about-portrait" data-about-profile>
-    <div class="about-copy">
-      <p class="about-intro" data-reveal data-reveal-stagger="0.035">{about.intro}</p>
-      <p class="about-statement" data-reveal data-reveal-stagger="0.035">{about.statement}</p>
+  <div class="about-story" data-about-profile>
+    <p class="about-lead" data-reveal data-reveal-stagger="0.035">{about.lead}</p>
+    <div class="about-year" data-about-mark aria-label={about.since}>
+      <span>{about.since}</span>
+      <strong>2014</strong>
     </div>
-    <figure class="about-desk">
-      <img
-        src="/images/about/radhyta-desk.png"
-        alt="Meja kerja dengan materi proses kreatif, kemasan, dan catatan proyek"
-        width="1672"
-        height="941"
-        loading="lazy"
-        decoding="async"
-      />
-    </figure>
   </div>
 
-  <div class="about-facts" data-about-stories>
-    {
-      about.facts.map((fact) => (
-        <article class="about-fact" data-about-story>
-          <strong>{fact.value}</strong>
-          <p>{fact.label}</p>
-        </article>
-      ))
-    }
+  <div class="about-detail" data-about-stories>
+    <p data-about-story>{about.body}</p>
+    <span data-about-story>{about.location}</span>
   </div>
 </section>

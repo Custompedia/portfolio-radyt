@@ -195,11 +195,11 @@
    *                 dikoreksi.
    *
    * Ukurannya lalu diturunkan dari ruang yang benar-benar tersedia — lebar
-   * layar dikurangi gutter kiri-kanan — supaya wordmark BERHENTI tepat di
-   * gutter alih-alih terpotong tepi layar. */
+   * layar dikurangi gutter kiri-kanan dan sedikit ruang napas tambahan —
+   * supaya wordmark tetap terasa besar tanpa menempel ke tepi layar. */
   --wordmark-ink: 4.6405;
   --wordmark-bearing-l: 0.0625;
-  --wordmark-size: calc((100vw - 2 * var(--gutter)) / var(--wordmark-ink));
+  --wordmark-size: calc((100vw - 3.5 * var(--gutter)) / var(--wordmark-ink));
 
   /* Kaki huruf (baseline, bukan kotak barisnya) jatuh di sekitar 0.852 ×
      ukuran font; navbar ditaruh 0.7vw di bawahnya supaya terbaca sebagai satu

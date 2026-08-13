@@ -14,13 +14,15 @@ export const brandStagesModule: AnimationModule = {
     context = gsap.context(() => {
       const profile = $<HTMLElement>('[data-about-profile]');
       if (profile) {
-        gsap.from(profile, {
-          autoAlpha: 0,
-          y: 48,
-          duration: 0.9,
-          ease: 'power4.out',
-          scrollTrigger: { trigger: profile, start: 'top 78%', once: true },
-        });
+        const mark = $<HTMLElement>('[data-about-mark]', profile);
+        const timeline = gsap.timeline({ scrollTrigger: { trigger: profile, start: 'top 78%', once: true } });
+
+        timeline.from(profile, { autoAlpha: 0, y: 48, duration: 0.9, ease: 'power4.out' });
+        if (mark) {
+          timeline
+            .from(mark, { autoAlpha: 0, y: 28, scale: 0.94, duration: 0.72, ease: 'power3.out' }, 0.12)
+            .from(mark.children, { autoAlpha: 0, y: 16, stagger: 0.08, duration: 0.48, ease: 'power3.out' }, 0.24);
+        }
       }
 
       const about = $<HTMLElement>('[data-about-stories]');
