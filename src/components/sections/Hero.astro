@@ -31,14 +31,16 @@ interface GhostBox {
   h: string;
 }
 
-// Kartu "3 Companies" bertumpu sedikit di atas pundak kiri potret.
-const STAT_SM_X = 25.5;
+// Kedua kartu statistik membentuk satu rail di sisi kiri panggung hero.
+// Titik tengah bersama menjaga tepinya tetap rapi walau lebarnya berbeda.
+const STAT_RAIL_CENTER = 11.5;
 const STAT_SM_W = 11.4;
 const STAT_SM_H = 4.8;
 const STAT_GAP = 3.2;
-const STAT_BIG_X = 23.1;
 const STAT_BIG_W = 9.62;
 const STAT_BIG_H = 10.44;
+const STAT_SM_X = STAT_RAIL_CENTER - STAT_SM_W / 2;
+const STAT_BIG_X = STAT_RAIL_CENTER - STAT_BIG_W / 2;
 
 const STAT_PAIR_H = STAT_SM_H + STAT_GAP + STAT_BIG_H;
 const statsSmY = `min(calc(var(--hero-nav-top) + 2.5vw), calc(97vh - ${STAT_PAIR_H}vw))`;

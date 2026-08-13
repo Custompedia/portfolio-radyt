@@ -354,8 +354,8 @@
 .hero-traits {
   position: absolute;
   top: 72vh;
-  right: auto;
-  left: 63vw;
+  right: 5.2vw;
+  left: auto;
   display: flex;
   flex-direction: column;
   gap: 0.48vw;
@@ -409,7 +409,10 @@
 .hero-headline {
   position: absolute;
   top: var(--hero-h1-top);
-  left: 33.5vw;
+  left: 18vw;
+  width: 64vw;
+  align-items: center;
+  text-align: center;
   margin: 0;
   color: #f8f7f3;
   font-size: var(--hero-h1-size);
