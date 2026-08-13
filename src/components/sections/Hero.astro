@@ -31,7 +31,8 @@ interface GhostBox {
   h: string;
 }
 
-const STAT_SM_X = 21.15;
+// Kartu "3 Companies" bertumpu sedikit di atas pundak kiri potret.
+const STAT_SM_X = 25.5;
 const STAT_SM_W = 11.4;
 const STAT_SM_H = 4.8;
 const STAT_GAP = 3.2;
@@ -40,7 +41,7 @@ const STAT_BIG_W = 9.62;
 const STAT_BIG_H = 10.44;
 
 const STAT_PAIR_H = STAT_SM_H + STAT_GAP + STAT_BIG_H;
-const statsSmY = `min(calc(var(--hero-nav-top) + 4vw), calc(97vh - ${STAT_PAIR_H}vw))`;
+const statsSmY = `min(calc(var(--hero-nav-top) + 2.5vw), calc(97vh - ${STAT_PAIR_H}vw))`;
 const statsBigY = `calc(${statsSmY} + ${STAT_SM_H + STAT_GAP}vw)`;
 
 const STAT_SM_TEXT_W = 9;

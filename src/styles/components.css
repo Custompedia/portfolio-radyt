@@ -222,7 +222,8 @@
 .nav-stat.is-inline {
   flex-direction: row;
   align-items: center;
-  gap: 0.3vw;
+  /* Napas kecil memisahkan angka dari label saat kartu ini berada di hero. */
+  gap: 0.42vw;
   text-align: left;
 }
 
