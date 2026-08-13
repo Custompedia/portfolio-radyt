@@ -170,7 +170,6 @@ export const about = {
   headline: 'About Radhyta',
   lead: 'Berawal dari toko online pada 2014, Radhyta Mahenda Mukhsin membangun bisnis dari Semarang dengan tetap dekat pada masalah, proses, dan orang-orang yang mempercayakan pekerjaannya.',
   body: 'Dari sana lahir Custompedia, Parcelin, dan Creasa. Tiga bisnis dengan medan berbeda, tetapi satu prinsip yang sama: pekerjaan harus jelas arahnya, rapi eksekusinya, dan berguna bagi orang yang menerimanya.',
-  since: 'Since',
   location: 'Semarang, Indonesia',
 };
 
@@ -183,7 +182,7 @@ export const about = {
  */
 export const journey = {
   eyebrow: 'Since 2014',
-  headline: 'From an online shop to three companies',
+  headline: ['FROM ONE ONLINE SHOP', 'TO BUILDING THREE COMPANIES.'],
   entries: [
     {
       year: '2014',

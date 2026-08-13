@@ -21,7 +21,7 @@ const VB_W = 1000;
  * tinggi daripada kartunya, kalau tidak kartu ke-N menabrak kartu berikutnya.
  */
 const NODE_GAP = 290;
-const FIRST_Y = 380;
+const FIRST_Y = 240;
 
 /**
  * x/y dalam koordinat viewBox; `side` menentukan kartu duduk di kiri atau kanan
@@ -64,7 +64,9 @@ const path = nodes
 <section class="section journey" id="journey">
   <header class="section-head journey-head">
     <span class="label-pill" data-label-pill>{journey.eyebrow}</span>
-    <h2 class="section-title h2-style" data-reveal>{journey.headline}</h2>
+    <h2 class="section-title h2-style" data-reveal>
+      {journey.headline.map((line) => <span>{line}</span>)}
+    </h2>
   </header>
 
   <div class="timeline" data-timeline style={`--timeline-nodes:${nodes.length}`}>
@@ -103,19 +105,16 @@ const path = nodes
           data-tl-from="{'opacity':0,'y':'8%','scale':0.96}"
           data-tl-to="{'opacity':1,'y':'0%','scale':1,'duration':0.8,'delay':0.12,'ease':'power3.out'}"
           data-tl-start="top 88%"
-          data-tl-once
         >
+          <div class="timeline-content">
+            <span class="tl-card-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <time class="timeline-year" datetime={entry.year} data-number-count={entry.year}>{entry.year}</time>
+            <h3 class="timeline-title">{entry.title}</h3>
+            <p class="timeline-body">{entry.body}</p>
+          </div>
           <figure class="timeline-media" data-timeline-media>
             <img src={entry.image} alt="" loading="lazy" decoding="async" />
           </figure>
-          {/* Nomor bab menggantikan chip bendera dan baris angka yang dulu ada
-              di sini: handoff meminta seluruh mini-stat dibuang karena tidak
-              ada sumbernya, dan menyebut perusahaan dua kali (chip + kalimat)
-              hanya mengulang isi deskripsinya. */}
-          <span class="tl-card-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-          <time class="timeline-year" datetime={entry.year} data-number-count={entry.year}>{entry.year}</time>
-          <h3 class="timeline-title">{entry.title}</h3>
-          <p class="timeline-body">{entry.body}</p>
         </article>
       ))
     }

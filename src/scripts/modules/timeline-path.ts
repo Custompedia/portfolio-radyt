@@ -30,14 +30,14 @@ import { $, $$, isDesktop, prefersReducedMotion } from '../core/utils';
  * tempat yang bukan simpul.
  */
 const FILL_STEPS = [
-  { height: '14%', duration: 2 },
-  { height: '24%', duration: 1 },
-  { height: '35%', duration: 1.5 },
-  { height: '45%', duration: 2 },
-  { height: '56%', duration: 1 },
-  { height: '66%', duration: 1.5 },
-  { height: '76%', duration: 2 },
-  { height: '87%', duration: 1 },
+  { height: '9%', duration: 2 },
+  { height: '20%', duration: 1 },
+  { height: '31%', duration: 1.5 },
+  { height: '42%', duration: 2 },
+  { height: '53%', duration: 1 },
+  { height: '64%', duration: 1.5 },
+  { height: '75%', duration: 2 },
+  { height: '86%', duration: 1 },
   { height: '100%', duration: 1.5 },
 ];
 
@@ -195,7 +195,7 @@ function buildMedia(container: HTMLElement): void {
     if (!image) return;
 
     const timeline = gsap.timeline({
-      scrollTrigger: { trigger: media, start: 'top 86%', once: true },
+      scrollTrigger: { trigger: media, start: 'top 86%', toggleActions: 'play none none reverse' },
     });
     timeline
       .fromTo(media, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 0.82, ease: 'power4.inOut' })
