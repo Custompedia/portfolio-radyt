@@ -13,8 +13,21 @@ import { work } from '../../data/site';
 ---
 
 <!-- Tinggi section diatur oleh horizontal.ts: viewport + sisa track yang harus
-     digeser, supaya 1px scroll = 1px geseran horizontal. -->
-<section class="section work theme-dark" id="work" data-work data-theme-section>
+     digeser + satu viewport penahan, supaya 1px scroll = 1px geseran horizontal
+     dan footer sempat naik menimpanya di ujung (lihat modules/stack.ts).
+
+     `data-theme-end` menutup tema gelap saat tepi BAWAH section menyentuh dasar
+     layar — di titik itulah footer terang sudah menutupi layar sepenuhnya.
+     Bawaannya ("bottom top") baru berhenti satu viewport sesudahnya, jadi
+     sidebar akan tertinggal gelap di atas footer yang sudah terang. -->
+<section
+  class="section work theme-dark"
+  id="work"
+  data-work
+  data-stack-hold
+  data-theme-section
+  data-theme-end="bottom bottom"
+>
   <div class="work-sticky" data-work-sticky>
     <header class="work-head">
       <div class="work-head-left">

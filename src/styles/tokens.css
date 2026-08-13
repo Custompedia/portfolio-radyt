@@ -13,72 +13,48 @@
  */
 
 :root {
-  /* --- Palette --- royal blue, bright blue, navy, slate, dan off-white dari
-     referensi visual brand. */
-  /* Latar halaman PUTIH MURNI — paling terang yang mungkin (L* 100), dan
-     seluruh teks ikut membaik: ink 17.85:1, teks redup 5.03:1, eyebrow biru
-     10.36:1, semuanya di atas nilai off-white yang lama.
-     Konsekuensinya ada di --card-bg: kartu tidak boleh ikut putih. Lihat di
-     sana. */
-  --bg: #ffffff;
+  /* --- Palette: Blue Bone Sand --- */
+  --bg: #f7f4ec;
   --yellow: #ffff23;
   --blue: #1e3a8a;
-  --blue-tint: #3b82f6;
-  --blue-pill: #3b82f6;
   --accent: var(--blue);
-  --black: #0f172a;
+  --warm-accent: #8a5a00;
+  --dark-accent: #a8bfff;
+  --dark-accent-rgb: 168, 191, 255;
+  --black: #111827;
   --white: #ffffff;
-  --dark: #0f172a;
+  --dark: #10131a;
+  --dark-text: #f8f6f0;
 
-  /* Tinta halaman: navy-hitam, bukan hitam murni — hitam pekat di atas
-     off-white terbaca keras pada blok teks panjang. Ditulis sebagai channel
-     supaya seluruh garis rambut, teks redup, dan bayangan turun dari satu
-     warna. 16.8:1 di atas --bg. */
-  --ink-rgb: 15, 23, 42;
+  /* Channels keep neutral borders and shadows consistent across components. */
+  --ink-rgb: 17, 24, 39;
+  --ink: rgb(var(--ink-rgb));
 
-  /* Surface: kartu di atas halaman. Hubungannya DIBALIK: halamannya yang putih,
-     kartunya yang bernada biru — bukan sebaliknya seperti versi sebelumnya.
-     Aturan yang tetap dipegang dari versi krem: kartu tidak boleh sewarna
-     latarnya, karena begitu sewarna, tepinya hilang dan halaman terbaca kusam.
-     Kalau kartu dibiarkan #ffffff di atas latar putih, pemisahannya 1.000 —
-     hilang total. DIUKUR: #f5f9ff memberi 1.057, yang justru LEBIH baik
-     daripada kartu putih di atas off-white lama (1.046). */
-  --card-bg: #f5f9ff;
-  --card-border: 1px solid rgba(30, 58, 138, 0.1);
-  /* Satu tingkat lebih dalam dari --card-bg, supaya permukaan di dalam kartu
-     tetap terbaca berbeda dari badan kartunya. */
-  --card-inner: #eaf1fe;
-  --card-inner-alt: #d8e6fb;
-  --card-inner-hover: #e2ecfd;
-  /* Dua lapis: satu garis kontak yang rapat, satu ambient yang lebar. Border
-     saja terbaca datar. Warnanya BIRU, bukan abu netral: bayangan abu di atas
-     halaman putih-biru terbaca kotor. */
-  --card-shadow: 0 1px 2px rgba(30, 58, 138, 0.07), 0 14px 34px -14px rgba(30, 58, 138, 0.24);
+  --card-bg: #fffdf8;
+  --card-border: 1px solid #d8cfc0;
+  --card-inner: #ede7db;
+  --card-inner-alt: var(--card-inner);
+  --card-inner-hover: #e4dccf;
+  --card-shadow: 0 1px 2px rgba(var(--ink-rgb), 0.06), 0 14px 34px -16px rgba(var(--ink-rgb), 0.18);
 
-  /* Surface: kartu saat sidebar melewati section gelap. Hue-nya diturunkan
-     dari --dark-bg yang sama, bukan abu-abu netral — sidebar mengambang tepat
-     di atas section itu, dan abu-abu netral di atas dasar kebiruan terbaca
-     sebagai tempelan yang warnanya meleset. */
-  --card-bg-dark: rgba(22, 22, 28, 0.6);
-  --card-border-dark: 1px solid rgba(255, 255, 255, 0.1);
-  --card-inner-dark: rgba(44, 44, 54, 0.9);
-  --card-inner-alt-dark: #2c2c36;
-  --card-inner-hover-dark: rgba(78, 78, 92, 0.5);
+  --card-bg-dark: #1a1f2a;
+  --card-border-dark: 1px solid rgba(248, 246, 240, 0.12);
+  --card-inner-dark: #242b38;
+  --card-inner-alt-dark: var(--card-inner-dark);
+  --card-inner-hover-dark: #2d3545;
   --card-shadow-dark: 0 10px 30px -18px rgba(0, 0, 0, 0.7);
 
-  /* Kaca hero — kartu statistik melayang di atas potret, jadi ia putih
-     setengah tembus, bukan permukaan solid seperti kartu section. */
-  /* Ikut bernada biru dan sedikit lebih pekat. Sebagian kartu ini menggantung
-     di luar potret, tepat di atas halaman — dan putih 0.5 di atas latar putih
-     lenyap sama sekali di bagian itu. */
-  --glass-bg: rgba(235, 243, 255, 0.62);
-  --glass-blur: 20px;
+  /* Only the floating hero cards use translucency. */
+  --glass-bg: rgba(255, 253, 248, 0.88);
+  --glass-border: 1px solid rgba(var(--ink-rgb), 0.12);
+  --glass-shadow: 0 1px 2px rgba(var(--ink-rgb), 0.06), 0 14px 34px -16px rgba(var(--ink-rgb), 0.2);
+  --glass-blur: 12px;
 
   /* Dasar gelap tunggal untuk SEMUA section gelap (The Moment / Pedi dan The
      Work). Sengaja rata, bukan gradient: kedua section itu bersebelahan
      langsung, dan dua gradient berbeda selalu meninggalkan garis sambung yang
      terlihat di perbatasannya. Satu warna rata = tidak ada sambungan. */
-  --dark-bg: #0d0d11;
+  --dark-bg: #10131a;
 
   /* Permukaan khusus per-section */
   --work-bg: var(--dark-bg);
@@ -104,7 +80,7 @@
   --surface-inner-hover: var(--card-inner-hover);
   --surface-shadow: var(--card-shadow);
   --fg: rgb(var(--ink-rgb));
-  --fg-muted: rgba(var(--ink-rgb), 0.62);
+  --fg-muted: #5c6470;
   --label-border: rgba(var(--ink-rgb), 0.22);
 
   /* --- Typography --- */
@@ -228,13 +204,14 @@
   --wordmark-ink: 4.6405;
   --wordmark-bearing-l: 0.0625;
   --wordmark-size: calc((100vw - 3.5 * var(--gutter)) / var(--wordmark-ink));
+  --wordmark-scale-y: 1.1;
 
   /* Kaki huruf (baseline, bukan kotak barisnya) jatuh di sekitar 0.852 ×
      ukuran font; navbar ditaruh 0.7vw di bawahnya supaya terbaca sebagai satu
      blok dengan wordmark. Sebelum ini angkanya ditulis lepas (26.7vw), dan
      satu kali penggantian nama langsung membuatnya menggantung 8vw dari kaki
      hurufnya tanpa ada yang mengingatkan. */
-  --hero-nav-top: calc(0.852 * var(--wordmark-size) + 0.7vw);
+  --hero-nav-top: calc(0.937 * var(--wordmark-size) + 0.7vw);
 
   --hero-h1-top: 51vh;
   --hero-h1-size: min(6.5rem, 11.5vh, 4.7vw);
@@ -248,6 +225,11 @@
   --radius-lg: 0.83vw;
   --radius-xs: 0.42vw;
   --radius-pill: 5.14vw;
+  /* Sudut atas section yang naik menimpa section di bawahnya (Pedi → The Work →
+     footer). Jauh lebih besar dari radius kartu: yang dibulatkan di sini selebar
+     layar, dan pada lebar itu radius kartu tidak terbaca sebagai lengkung sama
+     sekali. Dibatasi px supaya tetap wajar di layar sangat lebar/sempit. */
+  --stack-radius: clamp(16px, 2vw, 34px);
 
   /* Tangga jarak, bukan grid 8px. */
   --sp-1: 0.28vw;
@@ -298,29 +280,29 @@
 
 /* Sidebar / komponen apa pun yang sedang menimpa section gelap. */
 [data-theme='dark'] {
-  --accent: var(--blue-tint);
+  --accent: var(--dark-accent);
   --surface: var(--card-bg-dark);
   --surface-shadow: var(--card-shadow-dark);
   --surface-border: var(--card-border-dark);
   --surface-inner: var(--card-inner-dark);
   --surface-inner-alt: var(--card-inner-alt-dark);
   --surface-inner-hover: var(--card-inner-hover-dark);
-  --fg: rgba(255, 255, 255, 0.9);
-  --fg-muted: rgba(255, 255, 255, 0.55);
-  --label-border: rgba(255, 255, 255, 0.3);
+  --fg: var(--dark-text);
+  --fg-muted: rgba(248, 246, 240, 0.64);
+  --label-border: rgba(248, 246, 240, 0.3);
 }
 
 /* Section bertema gelap (work). */
 .theme-dark {
-  --accent: var(--blue-tint);
+  --accent: var(--dark-accent);
   --surface: var(--card-bg-dark);
   --surface-shadow: var(--card-shadow-dark);
   --surface-border: var(--card-border-dark);
   --surface-inner: var(--card-inner-dark);
   --surface-inner-hover: var(--card-inner-hover-dark);
-  --fg: rgba(255, 255, 255, 0.9);
-  --fg-muted: rgba(255, 255, 255, 0.55);
-  --label-border: rgba(255, 255, 255, 0.3);
+  --fg: var(--dark-text);
+  --fg-muted: rgba(248, 246, 240, 0.64);
+  --label-border: rgba(248, 246, 240, 0.3);
   background: var(--work-bg);
   color: var(--fg);
 }

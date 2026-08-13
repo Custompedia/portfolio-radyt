@@ -12,10 +12,12 @@ import { aboutStoryModule } from './modules/about-story';
 import { themeModule } from './modules/theme';
 import { timelinePathModule } from './modules/timeline-path';
 import { packagingTestModule } from './modules/packaging-test';
+import { stackModule } from './modules/stack';
 import { navActiveModule } from './modules/nav-active';
 import { workCardsModule } from './modules/work-cards';
 import { mobileMenuModule } from './modules/mobile-menu';
 import { footerCtaModule } from './modules/footer-cta';
+import { waHoldModule } from './modules/wa-hold';
 import { microModule } from './modules/micro';
 import { finishIntro, preloaderModule, sealIntro } from './modules/preloader';
 import { brandStagesModule } from './modules/brand-stages';
@@ -29,6 +31,10 @@ import { brandStagesModule } from './modules/brand-stages';
  * menetapkan tinggi section About — dan harus mendahului text-reveal, sebab
  * kelas panggung yang dipasangnya mengubah lebar kolom judul, sementara
  * SplitText memotong baris menurut lebar saat itu juga.
+ *
+ * stack menyusul packaging-test: ia menerbitkan `--stack-hold` dan (di bawah
+ * 1100px) memasang penahan tumpukan penutup, jadi ia butuh Pedi sudah memutuskan
+ * apakah dirinya nge-pin atau tidak.
  */
 const modules: AnimationModule[] = [
   sidebarModule,
@@ -40,10 +46,12 @@ const modules: AnimationModule[] = [
   timelinePathModule,
   themeModule,
   packagingTestModule,
+  stackModule,
   workCardsModule,
   navActiveModule,
   mobileMenuModule,
   footerCtaModule,
+  waHoldModule,
   brandStagesModule,
   microModule,
   preloaderModule,

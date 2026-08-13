@@ -31,20 +31,18 @@ interface GhostBox {
   h: string;
 }
 
-// Kedua kartu statistik membentuk satu rail di sisi kiri panggung hero.
-// Titik tengah bersama menjaga tepinya tetap rapi walau lebarnya berbeda.
-const STAT_RAIL_CENTER = 11.5;
+// Kartu perusahaan berada tepat di atas awal headline, sementara kartu tahun
+// jatuh persis di bawah kata "FROM" (baris kedua headline). Sumbu tengah kedua
+// kartu sengaja dibuat sama (≈29.7vw) supaya keduanya berdiri satu kolom.
 const STAT_SM_W = 11.4;
 const STAT_SM_H = 4.8;
-const STAT_GAP = 3.2;
 const STAT_BIG_W = 9.62;
 const STAT_BIG_H = 10.44;
-const STAT_SM_X = STAT_RAIL_CENTER - STAT_SM_W / 2;
-const STAT_BIG_X = STAT_RAIL_CENTER - STAT_BIG_W / 2;
+const STAT_SM_X = 24;
+const STAT_BIG_X = 24.89;
 
-const STAT_PAIR_H = STAT_SM_H + STAT_GAP + STAT_BIG_H;
-const statsSmY = `min(calc(var(--hero-nav-top) + 2.5vw), calc(97vh - ${STAT_PAIR_H}vw))`;
-const statsBigY = `calc(${statsSmY} + ${STAT_SM_H + STAT_GAP}vw)`;
+const statsSmY = `calc(var(--hero-h1-top) - ${STAT_SM_H + 1}vw)`;
+const statsBigY = `min(calc(var(--hero-h1-top) + 2 * 1.03 * var(--hero-h1-size) + 1.2vh), calc(97vh - ${STAT_BIG_H}vw))`;
 
 const STAT_SM_TEXT_W = 9;
 const STAT_SM_TEXT_H = STAT_SM_TEXT_W * 0.2338;

@@ -3,6 +3,16 @@ import type { AnimationModule } from '../core/module';
 import { $, $$, isDesktop, prefersReducedMotion } from '../core/utils';
 import type { PediPose, PediSceneController } from './pedi-scene';
 
+/** Panjang scroll yang dipakai timeline Pedi, dalam satuan viewport. */
+const TIMELINE_VIEWPORTS = 5.6;
+
+/**
+ * Satu viewport tambahan di ujung pin: Pedi berhenti di zoom penuh sementara
+ * The Work naik menimpanya. Lihat modules/stack.ts — angka ini harus sama
+ * dengan `--stack-hold` yang menarik naik layer di atasnya.
+ */
+const STACK_HOLD_VIEWPORTS = 1;
+
 let timeline: gsap.core.Timeline | null = null;
 let pedi: PediSceneController | null = null;
 let generation = 0;
@@ -69,7 +79,7 @@ export const packagingTestModule: AnimationModule = {
       scrollTrigger: {
         trigger: section,
         start: 'top top',
-        end: '+=560%',
+        end: `+=${(TIMELINE_VIEWPORTS + STACK_HOLD_VIEWPORTS) * 100}%`,
         scrub: 1,
         pin: true,
         anticipatePin: 1,
@@ -105,6 +115,19 @@ export const packagingTestModule: AnimationModule = {
       .to(stage, { xPercent: 0, duration: 0.52, ease: 'power2.inOut' }, 3.82)
       .to(pose, { focus: 1, duration: 1.25, ease: 'power2.inOut' }, 4.18)
       .to(pose, { focus: 1, duration: 0.62, ease: 'none' }, 5.43);
+
+    /**
+     * Scrub memetakan SELURUH rentang pin ke SELURUH durasi timeline, jadi
+     * memperpanjang `end` saja tidak menambah jeda — ia cuma memperlambat semua
+     * geraknya. Supaya viewport tambahan itu benar-benar jadi diam di zoom
+     * penuh, ekor timeline diberi tween tanpa perubahan yang panjangnya
+     * sebanding: durasi_sekarang × (1 viewport ÷ 5.6 viewport).
+     */
+    timeline.to(pose, {
+      focus: 1,
+      duration: timeline.duration() * (STACK_HOLD_VIEWPORTS / TIMELINE_VIEWPORTS),
+      ease: 'none',
+    });
   },
 
   destroy() {

@@ -9,6 +9,12 @@
  * `id` diperlukan meski section ini tidak punya menu sendiri — modules/
  * nav-active.ts memakainya untuk tetap menyalakan "Contact" saat scene ini
  * lewat, bukan meninggalkan "Work" menyala di section yang bukan Work.
+ *
+ * Section ini lapis paling bawah dari tumpukan penutup: setelah Pedi selesai
+ * nge-zoom ia DIAM satu viewport sementara The Work naik menimpanya. Lihat
+ * modules/stack.ts. `data-theme-duration` mengikuti panjang pin (5.6 + 1
+ * viewport penahan) — kalau tidak, sidebar keburu balik terang saat layar masih
+ * gelap.
  */
 import { moment } from '../../data/site';
 ---
@@ -17,8 +23,9 @@ import { moment } from '../../data/site';
   class="packaging-test theme-dark"
   id="moment"
   data-packaging-test
+  data-stack-hold
   data-theme-section
-  data-theme-duration="5.6"
+  data-theme-duration="6.6"
   aria-labelledby="packaging-test-title"
 >
   <div class="packaging-test-stage">

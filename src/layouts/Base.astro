@@ -3,7 +3,7 @@ import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/components.css';
 import '../styles/sections.css';
-import { brand, hero } from '../data/site';
+import { brand, companies, hero } from '../data/site';
 
 interface Props {
   title?: string;
@@ -14,7 +14,7 @@ const {
   title = `${brand.role} — ${brand.person} | ${brand.name}${brand.symbol}`,
   description = hero.subheadline,
 } = Astro.props;
-const socialImage = new URL('/images/radyta-og.jpg', Astro.url).href;
+const socialImage = new URL('/images/radyta-og-blue.jpg', Astro.url).href;
 ---
 
 <!-- lang="id": seluruh isi situs berbahasa Indonesia. Salah menandainya
@@ -57,6 +57,15 @@ const socialImage = new URL('/images/radyta-og.jpg', Astro.url).href;
     <link rel="preload" href="/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/satoshi-900.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/images/pedi.glb" as="fetch" crossorigin fetchpriority="high" />
+
+    <!-- Logo tiga perusahaan. Sebelumnya `loading="lazy"` tanpa preload: browser
+         baru meminta berkasnya ketika grid hampir masuk layar, sementara animasi
+         singkapnya sudah jalan duluan — jadi kotaknya kosong dulu, logonya
+         menyusul. Prioritasnya SENGAJA rendah: ketiganya jauh di bawah lipatan
+         dan tidak boleh berebut antrean dengan potret hero maupun font.
+         Diturunkan dari data, bukan ditulis ulang — menambah perusahaan tidak
+         perlu menyentuh berkas ini. -->
+    {companies.items.map((company) => <link rel="preload" href={company.logo} as="image" fetchpriority="low" />)}
 
     <!-- Harus inline dan di <head>: GhostEngine hanya bisa mengukur posisi awal
          saat scroll benar-benar nol. Modul yang di-defer sudah terlambat —

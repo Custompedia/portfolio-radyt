@@ -36,6 +36,9 @@ export const themeModule: AnimationModule = {
 
     for (const section of $$('[data-theme-section]')) {
       const duration = isDesktop() && !prefersReducedMotion() ? Number(section.getAttribute('data-theme-duration')) : 0;
+      // Section yang ditimpa layer berikutnya berhenti gelap lebih awal daripada
+      // tepi bawahnya sendiri — lihat catatan di Work.astro.
+      const customEnd = section.getAttribute('data-theme-end');
       triggers.push(
         ScrollTrigger.create({
           trigger: section,
@@ -44,7 +47,7 @@ export const themeModule: AnimationModule = {
           start: `top top+=${SIDEBAR_THEME_OFFSET}`,
           end: Number.isFinite(duration) && duration > 0
             ? `+=${window.innerHeight * (duration + 1)}`
-            : `bottom top+=${SIDEBAR_THEME_OFFSET}`,
+            : (customEnd ?? `bottom top+=${SIDEBAR_THEME_OFFSET}`),
           onToggle: (self) => {
             overlapping += self.isActive ? 1 : -1;
             overlapping = Math.max(0, overlapping);

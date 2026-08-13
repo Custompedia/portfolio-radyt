@@ -1,6 +1,6 @@
 import { gsap } from '../core/gsap';
 import type { AnimationModule } from '../core/module';
-import { $ } from '../core/utils';
+import { $, $$ } from '../core/utils';
 
 let timeline: gsap.core.Timeline | null = null;
 
@@ -9,14 +9,13 @@ export const footerCtaModule: AnimationModule = {
   skipOnReducedMotion: true,
 
   init() {
-    const footer = $<HTMLElement>('[data-footer-cta]');
+    const footer = $<HTMLElement>('.site-footer');
     if (!footer) return;
 
-    const targets = [
-      footer.querySelector<HTMLElement>('.contact-kicker'),
-      footer.querySelector<HTMLElement>('.contact-headline'),
-      footer.querySelector<HTMLElement>('.contact-bottom'),
-    ].filter((target): target is HTMLElement => target instanceof HTMLElement);
+    // Urutan naiknya mengikuti urutan markup, jadi penandanya cukup satu atribut
+    // — menambah blok baru di footer tidak perlu menyentuh modul ini.
+    const targets = $$<HTMLElement>('[data-footer-reveal]', footer);
+    if (targets.length === 0) return;
 
     timeline = gsap.timeline({
       scrollTrigger: {
@@ -33,5 +32,8 @@ export const footerCtaModule: AnimationModule = {
     timeline?.scrollTrigger?.kill();
     timeline?.kill();
     timeline = null;
+    // Tanpa ini, membongkar modul saat animasinya belum sempat main meninggalkan
+    // `visibility: hidden` inline — dan seluruh isi footer lenyap.
+    for (const el of $$<HTMLElement>('[data-footer-reveal]')) gsap.set(el, { clearProps: 'opacity,visibility,transform' });
   },
 };

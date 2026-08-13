@@ -19,8 +19,12 @@ import { companies } from '../../data/site';
     {
       companies.items.map((company) => (
         <li class="company-showcase" data-company-showcase>
+          {/* `eager`, bukan `lazy`: ketiganya sudah di-preload di <head> (lihat
+              Base.astro), dan `lazy` justru menahan pemakaian berkas yang sudah
+              terlanjur diunduh sampai gridnya nyaris masuk layar — logonya baru
+              muncul setelah animasi singkapnya jalan, jadi terlihat telat. */}
           <div class="company-logo-wrap" data-company-logo>
-            <img src={company.logo} alt={company.name} loading="lazy" decoding="async" />
+            <img src={company.logo} alt={company.name} loading="eager" fetchpriority="low" decoding="async" />
           </div>
         </li>
       ))

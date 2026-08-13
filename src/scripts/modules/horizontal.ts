@@ -34,7 +34,18 @@ export const horizontalModule: AnimationModule = {
     gsap.set(track, { clearProps: 'transform' });
 
     const overflow = Math.max(0, track.scrollWidth - wrap.clientWidth);
-    section.style.height = `${window.innerHeight + overflow}px`;
+
+    /**
+     * Satu viewport ekstra di ujung: track sudah berhenti bergeser, tapi
+     * `.work-sticky` tetap menempel di atas layar supaya footer sempat naik
+     * menimpanya. Ini penahan yang dimaksud modules/stack.ts.
+     *
+     * Ditulis sebagai `calc()` dengan variabelnya, bukan piksel hasil hitungan:
+     * `--stack-hold` disegarkan tiap kali tinggi viewport berubah, dan begitu
+     * ia berubah penahan di sini ikut menyesuaikan tanpa modul ini perlu
+     * dibangun ulang — persis sama panjang dengan margin negatif footer.
+     */
+    section.style.height = `calc(${window.innerHeight + overflow}px + var(--stack-hold, 100vh))`;
 
     if (overflow === 0) return;
 

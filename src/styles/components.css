@@ -49,8 +49,6 @@
   border-radius: inherit;
   background: var(--surface);
   border: var(--surface-border);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
   transition:
     background-color var(--theme-dur) var(--ease-out),
     border-color var(--theme-dur) var(--ease-out);
@@ -314,40 +312,37 @@
   z-index: 1;
 }
 
-/* Hover memakai biru yang sama dengan keadaan aktif — kursor jadi seolah
-   MEMBAWA sorotan itu, bukan memicu warna kedua yang tidak ada artinya.
-   Teksnya tetap HITAM seperti versi kuning, dan karena itu isinya --blue-pill
-   (biru muda, 8.9:1 di bawah hitam) alih-alih --blue yang pekat.
-   Alasannya bukan selera: pill ini satu-satunya isi di halaman yang sebagian
-   waktu belum terlihat. Di hero ia masih pudar sementara labelnya sudah
-   terbaca di atas krem — kalau labelnya dibuat putih mengikuti isi pekat, ia
-   hilang persis di jendela itu. */
-.nav-link:hover .nav-link-bg {
-  background: var(--blue-pill);
-}
-
-.nav-link:hover {
-  color: var(--black);
-}
-
-.nav-link.is-active {
-  color: var(--black);
-}
-
 .nav-link.is-active .nav-link-bg,
 .nav-link.is-active:hover .nav-link-bg {
-  background: var(--blue);
-  box-shadow: 0 0 0 1px rgba(48, 70, 199, 0.18), 0 10px 24px -14px rgba(48, 70, 199, 0.9);
+  background: var(--accent);
+  box-shadow: 0 0 0 1px rgba(var(--ink-rgb), 0.12), 0 10px 24px -14px rgba(var(--ink-rgb), 0.35);
 }
 
 .nav-link:hover .nav-link-bg {
   background: var(--blue);
-  box-shadow: 0 0 0 1px rgba(48, 70, 199, 0.18), 0 10px 24px -14px rgba(48, 70, 199, 0.9);
+  box-shadow: 0 0 0 1px rgba(var(--ink-rgb), 0.12), 0 10px 24px -14px rgba(var(--ink-rgb), 0.35);
 }
 
 .nav-link:hover,
 .nav-link.is-active {
   color: var(--white);
+}
+
+[data-theme='dark'] .nav-link:hover .nav-link-bg {
+  background: var(--accent);
+}
+
+[data-theme='dark'] .nav-link:hover,
+[data-theme='dark'] .nav-link.is-active {
+  color: var(--black);
+}
+
+[data-theme='dark'] .nav-link.is-active:not(:hover) .nav-link-bg {
+  background: var(--surface-inner);
+}
+
+[data-theme='dark'] .nav-link.is-active:not(:hover) {
+  color: var(--accent);
 }
 
 /* --- Clients marquee --- */
@@ -541,6 +536,7 @@
   padding: 0.22vw 0.83vw 0.28vw;
   border: 0.14vw solid var(--label-border);
   border-radius: var(--radius-pill);
+  color: var(--accent);
   font-family: var(--font-label);
   font-size: var(--fs-label);
   font-weight: 700;
@@ -597,12 +593,12 @@
 
 .glass-card {
   background: var(--glass-bg);
-  border: 1px solid rgba(var(--ink-rgb), 0.1);
+  border: var(--glass-border);
   border-radius: var(--radius-sm);
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--glass-shadow);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
-  color: var(--white);
+  color: var(--fg);
 }
 
 /* ==========================================================================

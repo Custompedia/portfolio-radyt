@@ -304,15 +304,12 @@ function buildWordmarkMorph(m: WordmarkMorph, trigger: Element): void {
 
   gsap.fromTo(
     m.inner,
-    { x: 0, y: 0, scale: 1, transformOrigin: 'top left', force3D: false },
+    { x: 0, y: 0, scaleX: 1, scaleY: 1, transformOrigin: 'top left', force3D: false },
     {
       x: m.to.left - m.from.left,
       y: m.to.top - m.from.top,
-      // Rasio LEBAR, bukan tinggi: dua kotak ini teks dengan font dan
-      // line-height yang sama, jadi menyamakan lebarnya otomatis menyamakan
-      // tingginya — dan lebar adalah satu-satunya ukuran yang bebas dari
-      // selisih letter-spacing di antara keduanya.
-      scale: m.to.width / m.from.width,
+      scaleX: m.to.width / m.from.width,
+      scaleY: m.to.height / m.from.height,
       ease: 'power1.inOut',
       force3D: false,
       scrollTrigger: {
