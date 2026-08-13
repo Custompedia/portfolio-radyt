@@ -13,54 +13,65 @@
  */
 
 :root {
-  /* --- Palette --- */
-  --bg: #d5cfbe;
-  --yellow: #ffff23;
+  /* --- Palette ---
+     Base navy sangat gelap, teks putih, SATU aksen biru.
+     Birunya DIAMBIL dari logo Custompedia sendiri (public/images/favicon.svg),
+     bukan ditaksir: #007EC8 pada rect badan logo, #0999CD pada path
+     lengkungnya. Kuning logo (#F8BD17) sengaja tidak ikut — handoff melarang
+     kuning di situs personal. */
+  --bg: #060a16;
   --black: #000000;
   --white: #ffffff;
-  --dark: #1d1d1d;
-  --dark-deep: #131313;
 
+  /* Tinta halaman, ditulis sebagai channel supaya alpha-nya bisa diturunkan di
+     mana-mana tanpa mengulang hex. Putih kebiruan, bukan putih murni: di atas
+     navy putih murni terbaca sedikit "menyala" pada blok teks panjang. */
+  --ink-rgb: 226, 235, 248;
 
-  /* Surface: kartu di atas background terang */
-  --card-bg: rgba(223, 222, 206, 0.8);
-  --card-border: 1px solid rgba(255, 255, 255, 0.2);
-  --card-inner: #ebeada;
-  --card-inner-alt: #c9c8ba;
-  --card-inner-hover: #edecda;
+  /* Tiga perhentian biru, dan pembagiannya soal KONTRAS — diukur di atas --bg:
+       --blue        4.5:1  aksen sebesar wordmark, bukan untuk teks isi
+       --blue-light  6.1:1  aksen teks, angka, garis — aman untuk ukuran apa pun
+       --blue-deep          isi tombol; PUTIH di atasnya 4.95:1, jadi label
+                            tombol tetap lolos AA pada ukuran normal
+     #007EC8 sendiri hanya 4.36:1 di bawah putih, jadi ia TIDAK dipakai sebagai
+     isi tombol meski itu hex brand-nya. */
+  --blue: #007ec8;
+  --blue-light: #0999cd;
+  --blue-deep: #0074be;
+  --accent: var(--blue-light);
 
-  /* Surface: kartu saat sidebar melewati section gelap */
-  --card-bg-dark: rgba(29, 29, 29, 0.6);
-  --card-border-dark: 1px solid rgba(255, 255, 255, 0.1);
-  --card-inner-dark: rgba(57, 57, 57, 0.9);
-  --card-inner-alt-dark: #393939;
-  --card-inner-hover-dark: rgba(94, 94, 94, 0.5);
+  /* Surface: kartu di atas navy halaman */
+  --card-bg: rgba(20, 30, 52, 0.72);
+  --card-border: 1px solid rgba(var(--ink-rgb), 0.1);
+  --card-inner: rgba(26, 38, 64, 0.9);
+  --card-inner-alt: #1a2640;
+  --card-inner-hover: rgba(34, 49, 80, 0.95);
 
-  /* Kaca hero — kartu stat & trait melayang di atas potret, jadi warnanya
-     taupe transparan, bukan beige solid seperti kartu section. */
-  --glass-bg: rgba(194, 184, 172, 0.45);
+  /* Surface: kartu saat sidebar melewati section paling gelap (Work).
+     Bedanya tipis dan memang begitu — seluruh halaman kini gelap, jadi yang
+     tersisa untuk dibedakan hanya kepekatannya. */
+  --card-bg-dark: rgba(10, 16, 30, 0.74);
+  --card-border-dark: 1px solid rgba(var(--ink-rgb), 0.08);
+  --card-inner-dark: rgba(16, 24, 42, 0.9);
+  --card-inner-alt-dark: #101828;
+  --card-inner-hover-dark: rgba(24, 35, 60, 0.95);
+
+  /* Kaca hero — kartu statistik melayang di atas potret, jadi ia navy
+     setengah tembus, bukan permukaan solid seperti kartu section. */
+  --glass-bg: rgba(12, 22, 42, 0.42);
   --glass-blur: 20px;
 
   /* Permukaan khusus per-section */
-  --work-bg: linear-gradient(#000000, #222222 44%);
-  --work-scrim: linear-gradient(rgba(0, 0, 0, 0.3), rgba(51, 51, 51, 0.03) 50%, rgba(0, 0, 0, 0.4));
-  --work-dim: rgba(0, 0, 0, 0.6);
-  --timeline-stroke: linear-gradient(
-    rgba(46, 32, 6, 0.49),
-    rgba(46, 32, 6, 0.27) 44%,
-    rgba(46, 32, 6, 0) 95%
-  );
-  --swiper-bullet: #a8a684;
+  --work-bg: linear-gradient(#01030a, #0a1122 44%);
+  --work-scrim: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.05) 50%, rgba(0, 0, 0, 0.45));
+  --work-dim: rgba(1, 4, 12, 0.66);
 
-  /* Scrollbar halaman. Track-nya SENGAJA transparan: dengan begitu yang
-     terlihat di belakangnya adalah section yang sedang lewat — beige di
-     sebagian besar halaman, hitam saat Work — jadi ia ikut berganti warna
-     tanpa satu baris JS pun.
-     Thumb-nya taupe pertengahan, dipilih supaya tetap terbaca di KEDUA latar
-     itu: terlalu gelap ia hilang di section Work, terlalu terang ia hilang di
-     beige. */
-  --scrollbar-thumb: #8f8b76;
-  --scrollbar-thumb-hover: #6f6c5b;
+  /* Scrollbar halaman. Track-nya SENGAJA transparan: yang terlihat di
+     belakangnya adalah section yang sedang lewat, jadi ia ikut berganti warna
+     tanpa satu baris JS pun. Thumb-nya tinta beralpha — cukup terbaca di navy
+     halaman maupun di Work yang lebih pekat. */
+  --scrollbar-thumb: rgba(var(--ink-rgb), 0.22);
+  --scrollbar-thumb-hover: rgba(var(--ink-rgb), 0.4);
 
   /* Token turunan yang di-flip oleh theme.ts lewat [data-theme] */
   --surface: var(--card-bg);
@@ -68,9 +79,9 @@
   --surface-inner: var(--card-inner);
   --surface-inner-alt: var(--card-inner-alt);
   --surface-inner-hover: var(--card-inner-hover);
-  --fg: var(--black);
-  --fg-muted: rgba(0, 0, 0, 0.7);
-  --label-border: rgba(0, 0, 0, 0.3);
+  --fg: rgb(var(--ink-rgb));
+  --fg-muted: rgba(var(--ink-rgb), 0.62);
+  --label-border: rgba(var(--ink-rgb), 0.3);
 
   /* --- Typography --- */
   --font-sans: 'Satoshi', 'Helvetica Neue', Arial, sans-serif;
@@ -301,12 +312,12 @@
 /* Selector `.line` juga diperlukan setelah SplitText membungkus tiap baris. */
 .h2-style:not(:has(.line)),
 .h2-style .line {
-  color: var(--black);
+  color: var(--fg);
 }
 
 .h2-style-white:not(:has(.line)),
 .h2-style-white .line {
-  background: linear-gradient(89deg, #d5d5d5 7.42%, #ffffff 95.11%);
+  background: linear-gradient(89deg, rgba(var(--ink-rgb), 0.72) 7.42%, #ffffff 95.11%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

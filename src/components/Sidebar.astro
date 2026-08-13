@@ -149,7 +149,7 @@ import { brand, clients, hero, nav, social, stats } from '../data/site';
                   class:list={['marquee-item', `marquee-item--${client.shape}`]}
                   style={`--logo-width-desktop:${client.desktopWidth}vw;--logo-width-mobile:${client.mobileWidth}px;--logo-scale:${client.scale ?? 1}`}
                 >
-                  <img class="marquee-logo" src={client.src} alt={client.name} loading="eager" decoding="async" />
+                  <img class:list={['marquee-logo', client.mono && 'is-mono']} src={client.src} alt={client.name} loading="eager" decoding="async" />
                 </span>
               ))
             }
@@ -161,7 +161,7 @@ import { brand, clients, hero, nav, social, stats } from '../data/site';
                   class:list={['marquee-item', `marquee-item--${client.shape}`]}
                   style={`--logo-width-desktop:${client.desktopWidth}vw;--logo-width-mobile:${client.mobileWidth}px;--logo-scale:${client.scale ?? 1}`}
                 >
-                  <img class="marquee-logo" src={client.src} alt="" loading="eager" decoding="async" />
+                  <img class:list={['marquee-logo', client.mono && 'is-mono']} src={client.src} alt="" loading="eager" decoding="async" />
                 </span>
               ))
             }

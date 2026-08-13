@@ -46,13 +46,18 @@ export async function createPediScene(canvas: HTMLCanvasElement, performanceLite
   const modelRoot = new THREE.Group();
   scene.add(modelRoot);
 
-  scene.add(new THREE.HemisphereLight(0xf8fbff, 0x17130c, performanceLite ? 2.1 : 2.5));
+  // Cahaya pantulan lantai ikut navy halaman, bukan cokelat hangat: latar di
+  // belakang scene ini sekarang #060a16, dan pantulan hangat membuat kotaknya
+  // terbaca seperti ditempel dari halaman lain.
+  scene.add(new THREE.HemisphereLight(0xf8fbff, 0x0b1224, performanceLite ? 2.1 : 2.5));
 
   const keyLight = new THREE.DirectionalLight(0xffffff, performanceLite ? 2.5 : 3.4);
   keyLight.position.set(-3, 4, 5);
   scene.add(keyLight);
 
-  const rimLight = new THREE.DirectionalLight(0xffff23, performanceLite ? 1.5 : 2.2);
+  // Rim biru Custompedia (#0999CD) menggantikan rim kuning — kuning tidak lagi
+  // dipakai di situs ini sama sekali.
+  const rimLight = new THREE.DirectionalLight(0x0999cd, performanceLite ? 1.5 : 2.2);
   rimLight.position.set(4, 2, -3);
   scene.add(rimLight);
 

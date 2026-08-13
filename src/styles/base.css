@@ -168,13 +168,13 @@ ul {
 }
 
 :focus-visible {
-  outline: 2px solid var(--yellow);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: var(--yellow);
-  color: var(--black);
+  background: var(--blue-deep);
+  color: var(--white);
 }
 
 /* Lenis mengambil alih scroll; html butuh height auto. */
@@ -205,9 +205,6 @@ html.lenis body {
   border: 0;
 }
 
-.u-yellow {
-  color: var(--yellow);
-}
 
 /* SplitText: tiap baris dibungkus mask ber-overflow hidden. */
 .line-mask {

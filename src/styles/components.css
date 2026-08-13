@@ -73,8 +73,8 @@
   align-self: start;
   padding: 0.33vw 0.69vw 0.4vw;
   border-radius: var(--radius-xs);
-  background: var(--yellow);
-  color: var(--black);
+  background: var(--blue-deep);
+  color: var(--white);
   font-size: 1.37vw;
   font-weight: 900;
   letter-spacing: -0.045em;
@@ -228,9 +228,9 @@
 }
 
 
-/* Angka statistik kuning tebal, labelnya lebih tipis dan gelap di rail. */
+/* Angka statistik biru tebal, labelnya lebih tipis di rail. */
 .nav-stat-value {
-  color: var(--yellow);
+  color: var(--accent);
   font-size: 1.8vw;
   font-weight: 900;
   line-height: 1;
@@ -305,25 +305,25 @@
   z-index: 1;
 }
 
-/* Hover memakai kuning yang sama dengan keadaan aktif — kursor jadi seolah
+/* Hover memakai biru yang sama dengan keadaan aktif — kursor jadi seolah
    MEMBAWA sorotan itu, bukan memicu warna kedua yang tidak ada artinya.
-   Teksnya wajib ikut jadi hitam: di tema gelap warnanya putih, dan putih di
-   atas kuning nyaris tidak terbaca. */
+   Isinya --blue-deep, bukan hex brand --blue: label nav berdiri di atasnya,
+   dan putih di atas #007EC8 cuma 4.36:1. */
 .nav-link:hover .nav-link-bg {
-  background: var(--yellow);
+  background: var(--blue-deep);
 }
 
 .nav-link:hover {
-  color: var(--black);
+  color: var(--white);
 }
 
 .nav-link.is-active {
-  color: var(--black);
+  color: var(--white);
 }
 
 .nav-link.is-active .nav-link-bg,
 .nav-link.is-active:hover .nav-link-bg {
-  background: var(--yellow);
+  background: var(--blue-deep);
 }
 
 /* --- Clients marquee --- */
@@ -369,13 +369,22 @@
   height: 1.2vw;
 }
 
+.marquee-logo.is-mono,
+.network-logo img.is-mono {
+  filter: brightness(0) invert(1);
+}
+
 .marquee-logo {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
   object-position: center;
-  filter: saturate(0.85);
+  /* Sedikit diangkat: sebagian logo punya bagian gelap yang di atas navy
+     kehilangan tepinya. Yang benar-benar gelap dan monokrom ditandai `is-mono`
+     di site.ts dan dirender sebagai siluet putih. */
+  filter: saturate(0.9) brightness(1.12);
+  opacity: 0.85;
   transform: scale(var(--logo-scale));
   transform-origin: center;
 }
@@ -430,8 +439,8 @@
   justify-content: center;
   padding: 0.9vw 1.5vw;
   border-radius: var(--radius-lg);
-  background: var(--yellow);
-  color: var(--black);
+  background: var(--blue-deep);
+  color: var(--white);
   font-family: var(--font-label);
   font-size: 1.18vw;
   font-weight: 600;
@@ -585,7 +594,7 @@
    keterbacaan lebih penting daripada kemiripan warna. */
 .glass-card {
   background: var(--glass-bg);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--radius-sm);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
@@ -612,7 +621,7 @@
   padding: 0 11px 0 13px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 12px;
-  background: var(--dark);
+  background: var(--card-inner-alt);
   color: var(--white);
   overflow: hidden;
   transition:
@@ -662,9 +671,9 @@
 }
 
 .mobile-menu-trigger[aria-expanded='true'] {
-  border-color: var(--yellow);
-  background: var(--yellow);
-  color: var(--black);
+  border-color: var(--blue-deep);
+  background: var(--blue-deep);
+  color: var(--white);
 }
 
 .mobile-menu-trigger[aria-expanded='true'] .mobile-menu-trigger-label-menu {

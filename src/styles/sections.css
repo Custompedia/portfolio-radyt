@@ -44,7 +44,7 @@
   display: flex;
   width: 100%;
   justify-content: center;
-  color: var(--yellow);
+  color: var(--blue);
   /* Full kanan kiri. Angkanya hidup di --wordmark-size (tokens.css), bukan di
      sini — baris navigasi dan versi mobile menurunkannya dari token yang sama. */
   font-size: var(--wordmark-size);
@@ -180,7 +180,7 @@
 .hero-nav-sep {
   width: 1px;
   height: 0.8vw;
-  background: var(--black);
+  background: var(--fg);
   opacity: 0.35;
 }
 
@@ -464,7 +464,7 @@
     flex-direction: column;
     width: 100%;
     max-height: 100dvh;
-    --fg: #f5f3ea;
+    --fg: rgb(var(--ink-rgb));
     --surface: transparent;
     --surface-border: transparent;
     --surface-inner: transparent;
@@ -538,7 +538,7 @@
 
   .sidebar-panel .nav-link:hover,
   .sidebar-panel .nav-link.is-active {
-    color: var(--yellow);
+    color: var(--accent);
   }
 
   .sidebar-panel .nav-link-icon {
@@ -747,7 +747,7 @@
    jejak samar di belakangnya — jadi ia harus cukup tegas untuk terbaca sebagai
    garis yang sedang ditarik, bukan bayangan. */
 .timeline-lit {
-  stroke: rgba(17, 12, 2, 0.92);
+  stroke: rgba(var(--ink-rgb), 0.72);
 }
 
 /* Pembungkus inilah yang di-scrub: tingginya naik bertahap dan memotong
@@ -773,12 +773,12 @@
   width: 15px;
   height: 15px;
   margin: -7.5px 0 0 -7.5px;
-  border: 2px solid rgba(0, 0, 0, 0.55);
+  border: 2px solid rgba(var(--ink-rgb), 0.45);
   border-radius: 50%;
   /* `transform` sengaja TIDAK dipakai di sini: dot sudah dianimasikan skalanya
      oleh timeline-path.ts, dan transform dari CSS akan ditimpa style inline
      milik GSAP. */
-  background: var(--yellow);
+  background: var(--accent);
   box-shadow: 0 0 0 0 transparent;
   transition:
     box-shadow 0.35s var(--ease-out),
@@ -791,8 +791,8 @@
 .timeline-dot.is-active {
   border-color: var(--fg);
   box-shadow:
-    0 0 0 6px color-mix(in srgb, var(--yellow) 35%, transparent),
-    0 0 18px 2px color-mix(in srgb, var(--yellow) 45%, transparent);
+    0 0 0 6px color-mix(in srgb, var(--accent) 35%, transparent),
+    0 0 18px 2px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .timeline-card {
@@ -804,20 +804,20 @@
   padding: 1.8vw;
   /* Kartu ini melayang di atas garis dan latar beige yang sama warnanya.
      Tanpa bayangan, tepinya hilang persis di tempat garis lewat. */
-  box-shadow: 0 1.2vw 2.6vw -1.4vw rgba(46, 32, 6, 0.45);
+  box-shadow: 0 1.2vw 2.6vw -1.4vw rgba(0, 0, 0, 0.6);
   transition: box-shadow var(--dur) var(--ease-out);
 }
 
 /* Hover-nya dipegang GSAP (scale), jadi di sini HANYA properti non-transform —
    menaruh transform di CSS akan langsung ditimpa style inline milik GSAP. */
 .timeline-card:hover {
-  box-shadow: 0 1.8vw 3.4vw -1.4vw rgba(46, 32, 6, 0.55);
+  box-shadow: 0 1.8vw 3.4vw -1.4vw rgba(0, 0, 0, 0.72);
 }
 
 .timeline-year {
   display: flex;
   align-items: flex-start;
-  color: var(--yellow);
+  color: var(--accent);
   /* Angkanya tetap elemen terberat di kartu, tapi dibatasi supaya tinggi kartu
      tidak pernah melewati jarak antar simpul. */
   font-size: clamp(2.75rem, 4.3vw, 4.75rem);
@@ -825,7 +825,7 @@
   letter-spacing: -0.05em;
   line-height: 1;
   /* Kuning di atas beige terang nyaris tak punya kontras di tepinya. */
-  text-shadow: 0 0.08vw 0 rgba(46, 32, 6, 0.18);
+  text-shadow: 0 0.08vw 0 rgba(0, 0, 0, 0.5);
 }
 
 .timeline-tick {
@@ -973,7 +973,7 @@
   height: 6px;
   width: 34%;
   border-radius: 3px;
-  background: var(--yellow);
+  background: var(--accent);
 }
 
 .work-card-mock-line {
@@ -1039,7 +1039,7 @@
 .work-card-kind {
   display: block;
   margin-bottom: 0.42vw;
-  color: var(--yellow);
+  color: var(--accent);
   font-family: var(--font-label);
   font-size: 0.75vw;
   font-weight: 600;
@@ -1121,7 +1121,9 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   line-height: 1;
-  opacity: 0.4;
+  /* 0.5, bukan 0.4: nomor ini tetap TEKS, dan di atas navy 0.4 jatuh ke
+     3.3:1 — di bawah ambang AA. 0.5 mengembalikannya ke 4.6:1. */
+  opacity: 0.5;
 }
 
 .company-name {
@@ -1222,7 +1224,16 @@
   display: block;
   width: var(--logo-width-desktop);
   height: auto;
+  /* Perlakuan yang sama dengan marquee rail — alasannya ada di
+     `.marquee-logo` (components.css). */
+  filter: saturate(0.9) brightness(1.12);
+  opacity: 0.88;
   transform: scale(var(--logo-scale, 1));
+  transition: opacity var(--dur) var(--ease-out);
+}
+
+.network-logo img:hover {
+  opacity: 1;
 }
 
 .network-logo--square img {
@@ -1267,7 +1278,7 @@
   width: 46vw;
   height: 46vw;
   border-radius: 50%;
-  background: rgba(255, 255, 35, 0.09);
+  background: rgba(9, 153, 205, 0.12);
   filter: blur(80px);
   content: '';
 }
@@ -1306,7 +1317,7 @@
 .packaging-test-label {
   display: block;
   margin-bottom: clamp(18px, 1.6vw, 28px);
-  color: var(--yellow);
+  color: var(--accent);
   font-family: var(--font-label);
   font-size: var(--fs-label);
   font-weight: 600;
@@ -1369,8 +1380,8 @@
 
 .pedi-orbit--middle {
   inset: 10%;
-  border-color: rgba(255, 255, 35, 0.17);
-  box-shadow: 0 0 42px rgba(255, 255, 35, 0.035);
+  border-color: rgba(9, 153, 205, 0.24);
+  box-shadow: 0 0 42px rgba(9, 153, 205, 0.06);
 }
 
 .pedi-orbit--outer {
@@ -1404,7 +1415,7 @@
   left: 50%;
   width: clamp(44px, 4vw, 64px);
   aspect-ratio: 1;
-  border: 1px solid rgba(255, 255, 35, 0.18);
+  border: 1px solid rgba(9, 153, 205, 0.26);
   border-radius: 50%;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
   opacity: 0.65;
@@ -1434,7 +1445,7 @@
 
 @keyframes pedi-loader-pulse {
   to {
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 0 18px rgba(255, 255, 35, 0.025);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 0 18px rgba(9, 153, 205, 0.04);
     transform: translate(-50%, -50%) scale(1.12);
   }
 }
@@ -1461,7 +1472,7 @@
 }
 
 .packaging-test-number {
-  color: var(--yellow);
+  color: var(--accent);
   font-family: var(--font-label);
   font-size: clamp(0.66rem, 0.75vw, 0.86rem);
   font-weight: 600;
@@ -1505,7 +1516,7 @@
 }
 
 .packaging-test-outro p span:last-child {
-  color: var(--yellow);
+  color: var(--accent);
 }
 
 
@@ -1516,7 +1527,7 @@
   left: 0;
   z-index: 6;
   height: clamp(110px, 15vh, 170px);
-  background: linear-gradient(to bottom, rgba(213, 207, 190, 0), var(--bg) 88%);
+  background: linear-gradient(to bottom, rgba(6, 10, 22, 0), var(--bg) 88%);
   pointer-events: none;
 }
 
@@ -1651,7 +1662,7 @@
 .footer-wordmark {
   display: flex;
   align-items: flex-start;
-  color: var(--yellow);
+  color: var(--blue);
   /* Diturunkan dari --wordmark-size dengan alasan yang sama seperti versi hero:
      angkanya terikat jumlah huruf nama. Di sini "RADHYTA" + ® memakan 4.703vw
      lebar per 1vw ukuran font (diukur di browser), dan kotak pembungkusnya
@@ -1807,8 +1818,8 @@
   gap: 2px;
   min-width: max-content;
   padding: 8px 10px 9px;
-  background: var(--yellow);
-  color: var(--black);
+  background: var(--blue-deep);
+  color: var(--white);
   font-family: var(--font-label);
   line-height: 1;
   white-space: nowrap;
@@ -1820,9 +1831,9 @@
   left: 0;
   width: clamp(110px, 10vw, 180px);
   aspect-ratio: 1;
-  border: 1px solid var(--yellow);
+  border: 1px solid var(--accent);
   border-radius: 50%;
-  box-shadow: inset 0 0 0 8px rgba(255, 255, 35, 0.08);
+  box-shadow: inset 0 0 0 8px rgba(9, 153, 205, 0.12);
   pointer-events: none;
   will-change: transform, opacity;
 }
@@ -2019,7 +2030,7 @@
 
 
   .hero-mobile-stat-value {
-    color: var(--yellow);
+    color: var(--accent);
     font-size: 1.75rem;
     font-weight: 900;
     line-height: 1;
@@ -2071,7 +2082,7 @@
     left: calc(var(--tl-line-x) - 1px);
     width: 2px;
     border-radius: 1px;
-    background: rgba(46, 32, 6, 0.28);
+    background: rgba(var(--ink-rgb), 0.2);
     content: '';
   }
 
@@ -2096,14 +2107,14 @@
     width: 3px;
     max-height: calc(100% - 20px);
     border-radius: 2px;
-    background: rgba(17, 12, 2, 0.85);
+    background: rgba(var(--ink-rgb), 0.7);
   }
 
   .timeline-card {
     position: relative;
     width: 100%;
     padding: 22px;
-    box-shadow: 0 14px 30px -18px rgba(46, 32, 6, 0.5);
+    box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.66);
   }
 
   /* Titik sejajar dengan angka tahun di dalam kartu (padding 22px + separuh
@@ -2120,7 +2131,7 @@
     left: calc(-1 * var(--tl-rail) + var(--tl-line-x) - (var(--tl-dot) + 4px) / 2);
     width: var(--tl-dot);
     height: var(--tl-dot);
-    border: 2px solid rgba(46, 32, 6, 0.5);
+    border: 2px solid rgba(var(--ink-rgb), 0.42);
     border-radius: 50%;
     background: var(--bg);
     content: '';
@@ -2463,8 +2474,8 @@
     width: auto;
     z-index: 3;
     gap: 10px;
-    color: #f8f7f3;
-    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+    color: rgb(var(--ink-rgb));
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
   }
 
   .hero-headline {
@@ -2480,7 +2491,7 @@
      ke bagian Journey selain menu, dan sebagai teks berpanah ia tidak
      bersaing dengan tombol WhatsApp di topbar. */
   .hero-secondary {
-    color: #f8f7f3;
+    color: rgb(var(--ink-rgb));
   }
 
   /* Baris merek dipatok ke KAKI panggung supaya tidak pernah bertabrakan
@@ -2499,16 +2510,16 @@
 .timeline-card {
   width: clamp(320px, 27vw, 500px);
   padding: clamp(22px, 1.65vw, 28px);
-  border: 1px solid rgba(46, 32, 6, 0.13);
+  border: 1px solid rgba(var(--ink-rgb), 0.1);
   border-radius: 20px;
-  background: rgba(241, 240, 225, 0.96);
-  box-shadow: 0 16px 36px -28px rgba(46, 32, 6, 0.55);
+  background: rgba(20, 30, 52, 0.92);
+  box-shadow: 0 16px 36px -28px rgba(0, 0, 0, 0.72);
   transition: box-shadow 280ms var(--ease-out), border-color 280ms var(--ease-out);
 }
 
 .timeline-card:hover {
-  border-color: rgba(46, 32, 6, 0.24);
-  box-shadow: 0 20px 42px -28px rgba(46, 32, 6, 0.68);
+  border-color: rgba(var(--ink-rgb), 0.2);
+  box-shadow: 0 20px 42px -28px rgba(0, 0, 0, 0.85);
 }
 
 
@@ -2517,7 +2528,7 @@
 .tl-card-index {
   display: block;
   margin-bottom: 0.6vw;
-  color: rgba(46, 32, 6, 0.38);
+  color: rgba(var(--ink-rgb), 0.55);
   font-family: var(--font-label);
   font-size: max(10px, 0.68vw);
   font-weight: 600;
@@ -2532,13 +2543,13 @@
   padding: 0.08em 0.08em 0.12em;
   margin: -0.08em -0.08em -0.12em;
   overflow: visible;
-  color: var(--yellow);
+  color: var(--accent);
   font-size: clamp(3.2rem, 4.2vw, 4.75rem);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.04em;
   line-height: 1;
   white-space: nowrap;
-  text-shadow: 0 2px 0 rgba(46, 32, 6, 0.18);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .timeline-card .timeline-title {
@@ -2551,7 +2562,7 @@
 
 .timeline-card .timeline-body {
   max-width: 38ch;
-  color: rgba(46, 46, 42, 0.75);
+  color: var(--fg-muted);
   font-size: clamp(0.92rem, 1vw, 1.02rem);
   line-height: 1.5;
 }
@@ -2570,20 +2581,20 @@
   .timeline::before {
     top: 18px;
     bottom: 18px;
-    background: rgba(46, 32, 6, 0.22);
+    background: rgba(var(--ink-rgb), 0.16);
   }
 
   .timeline-fill {
     top: 18px;
     max-height: calc(100% - 36px);
-    background: rgba(17, 12, 2, 0.92);
+    background: rgba(var(--ink-rgb), 0.72);
   }
 
   .timeline-card {
     padding: 22px 20px 20px;
     border-radius: 18px;
-    background: linear-gradient(145deg, rgba(248, 247, 234, 0.98), rgba(236, 235, 218, 0.96));
-    box-shadow: 0 18px 36px -26px rgba(46, 32, 6, 0.58);
+    background: linear-gradient(145deg, rgba(24, 35, 60, 0.95), rgba(14, 22, 40, 0.92));
+    box-shadow: 0 18px 36px -26px rgba(0, 0, 0, 0.75);
   }
 
 
@@ -2603,8 +2614,8 @@
   .timeline-card::before {
     /* Titik sengaja berada di pusat angka tahun, bukan di tepi atasnya. */
     top: 66px;
-    border-color: rgba(46, 32, 6, 0.62);
-    background: var(--yellow);
+    border-color: rgba(var(--ink-rgb), 0.55);
+    background: var(--accent);
     box-shadow: 0 0 0 4px var(--bg);
   }
 }
