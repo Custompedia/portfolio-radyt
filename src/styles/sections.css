@@ -1157,31 +1157,6 @@
 }
 
 
-/* Sorot lewat pengurangan: hover kartu mana pun MEREDUPKAN semua kartu, lalu
-   pembatalannya hanya untuk yang di-hover. Jauh lebih terarah daripada
-   menaikkan satu kartu — mata langsung dibawa ke satu tempat. */
-.work-image-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: var(--work-dim);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--dur) var(--ease-out);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .work-track:hover .work-card .work-image-overlay {
-    opacity: 1;
-  }
-
-
-  .work-track .work-card:hover .work-image-overlay {
-    opacity: 0;
-  }
-
-}
-
 /* ==========================================================================
    THE COMPANIES
    ========================================================================== */
@@ -1712,120 +1687,142 @@
    FOOTER
    ========================================================================== */
 
-/* Footer tidak punya bar copyright atau baris sosial berlapis: semuanya sudah
-   permanen di sidebar. Yang tersisa adalah wordmark penutup dan satu blok
-   CTA. */
 .site-footer {
   position: relative;
-  overflow-x: clip;
-  padding: 15vw var(--gutter) 2vw var(--content-left);
+  overflow: hidden;
+  min-height: min(760px, 74vw);
+  padding: clamp(76px, 8vw, 156px) var(--gutter) clamp(64px, 7vw, 128px) var(--content-left);
+  background:
+    radial-gradient(circle at 82% 74%, rgba(36, 66, 157, 0.11), transparent 26rem),
+    linear-gradient(135deg, rgba(36, 66, 157, 0.045), transparent 42%),
+    var(--bg);
 }
 
 .site-footer::before {
   position: absolute;
-  top: -3px;
-  right: 0;
-  left: 0;
-  height: 4px;
-  background: var(--bg);
+  inset: 0;
+  background-image: linear-gradient(rgba(var(--ink-rgb), 0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(var(--ink-rgb), 0.055) 1px, transparent 1px);
+  background-size: clamp(46px, 4vw, 76px) clamp(46px, 4vw, 76px);
   content: '';
   pointer-events: none;
 }
 
-/* Jawaban atas wordmark pembuka. Jejak dan labelnya boleh melampaui pita ini;
-   `pointer-events: none` di lapisan kartu menjaga area mouse tetap stabil. */
-.footer-wordmark-wrap {
+.footer-topline {
   position: relative;
-  overflow: visible;
-  perspective: 1400px;
-}
-
-/* Tanpa `justify-content: space-between`: itu mendorong ® ke tepi kanan
-   container, tepat di bawah scrollbar. Ia harus menempel di bahu huruf
-   terakhir, seperti tanda merek pada umumnya. */
-.footer-wordmark {
+  z-index: 1;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: clamp(22px, 2.2vw, 38px);
+  border-bottom: 1px solid rgba(var(--ink-rgb), 0.16);
+}
+
+.footer-wordmark {
   color: var(--blue);
-  /* Diturunkan dari --wordmark-size dengan alasan yang sama seperti versi hero:
-     angkanya terikat jumlah huruf nama. Di sini "RADHYTA" + ® memakan 4.703vw
-     lebar per 1vw ukuran font (diukur di browser), dan kotak pembungkusnya
-     hanya 76.8vw — dimulai dari --content-left 21vw. 0.76 × 21.4 = 16.3vw yang
-     membuatnya pas mengisi kotak itu.
-     Nilai lama 22.5vw dikalibrasi untuk "RADYT" yang lima huruf; dipakai apa
-     adanya untuk tujuh huruf, tulisannya melebar jadi 105.8vw dan terpotong di
-     "RADHY" oleh `overflow: clip` milik pembungkusnya. */
-  font-size: calc(var(--wordmark-size) * 0.76);
+  font-size: clamp(1.2rem, 1.85vw, 2.25rem);
   font-weight: 900;
-  letter-spacing: -0.035em;
-  line-height: 0.82;
-  user-select: none;
-  pointer-events: none;
-}
-
-.footer-wordmark-symbol {
-  font-size: 0.22em;
+  letter-spacing: -0.055em;
   line-height: 1;
+  user-select: none;
 }
 
-/* --- Blok CTA penutup ---
-   Menggantikan picker QnA lama (dua kolom, delapan opsi, dialog pesan siap
-   kirim). Satu blok, satu tombol, satu baris kontak alternatif. */
+.footer-route,
+.contact-kicker {
+  color: var(--fg-muted);
+  font-family: var(--font-label);
+  font-size: clamp(0.7rem, 0.8vw, 0.86rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+}
 
 .contact-block {
+  position: relative;
+  z-index: 1;
   display: flex;
-  max-width: min(64ch, 58vw);
   flex-direction: column;
   align-items: flex-start;
-  margin-top: clamp(48px, 7vh, 110px);
-  gap: clamp(18px, 1.8vw, 32px);
+  margin-top: clamp(58px, 7vw, 120px);
+  gap: clamp(24px, 2.4vw, 42px);
 }
 
 .contact-headline {
-  /* Lebih kecil dari --fs-h2: headline ini satu KALIMAT penuh, bukan dua-tiga
-     kata seperti judul section lain, dan pada ukuran itu ia turun lima baris. */
-  max-width: 20ch;
-  font-size: clamp(2rem, 3.4vw, 4rem);
+  max-width: none;
+  color: var(--ink);
+  font-size: clamp(5.25rem, 12.4vw, 15.5rem);
   font-weight: 900;
-  letter-spacing: -0.015em;
-  line-height: var(--lh-h2);
+  letter-spacing: -0.095em;
+  line-height: 0.76;
+}
+
+.contact-bottom {
+  display: flex;
+  width: 100%;
+  max-width: 760px;
+  align-items: end;
+  justify-content: space-between;
+  gap: clamp(28px, 4vw, 72px);
+  padding-top: clamp(24px, 2.2vw, 36px);
+  border-top: 1px solid rgba(var(--ink-rgb), 0.16);
 }
 
 .contact-body {
+  max-width: 34ch;
   color: var(--fg-muted);
-  font-size: var(--fs-body);
-  line-height: var(--lh-body);
+  font-size: clamp(1rem, 1.18vw, 1.34rem);
+  line-height: 1.45;
 }
 
 .contact-button {
-  margin-top: 0.6vw;
-}
-
-/* Kontak alternatif — baris, bukan tombol kedua: satu-satunya tombol di
-   section ini adalah WhatsApp di atasnya. */
-.contact-alt {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  margin: 0.6vw 0 0;
-  padding: 0;
-  gap: clamp(18px, 2vw, 40px);
-  list-style: none;
-}
-
-.contact-alt a {
   display: inline-flex;
   align-items: center;
-  gap: 0.5vw;
+  flex: none;
+  min-height: clamp(66px, 5vw, 86px);
+  padding: 10px 12px 10px 14px;
+  gap: clamp(12px, 1.1vw, 18px);
+  border: 1px solid var(--blue);
+  border-radius: 999px;
+  background: var(--blue);
+  box-shadow: 0 16px 38px rgba(36, 66, 157, 0.18);
+  color: var(--white);
   font-family: var(--font-label);
-  font-size: max(13px, 1vw);
-  font-weight: 600;
+  font-size: clamp(0.95rem, 1.1vw, 1.22rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1;
-  transition: opacity var(--dur) var(--ease-out);
+  transition: color 0.35s var(--ease-out), background-color 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out), transform 0.35s var(--ease-out);
 }
 
-.contact-alt a:hover {
-  opacity: 0.6;
+.contact-button-icon,
+.contact-button-arrow {
+  display: grid;
+  width: clamp(42px, 3.2vw, 58px);
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.contact-button-icon {
+  background: var(--white);
+  color: var(--blue);
+}
+
+.contact-button-arrow {
+  background: rgba(255, 255, 255, 0.14);
+  transition: transform 0.35s var(--ease-out), background-color 0.35s var(--ease-out);
+}
+
+.contact-button:hover {
+  background: var(--white);
+  box-shadow: 0 20px 46px rgba(36, 66, 157, 0.2);
+  color: var(--blue);
+  transform: translateY(-4px);
+}
+
+.contact-button:hover .contact-button-arrow {
+  background: rgba(36, 66, 157, 0.1);
+  transform: translate(3px, -3px);
 }
 
 /* Tombol WhatsApp rail disembunyikan selama section ini terlihat — kalau
@@ -1841,102 +1838,6 @@
 
 .sidebar > .btn-primary {
   transition: opacity var(--dur) var(--ease-out);
-}
-
-/* Kartu jejak. `pointer-events: none` pada lapisannya wajib — kalau tidak,
-   kartu yang baru jatuh berada di bawah kursor dan langsung memicu
-   `pointerleave` pada area jejaknya, jadi jejaknya berkedip-kedip. */
-.trail-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-}
-
-/* Rasio lanskap memberi ruang bagi label yang keluar di bawah kartu tanpa
-   menutup keseluruhan wordmark. */
-.trail-tile {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: clamp(150px, 13vw, 240px);
-  aspect-ratio: 1.15;
-  border-radius: var(--radius);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background-image:
-    linear-gradient(142deg, rgba(255, 255, 255, 0.2), transparent 42%),
-    linear-gradient(0deg, color-mix(in srgb, var(--tile) 36%, transparent), transparent 72%),
-    url('/images/packaging-trail-collage.webp');
-  background-position: center, center, var(--tile-position);
-  background-size: auto, auto, 300% 300%;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.36);
-  opacity: 0;
-  overflow: visible;
-  transform-style: preserve-3d;
-  will-change: transform, opacity;
-}
-
-.trail-tile::before {
-  position: absolute;
-  inset: 12%;
-  border: 1px solid rgba(255, 255, 255, 0.32);
-  border-radius: calc(var(--radius) * 0.5);
-  content: '';
-}
-
-.trail-tile::after {
-  position: absolute;
-  right: 12%;
-  bottom: 13%;
-  width: 28%;
-  height: 8%;
-  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.8) 0 2px, transparent 2px 5px);
-  content: '';
-}
-
-.trail-tile-label {
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 8%;
-  display: grid;
-  gap: 2px;
-  min-width: max-content;
-  padding: 8px 10px 9px;
-  background: var(--blue);
-  color: var(--white);
-  font-family: var(--font-label);
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.trail-ripple {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: clamp(110px, 10vw, 180px);
-  aspect-ratio: 1;
-  border: 1px solid var(--accent);
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 8px rgba(110, 134, 255, 0.11);
-  pointer-events: none;
-  will-change: transform, opacity;
-}
-
-.trail-tile-label strong {
-  font-size: clamp(0.72rem, 0.86vw, 1rem);
-  font-weight: 600;
-}
-
-.trail-tile-label small {
-  font-size: clamp(0.56rem, 0.62vw, 0.72rem);
-  letter-spacing: 0.07em;
-  opacity: 0.66;
-  text-transform: uppercase;
-}
-
-.cta-lead {
-  max-width: 44ch;
-  color: var(--fg);
 }
 
 /* ==========================================================================
@@ -2447,16 +2348,6 @@
     height: var(--logo-width-mobile);
   }
 
-  .contact-block {
-    max-width: none;
-    margin-top: 40px;
-    gap: 18px;
-  }
-
-  .contact-alt {
-    gap: 18px;
-  }
-
   .work {
     padding: 0;
     height: auto !important;
@@ -2504,21 +2395,26 @@
     font-size: 0.8125rem;
   }
 
-  /* Tanpa kursor tidak ada jejak untuk digambar; wordmark-nya tetap tampil. */
-  .trail-layer {
-    display: none;
-  }
-
   .site-footer {
-    padding: 80px var(--gutter) 48px;
+    min-height: 0;
+    padding: 80px var(--gutter) 56px;
   }
 
-  .footer-wordmark {
-    /* Pembungkusnya di sini 87vw (selebar layar dikurangi gutter), bukan 76.8vw
-       seperti desktop — jadi pengalinya lebih besar. 0.86 × 21.4 = 18.4vw →
-       tulisannya 86.5vw, pas di dalam pembungkus. 0.9 masih meluber 3.6vw dan
-       terpotong `overflow: clip`. */
-    font-size: calc(var(--wordmark-size) * 0.86);
+  .contact-block {
+    margin-top: 52px;
+    gap: 20px;
+  }
+
+  .contact-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .contact-button {
+    width: 100%;
+    justify-content: space-between;
+    padding-right: 10px;
   }
 
 }
@@ -2914,6 +2810,106 @@
   margin-top: clamp(20px, 2vw, 32px);
 }
 
+/* Logo-only company field: the logos establish their own visual rhythm. */
+.company-grid {
+  position: relative;
+  display: block;
+  height: clamp(360px, 34vw, 610px);
+  margin-top: clamp(24px, 3vw, 52px);
+}
+
+.company-showcase {
+  position: absolute;
+  display: grid;
+  width: clamp(180px, 18vw, 330px);
+  place-items: center;
+}
+
+.company-showcase .company-logo-wrap {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  place-items: center;
+  overflow: visible;
+  border: 0;
+}
+
+.company-showcase .company-logo-wrap img {
+  width: min(100%, 300px);
+  max-height: 180px;
+  object-fit: contain;
+  animation: company-logo-drift 5.4s ease-in-out infinite alternate;
+}
+
+.company-showcase:nth-child(1) .company-logo-wrap img {
+  width: min(54%, 168px);
+  animation-delay: -1.8s;
+}
+
+.company-showcase:nth-child(3) .company-logo-wrap img {
+  width: min(100%, 330px);
+  animation-delay: -3.6s;
+}
+
+.company-showcase:nth-child(1) {
+  top: 7%;
+  left: 4%;
+}
+
+.company-showcase:nth-child(2) {
+  bottom: 7%;
+  left: 38%;
+}
+
+.company-showcase:nth-child(3) {
+  top: 25%;
+  right: 4%;
+}
+
+@keyframes company-logo-drift {
+  from { transform: translate3d(-5px, 7px, 0) rotate(-1.5deg); }
+  to { transform: translate3d(6px, -8px, 0) rotate(1.5deg); }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .company-showcase .company-logo-wrap img {
+    transition: filter 260ms var(--ease-out);
+  }
+
+  .company-showcase:hover .company-logo-wrap img {
+    filter: drop-shadow(0 18px 18px rgba(var(--ink-rgb), 0.16));
+  }
+}
+
+@media (max-width: 767px) {
+  .company-showcase {
+    position: static;
+    width: min(78vw, 320px);
+  }
+
+  .company-grid {
+    display: grid;
+    height: auto;
+    justify-items: center;
+    gap: 46px;
+  }
+
+  .company-showcase .company-logo-wrap img {
+    max-height: 120px;
+  }
+
+  .company-showcase:nth-child(n) .company-logo-wrap img {
+    width: min(100%, 250px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .company-showcase .company-logo-wrap img {
+    animation: none;
+  }
+}
+
 .network-company-logos,
 .network-logos {
   display: grid;
@@ -2957,25 +2953,6 @@
 .network-logo--square img {
   width: auto;
   height: 62px;
-}
-
-.footer-wordmark {
-  color: rgba(var(--ink-rgb), 0.32);
-  font-size: clamp(1.2rem, 2.25vw, 2.8rem);
-  letter-spacing: -0.055em;
-}
-
-.contact-block {
-  max-width: none;
-  margin-top: clamp(30px, 3vw, 54px);
-}
-
-.contact-headline {
-  max-width: none;
-  color: var(--blue);
-  font-size: clamp(5rem, 11.5vw, 14rem);
-  letter-spacing: -0.09em;
-  line-height: 0.78;
 }
 
 @media (max-width: 767px) {
@@ -3035,8 +3012,19 @@
     min-height: 112px;
   }
 
+  .footer-topline {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .footer-route {
+    max-width: 11ch;
+    line-height: 1.35;
+    text-align: right;
+  }
+
   .contact-headline {
-    font-size: clamp(4.5rem, 19vw, 7.5rem);
+    font-size: clamp(4.8rem, 21vw, 7.8rem);
   }
 }
 

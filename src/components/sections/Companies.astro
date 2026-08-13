@@ -17,15 +17,11 @@ import { companies } from '../../data/site';
 
   <ol class="company-grid">
     {
-      companies.items.map((company, i) => (
-        <li class="company-card card">
-          <span class="company-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+      companies.items.map((company) => (
+        <li class="company-showcase" data-company-showcase>
           <div class="company-logo-wrap" data-company-logo>
             <img src={company.logo} alt={company.name} loading="lazy" decoding="async" />
           </div>
-          <h3 class="company-name">{company.name}</h3>
-          <span class="company-label">{company.label}</span>
-          <p class="company-description">{company.description}</p>
         </li>
       ))
     }

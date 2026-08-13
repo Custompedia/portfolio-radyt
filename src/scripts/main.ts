@@ -14,7 +14,7 @@ import { packagingTestModule } from './modules/packaging-test';
 import { navActiveModule } from './modules/nav-active';
 import { workCardsModule } from './modules/work-cards';
 import { mobileMenuModule } from './modules/mobile-menu';
-import { imageTrailModule } from './modules/image-trail';
+import { footerCtaModule } from './modules/footer-cta';
 import { microModule } from './modules/micro';
 import { preloaderModule } from './modules/preloader';
 import { brandStagesModule } from './modules/brand-stages';
@@ -36,7 +36,7 @@ const modules: AnimationModule[] = [
   workCardsModule,
   navActiveModule,
   mobileMenuModule,
-  imageTrailModule,
+  footerCtaModule,
   brandStagesModule,
   microModule,
   preloaderModule,

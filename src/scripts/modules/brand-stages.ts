@@ -39,12 +39,27 @@ export const brandStagesModule: AnimationModule = {
       }
 
       const companyGrid = $<HTMLElement>('.company-grid');
-      const companyCards = companyGrid ? $$<HTMLElement>('.company-card', companyGrid) : [];
-      if (companyGrid && companyCards.length) {
-        const timeline = gsap.timeline({ scrollTrigger: { trigger: companyGrid, start: 'top 72%', once: true } });
+      const companyShowcases = companyGrid ? $$<HTMLElement>('[data-company-showcase]', companyGrid) : [];
+      if (companyGrid && companyShowcases.length) {
+        const timeline = gsap.timeline({
+          scrollTrigger: { trigger: companyGrid, start: 'top 76%', toggleActions: 'play none none reverse' },
+        });
         timeline
-          .from(companyCards, { opacity: 0, y: 56, stagger: 0.14, duration: 0.8, ease: 'power4.out' })
-          .from($$<HTMLElement>('[data-company-logo]', companyGrid), { clipPath: 'inset(100% 0 0 0)', yPercent: 18, stagger: 0.14, duration: 0.7, ease: 'power4.out' }, 0.16);
+          .from(companyShowcases, {
+            autoAlpha: 0,
+            y: 42,
+            stagger: { each: 0.13, from: 'center' },
+            duration: 0.72,
+            ease: 'power3.out',
+          })
+          .from($$<HTMLElement>('[data-company-logo]', companyGrid), {
+            clipPath: 'inset(0 50% 0 50%)',
+            scale: 0.82,
+            rotation: (index) => (index % 2 ? 5 : -5),
+            stagger: { each: 0.13, from: 'center' },
+            duration: 0.78,
+            ease: 'power4.out',
+          }, '-=0.46');
       }
 
       const network = $<HTMLElement>('.network-body');

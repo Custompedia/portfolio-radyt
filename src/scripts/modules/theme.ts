@@ -12,7 +12,7 @@ import { $$, isDesktop, prefersReducedMotion } from '../core/utils';
  */
 
 const triggers: ScrollTrigger[] = [];
-const SIDEBAR_THEME_OFFSET = 80;
+const SIDEBAR_THEME_OFFSET = 0;
 let overlapping = 0;
 
 function apply(): void {
@@ -35,8 +35,8 @@ export const themeModule: AnimationModule = {
       triggers.push(
         ScrollTrigger.create({
           trigger: section,
-          // Diukur dari titik tempat sidebar benar-benar berada, bukan dari
-          // tepi viewport — kalau tidak, warnanya berganti terlalu cepat.
+          // Sidebar berubah bersamaan dengan masuknya section gelap agar tidak
+          // sempat menimpa latar gelap dengan permukaan terang.
           start: `top top+=${SIDEBAR_THEME_OFFSET}`,
           end: Number.isFinite(duration) && duration > 0
             ? `+=${window.innerHeight * (duration + 1)}`
