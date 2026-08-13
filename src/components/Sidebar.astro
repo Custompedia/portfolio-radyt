@@ -48,14 +48,10 @@ import { brand, clients, hero, nav, social, stats } from '../data/site';
         ))
       }
     </div>
-    {/* Keterangan di bawah nama. Tidak punya kotak asal di hero — seluruh teks
-        hero sekarang berdiri di satu kolom kiri, jadi baris ini ikut kelompok
-        yang menyala saat rail merakit diri. */}
-    <p class="nav-tagline" data-ghost-fade>Serial entrepreneur, Semarang</p>
   </div>
 
-  <!-- Panel yang bisa dibuka/tutup di mobile (lihat mobile-menu.ts): brand +
-       tagline di atas dan tombol CTA di bawah SENGAJA di LUAR wrapper ini
+  <!-- Panel yang bisa dibuka/tutup di mobile (lihat mobile-menu.ts): brand
+       dan tombol CTA SENGAJA di LUAR wrapper ini
        (lihat komponen sebelum & sesudah blok ini) supaya keduanya tetap
        terlihat sebagai topbar tetap terlepas dari status buka/tutup panel.
        Di desktop wrapper ini `display:contents` — tidak mengubah apa pun,
@@ -70,19 +66,8 @@ import { brand, clients, hero, nav, social, stats } from '../data/site';
       {
         stats.map((stat, i) => (
           <div class="nav-card nav-stat-card">
-            {/* Hanya kartu ber-`inHero` yang punya kotak asal di hero dan
-                diterbangkan ke sini; sisanya menyala di tempat bersama elemen
-                rail lain yang memang tidak muncul di hero. Susunannya BERTUMPUK
-                (angka di atas, label di bawah) di kedua tempat, jadi cukup
-                digeser dan diskalakan seperti ghost biasa — tidak ada lagi
-                susunan alternatif yang harus diukur satu frame. */}
-            <span
-              class="nav-card-bg"
-              data-ghost={stat.inHero ? `stats-card-${i}` : undefined}
-              data-ghost-type={stat.inHero ? 'background' : undefined}
-              data-ghost-fade={stat.inHero ? undefined : true}
-            />
-            <div class="nav-stat" data-ghost={stat.inHero ? `stat-${i}` : undefined} data-ghost-type="box" data-ghost-fade={stat.inHero ? undefined : true}>
+            <span class="nav-card-bg" data-ghost={`stats-card-${i}`} data-ghost-type="background" />
+            <div class="nav-stat" data-ghost={`stat-${i}`} data-ghost-type="box" data-ghost-alt={i === 0 ? 'is-inline' : undefined}>
               <span class="nav-stat-value">{stat.value}</span>
               <span class="nav-stat-label">
                 {

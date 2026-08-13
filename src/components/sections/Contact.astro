@@ -7,9 +7,8 @@
  * headline, body, SATU tombol, dan baris kontak alternatif. Picker itu tidak
  * pindah ke section lain — ia dihapus.
  *
- * Yang membuka footer tetap wordmark raksasa — jawaban atas wordmark yang
- * membuka hero, dengan jejak gambar yang mengikuti kursor di atasnya
- * (modules/image-trail.ts membaca hook `data-trail-*` di bawah).
+ * Footer dibuka dengan “Let's talk.” sebagai headline terbesar; wordmark kini
+ * menjadi detail penutup, bukan prioritas visual.
  *
  * Tombol "Chat on WhatsApp" di sini adalah satu-satunya CTA di layar saat
  * section ini terlihat: tombol WhatsApp di rail disembunyikan oleh
@@ -27,11 +26,7 @@ const trailTiles = work.items.map(({ title, kind, accent }, index) => ({ title, 
   <!-- Wordmark penutup. Jejaknya digambar di atas elemen ini oleh
        modules/image-trail.ts. -->
   <div class="footer-wordmark-wrap" data-trail-area>
-    <p class="footer-wordmark" aria-label={brand.name}>
-      <span aria-hidden="true">{brand.name}</span><span class="footer-wordmark-symbol" aria-hidden="true"
-        >{brand.symbol}</span
-      >
-    </p>
+    <p class="footer-wordmark" aria-hidden="true">{brand.name}{brand.symbol}</p>
     <div class="trail-layer" data-trail-layer aria-hidden="true">
       {
         trailTiles.map((tile) => (

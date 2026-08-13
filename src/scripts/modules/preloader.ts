@@ -37,6 +37,7 @@ const stage = () => ({
   statCards: $$('.nav-stat-card [data-ghost]'),
   lead: [$('.hero-eyebrow'), $('.hero-name')].filter(Boolean) as HTMLElement[],
   buttons: [$('.btn-primary'), $('.hero-secondary')].filter(Boolean) as HTMLElement[],
+  supporting: [$('.hero-traits')].filter(Boolean) as HTMLElement[],
   paragraphs: [$('.hero-subheadline'), $('.hero-brands')].filter(Boolean) as HTMLElement[],
 });
 
@@ -66,9 +67,10 @@ export const preloaderModule: AnimationModule = {
     // Link nav & tombol utama sudah dipegang transform-nya oleh GhostEngine,
     // jadi di sini hanya opacity + blur yang disentuh — scale akan bentrok.
     gsap.set(el.navLinks, { autoAlpha: 0 });
-    gsap.set(el.statCards, { autoAlpha: 0 });
+    gsap.set(el.statCards, { autoAlpha: 0, filter: 'blur(8px)' });
     gsap.set(el.buttons, { autoAlpha: 0 });
     gsap.set(el.lead, { autoAlpha: 0 });
+    gsap.set(el.supporting, { autoAlpha: 0 });
     gsap.set(el.paragraphs, { autoAlpha: 0 });
 
     timeline = gsap.timeline({ delay: 0.15 });
@@ -98,7 +100,7 @@ export const preloaderModule: AnimationModule = {
       .to(el.navSeps, { height: '0.8vw', duration: 0.2, ease: 'power2.out' }, 'hero+=0.6')
       .to(
         el.statCards,
-        { autoAlpha: 1, duration: 0.9, stagger: 0.1, ease: 'power2.out' },
+        { autoAlpha: 1, filter: 'blur(0px)', duration: 0.9, stagger: 0.1, ease: 'power2.out' },
         'hero+=0.6',
       )
       .to(
@@ -106,6 +108,7 @@ export const preloaderModule: AnimationModule = {
         { autoAlpha: 1, duration: 0.8, stagger: 0.08, ease: 'power2.out' },
         'hero+=1.25',
       )
+      .to(el.supporting, { autoAlpha: 1, duration: 0.7, stagger: 0.1, ease: 'power2.out' }, 'hero+=1.55')
       .to(
         el.paragraphs,
         { autoAlpha: 1, duration: 0.7, stagger: 0.1, ease: 'power2.out' },

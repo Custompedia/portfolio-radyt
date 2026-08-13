@@ -13,51 +13,32 @@
  */
 
 :root {
-  /* --- Palette ---
-     Latar tetap krem terang dan teksnya tetap hitam; yang berganti HANYA
-     aksennya — kuning diganti biru. Hex-nya dari Ryand (WhatsApp, 13 Agustus
-     2026), bukan taksiran: #112BD6.
-
-     Dua perhentian, dan pembagiannya soal KONTRAS, bukan selera:
-       --blue       di atas krem 5.8:1 — aksen teks, angka, garis, dan isi
-                    tombol (PUTIH di atasnya 9.0:1, jadi label tombol aman)
-       --blue-tint  di atas hitam 6.5:1 — dipakai HANYA di section bertema
-                    gelap (Work, scene 3D). #112BD6 di sana cuma 2.3:1 dan
-                    praktis hilang.
-       --blue-pill  isi pill navigasi, dan hurufnya tetap HITAM (8.9:1) persis
-                    seperti versi kuning. Pill ini satu-satunya isi yang
-                    sebagian waktu tidak terlihat: di hero ia masih pudar
-                    sementara labelnya sudah terbaca di atas krem, jadi
-                    labelnya tidak boleh bergantung pada isinya.
-     Pergantiannya otomatis lewat --accent, yang ikut di-flip theme.ts bersama
-     --fg dan --surface. */
-  /* Off-white sejuk, BUKAN putih murni. Alasannya bukan selera: kartu di
-     halaman ini putih, dan di atas putih murni kartunya hilang. Selisih
-     luminansi ~5.5% cukup untuk memisahkan keduanya tanpa terbaca abu-abu.
-     Nadanya condong biru setipis mungkin supaya sejalan dengan aksen. */
-  --bg: #f1f3f7;
-  --blue: #112bd6;
-  --blue-tint: #6e86ff;
-  --blue-pill: #8fa3ff;
+  /* --- Palette --- royal blue, bright blue, navy, slate, dan off-white dari
+     referensi visual brand. */
+  --bg: #f8fafc;
+  --yellow: #ffff23;
+  --blue: #1e3a8a;
+  --blue-tint: #3b82f6;
+  --blue-pill: #3b82f6;
   --accent: var(--blue);
-  --black: #000000;
+  --black: #0f172a;
   --white: #ffffff;
-  --dark: #141a2a;
+  --dark: #0f172a;
 
   /* Tinta halaman: navy-hitam, bukan hitam murni — hitam pekat di atas
      off-white terbaca keras pada blok teks panjang. Ditulis sebagai channel
      supaya seluruh garis rambut, teks redup, dan bayangan turun dari satu
      warna. 16.8:1 di atas --bg. */
-  --ink-rgb: 13, 18, 32;
+  --ink-rgb: 15, 23, 42;
 
   /* Surface: kartu di atas halaman. PUTIH, dan itu yang membalik hubungannya —
      versi krem memakai kartu yang nyaris sewarna latarnya, jadi tepinya hilang
      dan seluruh halaman terbaca kusam. */
   --card-bg: #ffffff;
   --card-border: 1px solid rgba(var(--ink-rgb), 0.08);
-  --card-inner: #f5f7fb;
-  --card-inner-alt: #e8ecf4;
-  --card-inner-hover: #eef2f9;
+  --card-inner: #f8fafc;
+  --card-inner-alt: #e2e8f0;
+  --card-inner-hover: #f1f5f9;
   /* Dua lapis: satu garis kontak yang rapat, satu ambient yang lebar. Kartu
      putih di atas off-white butuh keduanya — border saja terbaca datar. */
   --card-shadow: 0 1px 2px rgba(var(--ink-rgb), 0.05), 0 10px 28px -14px rgba(var(--ink-rgb), 0.16);
@@ -163,16 +144,9 @@
      ditambahkan di sini benar-benar mendorong headline turun. */
   --hero-portrait-h-sm: 54vh;
 
-  /* Geser potret mendatar. Negatif = ke kiri, positif = ke kanan; 0 berarti
-     kotak fotonya persis di tengah layar.
-     BUKAN lagi koreksi optis kecil seperti versi sebelumnya (-3vw): handoff
-     meminta potret pindah ke paruh KANAN supaya seluruh teks bisa berdiri di
-     satu kolom kiri tanpa menumpang di atas wajah. Pada 14vw pusat kotak foto
-     jatuh di 67vw dan tepi kirinya di ~45vw — tepat di kanan kolom teks
-     (berakhir 42.4vw) dengan sisa napas untuk kartu statistik di pundaknya.
-     Hanya berlaku di desktop — di mobile potret jadi elemen alir dan
-     dipusatkan oleh `margin: 0 auto`. */
-  --hero-portrait-x: 14vw;
+  /* Posisi ini dikembalikan ke commit a694029: subjek duduk di tengah hero,
+     dengan koreksi optis kecil untuk pose dan bahu kiri. */
+  --hero-portrait-x: -3vw;
 
   /* Jarak tepi ATAS kotak foto ke tepi atas layar — knob naik-turun potret.
      Kecilkan / buat negatif = potret naik. Sebelumnya angka ini terkunci di
@@ -198,17 +172,7 @@
   --hero-copy-top: calc(var(--hero-nav-top) + 2.8vw);
   --hero-copy-w: min(39vw, 700px);
 
-  /* Ukuran kedua tombol hero. Dipakai bersama oleh ghost tombol CTA
-     (tipe `size`) dan kotak pengukurnya di kolom teks, jadi keduanya dijamin
-     identik. */
-  --hero-btn-w: max(220px, 14.1vw);
-  /* 3.28vw = 49px @1492 — tinggi tombol hero referensi, diukur langsung.
-     3.9vw sebelumnya membuat tombolnya 9px lebih tinggi dari aslinya.
-     Lebarnya naik dari 10.5vw karena labelnya berganti dari "Let's Talk" ke
-     "Chat on WhatsApp". DIUKUR pada 1568: label itu 169.4px = 10.8vw, dan
-     dengan padding 1.5vw di kedua sisinya tombol butuh 13.8vw. 14.1vw memberi
-     sisa 0.3vw — tanpa itu `overflow:hidden` milik `.btn` memotong huruf
-     terakhirnya. */
+  --hero-btn-w: max(160px, 10.5vw);
   --hero-btn-h: 3.28vw;
 
   /* Ukuran wordmark raksasa, dan SATU-SATUNYA tempat angkanya ditulis.
@@ -244,15 +208,10 @@
      hurufnya tanpa ada yang mengingatkan. */
   --hero-nav-top: calc(0.852 * var(--wordmark-size) + 0.7vw);
 
-  /* Tiga batas headline hero:
-       6.5rem  langit-langit mutlak di layar sangat besar
-       7vh     kolom kiri sekarang memuat lima baris (eyebrow, nama, headline,
-               subheadline, tombol) di bawah wordmark yang memakan ~45vh —
-               DIUKUR: pada 782px tinggi, 7vh memberi headline 169px dan
-               menyisakan ~30px napas sebelum baris merek di kaki hero
-       4.1vw   baris terpanjang ("Building companies", 18 karakter w900) harus
-               muat di --hero-copy-w = 39vw (39 ÷ 8.9 lebar-em = 4.38vw) */
-  --hero-h1-size: min(6.5rem, 7vh, 4.1vw);
+  --hero-h1-top: 51vh;
+  --hero-h1-size: min(6.5rem, 11.5vh, 4.7vw);
+  --hero-h1-bottom: calc(var(--hero-h1-top) + 3 * 1.03 * var(--hero-h1-size));
+  --hero-cta-top: calc(var(--hero-h1-bottom) + 1.7vh);
 
   /* Tangga radius. `.83vw` adalah radius rumah — kartu, tombol, kartu work.
      `.56vw` yang lebih rapat dipakai panel sidebar dan kartu kaca hero. */

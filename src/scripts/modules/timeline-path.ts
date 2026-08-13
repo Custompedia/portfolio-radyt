@@ -189,6 +189,21 @@ function buildParallax(container: HTMLElement): void {
   });
 }
 
+function buildMedia(container: HTMLElement): void {
+  $$<HTMLElement>('[data-timeline-media]', container).forEach((media) => {
+    const image = media.querySelector('img');
+    if (!image) return;
+
+    const timeline = gsap.timeline({
+      scrollTrigger: { trigger: media, start: 'top 86%', once: true },
+    });
+    timeline
+      .fromTo(media, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 0.82, ease: 'power4.inOut' })
+      .fromTo(image, { scale: 1.22 }, { scale: 1, duration: 1.15, ease: 'power3.out' }, 0);
+    if (timeline.scrollTrigger) triggers.push(timeline.scrollTrigger);
+  });
+}
+
 /**
  * Simpul menyala saat kartunya berada di pita tengah layar. Kelas, bukan tween:
  * simpulnya sudah dianimasikan `scale`-nya oleh buildFill, dan tween kedua pada
@@ -256,6 +271,7 @@ export const timelinePathModule: AnimationModule = {
     anchorCards(container);
     buildFill(container);
     buildParallax(container);
+    buildMedia(container);
     buildActiveNodes(container);
     buildHover(container);
   },
@@ -271,6 +287,11 @@ export const timelinePathModule: AnimationModule = {
       card.style.left = '';
       card.style.top = '';
       gsap.set(card, { clearProps: 'yPercent,scale' });
+    });
+    $$<HTMLElement>('[data-timeline-media]').forEach((media) => {
+      gsap.set(media, { clearProps: 'clipPath' });
+      const image = media.querySelector('img');
+      if (image) gsap.set(image, { clearProps: 'transform' });
     });
     $$<HTMLElement>('[data-timeline-node]').forEach((node) => node.classList.remove('is-active'));
   },

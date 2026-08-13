@@ -17,6 +17,7 @@ import { mobileMenuModule } from './modules/mobile-menu';
 import { imageTrailModule } from './modules/image-trail';
 import { microModule } from './modules/micro';
 import { preloaderModule } from './modules/preloader';
+import { brandStagesModule } from './modules/brand-stages';
 
 /**
  * Urutan penting: sidebar mengunci skalanya dulu, baru ghost boleh mengukur.
@@ -36,6 +37,7 @@ const modules: AnimationModule[] = [
   navActiveModule,
   mobileMenuModule,
   imageTrailModule,
+  brandStagesModule,
   microModule,
   preloaderModule,
 ];

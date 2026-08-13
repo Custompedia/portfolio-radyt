@@ -52,6 +52,7 @@ export interface JourneyEntry {
   year: string;
   title: string;
   body: string;
+  image: string;
 }
 
 /** Kartu Section 04. Formatnya seragam: nama · label · deskripsi. */
@@ -59,6 +60,7 @@ export interface Company {
   name: string;
   label: string;
   description: string;
+  logo: string;
 }
 
 export interface WorkItem {
@@ -117,36 +119,30 @@ export const social: ContactChannel[] = [
  */
 export const nav: NavItem[] = [
   { id: 'home', label: 'Home', href: '#home', icon: 'home', sections: ['home'] },
-  { id: 'about', label: 'About', href: '#about', icon: 'user', sections: ['about', 'companies'] },
-  { id: 'journey', label: 'Journey', href: '#journey', icon: 'layers', sections: ['journey'] },
+  { id: 'journey', label: 'Journey', href: '#journey', icon: 'user', sections: ['about', 'journey', 'companies'] },
   { id: 'work', label: 'Work', href: '#work', icon: 'briefcase', sections: ['network', 'work'] },
   { id: 'contact', label: 'Contact', href: '#contact', icon: 'people', sections: ['moment', 'contact'] },
 ];
 
 export const hero = {
-  eyebrow: 'Serial Entrepreneur',
-  /** Nama versi terbaca. Wordmark raksasa di latar hanya memuat "RADHYTA",
-   *  jadi tanpa baris ini nama lengkapnya tidak pernah muncul utuh. */
-  name: 'RADHYTA MAHENDA MUKHSIN',
-  headline: ['Building companies', 'from zero', 'since 2014.'],
-  subheadline: 'Creative agency, packaging and printing. From Semarang.',
-  /** Satu baris dipisah titik tengah — bukan chip, bukan grid. */
-  brands: ['Custompedia', 'Parcelin', 'Creasa', 'Voca', 'But Gawe'],
-  ctaPrimary: { label: 'Chat on WhatsApp', href: brand.whatsappUrl },
-  ctaSecondary: { label: 'See the journey', href: '#journey' },
+  eyebrow: 'Serial entrepreneur,',
+  eyebrowSecond: 'Semarang',
+  headline: ['BUILDING BUSINESSES.', 'CREATING IMPACT.', 'SINCE 2014.'],
+  subheadline: 'Creative agency and creative packaging from Semarang.',
+  traits: ['Custompedia', 'Parcelin', 'Creasa', 'Voca'],
+  ctaPrimary: { label: "Let's Talk", href: brand.whatsappUrl },
+  ctaSecondary: { label: 'See Work', href: '#work' },
 };
 
 /**
  * Angka besar di rail. `label` dirender satu baris utuh di bawah angkanya, jadi
  * tahan tetap SATU kata — dua kata mulai memaksa kartunya melebar.
  *
- * Hanya `stats[1]` yang punya posisi di hero: handoff membatasi bukti di hero
- * jadi satu angka saja (12+ tahun) dan melarang menambah hitungan klien,
- * proyek, atau perusahaan di sana. `stats[0]` muncul pertama kali di rail.
+ * Keduanya muncul di hero lalu bermorfosis kembali menjadi kartu di rail.
  */
 export const stats: Stat[] = [
   { value: '3', label: 'Companies' },
-  { value: '12+', label: 'Years', inHero: true },
+  { value: '12+', label: 'Years experience' },
 ];
 
 /**
@@ -171,19 +167,22 @@ export const clients: ClientLogo[] = [
  * section terpisah untuk keduanya.
  */
 export const about = {
-  eyebrow: 'Three Companies, One Desk',
   headline: 'About Radhyta',
-  paragraphs: [
-    'Radhyta membangun tiga perusahaan dari Semarang: Custompedia untuk branding dan pemasaran, Parcelin untuk kemasan, dan Creasa untuk percetakan. Dimulai dari satu meja pada 2014, kini melayani klien di seluruh Indonesia.',
-    'Semuanya dimulai dari nol. Dari berjualan baju online pada 2014, lalu merchandise custom, sampai menjadi tiga perusahaan. Tidak ada yang diwarisi, semuanya dirintis dari awal.',
-    'Titik terberat datang pada 2020. Pandemi menghentikan lini merchandise yang selama ini menopang. Alih-alih berhenti, Custompedia berubah total menjadi creative agency, dan dari penjualan hampers lahir Parcelin. Perusahaan yang hari ini punya enam unit bisnis berawal dari masa paling sulit.',
-    'Di luar pekerjaannya, Radhyta seorang suami dan ayah. Menyempatkan waktu untuk gym, menikmati perjalanan ke tempat baru, dan seorang pencinta hewan. Tetap berpijak di Semarang, kota tempat semuanya dimulai.',
-  ],
-  /** Harus TIGA — versi sebelumnya hanya memuat Custompedia dan Parcelin. */
-  logos: [
-    { name: 'Custompedia', src: '/images/favicon.svg' },
-    { name: 'Parcelin', src: '/images/Parcelinpack-transparent.webp' },
-    { name: 'Creasa', src: '/images/CREASA%20LOGO%20NO%20BACKGROUND-01.webp' },
+  intro: 'Aku Radhyta Mahenda Mukhsin. Sejak 2014, aku membangun bisnis dari Semarang dengan cara yang paling aku percaya: turun langsung, mendengar lebih dekat, lalu mengubah ide menjadi sesuatu yang benar-benar berguna.',
+  statement: 'Buatku, membangun bisnis bukan soal terlihat paling besar. Ini tentang membuat karya yang tepat, merawat hubungan, dan berani memulai lagi.',
+  facts: [
+    {
+      value: '2014',
+      label: 'Aku memulai dari toko online.',
+    },
+    {
+      value: 'Semarang',
+      label: 'Rumah sekaligus titik berangkatku.',
+    },
+    {
+      value: '3',
+      label: 'Bisnis yang tumbuh dari proses.',
+    },
   ],
 };
 
@@ -202,46 +201,55 @@ export const journey = {
       year: '2014',
       title: 'The first online shop',
       body: 'Radhyta dan pasangannya memulai bisnis online: konveksi dan dropship baju, dijalankan sepenuhnya secara digital.',
+      image: '/images/timeline/2014-online-shop.webp',
     },
     {
       year: '2016',
       title: 'Custompedia begins',
       body: 'Custompedia dimulai dengan menjual merchandise custom secara digital, dan sempat dikenal luas sebagai brand custom gift saat itu.',
+      image: '/images/timeline/2016-custompedia.webp',
     },
     {
       year: '2018',
       title: 'First agency client: Gojek',
       body: 'Gojek meminta Custompedia menangani branding dan media sosial, setelah melihat cara Custompedia memasarkan produknya sendiri.',
+      image: '/images/timeline/2018-first-agency-client.webp',
     },
     {
       year: '2020',
       title: 'Pivot to a creative agency',
       body: 'Pandemi menghentikan lini merchandise. Custompedia beralih penuh menjadi creative agency, dan Parcelin lahir dari penjualan hampers.',
+      image: '/images/timeline/2020-pivot.webp',
     },
     {
       year: '2021',
       title: 'Parcelin expands',
       body: 'Parcelin melebar dari hampers ke kemasan dan percetakan.',
+      image: '/images/timeline/2021-packaging.webp',
     },
     {
       year: '2023',
       title: 'National GoFood vendor',
       body: 'Custompedia menjadi vendor branding GoFood untuk seluruh Indonesia, sekaligus menangani berbagai brand activation Gojek di banyak kota.',
+      image: '/images/timeline/2023-activation.webp',
     },
     {
       year: '2024',
       title: 'Nine cities, one team',
       body: 'Seluruh akun media sosial Gojek regional — Semarang, Solo, Bandung, Yogyakarta, Makassar, Palembang, Batam, Padang, dan Kalimantan — dikelola Custompedia.',
+      image: '/images/timeline/2024-regional-team.webp',
     },
     {
       year: '2025',
       title: 'A group and a new company',
       body: 'Parcelin berkembang menjadi enam unit bisnis, dan Creasa berdiri sebagai perusahaan percetakan online.',
+      image: '/images/timeline/2025-printing.webp',
     },
     {
       year: '2026',
       title: 'Two new ventures',
       body: 'Custompedia menambah dua unit: But Gawe untuk brand activation dan Voca untuk KOL management.',
+      image: '/images/timeline/2026-ventures.webp',
     },
   ] satisfies JourneyEntry[],
 };
@@ -253,23 +261,26 @@ export const journey = {
  */
 export const companies = {
   eyebrow: 'The Companies',
-  headline: 'Three companies, one desk',
-  intro: 'Tiga perusahaan dengan bidang yang berbeda, dibangun sejak 2014.',
+  headline: 'Three companies. One shared standard.',
+  intro: 'Tiga spesialisasi yang bergerak bersama dari satu cara berpikir: buat yang relevan, lalu buat sampai tuntas.',
   items: [
     {
       name: 'Custompedia Creative Group',
       label: 'Creative agency',
       description: 'Branding, media sosial, produksi visual, iklan digital, KOL, dan brand activation.',
+      logo: '/images/favicon.svg',
     },
     {
       name: 'Parcelin Creative Indonesia',
       label: 'Creative packaging',
       description: 'Kemasan, cetak, dan produksi untuk bisnis, dari UMKM sampai perusahaan besar.',
+      logo: '/images/Parcelinpack-transparent.webp',
     },
     {
       name: 'Creasa — Creative Supply Asia',
       label: 'Online retail printing',
       description: 'Layanan cetak ritel online.',
+      logo: '/images/CREASA%20LOGO%20NO%20BACKGROUND-01.webp',
     },
   ] satisfies Company[],
 };
@@ -283,20 +294,11 @@ export const companies = {
  * agar section ini tetap relevan untuk komunitas mana pun.
  */
 export const network = {
-  eyebrow: 'Network & Reach',
-  headline: 'Business runs on relationships',
-  intro: 'Selain membangun bisnis, Radhyta aktif di komunitas bisnis dan menjaga jaringan yang terus berkembang.',
+  eyebrow: 'Together, in motion',
+  headline: 'The work gets stronger when people move together.',
+  intro: 'Berawal dari tiga perusahaan yang saling melengkapi, lalu tumbuh lewat kepercayaan klien yang memberi ruang untuk membuat pekerjaan lebih berarti.',
   activeLabel: 'Active in',
-  active: [
-    'BNI Lighthouse',
-    'HIPMI Jateng',
-    'Yuk Bisnis',
-    'Moslem Entrepreneurs Semarang',
-    'Karang Taruna Jateng',
-  ],
   trustedLabel: 'Trusted by',
-  outlookLabel: 'Setting sights on Southeast Asia',
-  outlook: 'Berbasis di Semarang, melayani klien di seluruh Indonesia, dan menyiapkan langkah berikutnya ke Asia Tenggara.',
 };
 
 /**
@@ -397,15 +399,15 @@ export const work = {
  */
 export const moment = {
   eyebrow: 'The Moment It Lands',
-  headline: ['Bukan sekadar sampai.', 'Harus berkesan.'],
+  headline: ['Custompedia makes', 'brands feel alive.'],
   intro:
-    'Barang yang baik pantas sampai dengan cara yang membuat orang berhenti, memegangnya lebih lama, lalu ingin membagikannya.',
+    'Kami membantu brand menemukan bentuknya, nadanya, dan momennya. Dari strategi hingga eksekusi, setiap detail dirancang agar orang tidak hanya melihat, tetapi ikut merasakan.',
   beats: [
-    { number: '01', label: 'Terlihat', body: 'Membuat orang berhenti sebelum mengenal produknya.' },
-    { number: '02', label: 'Dipegang', body: 'Membuat kualitasnya terasa, bukan sekadar terlihat.' },
-    { number: '03', label: 'Diingat', body: 'Membuat momen kecil layak dibawa pulang.' },
+    { number: '01', label: 'Find the signal', body: 'Menemukan sudut yang membuat brand layak diperhatikan.' },
+    { number: '02', label: 'Build the moment', body: 'Mengubah strategi menjadi konten, kampanye, dan pengalaman nyata.' },
+    { number: '03', label: 'Keep it moving', body: 'Membuat setiap touchpoint terus bekerja setelah momen pertama lewat.' },
   ],
-  closing: ['Dari merek', 'sampai ke tangan pembeli.'],
+  closing: ['The right story', 'moves people forward.'],
 };
 
 /**
@@ -415,7 +417,7 @@ export const moment = {
  */
 export const contact = {
   eyebrow: "Let's Talk",
-  headline: 'Punya bisnis yang ingin dibangun atau dikemas?',
+  headline: "Let's talk.",
   body: 'Dari branding sampai kemasan, atau sekadar ingin berkenalan lebih dulu.',
   button: { label: 'Chat on WhatsApp', href: brand.whatsappUrl },
   alt: [

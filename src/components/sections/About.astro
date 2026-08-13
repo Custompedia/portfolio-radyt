@@ -2,42 +2,42 @@
 /**
  * Section 02 — About.
  *
- * Sisi personal dan cerita perintis dilebur ke sini; keduanya tidak lagi punya
- * section sendiri. Empat paragrafnya berurutan dan tidak boleh ditukar: tiga
- * perusahaan → mental perintis → masa pandemi → di luar bisnis.
- *
- * Section inilah yang ditarik naik menimpa hero (`.about` di sections.css),
- * jadi ia harus tetap section pertama sesudah Hero.
+ * Sisi personal Radhyta. Konten memakai sudut pandang orang pertama agar
+ * halaman ini terasa sebagai portfolio founder, bukan profil korporat.
  */
 import { about } from '../../data/site';
-
-/** Kelas per logo dipakai untuk menyeimbangkan ukuran optis — tiga kanvas
- *  logonya punya rasio ruang kosong yang berbeda-beda. */
-const slug = (name: string): string => name.toLowerCase();
 ---
 
 <section class="section about" id="about">
   <header class="section-head about-head">
-    <span class="label-pill" data-label-pill>{about.eyebrow}</span>
-    <div class="about-title-row">
-      <h2 class="section-title h2-style" data-reveal>{about.headline}</h2>
-      <div class="about-brands" aria-label="Tiga perusahaan Radhyta">
-        {
-          about.logos.map((logo) => (
-            <img
-              class:list={['about-brand', `about-brand--${slug(logo.name)}`]}
-              src={logo.src}
-              alt={logo.name}
-              loading="lazy"
-              decoding="async"
-            />
-          ))
-        }
-      </div>
-    </div>
+    <h2 class="section-title h2-style" data-reveal>{about.headline}</h2>
   </header>
 
-  <div class="about-body">
-    {about.paragraphs.map((paragraph) => <p data-reveal data-reveal-stagger="0.04">{paragraph}</p>)}
+  <div class="about-portrait" data-about-profile>
+    <div class="about-copy">
+      <p class="about-intro" data-reveal data-reveal-stagger="0.035">{about.intro}</p>
+      <p class="about-statement" data-reveal data-reveal-stagger="0.035">{about.statement}</p>
+    </div>
+    <figure class="about-desk">
+      <img
+        src="/images/about/radhyta-desk.png"
+        alt="Meja kerja dengan materi proses kreatif, kemasan, dan catatan proyek"
+        width="1672"
+        height="941"
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+  </div>
+
+  <div class="about-facts" data-about-stories>
+    {
+      about.facts.map((fact) => (
+        <article class="about-fact" data-about-story>
+          <strong>{fact.value}</strong>
+          <p>{fact.label}</p>
+        </article>
+      ))
+    }
   </div>
 </section>

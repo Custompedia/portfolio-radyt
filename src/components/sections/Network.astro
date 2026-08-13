@@ -11,7 +11,7 @@
  * di sana, dan menaruhnya di peta akan terbaca sebagai jangkauan yang sudah
  * berjalan.
  */
-import { clients, network } from '../../data/site';
+import { clients, companies, network } from '../../data/site';
 ---
 
 <section class="section network" id="network">
@@ -24,16 +24,15 @@ import { clients, network } from '../../data/site';
   <div class="network-body">
     <section class="network-block" aria-labelledby="network-active">
       <h3 class="network-label" id="network-active">{network.activeLabel}</h3>
-      <p class="network-list">
+      <ul class="network-company-logos">
         {
-          network.active.map((item, i) => (
-            <>
-              {i > 0 && <span class="network-sep" aria-hidden="true">·</span>}
-              <span class="network-item">{item}</span>
-            </>
+          companies.items.map((company) => (
+            <li class="network-company-logo" data-network-logo>
+              <img src={company.logo} alt={company.name} loading="lazy" decoding="async" />
+            </li>
           ))
         }
-      </p>
+      </ul>
     </section>
 
     <section class="network-block" aria-labelledby="network-trusted">
@@ -43,6 +42,7 @@ import { clients, network } from '../../data/site';
           clients.map((client) => (
             <li
               class:list={['network-logo', `network-logo--${client.shape}`]}
+              data-network-logo
               style={`--logo-width-desktop:${client.desktopWidth * 1.6}vw;--logo-width-mobile:${client.mobileWidth * 1.4}px;--logo-scale:${client.scale ?? 1}`}
             >
               <img src={client.src} alt={client.name} loading="lazy" decoding="async" />
@@ -52,9 +52,5 @@ import { clients, network } from '../../data/site';
       </ul>
     </section>
 
-    <section class="network-block network-block--outlook" aria-labelledby="network-outlook">
-      <h3 class="network-label" id="network-outlook">{network.outlookLabel}</h3>
-      <p class="network-outlook" data-reveal>{network.outlook}</p>
-    </section>
   </div>
 </section>

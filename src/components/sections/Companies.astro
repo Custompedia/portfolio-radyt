@@ -2,9 +2,8 @@
 /**
  * Section 04 — The Companies.
  *
- * Tiga kartu dengan format seragam: nama · label · deskripsi. Tidak ada nama
- * unit dan tidak ada peran/kepemilikan di sini — aturannya dipegang di
- * `companies` (site.ts), bukan di markup ini.
+ * Identitas tiga perusahaan menjadi pusat section, baru disusul keterangan
+ * singkat. Motion logo dibangun sebagai satu sequence di modules/brand-stages.
  */
 import { companies } from '../../data/site';
 ---
@@ -19,15 +18,11 @@ import { companies } from '../../data/site';
   <ol class="company-grid">
     {
       companies.items.map((company, i) => (
-        <li
-          class="company-card card"
-          data-tl-from="{'opacity':0,'y':'12%'}"
-          data-tl-to="{'opacity':1,'y':'0%','duration':0.7,'ease':'power3.out'}"
-          data-tl-start="top 88%"
-          data-tl-stagger="0.08"
-          data-tl-once
-        >
+        <li class="company-card card">
           <span class="company-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <div class="company-logo-wrap" data-company-logo>
+            <img src={company.logo} alt={company.name} loading="lazy" decoding="async" />
+          </div>
           <h3 class="company-name">{company.name}</h3>
           <span class="company-label">{company.label}</span>
           <p class="company-description">{company.description}</p>
