@@ -572,8 +572,7 @@
   border-radius: var(--radius-lg);
   background: var(--surface);
   border: var(--surface-border);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--surface-shadow);
 }
 
 /* Kartu kaca hero. Nilainya DIUKUR dari kartu hero referensi, bukan dikira:
@@ -589,8 +588,12 @@
    keterbacaan lebih penting daripada kemiripan warna. */
 .glass-card {
   background: var(--glass-bg);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  /* Tepinya tinta, bukan putih. Kartu ini melintasi DUA latar sekaligus —
+     separuh kiri di atas halaman off-white, separuh kanan di atas jas gelap
+     subjek — dan garis putih hilang sama sekali di separuh kirinya. */
+  border: 1px solid rgba(var(--ink-rgb), 0.1);
   border-radius: var(--radius-sm);
+  box-shadow: var(--card-shadow);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   color: var(--white);

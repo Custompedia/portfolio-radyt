@@ -333,7 +333,7 @@
   flex-wrap: wrap;
   align-items: center;
   padding-top: clamp(10px, 0.9vw, 18px);
-  border-top: 1px solid rgba(0, 0, 0, 0.16);
+  border-top: 1px solid rgba(var(--ink-rgb), 0.14);
   gap: 0.6vw;
   font-family: var(--font-label);
   font-size: max(11px, 0.8vw);
@@ -365,18 +365,19 @@
    kaca taupe dengan teks putih, bukan beige solid seperti di rail. Kelas ini
    dipasang/dilepas ghost.ts — bukan tween warna, supaya theme switcher tetap
    bisa membalikkannya saat sidebar melintasi section gelap. */
-/* Selama masih berukuran hero, kartu statistik memakai warna kaca yang SAMA
-   PERSIS dengan kartu trait di seberangnya — rgba(194,184,172,.3), nilai yang
-   diukur dari kartu hero referensi. Sebelumnya di sini ada gradien cokelat
-   sendiri, dan itulah kenapa dua kartu kiri terbaca keruh sementara kartu
-   kanan terang: keduanya memang tidak pernah sewarna. */
+/* Selama masih berukuran hero, kartu statistik melayang di atas potret, jadi
+   ia kaca — bukan permukaan solid seperti saat sudah mendarat di rail. Tepi
+   dan bayangannya mengikuti `.glass-card`; alasannya ada di sana. */
 .sidebar.is-hero-tone .nav-stat-card .nav-card-bg {
   background: var(--glass-bg);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(var(--ink-rgb), 0.1);
+  box-shadow: var(--card-shadow);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
 }
 
+/* Label duduk di atas bagian kartu yang menutupi jas gelap, jadi ia putih;
+   angkanya sendiri tetap biru dan berdiri di separuh yang terang. */
 .sidebar.is-hero-tone .nav-stat-label {
   color: var(--white);
 }
@@ -478,7 +479,7 @@
     flex-direction: column;
     width: 100%;
     max-height: 100dvh;
-    --fg: #f5f3ea;
+    --fg: #ffffff;
     --surface: transparent;
     --surface-border: transparent;
     --surface-inner: transparent;
@@ -761,7 +762,7 @@
    jejak samar di belakangnya — jadi ia harus cukup tegas untuk terbaca sebagai
    garis yang sedang ditarik, bukan bayangan. */
 .timeline-lit {
-  stroke: rgba(17, 12, 2, 0.92);
+  stroke: rgba(var(--ink-rgb), 0.8);
 }
 
 /* Pembungkus inilah yang di-scrub: tingginya naik bertahap dan memotong
@@ -787,7 +788,7 @@
   width: 15px;
   height: 15px;
   margin: -7.5px 0 0 -7.5px;
-  border: 2px solid rgba(0, 0, 0, 0.55);
+  border: 2px solid rgba(var(--ink-rgb), 0.4);
   border-radius: 50%;
   /* `transform` sengaja TIDAK dipakai di sini: dot sudah dianimasikan skalanya
      oleh timeline-path.ts, dan transform dari CSS akan ditimpa style inline
@@ -818,14 +819,14 @@
   padding: 1.8vw;
   /* Kartu ini melayang di atas garis dan latar beige yang sama warnanya.
      Tanpa bayangan, tepinya hilang persis di tempat garis lewat. */
-  box-shadow: 0 1.2vw 2.6vw -1.4vw rgba(46, 32, 6, 0.45);
+  box-shadow: 0 1.2vw 2.6vw -1.4vw rgba(var(--ink-rgb), 0.28);
   transition: box-shadow var(--dur) var(--ease-out);
 }
 
 /* Hover-nya dipegang GSAP (scale), jadi di sini HANYA properti non-transform —
    menaruh transform di CSS akan langsung ditimpa style inline milik GSAP. */
 .timeline-card:hover {
-  box-shadow: 0 1.8vw 3.4vw -1.4vw rgba(46, 32, 6, 0.55);
+  box-shadow: 0 1.8vw 3.4vw -1.4vw rgba(var(--ink-rgb), 0.34);
 }
 
 .timeline-year {
@@ -1528,7 +1529,7 @@
   left: 0;
   z-index: 6;
   height: clamp(110px, 15vh, 170px);
-  background: linear-gradient(to bottom, rgba(213, 207, 190, 0), var(--bg) 88%);
+  background: linear-gradient(to bottom, rgba(241, 243, 247, 0), var(--bg) 88%);
   pointer-events: none;
 }
 
@@ -2083,7 +2084,7 @@
     left: calc(var(--tl-line-x) - 1px);
     width: 2px;
     border-radius: 1px;
-    background: rgba(46, 32, 6, 0.28);
+    background: rgba(var(--ink-rgb), 0.18);
     content: '';
   }
 
@@ -2108,14 +2109,14 @@
     width: 3px;
     max-height: calc(100% - 20px);
     border-radius: 2px;
-    background: rgba(17, 12, 2, 0.85);
+    background: rgba(var(--ink-rgb), 0.8);
   }
 
   .timeline-card {
     position: relative;
     width: 100%;
     padding: 22px;
-    box-shadow: 0 14px 30px -18px rgba(46, 32, 6, 0.5);
+    box-shadow: 0 14px 30px -18px rgba(var(--ink-rgb), 0.3);
   }
 
   /* Titik sejajar dengan angka tahun di dalam kartu (padding 22px + separuh
@@ -2132,7 +2133,7 @@
     left: calc(-1 * var(--tl-rail) + var(--tl-line-x) - (var(--tl-dot) + 4px) / 2);
     width: var(--tl-dot);
     height: var(--tl-dot);
-    border: 2px solid rgba(46, 32, 6, 0.5);
+    border: 2px solid rgba(var(--ink-rgb), 0.35);
     border-radius: 50%;
     background: var(--bg);
     content: '';
@@ -2475,8 +2476,8 @@
     width: auto;
     z-index: 3;
     gap: 10px;
-    color: #f8f7f3;
-    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+    color: var(--white);
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
   }
 
   .hero-headline {
@@ -2499,7 +2500,7 @@
      ke bagian Journey selain menu, dan sebagai teks berpanah ia tidak
      bersaing dengan tombol WhatsApp di topbar. */
   .hero-secondary {
-    color: #f8f7f3;
+    color: var(--white);
   }
 
   /* Baris merek dipatok ke KAKI panggung supaya tidak pernah bertabrakan
@@ -2518,16 +2519,16 @@
 .timeline-card {
   width: clamp(320px, 27vw, 500px);
   padding: clamp(22px, 1.65vw, 28px);
-  border: 1px solid rgba(46, 32, 6, 0.13);
+  border: 1px solid rgba(var(--ink-rgb), 0.08);
   border-radius: 20px;
-  background: rgba(241, 240, 225, 0.96);
-  box-shadow: 0 16px 36px -28px rgba(46, 32, 6, 0.55);
+  background: var(--white);
+  box-shadow: 0 16px 36px -28px rgba(var(--ink-rgb), 0.34);
   transition: box-shadow 280ms var(--ease-out), border-color 280ms var(--ease-out);
 }
 
 .timeline-card:hover {
-  border-color: rgba(46, 32, 6, 0.24);
-  box-shadow: 0 20px 42px -28px rgba(46, 32, 6, 0.68);
+  border-color: rgba(var(--ink-rgb), 0.16);
+  box-shadow: 0 20px 42px -28px rgba(var(--ink-rgb), 0.42);
 }
 
 
@@ -2536,7 +2537,7 @@
 .tl-card-index {
   display: block;
   margin-bottom: 0.6vw;
-  color: rgba(46, 32, 6, 0.38);
+  color: rgba(var(--ink-rgb), 0.6);
   font-family: var(--font-label);
   font-size: max(10px, 0.68vw);
   font-weight: 600;
@@ -2569,7 +2570,7 @@
 
 .timeline-card .timeline-body {
   max-width: 38ch;
-  color: rgba(46, 46, 42, 0.75);
+  color: var(--fg-muted);
   font-size: clamp(0.92rem, 1vw, 1.02rem);
   line-height: 1.5;
 }
@@ -2588,20 +2589,20 @@
   .timeline::before {
     top: 18px;
     bottom: 18px;
-    background: rgba(46, 32, 6, 0.22);
+    background: rgba(var(--ink-rgb), 0.16);
   }
 
   .timeline-fill {
     top: 18px;
     max-height: calc(100% - 36px);
-    background: rgba(17, 12, 2, 0.92);
+    background: rgba(var(--ink-rgb), 0.8);
   }
 
   .timeline-card {
     padding: 22px 20px 20px;
     border-radius: 18px;
-    background: linear-gradient(145deg, rgba(248, 247, 234, 0.98), rgba(236, 235, 218, 0.96));
-    box-shadow: 0 18px 36px -26px rgba(46, 32, 6, 0.58);
+    background: linear-gradient(145deg, #ffffff, #f6f8fc);
+    box-shadow: 0 18px 36px -26px rgba(var(--ink-rgb), 0.36);
   }
 
 
@@ -2621,7 +2622,7 @@
   .timeline-card::before {
     /* Titik sengaja berada di pusat angka tahun, bukan di tepi atasnya. */
     top: 66px;
-    border-color: rgba(46, 32, 6, 0.62);
+    border-color: rgba(var(--ink-rgb), 0.45);
     background: var(--accent);
     box-shadow: 0 0 0 4px var(--bg);
   }

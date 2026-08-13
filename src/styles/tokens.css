@@ -31,23 +31,36 @@
                     labelnya tidak boleh bergantung pada isinya.
      Pergantiannya otomatis lewat --accent, yang ikut di-flip theme.ts bersama
      --fg dan --surface. */
-  --bg: #d5cfbe;
+  /* Off-white sejuk, BUKAN putih murni. Alasannya bukan selera: kartu di
+     halaman ini putih, dan di atas putih murni kartunya hilang. Selisih
+     luminansi ~5.5% cukup untuk memisahkan keduanya tanpa terbaca abu-abu.
+     Nadanya condong biru setipis mungkin supaya sejalan dengan aksen. */
+  --bg: #f1f3f7;
   --blue: #112bd6;
   --blue-tint: #6e86ff;
   --blue-pill: #8fa3ff;
   --accent: var(--blue);
   --black: #000000;
   --white: #ffffff;
-  --dark: #1d1d1d;
-  --dark-deep: #131313;
+  --dark: #141a2a;
 
+  /* Tinta halaman: navy-hitam, bukan hitam murni — hitam pekat di atas
+     off-white terbaca keras pada blok teks panjang. Ditulis sebagai channel
+     supaya seluruh garis rambut, teks redup, dan bayangan turun dari satu
+     warna. 16.8:1 di atas --bg. */
+  --ink-rgb: 13, 18, 32;
 
-  /* Surface: kartu di atas background terang */
-  --card-bg: rgba(223, 222, 206, 0.8);
-  --card-border: 1px solid rgba(255, 255, 255, 0.2);
-  --card-inner: #ebeada;
-  --card-inner-alt: #c9c8ba;
-  --card-inner-hover: #edecda;
+  /* Surface: kartu di atas halaman. PUTIH, dan itu yang membalik hubungannya —
+     versi krem memakai kartu yang nyaris sewarna latarnya, jadi tepinya hilang
+     dan seluruh halaman terbaca kusam. */
+  --card-bg: #ffffff;
+  --card-border: 1px solid rgba(var(--ink-rgb), 0.08);
+  --card-inner: #f5f7fb;
+  --card-inner-alt: #e8ecf4;
+  --card-inner-hover: #eef2f9;
+  /* Dua lapis: satu garis kontak yang rapat, satu ambient yang lebar. Kartu
+     putih di atas off-white butuh keduanya — border saja terbaca datar. */
+  --card-shadow: 0 1px 2px rgba(var(--ink-rgb), 0.05), 0 10px 28px -14px rgba(var(--ink-rgb), 0.16);
 
   /* Surface: kartu saat sidebar melewati section gelap */
   --card-bg-dark: rgba(29, 29, 29, 0.6);
@@ -55,32 +68,24 @@
   --card-inner-dark: rgba(57, 57, 57, 0.9);
   --card-inner-alt-dark: #393939;
   --card-inner-hover-dark: rgba(94, 94, 94, 0.5);
+  --card-shadow-dark: 0 10px 30px -18px rgba(0, 0, 0, 0.7);
 
-  /* Kaca hero — kartu stat & trait melayang di atas potret, jadi warnanya
-     taupe transparan, bukan beige solid seperti kartu section. */
-  --glass-bg: rgba(194, 184, 172, 0.45);
+  /* Kaca hero — kartu statistik melayang di atas potret, jadi ia putih
+     setengah tembus, bukan permukaan solid seperti kartu section. */
+  --glass-bg: rgba(255, 255, 255, 0.5);
   --glass-blur: 20px;
 
   /* Permukaan khusus per-section */
   --work-bg: linear-gradient(#000000, #222222 44%);
   --work-scrim: linear-gradient(rgba(0, 0, 0, 0.3), rgba(51, 51, 51, 0.03) 50%, rgba(0, 0, 0, 0.4));
   --work-dim: rgba(0, 0, 0, 0.6);
-  --timeline-stroke: linear-gradient(
-    rgba(46, 32, 6, 0.49),
-    rgba(46, 32, 6, 0.27) 44%,
-    rgba(46, 32, 6, 0) 95%
-  );
-  --swiper-bullet: #a8a684;
 
-  /* Scrollbar halaman. Track-nya SENGAJA transparan: dengan begitu yang
-     terlihat di belakangnya adalah section yang sedang lewat — beige di
-     sebagian besar halaman, hitam saat Work — jadi ia ikut berganti warna
-     tanpa satu baris JS pun.
-     Thumb-nya taupe pertengahan, dipilih supaya tetap terbaca di KEDUA latar
-     itu: terlalu gelap ia hilang di section Work, terlalu terang ia hilang di
-     beige. */
-  --scrollbar-thumb: #8f8b76;
-  --scrollbar-thumb-hover: #6f6c5b;
+  /* Scrollbar halaman. Track-nya SENGAJA transparan: yang terlihat di
+     belakangnya adalah section yang sedang lewat — off-white di sebagian besar
+     halaman, hitam saat Work — jadi ia ikut berganti warna tanpa satu baris JS
+     pun. Thumb-nya tinta beralpha supaya terbaca di kedua latar itu. */
+  --scrollbar-thumb: rgba(var(--ink-rgb), 0.22);
+  --scrollbar-thumb-hover: rgba(var(--ink-rgb), 0.4);
 
   /* Token turunan yang di-flip oleh theme.ts lewat [data-theme] */
   --surface: var(--card-bg);
@@ -88,9 +93,10 @@
   --surface-inner: var(--card-inner);
   --surface-inner-alt: var(--card-inner-alt);
   --surface-inner-hover: var(--card-inner-hover);
-  --fg: var(--black);
-  --fg-muted: rgba(0, 0, 0, 0.7);
-  --label-border: rgba(0, 0, 0, 0.3);
+  --surface-shadow: var(--card-shadow);
+  --fg: rgb(var(--ink-rgb));
+  --fg-muted: rgba(var(--ink-rgb), 0.62);
+  --label-border: rgba(var(--ink-rgb), 0.22);
 
   /* --- Typography --- */
   --font-sans: 'Satoshi', 'Helvetica Neue', Arial, sans-serif;
@@ -297,6 +303,7 @@
 [data-theme='dark'] {
   --accent: var(--blue-tint);
   --surface: var(--card-bg-dark);
+  --surface-shadow: var(--card-shadow-dark);
   --surface-border: var(--card-border-dark);
   --surface-inner: var(--card-inner-dark);
   --surface-inner-alt: var(--card-inner-alt-dark);
@@ -310,6 +317,7 @@
 .theme-dark {
   --accent: var(--blue-tint);
   --surface: var(--card-bg-dark);
+  --surface-shadow: var(--card-shadow-dark);
   --surface-border: var(--card-border-dark);
   --surface-inner: var(--card-inner-dark);
   --surface-inner-hover: var(--card-inner-hover-dark);
