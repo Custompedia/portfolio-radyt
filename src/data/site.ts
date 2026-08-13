@@ -281,12 +281,22 @@ export const companies = {
  * agar section ini tetap relevan untuk komunitas mana pun.
  */
 export const network = {
-  eyebrow: 'Together, in motion',
-  headline: 'The work gets stronger when people move together.',
-  intro: 'Berawal dari tiga perusahaan yang saling melengkapi, lalu tumbuh lewat kepercayaan klien yang memberi ruang untuk membuat pekerjaan lebih berarti.',
+  eyebrow: 'Network & reach',
+  headline: 'Business runs on relationships',
+  intro: 'Selain membangun bisnis, Radhyta aktif di komunitas bisnis dan menjaga jaringan yang terus berkembang.',
   activeLabel: 'Active in',
   trustedLabel: 'Trusted by',
+  outlookLabel: 'Setting sights on Southeast Asia',
+  outlook: 'Berbasis di Semarang, melayani klien di seluruh Indonesia, dan menyiapkan langkah berikutnya ke Asia Tenggara.',
 };
+
+export const networkActive = [
+  { name: 'BNI Lighthouse', src: '/images/BNI_logo.svg.webp', shape: 'landscape' },
+  { name: 'HIPMI Jateng', src: '/images/HIPMI%20Jateng.png', shape: 'portrait' },
+  { name: 'Yuk Bisnis', src: '/images/Yuk%20Bisnis.png', shape: 'landscape' },
+  { name: 'Moslem Entrepreneurs Semarang', mark: 'MES' },
+  { name: 'Karang Taruna Jateng', mark: 'KT' },
+];
 
 /**
  * Section 06. Kartu TIDAK punya halaman detail, jadi tidak ada tombol panah dan

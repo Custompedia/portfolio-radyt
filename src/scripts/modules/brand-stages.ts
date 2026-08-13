@@ -48,17 +48,32 @@ export const brandStagesModule: AnimationModule = {
       }
 
       const network = $<HTMLElement>('.network-body');
-      const logos = network ? $$<HTMLElement>('[data-network-logo]', network) : [];
-      if (network && logos.length) {
-        gsap.from(logos, {
-          opacity: 0,
-          scale: 0.78,
-          y: 24,
-          stagger: { each: 0.06, from: 'start' },
-          duration: 0.72,
-          ease: 'back.out(1.45)',
-          scrollTrigger: { trigger: network, start: 'top 76%', once: true },
+      const active = network ? $$<HTMLElement>('[data-network-active]', network) : [];
+      const trusted = network ? $$<HTMLElement>('[data-network-trusted]', network) : [];
+      if (network && (active.length || trusted.length)) {
+        const timeline = gsap.timeline({
+          scrollTrigger: { trigger: network, start: 'top 74%', toggleActions: 'play none none reverse' },
         });
+
+        timeline
+          .from(active, {
+            autoAlpha: 0,
+            x: (index) => (index % 2 ? 42 : -42),
+            y: (index) => (index % 2 ? 20 : -20),
+            rotation: (index) => (index % 2 ? 4 : -4),
+            scale: 0.86,
+            stagger: { each: 0.1, from: 'center' },
+            duration: 0.78,
+            ease: 'power3.out',
+          })
+          .from(trusted, {
+            autoAlpha: 0,
+            y: 28,
+            scale: 0.82,
+            stagger: { each: 0.08, from: 'center' },
+            duration: 0.68,
+            ease: 'back.out(1.35)',
+          }, '-=0.34');
       }
     });
   },
