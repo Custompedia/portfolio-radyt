@@ -44,14 +44,6 @@ export interface ClientLogo {
   desktopWidth: number;
   mobileWidth: number;
   scale?: number;
-  /**
-   * Logo yang artworknya gelap dan nyaris monokrom — di atas navy ia praktis
-   * hilang, jadi ia dirender sebagai siluet putih. DIUKUR per file, bukan
-   * ditebak: nyalakan kalau rata-rata luminansi piksel buramnya di bawah ~80
-   * DAN saturasinya rendah. Logo berwarna terang atau lambang berdetail jangan
-   * diberi tanda ini — siluet putih menghapus detailnya jadi satu bercak.
-   */
-  mono?: boolean;
 }
 
 /** Satu bab perjalanan. Sengaja hanya tiga field: handoff meminta seluruh
@@ -167,7 +159,7 @@ export const stats: Stat[] = [
  * Unilever ada di shortlist handoff tapi filenya belum masuk ke public/images.
  */
 export const clients: ClientLogo[] = [
-  { name: 'Gojek', src: '/images/logo-gojek.webp', shape: 'landscape', desktopWidth: 3.75, mobileWidth: 60, scale: 0.9, mono: true },
+  { name: 'Gojek', src: '/images/logo-gojek.webp', shape: 'landscape', desktopWidth: 3.75, mobileWidth: 60, scale: 0.9 },
   { name: 'GoTo', src: '/images/GoTo_logo.webp', shape: 'landscape', desktopWidth: 3.25, mobileWidth: 52, scale: 0.86 },
   { name: 'Tokopedia', src: '/images/Logo-Tokopedia.webp', shape: 'landscape', desktopWidth: 4.6, mobileWidth: 74 },
   { name: 'Pemprov Jawa Tengah', src: '/images/Coat_of_arms_of_Central_Java.svg.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 28, scale: 0.65 },
@@ -325,7 +317,7 @@ export const work = {
       kind: 'Custompedia',
       blurb: 'Positioning, identitas visual, dan panduan merek yang bisa dipakai tim internal secara mandiri.',
       tags: ['Branding', 'Design', 'Guideline'],
-      accent: '#10243c',
+      accent: '#3f2a1d',
       image: '/images/work-branding-natural.webp',
     },
     {
@@ -333,7 +325,7 @@ export const work = {
       kind: 'Custompedia',
       blurb: 'Perencanaan, produksi, publikasi, sampai membalas komentar. Pengelolaan kanal harian.',
       tags: ['Social Media', 'Content', 'Community'],
-      accent: '#0d2b3f',
+      accent: '#1f3340',
       image: '/images/work-social-media.webp',
     },
     {
@@ -341,7 +333,7 @@ export const work = {
       kind: 'Custompedia',
       blurb: 'Pemilihan, negosiasi, dan pengukuran kreator. Hasilnya dinilai dari penjualan, bukan jumlah tayangan.',
       tags: ['KOL', 'Campaign', 'Report'],
-      accent: '#17223f',
+      accent: '#4a2438',
       image: '/images/work-kol-natural.webp',
     },
     {
@@ -349,7 +341,7 @@ export const work = {
       kind: 'Custompedia',
       blurb: 'Iklan berbayar yang diikat ke satu target bisnis, lengkap dengan audit belanja iklan yang sudah berjalan.',
       tags: ['Ads', 'Audit', 'Performance'],
-      accent: '#0a1424',
+      accent: '#101014',
       image: '/images/work-digital-ads-natural.webp',
     },
     {
@@ -357,7 +349,7 @@ export const work = {
       kind: 'Custompedia',
       blurb: 'Peluncuran, papan luar ruang, dan event yang tersambung kembali ke kanal digital.',
       tags: ['Activation', 'OOH', 'Event'],
-      accent: '#1b2145',
+      accent: '#3d2c56',
       image: '/images/work-activation-event-natural.webp',
     },
     {
@@ -365,7 +357,7 @@ export const work = {
       kind: 'Parcelin',
       blurb: 'Kemasan yang dirancang dari ukuran barangnya, bukan dari cetakan yang kebetulan tersedia.',
       tags: ['Packaging', 'Struktur', 'Cetak'],
-      accent: '#0c2c39',
+      accent: '#14392c',
       image: '/images/work-custom-box.webp',
     },
     {
@@ -373,7 +365,7 @@ export const work = {
       kind: 'Parcelin',
       blurb: 'Paket kiriman untuk media dan mitra, dibuat agar layak difoto begitu kotaknya dibuka.',
       tags: ['Hampers', 'PR Kit', 'Seasonal'],
-      accent: '#142338',
+      accent: '#2a2118',
       image: '/images/work-pr-hampers.webp',
     },
     {
@@ -381,7 +373,7 @@ export const work = {
       kind: 'Parcelin',
       blurb: 'Pesanan kecil dengan mutu cetak yang sama, agar usaha rumahan bisa masuk rak yang sama.',
       tags: ['UMKM', 'MOQ Rendah', 'Konsultasi'],
-      accent: '#191f3e',
+      accent: '#241a2e',
       image: '/images/work-umkm-packaging-natural.webp',
     },
     {
@@ -389,7 +381,7 @@ export const work = {
       kind: 'Creasa',
       blurb: 'Layanan cetak ritel online untuk kebutuhan cepat dan bervolume.',
       tags: ['Cetak', 'Ritel', 'Online'],
-      accent: '#0e2f4a',
+      accent: '#1b2a4a',
     },
     // `as`, bukan `satisfies`: satisfies mempertahankan tipe literal array ini,
     // jadi field media opsional (image/video/videoWebm) terbaca "tidak ada" di

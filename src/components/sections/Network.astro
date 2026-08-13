@@ -45,7 +45,7 @@ import { clients, network } from '../../data/site';
               class:list={['network-logo', `network-logo--${client.shape}`]}
               style={`--logo-width-desktop:${client.desktopWidth * 1.6}vw;--logo-width-mobile:${client.mobileWidth * 1.4}px;--logo-scale:${client.scale ?? 1}`}
             >
-              <img class:list={[client.mono && 'is-mono']} src={client.src} alt={client.name} loading="lazy" decoding="async" />
+              <img src={client.src} alt={client.name} loading="lazy" decoding="async" />
             </li>
           ))
         }

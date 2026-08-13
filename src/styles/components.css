@@ -73,7 +73,7 @@
   align-self: start;
   padding: 0.33vw 0.69vw 0.4vw;
   border-radius: var(--radius-xs);
-  background: var(--blue-deep);
+  background: var(--blue);
   color: var(--white);
   font-size: 1.37vw;
   font-weight: 900;
@@ -228,7 +228,7 @@
 }
 
 
-/* Angka statistik biru tebal, labelnya lebih tipis di rail. */
+/* Angka statistik biru tebal, labelnya lebih tipis dan gelap di rail. */
 .nav-stat-value {
   color: var(--accent);
   font-size: 1.8vw;
@@ -307,23 +307,27 @@
 
 /* Hover memakai biru yang sama dengan keadaan aktif — kursor jadi seolah
    MEMBAWA sorotan itu, bukan memicu warna kedua yang tidak ada artinya.
-   Isinya --blue-deep, bukan hex brand --blue: label nav berdiri di atasnya,
-   dan putih di atas #007EC8 cuma 4.36:1. */
+   Teksnya tetap HITAM seperti versi kuning, dan karena itu isinya --blue-pill
+   (biru muda, 8.9:1 di bawah hitam) alih-alih --blue yang pekat.
+   Alasannya bukan selera: pill ini satu-satunya isi di halaman yang sebagian
+   waktu belum terlihat. Di hero ia masih pudar sementara labelnya sudah
+   terbaca di atas krem — kalau labelnya dibuat putih mengikuti isi pekat, ia
+   hilang persis di jendela itu. */
 .nav-link:hover .nav-link-bg {
-  background: var(--blue-deep);
+  background: var(--blue-pill);
 }
 
 .nav-link:hover {
-  color: var(--white);
+  color: var(--black);
 }
 
 .nav-link.is-active {
-  color: var(--white);
+  color: var(--black);
 }
 
 .nav-link.is-active .nav-link-bg,
 .nav-link.is-active:hover .nav-link-bg {
-  background: var(--blue-deep);
+  background: var(--blue-pill);
 }
 
 /* --- Clients marquee --- */
@@ -369,22 +373,13 @@
   height: 1.2vw;
 }
 
-.marquee-logo.is-mono,
-.network-logo img.is-mono {
-  filter: brightness(0) invert(1);
-}
-
 .marquee-logo {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
   object-position: center;
-  /* Sedikit diangkat: sebagian logo punya bagian gelap yang di atas navy
-     kehilangan tepinya. Yang benar-benar gelap dan monokrom ditandai `is-mono`
-     di site.ts dan dirender sebagai siluet putih. */
-  filter: saturate(0.9) brightness(1.12);
-  opacity: 0.85;
+  filter: saturate(0.85);
   transform: scale(var(--logo-scale));
   transform-origin: center;
 }
@@ -439,7 +434,7 @@
   justify-content: center;
   padding: 0.9vw 1.5vw;
   border-radius: var(--radius-lg);
-  background: var(--blue-deep);
+  background: var(--blue);
   color: var(--white);
   font-family: var(--font-label);
   font-size: 1.18vw;
@@ -594,7 +589,7 @@
    keterbacaan lebih penting daripada kemiripan warna. */
 .glass-card {
   background: var(--glass-bg);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-sm);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
@@ -621,7 +616,7 @@
   padding: 0 11px 0 13px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 12px;
-  background: var(--card-inner-alt);
+  background: var(--dark);
   color: var(--white);
   overflow: hidden;
   transition:
@@ -671,8 +666,8 @@
 }
 
 .mobile-menu-trigger[aria-expanded='true'] {
-  border-color: var(--blue-deep);
-  background: var(--blue-deep);
+  border-color: var(--blue);
+  background: var(--blue);
   color: var(--white);
 }
 

@@ -41,23 +41,24 @@ interface GhostBox {
  * kedua di rail ("3 Companies") karena itu tidak punya asal-usul di hero: ia
  * ikut kelompok `data-ghost-fade` dan menyala saat rail merakit diri.
  *
- * Geometri kartu yang tersisa diambil dari kartu besar hero referensi
- * (heynesh.com, viewport 1568x782, lewat getBoundingClientRect): w 9.62vw,
- * h 10.44vw — kotak, bukan pita lebar. Posisinya digeser ke kanan sampai duduk
- * di pundak kiri subjek, jadi ia melayang di atas potret dan bukan di atas
- * kolom teks.
+ * Kartunya BUJUR SANGKAR. Referensi memakai 9.62 x 10.44vw, tapi di sana ia
+ * berpasangan dengan kartu kedua yang lebar-pendek; di sini ia berdiri sendiri,
+ * dan satu-satunya kotak yang berdiri sendiri di atas potret terbaca paling
+ * tenang kalau rasionya 1:1. Posisinya digeser ke kanan sampai duduk di pundak
+ * kiri subjek, jadi ia melayang di atas potret dan bukan di atas kolom teks.
  */
-const STAT_W = 9.62;
-const STAT_H = 10.44;
+const STAT_W = 10;
+const STAT_H = STAT_W;
 const STAT_X = 46.5;
 
 /**
- * Tepi atas kartu, dijangkar ke kaki wordmark (--hero-nav-top) dan bukan ke
- * angka vh lepas: wordmark, baris nav, dan kartu ini harus turun-naik bersama
- * saat lebar layar berubah. `min(...)` cuma jaring pengaman layar lebar-pendek
- * supaya kaki kartu tetap di dalam layar.
+ * Tepi ATAS kartu sejajar dengan tepi atas kolom teks — satu garis mendatar
+ * yang mengikat kolom kiri dan kartu di kanan, alih-alih kartu yang mengambang
+ * di ketinggian sendiri. Keduanya membaca token yang sama, jadi tidak mungkin
+ * lepas sinkron. `min(...)` cuma jaring pengaman layar lebar-pendek supaya kaki
+ * kartu tetap di dalam layar.
  */
-const statY = `min(calc(var(--hero-nav-top) + 5.5vw), calc(94vh - ${STAT_H}vw))`;
+const statY = `min(var(--hero-copy-top), calc(94vh - ${STAT_H}vw))`;
 
 /**
  * Lebar blok angka di dalam kartu. Ghost `stat-1` menentukan SKALA blok (lebar

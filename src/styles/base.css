@@ -173,7 +173,7 @@ ul {
 }
 
 ::selection {
-  background: var(--blue-deep);
+  background: var(--blue);
   color: var(--white);
 }
 
