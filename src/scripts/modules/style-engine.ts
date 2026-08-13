@@ -114,7 +114,7 @@ function buildCounter(el: HTMLElement): void {
   });
 
   tracks.forEach((track, i) => {
-    const height = track.parentElement?.offsetHeight ?? 0;
+    const height = track.firstElementChild?.getBoundingClientRect().height ?? 0;
     const target = Number(track.dataset.target);
     gsap.set(track, { y: height * 9 });
     timeline.to(track, { y: -target * height, duration: 1.2, ease: 'power3.out' }, i * 0.06);

@@ -15,7 +15,12 @@
 :root {
   /* --- Palette --- royal blue, bright blue, navy, slate, dan off-white dari
      referensi visual brand. */
-  --bg: #f8fafc;
+  /* Latar halaman PUTIH MURNI — paling terang yang mungkin (L* 100), dan
+     seluruh teks ikut membaik: ink 17.85:1, teks redup 5.03:1, eyebrow biru
+     10.36:1, semuanya di atas nilai off-white yang lama.
+     Konsekuensinya ada di --card-bg: kartu tidak boleh ikut putih. Lihat di
+     sana. */
+  --bg: #ffffff;
   --yellow: #ffff23;
   --blue: #1e3a8a;
   --blue-tint: #3b82f6;
@@ -31,17 +36,24 @@
      warna. 16.8:1 di atas --bg. */
   --ink-rgb: 15, 23, 42;
 
-  /* Surface: kartu di atas halaman. PUTIH, dan itu yang membalik hubungannya —
-     versi krem memakai kartu yang nyaris sewarna latarnya, jadi tepinya hilang
-     dan seluruh halaman terbaca kusam. */
-  --card-bg: #ffffff;
-  --card-border: 1px solid rgba(var(--ink-rgb), 0.08);
-  --card-inner: #f8fafc;
-  --card-inner-alt: #e2e8f0;
-  --card-inner-hover: #f1f5f9;
-  /* Dua lapis: satu garis kontak yang rapat, satu ambient yang lebar. Kartu
-     putih di atas off-white butuh keduanya — border saja terbaca datar. */
-  --card-shadow: 0 1px 2px rgba(var(--ink-rgb), 0.05), 0 10px 28px -14px rgba(var(--ink-rgb), 0.16);
+  /* Surface: kartu di atas halaman. Hubungannya DIBALIK: halamannya yang putih,
+     kartunya yang bernada biru — bukan sebaliknya seperti versi sebelumnya.
+     Aturan yang tetap dipegang dari versi krem: kartu tidak boleh sewarna
+     latarnya, karena begitu sewarna, tepinya hilang dan halaman terbaca kusam.
+     Kalau kartu dibiarkan #ffffff di atas latar putih, pemisahannya 1.000 —
+     hilang total. DIUKUR: #f5f9ff memberi 1.057, yang justru LEBIH baik
+     daripada kartu putih di atas off-white lama (1.046). */
+  --card-bg: #f5f9ff;
+  --card-border: 1px solid rgba(30, 58, 138, 0.1);
+  /* Satu tingkat lebih dalam dari --card-bg, supaya permukaan di dalam kartu
+     tetap terbaca berbeda dari badan kartunya. */
+  --card-inner: #eaf1fe;
+  --card-inner-alt: #d8e6fb;
+  --card-inner-hover: #e2ecfd;
+  /* Dua lapis: satu garis kontak yang rapat, satu ambient yang lebar. Border
+     saja terbaca datar. Warnanya BIRU, bukan abu netral: bayangan abu di atas
+     halaman putih-biru terbaca kotor. */
+  --card-shadow: 0 1px 2px rgba(30, 58, 138, 0.07), 0 14px 34px -14px rgba(30, 58, 138, 0.24);
 
   /* Surface: kartu saat sidebar melewati section gelap. Hue-nya diturunkan
      dari --dark-bg yang sama, bukan abu-abu netral — sidebar mengambang tepat
@@ -56,7 +68,10 @@
 
   /* Kaca hero — kartu statistik melayang di atas potret, jadi ia putih
      setengah tembus, bukan permukaan solid seperti kartu section. */
-  --glass-bg: rgba(255, 255, 255, 0.5);
+  /* Ikut bernada biru dan sedikit lebih pekat. Sebagian kartu ini menggantung
+     di luar potret, tepat di atas halaman — dan putih 0.5 di atas latar putih
+     lenyap sama sekali di bagian itu. */
+  --glass-bg: rgba(235, 243, 255, 0.62);
   --glass-blur: 20px;
 
   /* Dasar gelap tunggal untuk SEMUA section gelap (The Moment / Pedi dan The

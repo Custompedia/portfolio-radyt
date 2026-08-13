@@ -2616,10 +2616,12 @@
 .timeline-card {
   width: clamp(320px, 27vw, 500px);
   padding: clamp(22px, 1.65vw, 28px);
-  border: 1px solid rgba(var(--ink-rgb), 0.08);
+  /* Ikut token kartu, BUKAN --white: halaman sekarang putih murni, dan kartu
+     putih di atasnya pemisahannya 1.000 alias hilang sama sekali. */
+  border: var(--surface-border);
   border-radius: 20px;
-  background: var(--white);
-  box-shadow: 0 16px 36px -28px rgba(var(--ink-rgb), 0.34);
+  background: var(--surface);
+  box-shadow: 0 16px 36px -28px rgba(30, 58, 138, 0.36);
   transition: box-shadow 280ms var(--ease-out), border-color 280ms var(--ease-out);
 }
 
@@ -3254,8 +3256,8 @@
   .timeline-card {
     padding: 22px 20px 20px;
     border-radius: 18px;
-    background: linear-gradient(145deg, #ffffff, #f6f8fc);
-    box-shadow: 0 18px 36px -26px rgba(var(--ink-rgb), 0.36);
+    background: linear-gradient(145deg, var(--surface), #e6efff);
+    box-shadow: 0 18px 36px -26px rgba(30, 58, 138, 0.36);
   }
 
 
@@ -3278,5 +3280,158 @@
     border-color: rgba(var(--ink-rgb), 0.45);
     background: var(--accent);
     box-shadow: 0 0 0 4px var(--bg);
+  }
+}
+
+/* Journey cards use one editorial surface: a generous story panel paired with
+   a full-bleed chapter image, rather than a text card with a small thumbnail. */
+.timeline-card {
+  display: grid;
+  width: clamp(500px, 34vw, 660px);
+  min-height: clamp(292px, 20vw, 350px);
+  grid-template-columns: minmax(0, 1.16fr) minmax(190px, 0.84fr);
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  border: var(--card-border);
+  border-radius: 24px;
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+}
+
+.timeline-card:hover {
+  border-color: rgba(30, 58, 138, 0.24);
+  box-shadow: 0 24px 50px -30px rgba(30, 58, 138, 0.4);
+}
+
+.timeline-content {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(28px, 2.45vw, 46px);
+}
+
+.tl-card-index {
+  margin: 0 0 clamp(16px, 1.4vw, 24px);
+  color: var(--blue);
+  font-size: clamp(0.62rem, 0.65vw, 0.76rem);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.timeline-card .timeline-year {
+  margin: 0;
+  color: var(--blue);
+  font-size: clamp(3.5rem, 5vw, 5.75rem);
+  letter-spacing: -0.075em;
+}
+
+.timeline-year.digit-row {
+  overflow: visible;
+}
+
+/* Odometer tahun: JENDELA MASK DAN TINGGI SEL DIGIT HARUS SAMA PERSIS.
+   Mask memotong di padding box, jadi menaikkan tinggi/padding mask saja tidak
+   memberi ruang bagi glyph — ia justru memperlebar jendela dan membuat digit
+   TETANGGA ikut terlihat di tepi atas.
+   DIUKUR pada versi sebelumnya (height 1.16em + padding-block .08em): jendela
+   91px sementara satu digit hanya 78.39px — 12.6px angka lain bocor.
+   Ruang untuk ascender didapat dari line-height sel digitnya sendiri (1.16),
+   bukan dari padding mask, sehingga langkah track tetap sama dengan jendela. */
+.timeline-year .digit-mask {
+  height: 1.16em;
+  padding-block: 0;
+}
+
+.timeline-year .digit,
+.timeline-year .digit-literal {
+  height: 1.16em;
+  line-height: 1.16;
+}
+
+.timeline-card .timeline-title {
+  max-width: 16ch;
+  margin: clamp(14px, 1.3vw, 22px) 0 8px;
+  color: var(--ink);
+  font-size: clamp(1.35rem, 1.65vw, 1.95rem);
+  font-weight: 750;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+}
+
+.timeline-card .timeline-body {
+  max-width: 30ch;
+  font-size: clamp(0.9rem, 0.95vw, 1.05rem);
+  line-height: 1.55;
+}
+
+.timeline-media {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  align-self: stretch;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  margin: 0;
+  border-radius: 0;
+  background: var(--card-inner-alt);
+}
+
+.timeline-media::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(15, 23, 42, 0.12), transparent 38%);
+  content: '';
+  pointer-events: none;
+}
+
+.timeline-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms var(--ease-out);
+}
+
+.timeline-card:hover .timeline-media img {
+  transform: scale(1.045);
+}
+
+@media (max-width: 767px) {
+  .timeline-card {
+    display: flex;
+    width: auto;
+    min-height: 0;
+    flex-direction: column;
+    border-radius: 20px;
+  }
+
+  .timeline-content {
+    display: flex;
+    padding: 22px 20px 24px;
+  }
+
+  .timeline-media {
+    order: -1;
+    width: 100%;
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .timeline-card .timeline-year {
+    font-size: clamp(3.25rem, 15vw, 4.25rem);
+  }
+
+  .timeline-card .timeline-title {
+    margin-top: 12px;
+  }
+
+  .timeline-card::before {
+    top: 28px;
   }
 }

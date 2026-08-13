@@ -127,7 +127,7 @@ export const nav: NavItem[] = [
 export const hero = {
   eyebrow: 'Serial entrepreneur,',
   eyebrowSecond: 'Semarang',
-  headline: ['BUILDING BUSINESSES.', 'CREATING IMPACT.', 'SINCE 2014.'],
+  headline: ['BUILDING COMPANIES.', 'FROM THE GROUND UP.', 'SINCE 2014.'],
   subheadline: 'Creative agency and creative packaging from Semarang.',
   traits: ['Custompedia', 'Parcelin', 'Creasa', 'Voca', 'But Gawe'],
   ctaPrimary: { label: "Let's Talk", href: brand.whatsappUrl },
