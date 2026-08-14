@@ -1,4 +1,4 @@
-import { gsap, SplitText } from '../core/gsap';
+import { gsap, SplitText, EASE_OUT } from '../core/gsap';
 import type { AnimationModule } from '../core/module';
 import { $, $$, isDesktop } from '../core/utils';
 
@@ -25,6 +25,108 @@ const splits: SplitText[] = [];
 /** Satu viewport untuk intro, lalu satu untuk tiap chapter. */
 const HOLD_PER_ACT = 1;
 
+/**
+ * ABOUT DI MOBILE — bab yang dibacakan, bukan blok yang muncul.
+ *
+ * Sebelumnya tiap bab cuma `gsap.from({ autoAlpha: 0, y: 32 })` sekali jalan:
+ * satu blok utuh menyembul, selesai. Panggung berbabak yang dibangun untuk
+ * desktop tidak punya padanannya sama sekali di layar sempit.
+ *
+ * Versi ini memakai bahan yang sama dengan desktop — SplitText — tapi dengan
+ * kosakata vertikal:
+ *
+ *   - ANGKA BAB (01/02/03) tidak muncul, ia DIGESER ikut scroll. Angkanya
+ *     raksasa dan nyaris transparan, jadi geseran pelan itulah yang membuat
+ *     halaman terasa punya lapisan latar dan lapisan depan.
+ *   - JUDUL naik dari balik mask barisnya sendiri.
+ *   - ISI naik per baris dengan jeda 0.06 — cukup untuk terbaca sebagai teks
+ *     yang "dibacakan", tidak sampai terasa lambat.
+ *
+ * `once: true` di semuanya: bab yang sudah dibaca tidak boleh menghilang lagi
+ * saat user menggulung balik untuk membacanya ulang.
+ */
+function buildMobileChapters(chapters: HTMLElement[]): void {
+  chapters.forEach((chapter) => {
+    const figure = chapter.querySelector<HTMLElement>('.about-chapter-figure');
+    const title = chapter.querySelector<HTMLElement>('[data-about-title]');
+    const text = chapter.querySelector<HTMLElement>('[data-about-text]');
+
+    // Angka latar: parallax sepanjang bab melintasi layar. `ease: 'none'` supaya
+    // ia menempel pada jari, bukan mengejarnya.
+    if (figure) {
+      mobileTweens.push(
+        gsap.fromTo(
+          figure,
+          { yPercent: 18, autoAlpha: 0.5 },
+          {
+            yPercent: -18,
+            autoAlpha: 1,
+            ease: 'none',
+            scrollTrigger: { trigger: chapter, start: 'top bottom', end: 'bottom top', scrub: 0.8 },
+          },
+        ),
+      );
+    }
+
+    const lines = (el: HTMLElement | null): HTMLElement[] => {
+      if (!el) return [];
+      const split = new SplitText(el, { type: 'lines', linesClass: 'line', aria: 'none' });
+      splits.push(split);
+      return split.lines as HTMLElement[];
+    };
+
+    const titleLines = lines(title);
+    const textLines = lines(text);
+
+    // `set()` + `to()`, BUKAN `from()`. Sudah terbukti di halaman ini bahwa
+    // `.from()` yang punya ScrollTrigger tidak menuliskan keadaan awalnya —
+    // DIUKUR: bab ketiga masih 1400px di bawah lipatan tapi judulnya sudah di
+    // `y: 0` dan teksnya sudah `opacity: 1`, jadi tidak ada yang tersisa untuk
+    // disingkap. Lihat catatan panjangnya di brand-stages.ts.
+    if (titleLines.length) {
+      gsap.set(titleLines, { yPercent: 112 });
+      mobileTweens.push(
+        gsap.to(titleLines, {
+          yPercent: 0,
+          duration: 0.72,
+          stagger: 0.07,
+          ease: EASE_OUT,
+          scrollTrigger: { trigger: chapter, start: 'top 82%', once: true },
+        }),
+      );
+    }
+
+    if (textLines.length) {
+      gsap.set(textLines, { yPercent: 60, autoAlpha: 0 });
+      mobileTweens.push(
+        gsap.to(textLines, {
+          yPercent: 0,
+          autoAlpha: 1,
+          duration: 0.62,
+          stagger: 0.06,
+          ease: EASE_OUT,
+          scrollTrigger: { trigger: chapter, start: 'top 76%', once: true },
+        }),
+      );
+    }
+
+    // Kalau SplitText gagal (mis. teksnya kosong), bab tetap harus terlihat —
+    // jangan biarkan satu bab hilang gara-gara animasinya tidak terbentuk.
+    if (!titleLines.length && !textLines.length) {
+      gsap.set(chapter, { autoAlpha: 0, y: 32 });
+      mobileTweens.push(
+        gsap.to(chapter, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.7,
+          ease: EASE_OUT,
+          scrollTrigger: { trigger: chapter, start: 'top 84%', once: true },
+        }),
+      );
+    }
+  });
+}
+
 export const aboutStoryModule: AnimationModule = {
   name: 'about-story',
   skipOnReducedMotion: true,
@@ -38,17 +140,7 @@ export const aboutStoryModule: AnimationModule = {
     if (!section || !stage || !intro || chapters.length === 0) return;
 
     if (!isDesktop()) {
-      chapters.forEach((chapter) => {
-        mobileTweens.push(
-          gsap.from(chapter, {
-            autoAlpha: 0,
-            y: 32,
-            duration: 0.7,
-            ease: 'power3.out',
-            scrollTrigger: { trigger: chapter, start: 'top 84%', once: true },
-          }),
-        );
-      });
+      buildMobileChapters(chapters);
       return;
     }
 
@@ -159,7 +251,14 @@ export const aboutStoryModule: AnimationModule = {
   },
 
   destroy() {
-    while (mobileTweens.length) mobileTweens.pop()?.kill();
+    // ScrollTrigger-nya dibunuh EKSPLISIT: `tween.kill()` tidak ikut
+    // membubarkan trigger yang menempel padanya, dan trigger yatim itu akan
+    // tetap ikut dihitung tiap `refresh()` setelah modulnya dibongkar.
+    while (mobileTweens.length) {
+      const tween = mobileTweens.pop();
+      tween?.scrollTrigger?.kill();
+      tween?.kill();
+    }
     timeline?.scrollTrigger?.kill();
     timeline?.kill();
     timeline = null;
@@ -176,6 +275,14 @@ export const aboutStoryModule: AnimationModule = {
 
     $$('[data-about-intro], [data-about-chapter], .about-chapter-figure, [data-about-glow], [data-about-rail-fill]').forEach(
       (el) => gsap.set(el, { clearProps: 'all' }),
+    );
+
+    // Baris hasil SplitText versi mobile diberi keadaan awal lewat `gsap.set()`,
+    // dan `revert()` di atas sudah membuang pembungkusnya. Baris ini menjaga
+    // kasus di mana revert gagal menemukan pembungkusnya (mis. markup disentuh
+    // modul lain) supaya tidak ada teks yang tertinggal tersembunyi.
+    $$('[data-about-title] .line, [data-about-text] .line').forEach((el) =>
+      gsap.set(el, { clearProps: 'all' }),
     );
   },
 };

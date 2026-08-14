@@ -1,4 +1,4 @@
-import { gsap } from '../core/gsap';
+import { gsap, EASE_OUT } from '../core/gsap';
 import type { AnimationModule } from '../core/module';
 import { $, $$, isDesktop } from '../core/utils';
 
@@ -68,18 +68,79 @@ const stage = () => ({
   buttons: [$('.btn-primary'), $('.hero-secondary')].filter(Boolean) as HTMLElement[],
   supporting: [$('.hero-traits')].filter(Boolean) as HTMLElement[],
   paragraphs: [$('.hero-subheadline'), $('.hero-brands')].filter(Boolean) as HTMLElement[],
+  /** Hanya ada di bawah 768px — lihat `.hero-mobile-stat` di sections.css. */
+  mobileStats: $$('.hero-mobile-stat'),
 });
+
+/**
+ * INTRO MOBILE — koreografi terpisah, bukan versi kecil dari yang di atas.
+ *
+ * Sebelum ini `desktopOnly: true`, jadi di ponsel hero tidak punya pembukaan
+ * sama sekali: halaman langsung utuh di frame pertama. Padahal justru di sanalah
+ * mayoritas pengunjung mendarat.
+ *
+ * ATURAN YANG MEMBENTUK SELURUH KOREOGRAFI INI: intro TIDAK BOLEH menyentuh
+ * wordmark maupun potret. Keduanya bergantian menjadi elemen LCP halaman ini di
+ * mobile, dan menahannya sampai JS boot memindahkan LCP dari ~550ms ke detik
+ * ke-5 dan ke-6 — DIUKUR keduanya pada CPU throttle 4x:
+ *
+ *     potret disembunyikan   → LCP 5000ms (render delay 4880ms)
+ *     wordmark disembunyikan → LCP 6316ms (render delay 6146ms)
+ *     keduanya dibiarkan     → LCP  550ms (render delay  449ms)
+ *
+ * Jadi yang dianimasikan hanya lapisan di ATAS keduanya: headline, kartu angka,
+ * daftar merek, baris eyebrow, tombol. Itu pun sudah cukup — dua benda terbesar
+ * di layar sudah terpampang sejak frame pertama, dan yang tersisa untuk
+ * disingkap justru teks yang memang dibaca berurutan.
+ *
+ * Sisanya sengaja berbeda dari desktop —
+ *
+ *   - TANPA penerbangan dari luar layar. Di layar selebar 390px, wordmark yang
+ *     melintas horizontal cuma terbaca sebagai kedutan.
+ *   - TANPA kunci scroll. Di ponsel jempol sudah bergerak sebelum halaman
+ *     selesai dilukis; menahan scroll demi animasi terbaca sebagai halaman
+ *     macet, bukan halaman mewah.
+ *   - Di bawah satu detik, bukan 3.3. Kalau user menggulung di tengah jalan,
+ *     tweennya tetap tuntas — tidak ada yang tersangkut setengah.
+ */
+function buildMobileIntro(el: ReturnType<typeof stage>): gsap.core.Timeline {
+  gsap.set(el.headlineLines, { autoAlpha: 0, yPercent: 40 });
+  gsap.set(el.mobileStats, { autoAlpha: 0, scale: 0.82, y: 14 });
+  gsap.set(el.supporting, { autoAlpha: 0, y: 16 });
+  gsap.set(el.lead, { autoAlpha: 0, y: 12 });
+  gsap.set(el.buttons, { autoAlpha: 0, y: 12 });
+
+  const tl = gsap.timeline({ delay: 0.08 });
+
+  tl.to(el.headlineLines, { autoAlpha: 1, yPercent: 0, duration: 0.55, stagger: 0.07, ease: EASE_OUT }, 0);
+  tl.to(el.mobileStats, { autoAlpha: 1, scale: 1, y: 0, duration: 0.5, stagger: 0.08, ease: EASE_OUT }, 0.18);
+  tl.to(el.supporting, { autoAlpha: 1, y: 0, duration: 0.45, ease: EASE_OUT }, 0.26);
+  tl.to(el.lead, { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.06, ease: EASE_OUT }, 0.32);
+  tl.to(el.buttons, { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.06, ease: EASE_OUT }, 0.38);
+
+  return tl;
+}
 
 export const preloaderModule: AnimationModule = {
   name: 'intro',
-  desktopOnly: true,
   skipOnReducedMotion: true,
+  /**
+   * Dulu `desktopOnly`. Sekarang dua koreografi hidup berdampingan, dan
+   * `rebuildOnResize` TIDAK dipasang dengan sengaja: `spent` menyegel intro
+   * setelah sekali jalan, jadi memutar layar atau melewati breakpoint tidak
+   * boleh memutarnya lagi.
+   */
 
   init() {
     const el = stage();
     const { wordmark, letters } = el;
-    if (!wordmark || letters.length === 0 || !isDesktop() || spent) return;
+    if (!wordmark || letters.length === 0 || spent) return;
     spent = true;
+
+    if (!isDesktop()) {
+      timeline = buildMobileIntro(el);
+      return;
+    }
 
     const rect = wordmark.getBoundingClientRect();
     const xToCenter = window.innerWidth / 2 - (rect.left + rect.width / 2);
@@ -163,8 +224,10 @@ export const preloaderModule: AnimationModule = {
     });
     gsap.set(el.portrait, { clearProps: 'opacity,visibility,scale,transformOrigin' });
     gsap.set(el.navSeps, { clearProps: 'height' });
-    gsap.set(el.headlineLines, { clearProps: 'opacity,visibility,scale' });
+    gsap.set(el.headlineLines, { clearProps: 'opacity,visibility,scale,yPercent' });
     gsap.set(el.statCards, { clearProps: 'opacity,visibility,filter' });
+    gsap.set(el.mobileStats, { clearProps: 'opacity,visibility,scale,y' });
+    gsap.set([...el.supporting, ...el.lead, ...el.buttons], { clearProps: 'y' });
     gsap.set([...el.navLinks, ...el.lead, ...el.buttons, ...el.supporting, ...el.paragraphs], {
       clearProps: 'opacity,visibility',
     });

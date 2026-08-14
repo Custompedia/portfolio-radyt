@@ -1294,11 +1294,23 @@
   color: var(--white);
 }
 
+/* LEBIH LEBAR DARI KARTUNYA — 124%, menjorok 12% ke kiri dan ke kanan.
+   Kelebihan itu bukan hiasan, itu bahan bakar parallax: work-cards.ts menggeser
+   poster ±8% dari lebarnya sendiri (= 9.9% dari lebar kartu) saat kartunya
+   menyeberang layar, jadi gambar mengapung di dalam bingkainya alih-alih ikut
+   kaku. 12% overhang > 9.9% geseran, jadi tepi kartu tidak pernah kosong.
+   Berkas sumbernya 1024×1536 di kotak ~330×430, jadi 124% tidak menambah beban
+   unduh dan tidak melunturkan ketajaman. */
 .work-poster,
 .work-bg {
   position: absolute;
-  inset: 0;
-  width: 100%;
+  top: 0;
+  left: -12%;
+  width: 124%;
+  /* WAJIB. `img, video { max-width: 100% }` di base.css memotong 124% itu balik
+     jadi 100% tanpa suara — DIUKUR: lebar poster tetap 272px di kartu 272px,
+     dan geseran parallax langsung menyingkap latar kartu di tepi kanan. */
+  max-width: none;
   height: 100%;
   object-fit: cover;
 }

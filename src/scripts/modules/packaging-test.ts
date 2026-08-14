@@ -1,4 +1,4 @@
-import { gsap } from '../core/gsap';
+import { gsap, EASE_OUT } from '../core/gsap';
 import type { AnimationModule } from '../core/module';
 import { $, $$, isDesktop, prefersReducedMotion } from '../core/utils';
 import type { PediPose, PediSceneController } from './pedi-scene';
@@ -14,10 +14,77 @@ const TIMELINE_VIEWPORTS = 5.6;
 const STACK_HOLD_VIEWPORTS = 1;
 
 let timeline: gsap.core.Timeline | null = null;
+let compact: gsap.core.Timeline | null = null;
+let compactReveal: gsap.core.Tween | null = null;
 let pedi: PediSceneController | null = null;
 let generation = 0;
 
 const pose: PediPose = { turn: 0, focus: 0 };
+
+/**
+ * PEDI DI LAYAR ≤1100px — versi ringkas, bukan versi kecil.
+ *
+ * Sebelum ini seluruh koreografi berhenti di penjaga lebar, tapi `.glb`-nya
+ * 813 KB tetap diunduh dengan `fetchpriority="high"` di setiap viewport. Jadi
+ * ponsel membayar ongkos penuh sebuah scene 3D untuk mendapat SATU frame diam —
+ * posisi terburuk dari dua pilihan yang ada.
+ *
+ * Versi ringkas ini membalik perhitungan itu tanpa menambah unduhan sedikit pun:
+ * modelnya berputar tiga perempat lingkaran mengikuti scroll, dan kamera
+ * menutup sedikit di ujungnya.
+ *
+ * TANPA PIN dan TANPA `--stack-hold`. Di lebar ini stack.ts sudah memegang pin
+ * sendiri untuk section ini; menambah pin kedua akan menyisipkan spacer kedua
+ * dan menggeser posisi dokumen semua section di bawahnya. Yang dipakai di sini
+ * cuma scrub biasa sepanjang tinggi section yang memang sudah ada.
+ *
+ * `focus` berhenti di 0.55, bukan 1: pada lebar sempit `updateCamera` menarik
+ * kamera sampai kotaknya melewati tepi kanvas, dan yang terlihat cuma potongan.
+ */
+function buildCompactScene(el: {
+  section: HTMLElement;
+  stage: HTMLElement;
+  moments: HTMLElement[];
+  orbits: HTMLElement | null;
+  outro: HTMLElement;
+  renderPedi: () => void;
+}): void {
+  gsap.set(el.stage, { autoAlpha: 1, scale: 1, xPercent: 0, yPercent: 0, rotation: 0 });
+  pose.turn = -Math.PI * 0.75;
+
+  compact = gsap.timeline({
+    onUpdate: el.renderPedi,
+    scrollTrigger: {
+      trigger: el.section,
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: 0.8,
+    },
+  });
+
+  compact
+    .to(pose, { turn: 0, duration: 0.7, ease: 'none' }, 0)
+    .to(pose, { focus: 0.55, duration: 0.3, ease: 'none' }, 0.7);
+
+  // Teks dan orbit tetap disingkap seperti elemen lain di halaman: sekali jalan
+  // saat masuk layar, bukan di-scrub. Yang di-scrub cukup benda 3D-nya.
+  //
+  // Tween ini BERDIRI SENDIRI, tidak disisipkan ke `compact`: tween yang punya
+  // ScrollTrigger sendiri tidak boleh jadi anak timeline yang juga di-scrub —
+  // keduanya akan sama-sama mengatur waktunya dan hasilnya tidak menentu.
+  const reveal = [...el.moments, el.outro, el.orbits].filter(Boolean) as HTMLElement[];
+  if (reveal.length) {
+    gsap.set(reveal, { autoAlpha: 0, y: 24 });
+    compactReveal = gsap.to(reveal, {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.08,
+      ease: EASE_OUT,
+      scrollTrigger: { trigger: el.section, start: 'top 70%', once: true },
+    });
+  }
+}
 
 export const packagingTestModule: AnimationModule = {
   name: 'packaging-test',
@@ -63,7 +130,10 @@ export const packagingTestModule: AnimationModule = {
     pose.turn = 0;
     pose.focus = 0;
 
-    if (!isDesktop() || window.innerWidth <= 1100 || prefersReducedMotion()) return;
+    if (!isDesktop() || window.innerWidth <= 1100 || prefersReducedMotion()) {
+      if (!prefersReducedMotion()) buildCompactScene({ section, stage, moments, orbits, outro, renderPedi });
+      return;
+    }
 
     pose.turn = -Math.PI * 1.5;
     gsap.set(intro, { autoAlpha: 0, y: 36 });
@@ -135,6 +205,14 @@ export const packagingTestModule: AnimationModule = {
     timeline?.scrollTrigger?.kill();
     timeline?.kill();
     timeline = null;
+    compact?.scrollTrigger?.kill();
+    compact?.kill();
+    compact = null;
+    compactReveal?.scrollTrigger?.kill();
+    compactReveal?.kill();
+    compactReveal = null;
+    pose.turn = 0;
+    pose.focus = 0;
     pedi?.dispose();
     pedi = null;
     const stage = $<HTMLElement>('[data-pedi-stage]');

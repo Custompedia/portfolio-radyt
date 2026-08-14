@@ -258,8 +258,40 @@ html.lenis body {
   visibility: hidden;
 }
 
+/* Panggung intro hero di MOBILE. Alasannya sama dengan aturan di atas, tapi
+   masalahnya baru terlihat setelah intro mobile ada: modul intro baru jalan
+   setelah `whenFontsReady()`, dan jeda itu TERUKUR ~280ms di 390px — cukup lama
+   untuk hero tampil utuh dulu, lalu mendadak disembunyikan, lalu beranimasi
+   masuk. Yang terbaca user bukan pembukaan, melainkan kedipan.
+
+   Urutan di main.ts yang membuat ini aman: `initModules()` (yang menulis
+   keadaan awal intro) dipanggil SEBELUM `js-loading` dilepas, jadi tidak pernah
+   ada satu frame pun di antara keduanya.
+
+   `.hero-portrait` SENGAJA TIDAK ADA DI DAFTAR INI, dan itu keputusan
+   performa, bukan kelupaan: potret adalah elemen LCP halaman ini di mobile.
+   Menyembunyikannya sampai JS boot menunda LCP dari ~300ms jadi 5000ms —
+   DIUKUR pada CPU throttle 4x, dengan render delay 4880ms. Satu animasi masuk
+   tidak sepadan dengan itu. Potret dibiarkan tampil sejak frame pertama; yang
+   dianimasikan intro cuma teks dan kartu di atasnya. */
+@media (max-width: 767px) {
+  .js-loading .hero-headline-line,
+  .js-loading .hero-mobile-stat,
+  .js-loading .hero-traits,
+  .js-loading .hero-eyebrow {
+    visibility: hidden;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .js-loading [data-reveal] {
+    visibility: visible;
+  }
+
+  .js-loading .hero-headline-line,
+  .js-loading .hero-mobile-stat,
+  .js-loading .hero-traits,
+  .js-loading .hero-eyebrow {
     visibility: visible;
   }
 

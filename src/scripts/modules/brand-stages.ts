@@ -106,48 +106,24 @@ export const brandStagesModule: AnimationModule = {
     const desktop = isDesktop();
 
     context = gsap.context(() => {
-      const profile = $<HTMLElement>('[data-about-profile]');
-      if (profile) {
-        gsap.from(profile, {
-          autoAlpha: 0,
-          y: 48,
-          duration: 0.9,
-          ease: 'power4.out',
-          scrollTrigger: { trigger: profile, start: 'top 78%', once: true },
-        });
-
-        const growth = $<HTMLElement>('[data-about-growth]', profile);
-        const rings = growth ? $$<SVGCircleElement>('[data-growth-ring]', growth) : [];
-        const marks = growth ? $$<SVGCircleElement>('[data-growth-mark]', growth) : [];
-        const core = growth ? $<SVGCircleElement>('[data-growth-core]', growth) : null;
-        if (growth && core && rings.length) {
-          rings.forEach((ring) => {
-            const length = ring.getTotalLength();
-            gsap.set(ring, { strokeDasharray: length, strokeDashoffset: length });
-          });
-
-          gsap.timeline({ scrollTrigger: { trigger: profile, start: 'top 76%', end: 'bottom 34%', scrub: 0.7 } })
-            .fromTo(core, { scale: 0.35, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.18, ease: 'power2.out' })
-            .to(rings, { strokeDashoffset: 0, stagger: 0.14, duration: 0.62, ease: 'power2.inOut' }, '-=0.08')
-            .from(marks, { scale: 0, autoAlpha: 0, stagger: 0.09, duration: 0.18, ease: 'back.out(1.4)' }, '-=0.18');
-        }
-      }
-
-      const about = $<HTMLElement>('[data-about-stories]');
-      const stories = about ? $$<HTMLElement>('[data-about-story]', about) : [];
-      if (about && stories.length) {
-        gsap.from(stories, {
-          opacity: 0,
-          y: 42,
-          rotateX: -9,
-          transformOrigin: '50% 100%',
-          stagger: 0.13,
-          duration: 0.9,
-          ease: 'power4.out',
-          scrollTrigger: { trigger: about, start: 'top 76%', once: true },
-        });
-      }
-
+      /*
+       * DIBUANG: blok profil About beserta cincin pertumbuhan SVG-nya
+       * (`[data-about-profile]`, `[data-about-growth]`, `[data-growth-ring]`,
+       * `[data-growth-mark]`, `[data-growth-core]`) dan blok cerita About
+       * (`[data-about-stories]`, `[data-about-story]`).
+       *
+       * Bukan karena tidak terpakai lagi, tapi karena SUDAH tidak pernah
+       * terpakai: markup About ditulis ulang jadi panggung berbabak
+       * (`[data-about-chapter]`, lihat about-story.ts) dan seluruh kait di atas
+       * ikut hilang bersamanya. DIUKUR di DOM langsung — kelima selector itu
+       * mengembalikan NOL elemen, jadi ~40 baris ini tidak pernah dieksekusi
+       * sekali pun sejak markupnya berubah.
+       *
+       * Di antaranya ada animasi menggambar cincin yang ditulis tangan dengan
+       * `getTotalLength()` + `strokeDasharray`/`strokeDashoffset`. Itu memang
+       * kandidat kuat untuk DrawSVGPlugin — tapi mengganti kode mati dengan
+       * kode mati yang lebih rapi tetap saja kode mati.
+       */
       const companyGrid = $<HTMLElement>('.company-grid');
       const companyShowcases = companyGrid ? $$<HTMLElement>('[data-company-showcase]', companyGrid) : [];
       if (companyGrid && companyShowcases.length) {
