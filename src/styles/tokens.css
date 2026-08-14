@@ -1,17 +1,3 @@
-/* Design tokens — diambil dari computed style situs referensi (heynesh.com).
- *
- * Semua ukuran adalah `vw` di dalam `clamp()`. Referensinya tidak punya
- * container ber-max-width sama sekali: satu-satunya sumbu adalah lebar
- * viewport, dan tipe, radius, padding, serta lebar rail semuanya menskala
- * dari situ. Itulah sebabnya halamannya terbaca sebagai satu objek yang
- * dirancang, bukan tumpukan blok — dan kenapa `clamp()` per-token dengan
- * radius `px` (versi sebelumnya) selalu melenceng di lebar layar lain.
- *
- * Angka yang tertulis di sini VERIFIED: diambil dari
- * nesh-staging.webflow.shared.*.min.css dan dari getComputedStyle pada
- * viewport 1512x950.
- */
-
 :root {
   /* --- Palette: Blue Bone Sand --- */
   --bg: #f7f4ec;
@@ -61,13 +47,6 @@
   --work-scrim: linear-gradient(rgba(0, 0, 0, 0.3), rgba(51, 51, 51, 0.03) 50%, rgba(0, 0, 0, 0.4));
   --work-dim: rgba(0, 0, 0, 0.6);
 
-  /* Scrollbar halaman.
-     Track transparan TIDAK menampilkan section yang sedang lewat: lajur
-     scrollbar ada di luar kotak konten, jadi yang tembus di belakangnya adalah
-     latar kanvas (--bg, off-white) yang dipropagasi dari <body> — tetap terang
-     bahkan saat seluruh layar sedang gelap, dan itulah pita putih kontras di
-     tepi kanan. Karena itu track-nya diwarnai eksplisit dan ikut dibalik oleh
-     theme.ts lewat .is-dark-scroll di bawah. */
   --scrollbar-track: transparent;
   --scrollbar-thumb: rgba(var(--ink-rgb), 0.22);
   --scrollbar-thumb-hover: rgba(var(--ink-rgb), 0.4);
@@ -198,12 +177,11 @@
    *                 kanan bearing-nya nol, jadi hanya sisi kiri yang perlu
    *                 dikoreksi.
    *
-   * Ukurannya lalu diturunkan dari ruang yang benar-benar tersedia — lebar
-   * layar dikurangi gutter kiri-kanan dan sedikit ruang napas tambahan —
-   * supaya wordmark tetap terasa besar tanpa menempel ke tepi layar. */
+   * Ukurannya diturunkan dari ruang aman penuh di antara gutter kiri-kanan,
+   * agar tinta wordmark mengisi layar semaksimal mungkin tanpa terpotong. */
   --wordmark-ink: 4.6405;
   --wordmark-bearing-l: 0.0625;
-  --wordmark-size: calc((100vw - 3.5 * var(--gutter)) / var(--wordmark-ink));
+  --wordmark-size: calc((100vw - 2 * var(--gutter)) / var(--wordmark-ink));
   --wordmark-scale-y: 1.1;
 
   /* Kaki huruf (baseline, bukan kotak barisnya) jatuh di sekitar 0.852 ×
@@ -225,9 +203,9 @@
   --radius-lg: 0.83vw;
   --radius-xs: 0.42vw;
   --radius-pill: 5.14vw;
-  /* Sudut atas section yang naik menimpa section di bawahnya (Pedi → The Work →
-     footer). Jauh lebih besar dari radius kartu: yang dibulatkan di sini selebar
-     layar, dan pada lebar itu radius kartu tidak terbaca sebagai lengkung sama
+  /* Sudut atas The Work saat naik menimpa Pedi. Jauh lebih besar dari radius
+     kartu: yang dibulatkan di sini selebar layar, dan pada lebar itu radius
+     kartu tidak terbaca sebagai lengkung sama
      sekali. Dibatasi px supaya tetap wajar di layar sangat lebar/sempit. */
   --stack-radius: clamp(16px, 2vw, 34px);
 
@@ -253,27 +231,12 @@
   --theme-dur: 0.3s;
 }
 
-/* Layar lebar-pendek (rasio ≳ 2.15). Di sini wordmark full-bleed tingginya
-   ~46vh dan kolom teks di bawahnya tidak lagi muat sampai kaki hero — DIUKUR
-   pada 1920x780: kaki baris tombol jatuh di 764px sementara baris merek mulai
-   di 729px, jadi keduanya bertindih. Membatasi wordmark ke 34vh mengembalikan
-   ~116px ke kolom teks. Konsekuensinya wordmark berhenti sebelum gutter di
-   rasio seperti itu, dan itu memang disengaja: wordmark yang tidak menyisakan
-   ruang untuk isinya bukan lagi latar, ia penghalang.
-   `min-width` menjaga aturan ini tidak ikut kena ponsel lanskap, yang punya
-   susunan hero-nya sendiri. */
-@media (min-aspect-ratio: 43/20) and (min-width: 768px) {
-  :root {
-    --wordmark-size: 34vh;
-  }
-}
-
 /* Dipasang theme.ts di <html> selama section gelap menguasai layar. Hanya
    menyentuh scrollbar — token permukaan sengaja TIDAK ikut dibalik di sini,
    karena selector ini kena seluruh halaman dan akan menggelapkan juga kartu
    section terang yang masih terlihat. */
 .is-dark-scroll {
-  --scrollbar-track: var(--dark-bg);
+  --scrollbar-track: transparent;
   --scrollbar-thumb: rgba(255, 255, 255, 0.22);
   --scrollbar-thumb-hover: rgba(255, 255, 255, 0.42);
 }

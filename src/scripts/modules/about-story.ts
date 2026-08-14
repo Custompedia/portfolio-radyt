@@ -19,6 +19,7 @@ import { $, $$, isDesktop } from '../core/utils';
  */
 
 let timeline: gsap.core.Timeline | null = null;
+const mobileTweens: gsap.core.Tween[] = [];
 const splits: SplitText[] = [];
 
 /** Satu viewport untuk intro, lalu satu untuk tiap chapter. */
@@ -26,7 +27,6 @@ const HOLD_PER_ACT = 1;
 
 export const aboutStoryModule: AnimationModule = {
   name: 'about-story',
-  desktopOnly: true,
   skipOnReducedMotion: true,
   rebuildOnResize: true,
 
@@ -35,7 +35,22 @@ export const aboutStoryModule: AnimationModule = {
     const stage = $('[data-about-stage]');
     const intro = $('[data-about-intro]');
     const chapters = $$('[data-about-chapter]');
-    if (!section || !stage || !intro || chapters.length === 0 || !isDesktop()) return;
+    if (!section || !stage || !intro || chapters.length === 0) return;
+
+    if (!isDesktop()) {
+      chapters.forEach((chapter) => {
+        mobileTweens.push(
+          gsap.from(chapter, {
+            autoAlpha: 0,
+            y: 32,
+            duration: 0.7,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: chapter, start: 'top 84%', once: true },
+          }),
+        );
+      });
+      return;
+    }
 
     const glow = $('[data-about-glow]');
     const rails = $$('[data-about-rail-fill]');
@@ -144,6 +159,7 @@ export const aboutStoryModule: AnimationModule = {
   },
 
   destroy() {
+    while (mobileTweens.length) mobileTweens.pop()?.kill();
     timeline?.scrollTrigger?.kill();
     timeline?.kill();
     timeline = null;

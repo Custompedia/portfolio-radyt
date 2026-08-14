@@ -21,9 +21,8 @@ function apply(): void {
     if (dark) el.setAttribute('data-theme', 'dark');
     else el.removeAttribute('data-theme');
   }
-  // Lajur scrollbar ada di luar kotak konten: yang tembus di belakangnya bukan
-  // section yang sedang lewat, melainkan latar kanvas yang terang. Satu-satunya
-  // cara membuatnya ikut gelap adalah memberi tahu <html> di sini.
+  // Thumb scrollbar ikut tema agar tetap terbaca, tetapi track-nya transparan
+  // supaya tidak membentuk pita kontras di tepi viewport.
   document.documentElement.classList.toggle('is-dark-scroll', dark);
 }
 

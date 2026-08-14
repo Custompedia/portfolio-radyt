@@ -4,6 +4,11 @@ import { prefersReducedMotion } from './utils';
 
 let lenis: Lenis | null = null;
 
+const ANCHOR_MIN_DURATION = 1.25;
+const ANCHOR_MAX_DURATION = 2.8;
+const ANCHOR_PX_PER_SECOND = 1800;
+const anchorEase = (t: number): number => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
+
 /**
  * Lenis dijalankan dari ticker GSAP (bukan rAF sendiri) supaya scroll position,
  * tween, dan ScrollTrigger dievaluasi di frame yang sama. `lagSmoothing(0)`
@@ -51,9 +56,13 @@ export function initAnchorLinks(): void {
 
       event.preventDefault();
       if (lenis) {
-        lenis.scrollTo(target as HTMLElement, { offset: 0, duration: 1.1 });
+        const duration = Math.min(
+          ANCHOR_MAX_DURATION,
+          Math.max(ANCHOR_MIN_DURATION, Math.abs(target.getBoundingClientRect().top) / ANCHOR_PX_PER_SECOND),
+        );
+        lenis.scrollTo(target as HTMLElement, { offset: 0, duration, easing: anchorEase });
       } else {
-        target.scrollIntoView({ behavior: 'smooth' });
+        target.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
       }
     });
   });

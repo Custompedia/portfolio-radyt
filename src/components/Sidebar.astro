@@ -116,12 +116,20 @@ import { brand, clients, hero, nav, social, stats } from '../data/site';
                   <Icon name={item.icon} size={14} />
                 </span>
                 <span class="nav-link-label">{item.label}</span>
+                {/* Panah dan ikon-ikon `panel-only` di bawah HANYA hidup di
+                    panel mobile; di desktop semuanya `display:none` sehingga
+                    tidak ikut terukur GhostEngine saat link ini terbang. */}
+                <span class="nav-link-go panel-only" aria-hidden="true">
+                  <Icon name="arrow" size={13} />
+                </span>
               </a>
             </li>
           ))
         }
       </ul>
     </nav>
+
+    <p class="panel-label panel-label--clients">Trusted by</p>
 
     <div class="nav-card nav-clients">
       <span class="nav-card-bg" data-ghost-fade></span>
@@ -155,10 +163,18 @@ import { brand, clients, hero, nav, social, stats } from '../data/site';
       </div>
     </div>
 
+    <p class="panel-label panel-label--contact">Get in touch</p>
+
     <div class="nav-card nav-email">
       <span class="nav-card-bg" data-ghost-fade></span>
       <a class="nav-email-btn" href={`mailto:${brand.email}`} data-ghost-fade>
+        <span class="nav-email-icon panel-only" aria-hidden="true">
+          <Icon name="mail" size={16} />
+        </span>
         <span class="nav-email-text">{brand.email}</span>
+        <span class="nav-email-go panel-only" aria-hidden="true">
+          <Icon name="arrow" size={13} />
+        </span>
       </a>
     </div>
 

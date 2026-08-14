@@ -40,14 +40,19 @@ export interface Stat {
 export interface ClientLogo {
   name: string;
   src: string;
-  shape: 'landscape' | 'square';
+  /**
+   * Menentukan TINGGI BARIS logo di marquee, bukan lebarnya — lambang yang
+   * memanjang ke bawah harus duduk di baris yang lebih pendek, kalau tidak ia
+   * jadi dua kali lebih tinggi dari wordmark di sebelahnya. Di Section 05
+   * `portrait` juga yang mengunci lebar kartunya (lihat .network-orbit--portrait).
+   */
+  shape: 'landscape' | 'square' | 'portrait';
   desktopWidth: number;
   mobileWidth: number;
   scale?: number;
 }
 
-/** Satu bab perjalanan. Sengaja hanya tiga field: handoff meminta seluruh
- *  mini-stat lama dibuang karena tidak ada sumbernya. */
+/** Satu bab perjalanan. */
 export interface JourneyEntry {
   year: string;
   title: string;
@@ -55,7 +60,7 @@ export interface JourneyEntry {
   image: string;
 }
 
-/** Kartu Section 04. Formatnya seragam: nama · label · deskripsi. */
+/** Kartu Section 04. */
 export interface Company {
   name: string;
   label: string;
@@ -147,9 +152,18 @@ export const stats: Stat[] = [
 
 /**
  * Logo klien — dipakai bersama oleh marquee sidebar dan baris "Trusted by" di
- * Section 05. Isinya hanya hubungan langsung yang bisa dipertanggungjawabkan;
- * handoff melarang logo lama yang hubungannya tidak jelas (Airbnb, ByteDance,
- * Pertamina, Astra, HM Sampoerna, Shopee, Cosmax, Kahf, Pegipegi, BTN).
+ * Section 05.
+ *
+ * Airbnb dan HM Sampoerna dulu dilarang handoff (radhytam-copy-handoff.md:266)
+ * bersama ByteDance, Pertamina, Astra, Shopee, Cosmax, Kahf, Pegipegi, dan BTN.
+ * Keduanya dimasukkan lagi atas permintaan langsung pemilik situs; sisa daftar
+ * larangan itu TETAP berlaku dan filenya sengaja tidak ada di sini.
+ *
+ * `desktopWidth`/`mobileWidth` adalah lebar KOTAKNYA, dan karena logonya
+ * `object-fit: contain` yang menentukan skala nyata adalah tinggi baris (lihat
+ * `shape`). Karena itu tiap lebar di bawah dihitung dari rasio asli file:
+ * lebar ≈ tinggi baris × (w/h) — kalau dilebihkan, yang bertambah cuma jarak
+ * kosong antar logo, bukan ukuran logonya.
  *
  * TODO aset: Bank Jateng, PLN, Time International, Mondelez, Paragon Corp, dan
  * Unilever ada di shortlist handoff tapi filenya belum masuk ke public/images.
@@ -158,8 +172,51 @@ export const clients: ClientLogo[] = [
   { name: 'Gojek', src: '/images/logo-gojek.webp', shape: 'landscape', desktopWidth: 3.75, mobileWidth: 60, scale: 0.9 },
   { name: 'GoTo', src: '/images/GoTo_logo.webp', shape: 'landscape', desktopWidth: 3.25, mobileWidth: 52, scale: 0.86 },
   { name: 'Tokopedia', src: '/images/Logo-Tokopedia.webp', shape: 'landscape', desktopWidth: 4.6, mobileWidth: 74 },
-  { name: 'Pemprov Jawa Tengah', src: '/images/Coat_of_arms_of_Central_Java.svg.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 28, scale: 0.65 },
+  // 1177×1286 → rasio 0.92.
+  // `scale` naik dari 0.65: angka lama mengompensasi logo yang dulu meluber
+  // melewati tinggi barisnya (lihat .marquee-logo). Setelah tingginya benar,
+  // 0.65 membuatnya jadi yang paling kerdil di barisan.
+  { name: 'Pemprov Jawa Tengah', src: '/images/Coat_of_arms_of_Central_Java.svg.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 28, scale: 0.85 },
   { name: 'Roda Roda', src: '/images/Roda%20Roda%20Background%20Removed.webp', shape: 'landscape', desktopWidth: 4.35, mobileWidth: 70 },
+  // 1200×1563 → rasio 0.77, paling menjulang dari semuanya; satu-satunya yang
+  // butuh baris `portrait`.
+  {
+    name: 'Pemkot Semarang',
+    src: '/images/Lambang_Kota_Semarang%20(1).webp',
+    shape: 'portrait',
+    desktopWidth: 1,
+    mobileWidth: 16,
+    scale: 0.92,
+  },
+  // 869×454 → rasio 1.91, satu-satunya tambahan yang benar-benar landscape.
+  {
+    name: 'Unika Soegijapranata',
+    src: '/images/Unika_Soegijapranata_Talenta_Propatria_et_Humaniora.webp',
+    shape: 'landscape',
+    desktopWidth: 2.95,
+    mobileWidth: 42,
+    // Satu-satunya logo yang mengisi penuh tinggi baris; diturunkan sedikit
+    // supaya tidak lebih menjulang dari wordmark di kiri-kanannya.
+    scale: 0.9,
+  },
+  // 840×859 → rasio 0.98.
+  {
+    name: 'HM Sampoerna',
+    src: '/images/logo-hm-sampoerna-115507099816te6s4zjge.webp',
+    shape: 'square',
+    desktopWidth: 1.25,
+    mobileWidth: 20,
+  },
+  // 2126×1874 → rasio 1.13.
+  { name: 'Iris', src: '/images/Logo%20Iris.webp', shape: 'square', desktopWidth: 1.45, mobileWidth: 23 },
+  // 275×308 → rasio 0.89.
+  {
+    name: 'Airbnb',
+    src: '/images/airbnb-logo-png_seeklogo-284907.webp',
+    shape: 'square',
+    desktopWidth: 1.15,
+    mobileWidth: 18,
+  },
 ];
 
 /**
@@ -169,7 +226,7 @@ export const clients: ClientLogo[] = [
 export const about = {
   eyebrow: 'Three Companies, One Desk',
   headline: 'About Radhyta',
-  lead: 'Berawal dari satu meja pada 2014, Radhyta membangun Custompedia, Parcelin, dan Creasa dari Semarang. Kini, ketiganya melayani bisnis di seluruh Indonesia.',
+  lead: 'Berawal dari satu meja pada 2014, Radhyta membangun Custompedia, Parcelin, dan Creasa di Semarang. Kini, ketiganya melayani bisnis di seluruh Indonesia.',
   stories: [
     {
       title: 'Built from zero',
@@ -184,7 +241,6 @@ export const about = {
       body: 'Di luar pekerjaan, Radhyta adalah seorang suami dan ayah. Ia meluangkan waktu untuk gym, menjelajah tempat baru, dan merawat kecintaannya pada hewan. Semarang tetap menjadi tempat semuanya dimulai.',
     },
   ],
-  location: 'Semarang, Indonesia',
 };
 
 /**
@@ -195,7 +251,6 @@ export const about = {
  * di `companies`.
  */
 export const journey = {
-  eyebrow: 'Since 2014',
   headline: ['FROM ONE ONLINE SHOP', 'TO BUILDING THREE COMPANIES.'],
   entries: [
     {

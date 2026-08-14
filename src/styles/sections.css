@@ -234,6 +234,8 @@
 }
 
 .hero-eyebrow {
+  display: flex;
+  flex-direction: column;
   font-family: var(--font-label);
   font-size: var(--fs-label);
   font-weight: 700;
@@ -241,6 +243,10 @@
   line-height: 1;
   text-transform: uppercase;
   color: var(--accent);
+}
+
+.hero-mobile-about-eyebrow {
+  display: none;
 }
 
 /* Nama lengkap versi terbaca. Wordmark raksasa di latar cuma memuat "RADHYTA",
@@ -351,6 +357,10 @@
 
 .hero-mobile-stat {
   display: none;
+}
+
+.hero-mobile-cards {
+  display: contents;
 }
 
 .hero-traits {
@@ -575,11 +585,15 @@
      Sebelumnya masing-masing tingginya lahir dari padding + metrik font-nya
      sendiri: pill brand jadi ~34px, CTA ~33px, tombol menu 44px — bertingkat
      dan terbaca miring. Dengan `height` eksplisit + `align-items:center`,
-     ketiganya rata berapa pun ukuran fontnya nanti. */
+     ketiganya rata berapa pun ukuran fontnya nanti.
+     Radiusnya ikut disamakan: pill brand mewarisi `--radius-xs` (8px) dari
+     aturan desktop, sementara CTA & tombol menu 12px — tingginya sama tapi
+     sudutnya beda, dan itu yang terbaca sebagai kartu yang tidak sejajar. */
   .brand,
   .sidebar > .btn-primary,
   .mobile-menu-trigger {
     height: var(--topbar-ctl-h);
+    border-radius: 12px;
   }
 
   /* Lebar capsule mengikuti isi label + ikon, bukan rasio kotak. */
@@ -594,7 +608,19 @@
     font-size: 1.05rem;
   }
 
-  /* Panel menu adalah kanvas sendiri agar navigasi tidak bersaing dengan hero. */
+  /* ------------------------------------------------------------------------
+     PANEL MENU MOBILE
+
+     Bahasa visualnya sama persis dengan sisa situs: alas bone (`--bg`), kartu
+     `--card-bg` bergaris rambut `--card-border`, aksen biru tunggal, dan tangga
+     radius yang sama. Versi sebelumnya membuang seluruh permukaan kartu
+     (`--surface: transparent`) sehingga panel jadi daftar teks polos di atas
+     bidang kosong — rapi tapi tidak sekelas halamannya.
+
+     Yang berubah mendasar: kartu tetap kartu. Token permukaannya SENGAJA tidak
+     ditimpa lagi, jadi `.nav-card-bg` melukis kartu yang sama seperti di rail
+     desktop tanpa aturan tambahan.
+     ------------------------------------------------------------------------ */
   .sidebar-panel {
     position: fixed;
     top: 0;
@@ -606,127 +632,332 @@
     width: 100%;
     min-height: 100dvh;
     max-height: 100dvh;
+    /* PANEL SELALU TERANG, DI SECTION MANA PUN.
+       theme.ts memasang `data-theme="dark"` di `.sidebar` selama section gelap
+       (The Moment / The Work) menguasai layar — itu benar untuk rail desktop
+       yang memang melayang DI ATAS section itu. Panel mobile tidak melayang: ia
+       menutup seluruh layar dengan alasnya sendiri (`--bg` bone), jadi token
+       gelap yang diwariskan cuma menghasilkan kartu hitam di atas kertas bone.
+       Token terang dikunci ulang di sini — `.sidebar-panel` lebih dalam dari
+       `.sidebar`, jadi definisi ini yang dipakai seluruh isinya. */
+    --surface: var(--card-bg);
+    --surface-border: var(--card-border);
+    --surface-inner: var(--card-inner);
+    --surface-inner-alt: var(--card-inner-alt);
+    --surface-inner-hover: var(--card-inner-hover);
+    --surface-shadow: var(--card-shadow);
+    --accent: var(--blue);
     --fg: var(--dark);
-    --surface: transparent;
-    --surface-border: transparent;
-    --surface-inner: transparent;
-    --surface-inner-alt: transparent;
-    gap: 0;
+    --fg-muted: #5c6470;
+    --label-border: rgba(var(--ink-rgb), 0.22);
+    gap: 10px;
     overflow-y: auto;
-    padding: 86px 20px 20px;
-    background: var(--bg);
+    overscroll-behavior: contain;
+    padding: 78px 20px calc(28px + env(safe-area-inset-bottom));
+    /* Bukan warna rata: sapuan biru yang sangat tipis di puncak menahan panel
+       dari terbaca sebagai kertas kosong, dan berhenti sebelum kartu pertama. */
+    background:
+      radial-gradient(120% 46% at 50% 0%, rgba(30, 58, 138, 0.07), transparent 70%),
+      var(--bg);
     box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
     clip-path: inset(0 0 100% 0);
     transition: clip-path 0.5s var(--ease-out);
   }
 
-  /* Urutan referensi: link → email → marquee klien. Diatur lewat `order`, bukan
+  /* Urutan panel: menu → kontak → sosial → klien. Diatur lewat `order`, bukan
      dengan memindah markup, karena urutan DOM-nya sudah benar untuk rail
      desktop (statistik di atas, email di bawah). */
   .sidebar-panel .nav-menu {
     order: 1;
   }
 
-  .sidebar-panel .nav-email {
+  .sidebar-panel .panel-label--contact {
     order: 2;
   }
 
-  .sidebar-panel .nav-clients {
+  .sidebar-panel .nav-email {
     order: 3;
   }
 
+  .sidebar-panel .nav-social-card {
+    order: 4;
+  }
+
+  /* `margin-top:auto` dipasang di LABEL, bukan di kartunya: kalau kartu yang
+     mendapat dorongan, ia terlepas dari judulnya sendiri dan menyisakan lubang
+     di antara keduanya. Judul yang mendorong membawa kartunya serta. */
+  .sidebar-panel .panel-label--clients {
+    order: 5;
+    margin-top: auto;
+    padding-top: 18px;
+  }
+
+  .sidebar-panel .nav-clients {
+    order: 6;
+  }
+
   /* Angkanya sudah tampil mengambang di atas potret hero (`.hero-mobile-stat`),
-     jadi di dalam menu ia cuma pengulangan yang memakan satu layar penuh.
-     Referensi juga tidak menampilkannya di menu terbuka. */
+     jadi di dalam menu ia cuma pengulangan yang memakan satu layar penuh. */
   .sidebar-panel .nav-stats-row {
     display: none;
   }
 
+  /* Judul kelompok — sekelas dengan `.network-label` di Section 05 supaya panel
+     ini terbaca sebagai bagian dari situs yang sama, bukan menu tempelan. */
+  .panel-label {
+    display: block;
+    margin: 10px 0 0 4px;
+    color: var(--fg-muted);
+    font-family: var(--font-label);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .panel-only {
+    display: grid;
+    place-items: center;
+  }
+
   .sidebar-panel .nav-card {
-    padding: 0;
-    border-radius: 0;
+    padding: 6px;
+    border-radius: 16px;
   }
 
   .sidebar-panel .nav-card-bg {
-    border: 0;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    box-shadow: var(--card-shadow);
   }
 
   .sidebar-panel .nav-menu ul {
+    display: flex;
+    flex-direction: column;
     align-items: stretch;
     gap: 0;
   }
 
-  .sidebar-panel .nav-link {
-    width: 100%;
-    min-height: 58px;
-    justify-content: flex-start;
-    gap: 12px;
-    padding: 14px 0;
-    border-bottom: 1px solid rgba(100, 116, 139, 0.28);
-    border-radius: 0;
-    color: var(--dark);
-    font-size: clamp(1.18rem, 5.2vw, 1.55rem);
-    letter-spacing: -0.02em;
+  /* Garis rambut hanya DI ANTARA baris, bukan di bawah baris terakhir: garis
+     terakhir akan menempel ke tepi bawah kartu dan terbaca sebagai retakan. */
+  .sidebar-panel .nav-menu li + li {
+    border-top: 1px solid rgba(var(--ink-rgb), 0.08);
   }
 
+  .sidebar-panel .nav-link {
+    width: 100%;
+    min-height: 56px;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 12px 10px;
+    border-radius: 12px;
+    color: var(--dark);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  /* BARIS AKTIF TIDAK PUNYA LATAR SAMA SEKALI. Yang menyala cuma dua hal:
+     tulisannya dan ubin ikonnya (lihat aturan `.nav-link-icon` di bawah).
+     Isian biru selebar baris — bahkan setipis 6% — membuat satu baris terbaca
+     sebagai kartu tersendiri di dalam kartu menu, dan itu satu lapis lebih
+     ramai daripada yang dibutuhkan untuk menandai halaman yang sedang dibuka. */
   .sidebar-panel .nav-link-bg,
   .sidebar-panel .nav-link:hover .nav-link-bg,
   .sidebar-panel .nav-link.is-active .nav-link-bg,
   .sidebar-panel .nav-link.is-active:hover .nav-link-bg {
     background: transparent;
+    box-shadow: none;
   }
 
   .sidebar-panel .nav-link:hover,
   .sidebar-panel .nav-link.is-active {
     color: var(--blue);
-    box-shadow: inset 3px 0 0 var(--blue);
   }
 
+  /* Ikon duduk di ubinnya sendiri — itu yang membedakan baris ini dari daftar
+     teks biasa, dan yang membuat status aktif terbaca dari sudut mata. */
   .sidebar-panel .nav-link-icon {
     display: grid;
-    width: 24px;
+    width: 34px;
+    height: 34px;
+    flex: none;
     place-items: center;
-    opacity: 0.64;
+    border-radius: 10px;
+    background: var(--card-inner);
+    color: var(--fg-muted);
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
   }
 
-  .sidebar-panel .nav-email {
-    margin-top: 20px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(100, 116, 139, 0.28);
+  .sidebar-panel .nav-link.is-active .nav-link-icon {
+    background: var(--blue);
+    color: var(--white);
+  }
+
+  .sidebar-panel .nav-link-label {
+    flex: 1;
+  }
+
+  .sidebar-panel .nav-link-go {
+    width: 26px;
+    height: 26px;
+    flex: none;
+    color: var(--fg-muted);
+    opacity: 0.55;
+  }
+
+  .sidebar-panel .nav-link.is-active .nav-link-go {
+    color: var(--blue);
+    opacity: 1;
   }
 
   .sidebar-panel .nav-email-btn {
-    padding: 12px 0;
-    border-radius: 0;
+    gap: 12px;
+    padding: 11px 10px;
+    border-radius: 12px;
     background: transparent;
     color: var(--dark);
     font-size: 0.9375rem;
+    font-weight: 500;
   }
 
+  .sidebar-panel .nav-email-icon {
+    width: 34px;
+    height: 34px;
+    flex: none;
+    border-radius: 10px;
+    background: var(--card-inner);
+    color: var(--blue);
+  }
+
+  .sidebar-panel .nav-email-text {
+    flex: 1;
+    text-align: left;
+  }
+
+  .sidebar-panel .nav-email-go {
+    width: 26px;
+    height: 26px;
+    flex: none;
+    color: var(--fg-muted);
+    opacity: 0.55;
+  }
+
+  /* Tanpa padding: ubin sosial adalah kartu-kartu utuh, jadi kartu pembungkusnya
+     tidak boleh menyisakan padding apa pun — kalau ada, baris ini berhenti
+     6px lebih pendek di kiri dan kanan daripada kartu email di atasnya. */
+  .sidebar-panel .nav-social-card {
+    padding: 0;
+  }
+
+  /* Tiga ubin sama lebar, bukan tiga kotak abu berjejer: label dan ikonnya
+     ditumpuk supaya barisnya terbaca sebagai pilihan, bukan hiasan. */
+  .sidebar-panel .social--panel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  /* Ubin sosial memakai permukaan kartu yang sama dengan menu dan email —
+     `--card-inner` membuatnya terbaca sebagai isi kartu yang kartunya hilang,
+     karena kartu sosial ini memang satu-satunya yang tidak punya
+     `.nav-card-bg` di markup. */
+  .sidebar-panel .social--panel .social-link {
+    width: auto;
+    height: auto;
+    flex: none;
+    grid-auto-flow: row;
+    gap: 7px;
+    padding: 13px 6px;
+    border: var(--card-border);
+    border-radius: 14px;
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    color: var(--dark);
+  }
+
+  .sidebar-panel .social--panel .social-link:hover,
+  .sidebar-panel .social--panel .social-link:active {
+    background: var(--card-inner);
+    color: var(--blue);
+  }
+
+  .sidebar-panel .social--panel .social-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.01em;
+  }
+
+  /* LOGO KLIEN BERWARNA PENUH.
+     Sebelumnya `grayscale(1) brightness(0)` — brightness(0) memaksa setiap
+     piksel jadi hitam pekat, jadi lambang berdetail (Jateng, Semarang,
+     Sampoerna) runtuh jadi gumpalan gelap yang tidak bisa dikenali. Di kartu
+     terang seperti ini tidak ada alasan untuk itu: warna aslinya justru yang
+     membuat baris ini terbaca sebagai logo. */
   .sidebar-panel .nav-clients {
-    margin-top: 12px;
-    padding: 16px 0 4px;
-    border-top: 1px solid rgba(100, 116, 139, 0.28);
+    padding: 14px 0;
   }
 
   .sidebar-panel .marquee-logo {
-    filter: grayscale(1) brightness(0);
-    opacity: 0.4;
+    filter: none;
+    opacity: 1;
   }
 
-  .sidebar-panel .social--panel .social-link {
-    color: var(--dark);
-    background: transparent;
+  /* Baris marquee di panel lebih tinggi dari di rail: di sini ia satu-satunya
+     grafis, dan pada 20px lambang berdetail belum terbaca. Lebar kotaknya ikut
+     dikalikan faktor yang sama — kalau hanya tingginya yang naik, lebar yang
+     tertinggal justru yang mengunci ukuran logo dan tambahan tinggi itu tidak
+     berbuat apa-apa. */
+  .sidebar-panel .marquee-item {
+    --logo-row-h: 26px;
+    width: calc(var(--logo-width-mobile) * 1.3);
   }
 
-  .sidebar-panel .social--panel .social-link:hover {
-    color: var(--blue);
+  .sidebar-panel .marquee-item--square {
+    --logo-row-h: 22px;
+    width: calc(var(--logo-width-mobile) * 1.375);
+  }
+
+  .sidebar-panel .marquee-item--portrait {
+    --logo-row-h: 20px;
+    width: calc(var(--logo-width-mobile) * 1.43);
   }
 
   .sidebar.is-open .sidebar-panel {
     clip-path: inset(0 0 0 0);
+  }
+
+  /* Isi panel menyusul alasnya, bukan muncul bersamaan: tanpa jeda ini seluruh
+     menu tampak sekaligus dan gerakan clip-path-nya jadi tak terasa. */
+  .sidebar-panel > * {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.4s var(--ease-out),
+      transform 0.4s var(--ease-out);
+  }
+
+  .sidebar.is-open .sidebar-panel > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Jeda dipasang per ELEMEN, bukan lewat `nth-child`: urutan DOM panel ini
+     tidak sama dengan urutan tampilnya (lihat blok `order` di atas), jadi
+     `nth-child` akan menyalakan kartu paling bawah lebih dulu. */
+  .sidebar.is-open .sidebar-panel .nav-menu { transition-delay: 0.14s; }
+  .sidebar.is-open .sidebar-panel .panel-label--contact { transition-delay: 0.19s; }
+  .sidebar.is-open .sidebar-panel .nav-email { transition-delay: 0.24s; }
+  .sidebar.is-open .sidebar-panel .nav-social-card { transition-delay: 0.29s; }
+  .sidebar.is-open .sidebar-panel .panel-label--clients { transition-delay: 0.34s; }
+  .sidebar.is-open .sidebar-panel .nav-clients { transition-delay: 0.39s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sidebar-panel > *,
+    .sidebar.is-open .sidebar-panel > * {
+      transform: none;
+      transition-delay: 0s;
+    }
   }
 
   /* Tombol CTA ikut jadi bagian topbar — dikecilkan ke ukuran pil compact
@@ -787,6 +1018,11 @@
 
 .journey {
   padding-top: clamp(56px, 5vw, 96px);
+}
+
+.timeline-body {
+  max-width: 46ch;
+  color: var(--fg-muted);
 }
 
 /* ==========================================================================
@@ -940,11 +1176,6 @@
   margin: 0.6vw 0 0.5vw;
   font-size: var(--fs-h3);
   font-weight: 600;
-}
-
-.timeline-body {
-  max-width: 46ch;
-  color: var(--fg-muted);
 }
 
 /* --- Dua angka di kaki kartu --- */
@@ -1155,7 +1386,7 @@
   font-size: var(--fs-work-title);
   font-weight: 500;
   line-height: 1;
-  margin-bottom: 0.56vw;
+  margin: 0 0 0.56vw;
 }
 
 .work-card-blurb {
@@ -1165,7 +1396,6 @@
   line-height: 1.45;
 }
 
-
 /* ==========================================================================
    THE COMPANIES
    ========================================================================== */
@@ -1174,9 +1404,6 @@
   max-width: 44ch;
 }
 
-/* Tiga kartu sejajar. `1fr` dan bukan `auto`: deskripsi ketiganya jauh berbeda
-   panjang (Creasa cuma satu kalimat), dan kolom yang mengikuti isi membuat
-   kartu ketiga menciut jadi separuh lebar tetangganya. */
 .company-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1184,55 +1411,6 @@
   padding: 0;
   gap: clamp(16px, 1.6vw, 32px);
   list-style: none;
-}
-
-.company-card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: clamp(24px, 2.2vw, 40px);
-  gap: 0.5vw;
-}
-
-.company-index {
-  font-family: var(--font-label);
-  font-size: max(10px, 0.68vw);
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  line-height: 1;
-  opacity: 0.4;
-}
-
-.company-name {
-  margin-top: clamp(24px, 2.4vw, 44px);
-  font-size: clamp(1.15rem, 1.32vw, 1.6rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-
-/* Label bidang, bukan jabatan: handoff melarang menyebut peran atau
-   kepemilikan di section ini. */
-.company-label {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.28vw 0.83vw 0.34vw;
-  border: 1px solid var(--label-border);
-  border-radius: var(--radius-pill);
-  font-family: var(--font-label);
-  font-size: max(10px, 0.72vw);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  line-height: 1;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.company-description {
-  margin-top: 0.4vw;
-  color: var(--fg-muted);
-  font-size: var(--fs-body);
-  line-height: var(--lh-body);
 }
 
 /* ==========================================================================
@@ -1266,6 +1444,15 @@
   line-height: 1;
   text-transform: uppercase;
   opacity: 0.55;
+}
+
+/* Bagian ketiga = ASPIRASI, bukan pencapaian. Karena itu ia paragraf biasa
+   dengan label di atasnya, bukan peta atau daftar negara. */
+.network-outlook {
+  max-width: 44ch;
+  color: var(--fg-muted);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
 }
 
 /* Satu baris dipisah titik tengah, sama seperti baris merek di hero — bukan
@@ -1308,15 +1495,6 @@
 .network-logo--square img {
   width: auto;
   height: var(--logo-width-desktop);
-}
-
-/* Bagian ketiga = ASPIRASI, bukan pencapaian. Karena itu ia paragraf biasa
-   dengan label di atasnya, bukan peta atau daftar negara. */
-.network-outlook {
-  max-width: 44ch;
-  color: var(--fg-muted);
-  font-size: var(--fs-body);
-  line-height: var(--lh-body);
 }
 
 /* ==========================================================================
@@ -1555,6 +1733,12 @@
   gap: 3px;
 }
 
+.packaging-test-moment-copy span {
+  color: rgba(255, 255, 255, 0.56);
+  font-size: clamp(0.75rem, 0.9vw, 1rem);
+  line-height: 1.35;
+}
+
 .packaging-test-moment strong {
   color: var(--white);
   font-family: var(--font-label);
@@ -1562,12 +1746,6 @@
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-}
-
-.packaging-test-moment-copy span {
-  color: rgba(255, 255, 255, 0.56);
-  font-size: clamp(0.75rem, 0.9vw, 1rem);
-  line-height: 1.35;
 }
 
 .packaging-test-outro {
@@ -1726,21 +1904,6 @@
   gap: clamp(20px, 2vw, 34px);
 }
 
-.footer-headline {
-  max-width: none;
-  color: var(--ink);
-  /* Dibatasi 11.2vw, bukan 12.4vw seperti versi sebelumnya: di bawah judul ini
-     sekarang ada tiga kolom tautan, dan pada ukuran lama judulnya menekan
-     semuanya keluar layar di lebar menengah. */
-  font-size: clamp(4rem, 11.2vw, 13.5rem);
-  font-weight: 900;
-  letter-spacing: -0.095em;
-  line-height: 0.78;
-}
-
-/* Kalimat dan tombol berbagi satu baris dan MEMENUHI lebar konten. Versi
-   sebelumnya dipatok `max-width: 760px`, jadi separuh kanan footer kosong
-   sementara garis pemisah di atasnya membentang penuh. */
 .footer-cta-row {
   display: flex;
   width: 100%;
@@ -1758,25 +1921,32 @@
   line-height: 1.45;
 }
 
+.footer-headline {
+  max-width: none;
+  color: var(--ink);
+  /* Dibatasi 11.2vw, bukan 12.4vw seperti versi sebelumnya: di bawah judul ini
+     sekarang ada tiga kolom tautan, dan pada ukuran lama judulnya menekan
+     semuanya keluar layar di lebar menengah. */
+  font-size: clamp(4rem, 11.2vw, 13.5rem);
+  font-weight: 900;
+  letter-spacing: -0.095em;
+  line-height: 0.78;
+}
+
+/* Kalimat dan tombol berbagi satu baris dan MEMENUHI lebar konten. Versi
+   sebelumnya dipatok `max-width: 760px`, jadi separuh kanan footer kosong
+   sementara garis pemisah di atasnya membentang penuh. */
 /* --- Tombol WhatsApp ---
    Dirapikan dari versi sebelumnya: tingginya turun dari 86px ke 60px, dan
    lingkaran kedua di kanan (yang membungkus panah) dilepas. Dua lingkaran putih
    di satu kapsul membuatnya terbaca seperti dua tombol yang berdempetan; panah
    sekarang jadi glif biasa yang bergeser saat hover. */
 .footer-wa {
-  position: relative;
   display: inline-flex;
   align-items: center;
   flex: none;
   height: clamp(52px, 3.9vw, 62px);
-  /* Tombol ini diseret transform sepanjang rel dan ditekan lama di layar
-     sentuh; keduanya butuh ini supaya tidak berubah jadi seleksi teks atau
-     menu tautan di tengah tahanan. */
   cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-  touch-action: manipulation;
   padding: 0 clamp(20px, 1.5vw, 26px) 0 8px;
   gap: clamp(10px, 0.85vw, 15px);
   border: 1px solid var(--blue);
@@ -1790,10 +1960,6 @@
   letter-spacing: -0.01em;
   line-height: 1;
   white-space: nowrap;
-  /* `transform` SENGAJA tidak ikut ditransisikan: sumbu itu milik gerak menahan
-     yang ditulis GSAP sebagai style inline, dan transisi CSS di properti yang
-     sama membuat tombol terasa berat menyusul kursor alih-alih menempel pada
-     tahanan jari. */
   transition:
     color var(--dur) var(--ease-out),
     background-color var(--dur) var(--ease-out),
@@ -1801,48 +1967,7 @@
     box-shadow var(--dur) var(--ease-out);
 }
 
-/* Cincin letusan. Duduk di belakang isi tombol dan mengembang keluar dari
-   tepinya, jadi tombolnya sendiri tidak boleh memotongnya — tidak ada
-   `overflow: hidden` di mana pun jalur ini. */
-.footer-wa-burst {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  border: 2px solid var(--blue);
-  border-radius: inherit;
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Sesaat setelah sampai ujung: SATU bidang putih penuh. Lingkaran ikonnya ikut
-   melebur — latarnya dilepas dan bayangannya dimatikan — jadi tidak ada lagi
-   kepingan terpisah di dalam kapsul; yang tersisa cuma logo, tulisan, dan panah
-   biru di atas putih. */
-.footer-wa.is-blown {
-  border-color: var(--white);
-  background: var(--white);
-  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.55), 0 18px 44px -16px rgba(var(--ink-rgb), 0.5);
-  color: var(--blue);
-}
-
-.footer-wa.is-blown .footer-wa-icon {
-  background: transparent;
-  box-shadow: none;
-  color: var(--blue);
-}
-
-/* Panahnya tidak diatur di sini: saat kapsul memutih, opacity-nya sudah dipegang
-   style inline dari tween menahan (tinggal 14%) dan aturan CSS mana pun kalah
-   melawannya. Membiarkannya pudar memang yang diinginkan — lingkaran logo
-   berhenti tepat di atas panah itu, dan dua glif bertumpuk terbaca sebagai
-   kesalahan render. */
-
-/* Inilah yang berjalan ke kanan saat tombol ditahan — badan kapsulnya diam.
-   `z-index` menaikkannya di atas label yang dilintasinya, dan bayangan tipis
-   memisahkan putih-di-atas-biru itu dari tulisan yang memudar di bawahnya. */
 .footer-wa-icon {
-  position: relative;
-  z-index: 1;
   display: grid;
   width: clamp(38px, 2.8vw, 46px);
   aspect-ratio: 1;
@@ -1852,7 +1977,6 @@
   background: var(--white);
   box-shadow: 0 4px 12px -4px rgba(var(--ink-rgb), 0.5);
   color: var(--blue);
-  transition: background-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
 }
 
 .footer-wa-arrow {
@@ -1861,14 +1985,6 @@
   transition: transform var(--dur) var(--ease-out), opacity var(--dur) var(--ease-out);
 }
 
-/* Hover TETAP BIRU — yang menguat cuma bayangannya. Tombol ini punya satu-satunya
-   perubahan warna yang benar-benar berarti di footer, yaitu memutih saat sampai
-   ujung; kalau hover juga mengganti warna badannya (apalagi jadi hitam), letusan
-   putih itu kehilangan kejutannya.
-
-   Tanpa `transform` di sini: begitu GSAP menulis transform inline untuk gerak
-   menahan, angkatan hover tidak akan pernah menang lagi — dan dua gerak di sumbu
-   yang sama memang tidak perlu. */
 .footer-wa:hover {
   box-shadow: 0 18px 40px -14px rgba(var(--ink-rgb), 0.55);
 }
@@ -2388,6 +2504,25 @@
     flex-direction: column;
     align-items: flex-start;
   }
+
+  .footer-cta-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
+.network-outlook {
+  max-width: 62ch;
+  padding-top: clamp(4px, 1vw, 16px);
+  border-top: 1px solid rgba(var(--ink-rgb), 0.14);
+}
+
+.network-outlook p {
+  margin: 0;
+  color: var(--fg-muted);
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  line-height: 1.55;
 }
 
 /* Network constellation — typography keeps unnamed community marks honest. */
@@ -2467,27 +2602,15 @@
   line-height: 1.18;
 }
 
-.network-outlook {
-  max-width: 62ch;
-  padding-top: clamp(4px, 1vw, 16px);
-  border-top: 1px solid rgba(var(--ink-rgb), 0.14);
-}
-
-.network-outlook p {
-  margin: 0;
-  color: var(--fg-muted);
-  font-size: clamp(1rem, 1.2vw, 1.2rem);
-  line-height: 1.55;
-}
-
 @media (max-width: 767px) {
   .hero-wordmark {
     scale: 1;
   }
 
   .network-constellation {
-    grid-template-columns: 1fr;
-    gap: 18px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 12px;
+    row-gap: 16px;
   }
 
   .network-orbit,
@@ -2497,8 +2620,32 @@
   }
 
   .network-orbit-mark {
-    height: 112px;
-    border-radius: 16px;
+    height: 92px;
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .network-orbit {
+    gap: 8px;
+  }
+
+  .network-orbit-mark img {
+    width: min(100%, 110px);
+    max-height: 54px;
+  }
+
+  .network-orbit--portrait .network-orbit-mark img {
+    max-width: 50px;
+    height: 54px;
+  }
+
+  .network-orbit--mark .network-orbit-mark span {
+    font-size: 1.5rem;
+  }
+
+  .network-orbit-name {
+    font-size: 0.6875rem;
+    line-height: 1.25;
   }
 }
 
@@ -2591,12 +2738,6 @@
 
   .footer-shell {
     gap: 44px;
-  }
-
-  .footer-cta-row {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 24px;
   }
 
   /* Melebar penuh: makin lebar tombolnya, makin panjang lintasan lingkaran di
@@ -2732,20 +2873,42 @@
     left: 0;
     right: 0;
     width: 100%;
-    font-size: calc(100vw / var(--wordmark-ink));
+    font-size: calc((100vw - 2 * var(--gutter)) / var(--wordmark-ink));
     justify-content: center;
     padding-right: 0;
     margin: 0;
   }
 
-  .hero-mobile-stat-float {
+  .hero-mobile-cards {
+    position: absolute;
     top: 75%;
-    right: auto;
+    right: var(--gutter);
     left: var(--gutter);
     z-index: 4;
-    width: 27vw;
-    padding: 14px 10px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    min-height: clamp(120px, 14.5svh, 132px);
+    overflow: hidden;
     background: var(--glass-bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .hero-mobile-cards > * {
+    min-width: 0;
+    min-height: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .hero-mobile-stat-float {
+    position: static;
+    width: auto;
+    padding: 14px 10px;
+    border-right: 1px solid rgba(var(--ink-rgb), 0.14);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
@@ -2757,25 +2920,32 @@
   }
 
   .hero-traits {
-    top: 75%;
-    right: var(--gutter);
-    left: auto;
-    z-index: 4;
-    max-width: 36vw;
+    position: static;
+    max-width: none;
+    justify-content: center;
+    align-items: stretch;
     gap: 7px;
-    padding: 12px 14px;
-    background: var(--glass-bg);
+    padding: 12px 16px;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
 
   .hero-trait {
+    display: grid;
+    grid-template-columns: 7px minmax(0, 1fr);
+    align-items: center;
+    gap: 6px;
+    width: 100%;
     font-size: 0.8125rem;
+    line-height: 1.15;
   }
 
-  .hero-trait-mark {
-    width: 7.5px;
-    height: 7.5px;
+  .hero-trait:nth-child(n) .hero-trait-mark {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    clip-path: none;
+    transform: none;
   }
 
   .hero-mobile-stat-float .hero-mobile-stat-label {
@@ -2784,14 +2954,20 @@
 
   .hero-headline {
     position: absolute;
-    top: 58.5%;
+    top: auto;
+    bottom: calc(25% + 14px);
     left: var(--gutter);
     right: var(--gutter);
     z-index: 3;
     color: var(--white);
-    font-size: clamp(2rem, 9.5vw, 3rem);
+    max-width: 100%;
+    font-size: clamp(1.25rem, 7.4vw, 2.5rem);
     text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
     margin: 0;
+  }
+
+  .hero-headline-line {
+    white-space: nowrap;
   }
 
   .hero-mobile-stat-inline {
@@ -2804,11 +2980,21 @@
 
   .hero-eyebrow {
     position: absolute;
-    bottom: 2.5%;
+    bottom: 1.25%;
     left: var(--gutter);
     z-index: 3;
     color: var(--black);
     margin: 0;
+  }
+
+  .hero-mobile-about-eyebrow {
+    display: block;
+    margin-top: 8px;
+    color: var(--blue);
+  }
+
+  .about-head .about-eyebrow {
+    display: none;
   }
 
   .hero-secondary {
@@ -2868,13 +3054,6 @@
   font-size: clamp(1.25rem, 1.4vw, 1.65rem);
   letter-spacing: -0.025em;
   line-height: 1.16;
-}
-
-.timeline-card .timeline-body {
-  max-width: 38ch;
-  color: var(--fg-muted);
-  font-size: clamp(0.92rem, 1vw, 1.02rem);
-  line-height: 1.5;
 }
 
 /* ==========================================================================
@@ -2949,17 +3128,6 @@
   position: relative;
   z-index: 2;
   max-width: 46ch;
-}
-
-.about-location {
-  display: block;
-  margin-bottom: clamp(14px, 1.6vw, 24px);
-  color: var(--blue);
-  font-family: var(--font-label);
-  font-size: clamp(0.68rem, 0.75vw, 0.84rem);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
 }
 
 .about-lead {
@@ -3172,12 +3340,6 @@
   object-fit: cover;
 }
 
-.company-card {
-  min-height: clamp(390px, 28vw, 510px);
-  overflow: hidden;
-  background: var(--card-bg);
-}
-
 .company-logo-wrap {
   display: grid;
   width: 100%;
@@ -3194,18 +3356,6 @@
   width: min(68%, 240px);
   max-height: 74%;
   object-fit: contain;
-}
-
-.company-card:nth-child(1) .company-logo-wrap img {
-  width: min(42%, 130px);
-}
-
-.company-card:nth-child(3) .company-logo-wrap img {
-  width: min(74%, 270px);
-}
-
-.company-name {
-  margin-top: clamp(20px, 2vw, 32px);
 }
 
 /* Logo-only company field: the logos establish their own visual rhythm. */
@@ -3363,15 +3513,81 @@
   }
 
   .about-lead {
-    font-size: clamp(1.6rem, 8.2vw, 2.6rem);
+    max-width: 31ch;
+    font-size: clamp(1.35rem, 5.7vw, 1.65rem);
+    letter-spacing: -0.035em;
+    line-height: 1.14;
+    text-wrap: pretty;
   }
 
   .about-chapters {
-    margin-top: 42px;
+    display: grid;
+    gap: 14px;
+    margin-top: 32px;
+  }
+
+  .about-chapter,
+  .about-chapter + .about-chapter {
+    position: relative;
+    isolation: isolate;
+    min-height: 238px;
+    padding: clamp(24px, 7vw, 32px);
+    margin: 0;
+    overflow: hidden;
+    border: var(--surface-border);
+    border-radius: 20px;
+    background: var(--surface);
+    box-shadow: var(--surface-shadow);
+  }
+
+  .about-chapter-figure {
+    position: absolute;
+    z-index: 0;
+    top: 18px;
+    right: 16px;
+    color: rgba(30, 58, 138, 0.1);
+    font-size: clamp(7rem, 36vw, 10rem);
+    line-height: 0.7;
+  }
+
+  .about-chapter-body {
+    position: relative;
+    z-index: 1;
   }
 
   .about-chapter-title {
-    margin-bottom: 10px;
+    max-width: 10ch;
+    margin-bottom: 12px;
+    font-size: clamp(1.65rem, 7.2vw, 2.2rem);
+  }
+
+  .about-chapter-text {
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .about-chapter:nth-child(2) {
+    border-color: var(--blue);
+    background: var(--blue);
+    box-shadow: 0 18px 36px -24px rgba(30, 58, 138, 0.52);
+  }
+
+  .about-chapter:nth-child(3) {
+    border-color: var(--black);
+    background: var(--black);
+    box-shadow: var(--card-shadow-dark);
+  }
+
+  .about-chapter:nth-child(n + 2) .about-chapter-text {
+    color: rgba(255, 255, 255, 0.76);
+  }
+
+  .about-chapter:nth-child(n + 2) .about-chapter-figure {
+    color: rgba(255, 255, 255, 0.14);
+  }
+
+  .about-chapter:nth-child(n + 2) .about-chapter-title {
+    color: var(--white);
   }
 
   .network-company-logos,
@@ -3399,10 +3615,6 @@
     border-radius: 12px;
   }
 
-  .company-card {
-    min-height: 0;
-  }
-
   .network-company-logos,
   .network-logos {
     width: 100%;
@@ -3427,22 +3639,27 @@
   .timeline {
     --tl-rail: 38px;
     --tl-line-x: 11px;
-    --tl-dot: 14px;
+    --tl-dot: 16px;
 
     gap: clamp(32px, 5vh, 48px);
     padding-left: var(--tl-rail);
   }
 
   .timeline::before {
-    top: 18px;
-    bottom: 18px;
-    background: rgba(var(--ink-rgb), 0.16);
+    top: 24px;
+    bottom: 24px;
+    left: calc(var(--tl-line-x) - 2px);
+    width: 4px;
+    border-radius: 2px;
+    background: rgba(var(--ink-rgb), 0.28);
   }
 
   .timeline-fill {
-    top: 18px;
-    max-height: calc(100% - 36px);
-    background: rgba(var(--ink-rgb), 0.8);
+    top: 24px;
+    left: calc(var(--tl-line-x) - 2px);
+    width: 4px;
+    max-height: calc(100% - 48px);
+    background: rgba(var(--ink-rgb), 0.88);
   }
 
   .timeline-card {
@@ -3459,10 +3676,6 @@
 
   .timeline-card .timeline-title {
     margin-top: 14px;
-  }
-
-  .timeline-card .timeline-body {
-    font-size: 0.95rem;
   }
 
 
@@ -3555,6 +3768,7 @@
 
 .timeline-card .timeline-body {
   max-width: 30ch;
+  color: var(--fg-muted);
   font-size: clamp(0.9rem, 0.95vw, 1.05rem);
   line-height: 1.55;
 }
@@ -3598,33 +3812,59 @@
     width: auto;
     min-height: 0;
     flex-direction: column;
-    border-radius: 20px;
+    overflow: visible;
+    border-radius: 18px;
   }
 
   .timeline-content {
     display: flex;
-    padding: 22px 20px 24px;
+    padding: 16px 18px 18px;
   }
 
   .timeline-media {
     order: -1;
     width: 100%;
     min-height: 0;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 9;
     margin: 0;
-    border-radius: 0;
+    overflow: hidden;
+    border-radius: 18px 18px 0 0;
+  }
+
+  .timeline-card .tl-card-index {
+    margin-bottom: 10px;
   }
 
   .timeline-card .timeline-year {
-    font-size: clamp(3.25rem, 15vw, 4.25rem);
+    font-size: clamp(3rem, 14vw, 3.75rem);
+  }
+
+  .timeline-year.digit-row .digit-mask {
+    display: none;
+  }
+
+  .timeline-year.digit-row::before {
+    content: attr(data-number-count);
   }
 
   .timeline-card .timeline-title {
-    margin-top: 12px;
+    margin: 8px 0 5px;
+    font-size: 1.2rem;
+  }
+
+  .timeline-card .timeline-body {
+    max-width: 31ch;
+    font-size: 0.9rem;
+    line-height: 1.45;
   }
 
   .timeline-card::before {
-    top: 28px;
+    top: 24px;
+    left: calc(-1 * var(--tl-rail) + var(--tl-line-x) - var(--tl-dot) / 2);
+    z-index: 3;
+    border: 3px solid var(--bg);
+    background: var(--blue);
+    box-shadow: 0 0 0 2px rgba(var(--ink-rgb), 0.72);
   }
 }
 
@@ -3673,14 +3913,14 @@
        menyisakan potongan layer di bawahnya yang tidak pernah tertutup — paling
        kelihatan di footer, yang isinya pendek di layar sempit. */
     min-height: var(--stack-hold, 100vh);
-    border-top-left-radius: var(--stack-radius);
-    border-top-right-radius: var(--stack-radius);
   }
 
   /* Pedi dan The Work sama-sama memakai --dark-bg yang identik, jadi tepi
      atasnya HARUS ditandai sendiri: tanpa garis rambut di dalam dan bayangan di
      luar, layer yang naik tidak terlihat sebagai layer sama sekali. */
   .work {
+    border-top-left-radius: var(--stack-radius);
+    border-top-right-radius: var(--stack-radius);
     box-shadow:
       0 -26px 64px -20px rgba(0, 0, 0, 0.72),
       inset 0 1px 0 rgba(248, 246, 240, 0.12);

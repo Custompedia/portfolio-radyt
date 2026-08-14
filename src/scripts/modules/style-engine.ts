@@ -66,6 +66,7 @@ function build(el: HTMLElement): void {
  * dilihat daripada menge-tween nilai teksnya.
  */
 function buildCounter(el: HTMLElement): void {
+  if (!isDesktop()) return;
   if (completedOnce.has(el)) return;
 
   const raw = el.dataset.numberCount ?? el.textContent?.trim() ?? '';

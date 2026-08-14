@@ -17,7 +17,6 @@ import { navActiveModule } from './modules/nav-active';
 import { workCardsModule } from './modules/work-cards';
 import { mobileMenuModule } from './modules/mobile-menu';
 import { footerCtaModule } from './modules/footer-cta';
-import { waHoldModule } from './modules/wa-hold';
 import { microModule } from './modules/micro';
 import { finishIntro, preloaderModule, sealIntro } from './modules/preloader';
 import { brandStagesModule } from './modules/brand-stages';
@@ -51,7 +50,6 @@ const modules: AnimationModule[] = [
   navActiveModule,
   mobileMenuModule,
   footerCtaModule,
-  waHoldModule,
   brandStagesModule,
   microModule,
   preloaderModule,

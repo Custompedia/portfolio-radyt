@@ -21,7 +21,7 @@
  * cukup lewat silang-pudar — tanpa perlu menukar z-index di tengah scroll.
  */
 import Icon from '../Icon.astro';
-import { brand, hero, nav, stats } from '../../data/site';
+import { about, brand, hero, nav, stats } from '../../data/site';
 
 interface GhostBox {
   id: string;
@@ -152,20 +152,6 @@ const navRight = nav.slice(2);
       />
     </div>
 
-    <!-- Kartu tahun mengambang di atas potret — HANYA dirender/terlihat di
-         mobile (lihat sections.css, `.hero-mobile-stat`). Ghost engine
-         desktop (modules/ghost.ts) `desktopOnly:true` dan mencari elemen
-         lewat `[data-ghost]`; markup ini SENGAJA tidak punya atribut itu jadi
-         tidak pernah ikut terukur atau dobel dengan kartu asli di sidebar. -->
-    {
-      stats[1] && (
-        <div class="hero-mobile-stat hero-mobile-stat-float glass-card">
-          <span class="hero-mobile-stat-value">{stats[1].value}</span>
-          <span class="hero-mobile-stat-label">{stats[1].label}</span>
-        </div>
-      )
-    }
-
     {
       ghosts.map((g) => (
         <span class="ghost" data-ghost-target={g.id} style={`--gx:${g.x};--gy:${g.y};--gw:${g.w};--gh:${g.h}`} />
@@ -260,22 +246,33 @@ const navRight = nav.slice(2);
       </div>
     )}
 
-    <div
-      class="hero-traits glass-card"
-      data-tl-type="scroll"
-      data-tl-trigger="[data-hero]"
-      data-tl-start="5% top"
-      data-tl-end="20% top"
-      data-tl-from="{'opacity':1,'scale':1,'x':0,'y':0}"
-      data-tl-to="{'scale':0.3,'autoAlpha':0,'x':'-25vw','y':'-5vw'}"
-      data-tl-desktop
-    >
-      {hero.traits.map((trait) => (
-        <span class="hero-trait">
-          <span class="hero-trait-mark" aria-hidden="true" />
-          {trait}
-        </span>
-      ))}
+    <div class="hero-mobile-cards glass-card">
+      {
+        stats[1] && (
+          <div class="hero-mobile-stat hero-mobile-stat-float glass-card">
+            <span class="hero-mobile-stat-value">{stats[1].value}</span>
+            <span class="hero-mobile-stat-label">{stats[1].label}</span>
+          </div>
+        )
+      }
+
+      <div
+        class="hero-traits glass-card"
+        data-tl-type="scroll"
+        data-tl-trigger="[data-hero]"
+        data-tl-start="5% top"
+        data-tl-end="20% top"
+        data-tl-from="{'opacity':1,'scale':1,'x':0,'y':0}"
+        data-tl-to="{'scale':0.3,'autoAlpha':0,'x':'-25vw','y':'-5vw'}"
+        data-tl-desktop
+      >
+        {hero.traits.map((trait) => (
+          <span class="hero-trait">
+            <span class="hero-trait-mark" aria-hidden="true" />
+            {trait}
+          </span>
+        ))}
+      </div>
     </div>
 
     <p
@@ -288,7 +285,8 @@ const navRight = nav.slice(2);
       data-tl-to="{'yPercent':-100,'autoAlpha':0}"
       data-tl-desktop
     >
-      <span>{hero.eyebrow} {hero.eyebrowSecond}</span>
+      <span class="hero-role">{hero.eyebrow} {hero.eyebrowSecond}</span>
+      <span class="hero-mobile-about-eyebrow">{about.eyebrow}</span>
     </p>
 
     <a

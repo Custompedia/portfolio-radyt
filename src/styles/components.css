@@ -122,6 +122,16 @@
   display: none;
 }
 
+/* Milik panel mobile saja: judul kelompok dan afordans (panah, ikon amplop).
+   `display:none` di desktop bukan sekadar kosmetik — `.nav-link` dan
+   `.nav-email-btn` adalah elemen yang diukur GhostEngine, jadi apa pun yang
+   tidak boleh ikut menggeser kotaknya di desktop harus benar-benar tidak
+   menghasilkan kotak. */
+.panel-label,
+.panel-only {
+  display: none;
+}
+
 /* --- Stats --- */
 
 /* Gap nol plus pembatas di antaranya: kalau statistiknya lebih dari satu,
@@ -375,23 +385,42 @@
   padding-right: 1.05vw;
 }
 
+/* Tinggi baris disimpan di custom property, BUKAN cuma di `height`, karena
+   logonya perlu angka yang sama sebagai panjang definit — lihat `.marquee-logo`. */
 .marquee-item {
+  --logo-row-h: 1.5vw;
   display: grid;
   flex: 0 0 auto;
   width: var(--logo-width-desktop);
-  height: 1.5vw;
+  height: var(--logo-row-h);
   place-items: center;
   opacity: 0.82;
 }
 
+/* Baris makin pendek makin menjulang bentuknya. Lambang yang tinggi disamakan
+   lewat TINGGI, bukan lebar: pada tinggi baris yang sama, logo portrait
+   terbaca dua kali lebih besar dari wordmark landscape di sebelahnya. */
 .marquee-item--square {
-  height: 1.2vw;
+  --logo-row-h: 1.2vw;
 }
 
+.marquee-item--portrait {
+  --logo-row-h: 1.05vw;
+}
+
+/* TINGGINYA PANJANG DEFINIT, BUKAN PERSENTASE.
+   Versi lama memakai `height: 100%`, dan persentase itu tidak pernah
+   terpecahkan di sini: `.marquee-item` grid ber-`place-items: center`, jadi
+   jalur tingginya bukan `stretch` dan Chrome mengembalikan tinggi ke rasio asli
+   file (`max-height: 100%` pun ikut tidak terpecahkan). Untuk wordmark
+   landscape hasilnya kebetulan pas, tapi lambang yang memanjang ke bawah jadi
+   LEBIH TINGGI dari baris marquee lalu dipotong `overflow: hidden` di
+   `.marquee` — yang tersisa cuma potongan tengahnya. Dengan tinggi definit +
+   `object-fit: contain`, logo mengecil sampai muat berapa pun rasionya. */
 .marquee-logo {
   display: block;
   width: 100%;
-  height: 100%;
+  height: var(--logo-row-h);
   object-fit: contain;
   object-position: center;
   filter: saturate(0.85);
@@ -522,10 +551,6 @@
   pointer-events: none;
 }
 
-/* ==========================================================================
-   POTONGAN UI YANG DIPAKAI ULANG ANTAR SECTION
-   ========================================================================== */
-
 /* Pill label dianimasikan dari width:0 ke width:auto, jadi ia harus
    `overflow:hidden` dan `white-space:nowrap` — kalau tidak, teksnya membungkus
    saat lebarnya nol dan kartunya melonjak tinggi di frame pertama. */
@@ -545,6 +570,10 @@
   line-height: 1;
   white-space: nowrap;
 }
+
+/* ==========================================================================
+   POTONGAN UI YANG DIPAKAI ULANG ANTAR SECTION
+   ========================================================================== */
 
 .section-head {
   display: flex;
@@ -784,6 +813,11 @@
     font-size: 0.75rem;
   }
 
+  .label-pill {
+    padding: 5px 12px 6px;
+    border-width: 1.5px;
+  }
+
   .nav-menu ul {
     gap: 6px;
   }
@@ -808,12 +842,16 @@
   }
 
   .marquee-item {
+    --logo-row-h: 20px;
     width: var(--logo-width-mobile);
-    height: 20px;
   }
 
   .marquee-item--square {
-    height: 16px;
+    --logo-row-h: 16px;
+  }
+
+  .marquee-item--portrait {
+    --logo-row-h: 14px;
   }
 
   .nav-email {
@@ -831,11 +869,6 @@
     padding: 15px 22px;
     border-radius: 12px;
     font-size: 0.9375rem;
-  }
-
-  .label-pill {
-    padding: 5px 12px 6px;
-    border-width: 1.5px;
   }
 
   .section-head {
