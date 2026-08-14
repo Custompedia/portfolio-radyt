@@ -1562,7 +1562,7 @@
   width: 46vw;
   height: 46vw;
   border-radius: 50%;
-  background: rgba(var(--dark-accent-rgb), 0.12);
+  background: rgba(var(--blue-rgb), 0.12);
   filter: blur(80px);
   content: '';
 }
@@ -1591,7 +1591,7 @@
   left: 25vw;
   /* Biru redup, BUKAN putih: blob ini duduk di kaki scene, tepat di tempat
      Pedi berhenti, dan putih beralpha di situ terbaca sebagai kabut pucat. */
-  background: rgba(var(--dark-accent-rgb), 0.06);
+  background: rgba(var(--blue-rgb), 0.06);
 }
 
 .packaging-test-copy {
@@ -1666,8 +1666,8 @@
 
 .pedi-orbit--middle {
   inset: 10%;
-  border-color: rgba(var(--dark-accent-rgb), 0.22);
-  box-shadow: 0 0 42px rgba(var(--dark-accent-rgb), 0.05);
+  border-color: rgba(var(--blue-rgb), 0.22);
+  box-shadow: 0 0 42px rgba(var(--blue-rgb), 0.05);
 }
 
 .pedi-orbit--outer {
@@ -1701,7 +1701,7 @@
   left: 50%;
   width: clamp(44px, 4vw, 64px);
   aspect-ratio: 1;
-  border: 1px solid rgba(var(--dark-accent-rgb), 0.24);
+  border: 1px solid rgba(var(--blue-rgb), 0.24);
   border-radius: 50%;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
   opacity: 0.65;
@@ -1731,7 +1731,7 @@
 
 @keyframes pedi-loader-pulse {
   to {
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 0 18px rgba(var(--dark-accent-rgb), 0.035);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 0 18px rgba(var(--blue-rgb), 0.035);
     transform: translate(-50%, -50%) scale(1.12);
   }
 }

@@ -3,10 +3,9 @@
   --bg: #f7f4ec;
   --yellow: #ffff23;
   --blue: #1e3a8a;
+  --blue-rgb: 30, 58, 138;
   --accent: var(--blue);
   --warm-accent: #8a5a00;
-  --dark-accent: #a8bfff;
-  --dark-accent-rgb: 168, 191, 255;
   --black: #111827;
   --white: #ffffff;
   --dark: #10131a;
@@ -277,7 +276,7 @@
 
 /* Sidebar / komponen apa pun yang sedang menimpa section gelap. */
 [data-theme='dark'] {
-  --accent: var(--dark-accent);
+  --accent: var(--blue);
   --surface: var(--card-bg-dark);
   --surface-shadow: var(--card-shadow-dark);
   --surface-border: var(--card-border-dark);
@@ -291,7 +290,7 @@
 
 /* Section bertema gelap (work). */
 .theme-dark {
-  --accent: var(--dark-accent);
+  --accent: var(--blue);
   --surface: var(--card-bg-dark);
   --surface-shadow: var(--card-shadow-dark);
   --surface-border: var(--card-border-dark);
