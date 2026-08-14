@@ -5,62 +5,91 @@ import { $, $$, isDesktop, prefersReducedMotion } from '../core/utils';
 let context: gsap.Context | null = null;
 
 /**
- * Menyingkap satu kartu saat KARTU ITU SENDIRI masuk layar.
- *
- * Dipakai hanya di bawah 768px, dan alasannya geometri: di desktop grid-nya
- * tiga kolom bersebelahan, jadi satu pemicu di grid memang menyingkap semuanya
- * pada saat yang sama-sama benar. Di mobile grid yang sama jadi SATU KOLOM
- * setinggi 452px — dengan satu pemicu di puncak grid, kartu ketiga (332px lebih
- * bawah) ikut dianimasikan saat ia masih jauh di bawah lipatan, dan sudah
- * selesai sebelum sempat terlihat. Yang tersisa untuk user: kotak kosong dulu,
- * lalu tahu-tahu sudah lengkap.
- *
- * `once: true`, bukan `toggleActions: 'play none none reverse'`: kartu yang
- * sudah tampil tidak boleh menghilang lagi hanya karena user menggulung balik.
+ * Letupan logo perusahaan. `back.out` yang membuatnya terbaca sebagai "pop":
+ * skalanya melewati 1 sedikit sebelum mendarat, bukan meluncur masuk. Jarak
+ * `y`-nya sengaja kecil — kalau logonya ikut bergeser jauh, yang terbaca adalah
+ * geseran, bukan letupan.
  */
-const revealOnEnter = (
+const LOGO_HIDDEN: gsap.TweenVars = { autoAlpha: 0, scale: 0.55, y: 22, transformOrigin: '50% 60%' };
+const LOGO_SHOWN: gsap.TweenVars = { autoAlpha: 1, scale: 1, y: 0, duration: 0.62, ease: 'back.out(1.7)' };
+
+/**
+ * Kartu network mendarat, bukan meletup: ia kotak berisi logo, dan kotak yang
+ * ikut memantul terbaca seperti tombol yang ditekan. Miring sedikit lalu
+ * diluruskan sambil naik — seperti kartu yang dijatuhkan ke meja.
+ */
+const CARD_HIDDEN: gsap.TweenVars = {
+  autoAlpha: 0,
+  y: 34,
+  scale: 0.9,
+  rotation: (index: number) => (index % 2 ? 2.5 : -2.5),
+  transformOrigin: '50% 100%',
+};
+const CARD_SHOWN: gsap.TweenVars = {
+  autoAlpha: 1,
+  y: 0,
+  scale: 1,
+  rotation: 0,
+  duration: 0.66,
+  ease: 'power3.out',
+};
+
+/** Jeda antar-elemen. Cukup panjang untuk terbaca bergantian, bukan berbarengan. */
+const POP_STAGGER = 0.22;
+const CARD_STAGGER = 0.09;
+
+/**
+ * SEMBUNYIKAN DULU, BARU ANIMASIKAN — sengaja bukan `gsap.from()`.
+ *
+ * `.from()` semestinya menuliskan keadaan awalnya sendiri begitu tween dibuat,
+ * tapi di halaman ini tidak: diukur pada scroll 0, `.company-showcase` sama
+ * sekali tidak punya style inline dan opacity-nya 1 — bahkan dengan
+ * `immediateRender: true`, bahkan setelah `progress(0)` dipanggil paksa (tween-
+ * nya baru mau menulis setelah sempat dirender penuh sekali). Akibatnya logonya
+ * sudah terlihat sejak halaman dimuat lalu berkedip hilang-muncul saat pemicunya
+ * lewat — persis kebalikan dari yang diminta.
+ *
+ * `set()` + `to()` tidak punya ambiguitas itu: keadaan awal ditulis saat itu
+ * juga, keadaan akhir ditulis eksplisit. Dan karena yang menyembunyikan adalah
+ * JS — bukan CSS — tanpa JS atau pada `prefers-reduced-motion` (modul ini
+ * `skipOnReducedMotion`) semuanya tetap terlihat apa adanya.
+ */
+const hideThenReveal = (
   elements: HTMLElement[],
-  vars: gsap.TweenVars,
-  start = 'top 90%',
+  hidden: gsap.TweenVars,
+  shown: gsap.TweenVars,
+  scrollTrigger: ScrollTrigger.Vars,
+  extra: gsap.TweenVars = {},
 ): void => {
-  elements.forEach((element) => {
-    gsap.from(element, {
-      ...vars,
-      scrollTrigger: { trigger: element, start, once: true },
-    });
-  });
+  if (!elements.length) return;
+  gsap.set(elements, hidden);
+  gsap.to(elements, { ...shown, ...extra, scrollTrigger });
 };
 
 /**
- * Keadaan AWAL logo perusahaan — satu definisi, dipakai desktop dan mobile.
+ * Menyingkap tiap elemen saat ELEMEN ITU SENDIRI masuk layar — dipakai untuk
+ * susunan satu kolom, di mana stagger tidak ada gunanya karena tiap kartu tiba
+ * di layar pada waktunya masing-masing.
  *
- * `back.out` yang membuatnya terbaca sebagai "pop": skalanya melewati 1 sedikit
- * sebelum mendarat, bukan meluncur masuk. Jarak `y`-nya sengaja kecil; kalau
- * logonya ikut bergeser jauh, yang terbaca adalah geseran, bukan letupan.
+ * `once: true`, bukan `toggleActions: 'play none none reverse'`: yang sudah
+ * tampil tidak boleh menghilang lagi hanya karena user menggulung balik.
  */
-const LOGO_POP: gsap.TweenVars = {
-  autoAlpha: 0,
-  scale: 0.55,
-  y: 22,
-  transformOrigin: '50% 60%',
-  duration: 0.62,
-  ease: 'back.out(1.7)',
-  /**
-   * WAJIB eksplisit. Tanpa ini logonya sudah terlihat sejak halaman dimuat dan
-   * baru "muncul" saat pemicunya lewat — jadi yang terjadi bukan kemunculan,
-   * melainkan kedipan: terlihat, hilang sesaat, lalu meletup. Diukur: sebelum
-   * baris ini, `.company-showcase` tidak punya style inline sama sekali pada
-   * scroll 0 dan opacity-nya 1.
-   *
-   * Hanya keadaan AWAL yang ditulis lebih dini; kalau JS tidak jalan atau user
-   * meminta gerak minimal, modul ini tidak pernah init dan logonya tetap
-   * terlihat apa adanya — karena itu penyembunyiannya di sini, bukan di CSS.
-   */
-  immediateRender: true,
+const revealEachOnEnter = (
+  elements: HTMLElement[],
+  hidden: gsap.TweenVars,
+  shown: gsap.TweenVars,
+  start = 'top 90%',
+): void => {
+  elements.forEach((element, index) => {
+    // Nilai fungsional (mis. rotasi selang-seling) dihitung per elemen di sini,
+    // karena tiap elemen jadi tween-nya sendiri dan indeks lokalnya selalu 0.
+    const resolve = (vars: gsap.TweenVars): gsap.TweenVars =>
+      Object.fromEntries(
+        Object.entries(vars).map(([key, value]) => [key, typeof value === 'function' ? value(index) : value]),
+      );
+    hideThenReveal([element], resolve(hidden), shown, { trigger: element, start, once: true });
+  });
 };
-
-/** Jeda antar-logo. Cukup panjang untuk terbaca bergantian, bukan berbarengan. */
-const LOGO_POP_STAGGER = 0.22;
 
 export const brandStagesModule: AnimationModule = {
   name: 'brand-stages',
@@ -123,27 +152,23 @@ export const brandStagesModule: AnimationModule = {
       const companyShowcases = companyGrid ? $$<HTMLElement>('[data-company-showcase]', companyGrid) : [];
       if (companyGrid && companyShowcases.length) {
         // Logonya tidak terlihat sampai section-nya benar-benar didatangi, lalu
-        // meletup satu per satu. Yang menyembunyikannya adalah `.from()` itu
-        // sendiri: gsap menuliskan keadaan awalnya begitu tween dibuat, jadi
-        // TIDAK boleh ada `gsap.set(..., {autoAlpha: 0})` tambahan di sini —
-        // `.from()` beranimasi menuju nilai yang sedang berlaku, dan nilai itu
-        // akan ikut jadi nol sehingga logonya tidak pernah muncul.
-        // Berkasnya sendiri sudah di-preload di <head> (lihat Base.astro), jadi
-        // yang ditunda cuma penampakannya — bukan pengunduhannya.
+        // meletup satu per satu. Berkasnya sendiri sudah di-preload di <head>
+        // (lihat Base.astro), jadi yang ditunda cuma penampakannya — bukan
+        // pengunduhannya.
         if (desktop) {
           // Ketiganya tersebar dalam satu bidang yang seluruhnya masuk layar
           // bersamaan, jadi satu pemicu di grid sudah tepat; urutannya yang
           // dijaga lewat stagger. `from: 'start'`, bukan `'center'`: letupan
           // harus mengalir dari logo pertama, bukan meledak dari tengah.
-          gsap.from(companyShowcases, {
-            ...LOGO_POP,
-            stagger: { each: LOGO_POP_STAGGER, from: 'start' },
-            scrollTrigger: { trigger: companyGrid, start: 'top 76%', once: true },
-          });
+          hideThenReveal(
+            companyShowcases,
+            LOGO_HIDDEN,
+            LOGO_SHOWN,
+            { trigger: companyGrid, start: 'top 76%', once: true },
+            { stagger: { each: POP_STAGGER, from: 'start' } },
+          );
         } else {
-          // Satu kolom: stagger tidak berlaku karena tiap logo tiba di layar
-          // pada waktunya sendiri-sendiri — pemicunya yang jadi penggantinya.
-          revealOnEnter(companyShowcases, LOGO_POP);
+          revealEachOnEnter(companyShowcases, LOGO_HIDDEN, LOGO_SHOWN);
         }
       }
 
@@ -157,37 +182,30 @@ export const brandStagesModule: AnimationModule = {
         // puncak `.network-body`. Kartu paling bawah selesai dianimasikan jauh
         // sebelum user sampai ke sana.
         if (desktop) {
-          const timeline = gsap.timeline({
-            scrollTrigger: { trigger: network, start: 'top 74%', toggleActions: 'play none none reverse' },
-          });
-
-          timeline
-            .from(active, {
-              autoAlpha: 0,
-              x: (index) => (index % 2 ? 42 : -42),
-              y: (index) => (index % 2 ? 20 : -20),
-              rotation: (index) => (index % 2 ? 4 : -4),
-              scale: 0.86,
-              stagger: { each: 0.1, from: 'center' },
-              duration: 0.78,
-              ease: 'power3.out',
-            })
-            .from(trusted, {
-              autoAlpha: 0,
-              y: 28,
-              scale: 0.82,
-              stagger: { each: 0.08, from: 'center' },
-              duration: 0.68,
-              ease: 'back.out(1.35)',
-            }, '-=0.34');
+          // Dua baris, dua pemicu — bukan satu timeline untuk keduanya. "Trusted
+          // by" berdiri jauh di bawah "Active in" dan punya dua baris sendiri;
+          // dengan satu pemicu di puncak `.network-body`, baris bawah selesai
+          // mendarat sebelum sempat masuk layar.
+          if (active.length) {
+            hideThenReveal(
+              active,
+              CARD_HIDDEN,
+              CARD_SHOWN,
+              { trigger: active[0], start: 'top 88%', once: true },
+              { stagger: { each: CARD_STAGGER, from: 'start' } },
+            );
+          }
+          if (trusted.length) {
+            hideThenReveal(
+              trusted,
+              CARD_HIDDEN,
+              CARD_SHOWN,
+              { trigger: trusted[0], start: 'top 88%', once: true },
+              { stagger: { each: CARD_STAGGER, from: 'start' } },
+            );
+          }
         } else {
-          revealOnEnter([...active, ...trusted], {
-            autoAlpha: 0,
-            y: 26,
-            scale: 0.94,
-            duration: 0.5,
-            ease: 'power3.out',
-          });
+          revealEachOnEnter([...active, ...trusted], CARD_HIDDEN, CARD_SHOWN);
         }
       }
     });

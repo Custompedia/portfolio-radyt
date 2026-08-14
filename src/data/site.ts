@@ -484,7 +484,7 @@ export const moment = {
 export const contact = {
   eyebrow: "Let's Talk",
   headline: "Let's talk.",
-  body: 'Dari branding sampai kemasan, atau sekadar ingin berkenalan lebih dulu.',
+  body: 'Mau berkenalan atau berbagi ide? Kirim pesan, aku akan senang mendengarnya.',
   button: { label: 'Chat on WhatsApp', href: brand.whatsappUrl },
   alt: [
     { label: 'Instagram', href: brand.instagramUrl, icon: 'instagram' },

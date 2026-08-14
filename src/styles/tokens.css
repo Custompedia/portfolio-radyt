@@ -158,6 +158,19 @@
   --hero-btn-w: max(160px, 10.5vw);
   --hero-btn-h: 3.28vw;
 
+  /* Mundurnya kolom statistik hero saat tombol utama mulai mendesaknya.
+     Lantai `160px` di `--hero-btn-w` adalah biangnya: di bawah ~1070px tombol
+     berhenti menyusut sementara segalanya yang lain terus mengecil, jadi tepi
+     kirinya (50vw − lebar tombol − 0.28vw) merangkak masuk ke kolom statistik.
+     DIUKUR di 768×1024: kartu "12+" duduk di 191–265 sementara tombol mulai di
+     222 — 1075px² saling tindih dan label "Years experience" tertutup tombol.
+     Di 819×614 selisihnya −36px.
+
+     35.4vw = tepi kanan kartu TERLEBAR di kolom itu (STAT_SM_X + STAT_SM_W di
+     Hero.astro); 1.2vw napas ke tombol. Di lebar lapang hasilnya nol persis,
+     jadi komposisi desktop tidak bergeser sedikit pun. */
+  --hero-stat-shift: max(0px, calc(35.4vw - (50vw - var(--hero-btn-w) - 0.28vw - 1.2vw)));
+
   /* Ukuran wordmark raksasa, dan SATU-SATUNYA tempat angkanya ditulis.
    *
    * Ketiga angka di bawah diukur di browser pada "RADHYTA" (Satoshi 900,
@@ -229,6 +242,27 @@
   --dur-fast: 0.2s;
   --dur: 0.4s;
   --theme-dur: 0.3s;
+}
+
+/* Layar lebar-pendek (rasio ≳ 2.15) — ponsel lanskap dan jendela desktop yang
+   dipendekkan. GESERAN KOLOM STATISTIK DIMATIKAN DI SINI.
+
+   Di rasio ini baris merek ("Serial entrepreneur, Semarang") duduk sejajar
+   tinggi dengan kartu "12+", dan ruang di antara keduanya lebih sempit dari
+   kartunya sendiri — DIUKUR di 844×390: tinta baris merek berhenti di 198px
+   sementara tombol utama mulai di 260px, celah 62px untuk kartu selebar 81px.
+   Menggeser kartu ke kiri di situ tidak menyelesaikan apa pun, cuma memindahkan
+   tabrakan dari tombol ke teks (tertutup 38px).
+
+   Rasio ini memang tidak punya ruang untuk ketiganya sekaligus; selama belum ada
+   susunan hero khusus untuknya, komposisi lamanya dipertahankan apa adanya
+   alih-alih ditukar dengan tabrakan lain.
+   `min-width` menjaga aturan ini tidak ikut kena ponsel potret, yang punya
+   susunan hero-nya sendiri. */
+@media (min-aspect-ratio: 43/20) and (min-width: 768px) {
+  :root {
+    --hero-stat-shift: 0px;
+  }
 }
 
 /* Dipasang theme.ts di <html> selama section gelap menguasai layar. Hanya

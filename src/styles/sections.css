@@ -960,6 +960,42 @@
     }
   }
 
+  /* Ponsel berlayar pendek (iPhone SE dan sekelasnya). DIUKUR di 320×568: kartu
+     "Trusted by" berakhir di 612px sementara layarnya 568 — panel memang bisa
+     digulung, tapi baris klien jadi tersembunyi di bawah lipatan padahal ia
+     penutup section, bukan isi yang dicari orang. Yang dirapatkan hanya jarak,
+     bukan ukuran teks: menu yang muat tanpa digulung lebih berharga daripada
+     napas ekstra 8px per baris. */
+  @media (max-height: 700px) {
+    .sidebar-panel {
+      gap: 8px;
+      padding-top: 74px;
+      padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    }
+
+    .panel-label {
+      margin-top: 6px;
+    }
+
+    .sidebar-panel .panel-label--clients {
+      padding-top: 10px;
+    }
+
+    .sidebar-panel .nav-link {
+      min-height: 48px;
+      padding: 9px 10px;
+    }
+
+    .sidebar-panel .nav-link-icon {
+      width: 30px;
+      height: 30px;
+    }
+
+    .sidebar-panel .social--panel .social-link {
+      padding: 10px 6px;
+    }
+  }
+
   /* Tombol CTA ikut jadi bagian topbar — dikecilkan ke ukuran pil compact
      supaya sejajar tinggi dengan brand pill & tombol menu. z-index sama
      alasannya dengan `.nav-top` di atas. */

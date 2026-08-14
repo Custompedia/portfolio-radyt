@@ -41,6 +41,30 @@ const STAT_BIG_H = 10.44;
 const STAT_SM_X = 24;
 const STAT_BIG_X = 24.89;
 
+/**
+ * Kolom statistik mundur ke kiri saat tombol utama mulai mendesaknya.
+ *
+ * `--hero-btn-w` punya lantai `max(160px, 10.5vw)`, dan lantai itulah biang
+ * tabrakannya: di bawah ~1070px tombol berhenti menyusut sementara segalanya
+ * yang lain terus mengecil, jadi tepi kirinya (50vw − lebar tombol − 0.28vw)
+ * merangkak masuk ke kolom statistik. DIUKUR di 768×1024: kartu "12+" duduk di
+ * 191–265 sementara tombol mulai di 222 — 1075px² saling tindih, dan label
+ * "Years experience" tertutup tombol. Di 819×614 selisihnya −36px.
+ *
+ * Yang digeser KEDUA kartu dengan jarak yang sama, bukan cuma yang menabrak:
+ * sumbu tengah keduanya sengaja disamakan (≈29.7vw, lihat catatan di atas), dan
+ * menggeser satu saja akan mematahkan kolomnya.
+ *
+ * Di lebar yang lapang hasilnya nol persis, jadi komposisi desktop tidak
+ * bergeser sedikit pun — diverifikasi di 1210.
+ *
+ * Rumusnya sendiri ada di tokens.css sebagai `--hero-stat-shift`, BUKAN di sini:
+ * media query lebar-pendek harus bisa menolkannya, dan nilai yang ditulis
+ * inline lewat `style` tidak bisa ditimpa aturan CSS mana pun. Kalau
+ * `STAT_SM_X`/`STAT_SM_W` di atas berubah, perbarui juga angka 35.4vw di sana.
+ */
+const statX = (x: number): string => `calc(${x}vw - var(--hero-stat-shift))`;
+
 const statsSmY = `calc(var(--hero-h1-top) - ${STAT_SM_H + 1}vw)`;
 const statsBigY = `min(calc(var(--hero-h1-top) + 2 * 1.03 * var(--hero-h1-size) + 1.2vh), calc(97vh - ${STAT_BIG_H}vw))`;
 
@@ -60,18 +84,18 @@ const STAT_BIG_TEXT_H = STAT_BIG_TEXT_W * 0.9353;
  * dibaca engine dan diisi apa adanya sebagai dokumentasi.
  */
 const ghosts: GhostBox[] = [
-  { id: 'stats-card-0', x: `${STAT_SM_X}vw`, y: statsSmY, w: `${STAT_SM_W}vw`, h: `${STAT_SM_H}vw` },
+  { id: 'stats-card-0', x: statX(STAT_SM_X), y: statsSmY, w: `${STAT_SM_W}vw`, h: `${STAT_SM_H}vw` },
   {
     id: 'stat-0',
-    x: `${STAT_SM_X + (STAT_SM_W - STAT_SM_TEXT_W) / 2}vw`,
+    x: statX(STAT_SM_X + (STAT_SM_W - STAT_SM_TEXT_W) / 2),
     y: `calc(${statsSmY} + ${(STAT_SM_H - STAT_SM_TEXT_H) / 2}vw)`,
     w: `${STAT_SM_TEXT_W}vw`,
     h: `${STAT_SM_TEXT_H}vw`,
   },
-  { id: 'stats-card-1', x: `${STAT_BIG_X}vw`, y: statsBigY, w: `${STAT_BIG_W}vw`, h: `${STAT_BIG_H}vw` },
+  { id: 'stats-card-1', x: statX(STAT_BIG_X), y: statsBigY, w: `${STAT_BIG_W}vw`, h: `${STAT_BIG_H}vw` },
   {
     id: 'stat-1',
-    x: `${STAT_BIG_X + (STAT_BIG_W - STAT_BIG_TEXT_W) / 2}vw`,
+    x: statX(STAT_BIG_X + (STAT_BIG_W - STAT_BIG_TEXT_W) / 2),
     y: `calc(${statsBigY} + ${(STAT_BIG_H - STAT_BIG_TEXT_H) / 2}vw)`,
     w: `${STAT_BIG_TEXT_W}vw`,
     h: `${STAT_BIG_TEXT_H}vw`,
