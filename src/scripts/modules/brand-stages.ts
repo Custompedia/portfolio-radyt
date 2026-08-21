@@ -106,24 +106,6 @@ export const brandStagesModule: AnimationModule = {
     const desktop = isDesktop();
 
     context = gsap.context(() => {
-      /*
-       * DIBUANG: blok profil About beserta cincin pertumbuhan SVG-nya
-       * (`[data-about-profile]`, `[data-about-growth]`, `[data-growth-ring]`,
-       * `[data-growth-mark]`, `[data-growth-core]`) dan blok cerita About
-       * (`[data-about-stories]`, `[data-about-story]`).
-       *
-       * Bukan karena tidak terpakai lagi, tapi karena SUDAH tidak pernah
-       * terpakai: markup About ditulis ulang jadi panggung berbabak
-       * (`[data-about-chapter]`, lihat about-story.ts) dan seluruh kait di atas
-       * ikut hilang bersamanya. DIUKUR di DOM langsung - kelima selector itu
-       * mengembalikan NOL elemen, jadi ~40 baris ini tidak pernah dieksekusi
-       * sekali pun sejak markupnya berubah.
-       *
-       * Di antaranya ada animasi menggambar cincin yang ditulis tangan dengan
-       * `getTotalLength()` + `strokeDasharray`/`strokeDashoffset`. Itu memang
-       * kandidat kuat untuk DrawSVGPlugin - tapi mengganti kode mati dengan
-       * kode mati yang lebih rapi tetap saja kode mati.
-       */
       const companyGrid = $<HTMLElement>('.company-grid');
       const companyShowcases = companyGrid ? $$<HTMLElement>('[data-company-showcase]', companyGrid) : [];
       if (companyGrid && companyShowcases.length) {

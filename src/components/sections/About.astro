@@ -1,30 +1,20 @@
 ---
-/**
- * Section 02 - About.
- *
- * Tiga chapter bergantian menguasai satu panggung yang menempel di layar,
- * bukan tiga kolom yang dibaca sekaligus. Kronologi tahun SENGAJA tidak ada di
- * sini - itu tugas section Journey; About memegang hook eyebrow-nya: tiga
- * perusahaan yang dijalankan dari satu meja.
- *
- * Markup default-nya adalah versi statis (judul, intro, lalu tiga chapter
- * mengalir berurutan). modules/about-story.ts yang mengangkatnya jadi panggung
- * sticky dengan menambahkan `.about--staged`, dan hanya di desktop tanpa
- * reduced-motion. Artinya tanpa JS, di mobile, atau saat user meminta gerak
- * minimum, section ini tetap terbaca utuh - bukan layar kosong.
- *
- * Judul ikut masuk ke dalam panggung supaya seluruh komposisi menempel sebagai
- * satu kesatuan; kalau judul ditinggal di luar, panggung baru mulai menempel
- * setelah judul tergulung habis dan hitungan scroll-nya meleset setinggi judul.
- */
 import { about } from '../../data/site';
 ---
 
 <section class="section about" id="about" data-about>
   <div class="about-stage" data-about-stage>
-    <!-- Cahaya yang ikut berpindah tiap chapter berganti; memberi kedalaman
-         pada panggung yang isinya nyaris seluruhnya tipografi. -->
     <span class="about-glow" data-about-glow aria-hidden="true"></span>
+
+    <div class="about-photo-cloud" aria-hidden="true">
+      {
+        about.images.map((image, index) => (
+          <figure class:list={['about-photo', `about-photo--${index + 1}`]}>
+            <img src={image.src} alt="" loading="lazy" decoding="async" />
+          </figure>
+        ))
+      }
+    </div>
 
     <header class="section-head about-head">
       <span class="about-eyebrow">{about.eyebrow}</span>
@@ -39,21 +29,10 @@ import { about } from '../../data/site';
       {
         about.stories.map((story, index) => (
           <article class="about-chapter" data-about-chapter>
-            {/* Angka raksasa di belakang teks. aria-hidden: "01" sudah
-                tersirat dari urutan artikelnya dan hanya jadi kebisingan
-                kalau ikut dibacakan. */}
-            <span class="about-chapter-figure" aria-hidden="true">0{index + 1}</span>
+            <span class="about-chapter-figure" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
             <div class="about-chapter-body">
               <h3 class="about-chapter-title" data-about-title>{story.title}</h3>
               <p class="about-chapter-text" data-about-text>{story.body}</p>
-            </div>
-            <div class:list={['about-chapter-visual', `about-chapter-visual--${index + 1}`]} data-about-visual>
-              <figure class="about-visual-primary">
-                <img src={about.visuals[index]!.primary.src} alt={about.visuals[index]!.primary.alt} loading="lazy" decoding="async" />
-              </figure>
-              <figure class="about-visual-secondary">
-                <img src={about.visuals[index]!.secondary.src} alt={about.visuals[index]!.secondary.alt} loading="lazy" decoding="async" />
-              </figure>
             </div>
           </article>
         ))

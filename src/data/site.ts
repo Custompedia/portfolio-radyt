@@ -7,9 +7,8 @@ export interface ClientLogo {
 export interface AboutPhoto {
   src: string; alt: string;
 }
-export interface AboutVisual { primary: AboutPhoto; secondary: AboutPhoto }
 export interface JourneyEntry { year: string; title: string; body: string; image: string; alt: string }
-export interface Company { name: string; label: string; description: string; logo: string }
+export interface Company { name: string; label?: string; description: string; logo: string }
 export type WorkGroup = 'Custompedia' | 'Parcelin' | 'Creasa';
 export interface WorkItem {
   group: WorkGroup; title: string; kind: string; blurb: string; tags: string[];
@@ -77,30 +76,30 @@ export const clients: ClientLogo[] = [
   { name: 'Handayani', src: '/images/logos/clients/handayani.webp', shape: 'square', desktopWidth: 1.65, mobileWidth: 30 },
 ];
 
-const aboutVisuals: AboutVisual[] = [
-  {
-    primary: { src: '/images/timeline/2016-custompedia.webp', alt: 'Produk merchandise custom pada awal perjalanan Custompedia' },
-    secondary: { src: '/images/timeline/2021-packaging.webp', alt: 'Pengiriman produk kemasan Parcelin' },
-  },
-  {
-    primary: { src: '/images/timeline/2020-pivot.webp', alt: 'Aktivitas kreatif saat Custompedia beralih menjadi creative agency' },
-    secondary: { src: '/images/about/radhyta-gojek-office.webp', alt: 'Radhyta dan tim di kantor Gojek' },
-  },
-  {
-    primary: { src: '/images/timeline/2014-online-shop.webp', alt: 'Radhyta dan istri saat memulai bisnis online' },
-    secondary: { src: '/images/about/radhyta-business-expo.webp', alt: 'Radhyta dalam perjalanan menghadiri pertemuan bisnis' },
-  },
+const aboutImages: AboutPhoto[] = [
+  { src: '/images/about/radhyta-business-expo.webp', alt: 'Radhyta dalam pertemuan bisnis di sebuah expo' },
+  { src: '/images/about/radhyta-gofood-team.webp', alt: 'Radhyta bersama tim pada acara GoFood' },
+  { src: '/images/about/radhyta-gojek-office.webp', alt: 'Radhyta dan tim di kantor Gojek' },
 ];
 
 export const about = {
   eyebrow: 'Three Companies, One Desk', headline: 'About Radhyta',
-  lead: 'Berawal dari satu meja di Semarang pada 2014, Radhyta membangun tiga bisnis yang kini jadi satu ekosistem kreatif: Custompedia, Parcelin, dan Creasa. Dipercaya BNI Lighthouse, Gojek, hingga Pemerintah Provinsi Jawa Tengah untuk menyediakan semua kebutuhan kreatifnya - dari Semarang, untuk seluruh Indonesia.',
-  visuals: aboutVisuals,
+  lead: 'Berawal dari satu meja di Semarang pada 2014, Radhyta membangun tiga bisnis yang kini jadi satu ekosistem kreatif: Custompedia, Parcelin, dan Creasa. Dipercaya BNI Lighthouse, Gojek, hingga Pemerintah Provinsi Jawa Tengah untuk menyediakan semua kebutuhan kreatifnya — dari Semarang, untuk seluruh Indonesia.',
   stories: [
-    { title: 'Built from zero', body: 'Semuanya dimulai dari nol pada 2014. Dimulai dari berjualan baju online, merchandise custom, hingga berkembang menjadi Custompedia. Tidak ada yang diwarisi. Semuanya dirintis dari awal.' },
-    { title: 'The turning point', body: 'Titik terberat datang pada 2020. Pandemi menghentikan lini Merchandise yang selama ini menopang bisnis. Dari situ, Custompedia pivot jadi Creative Agency, Parcelin lahir dari penjualan hampers, dan Creasa tumbuh dari permintaan kebutuhan online retail.' },
-    { title: 'Beyond the work', body: 'Di luar pekerjaan, Radhyta adalah seorang Suami dan Ayah. Selalu ada waktu untuk dihabiskan dengan anak dan istri, menekuni hobi, dan menjelajah ke tempat-tempat baru. Semarang, tetap menjadi tempat semuanya dimulai dan dijalankan.' },
+    {
+      title: 'Built from zero',
+      body: 'Semuanya dimulai dari nol pada 2014. Dimulai dari berjualan baju online, merchandise custom, hingga berkembang menjadi Custompedia. Tidak ada yang diwarisi. Semuanya dirintis dari awal.',
+    },
+    {
+      title: 'The turning point',
+      body: 'Titik terberat datang pada 2020. Pandemi menghentikan lini Merchandise yang selama ini menopang bisnis. Dari situ, Custompedia pivot jadi Creative Agency, Parcelin lahir dari penjualan hampers, dan Creasa tumbuh dari permintaan kebutuhan online retail.',
+    },
+    {
+      title: 'Beyond the work',
+      body: 'Di luar pekerjaan, Radhyta adalah seorang Suami dan Ayah. Selalu ada waktu untuk dihabiskan dengan anak dan istri, menekuni hobi, dan menjelajah ke tempat-tempat baru. Semarang, tetap menjadi tempat semuanya dimulai dan dijalankan.',
+    },
   ],
+  images: aboutImages,
 };
 
 export const journey = {
@@ -122,9 +121,9 @@ export const companies = {
   headline: 'Three Specialization, One Standard',
   intro: 'Tiga spesialisasi utama yang bergerak bersamaan dan lahir dari satu cara berpikir: Relevan dan Tuntas.',
   items: [
-    { name: 'PT Custompedia Creative Group', label: 'Custompedia · Voca · But Gawe', description: 'Rumah kreatif untuk membangun brand dari strategi sampai eksekusi. Tiga unit usaha jalan beriringan: Custompedia (Media Sosial & Branding), Voca (KOL Management), dan But Gawe (Brand Activation).', logo: '/images/favicon.svg' },
-    { name: 'PT Parcelin Creative Indonesia', label: '#BikinDiParcelin', description: 'Creative production house yang mengubah ide jadi produk nyata - packaging, printing, merchandise, sampai promosi brand, semua end-to-end dalam satu atap. Enam unit usaha, satu standar kerja. #BikinDiParcelin', logo: '/images/LOGO%20PT%20PARCELIN%201.webp' },
-    { name: 'Creasa Print', label: '#CetakApaAjaDiCreasa', description: 'Partner printing untuk semua kebutuhan cetak: poster, sticker, DTF, kaos, hingga gantungan kunci. Cepat pengerjaannya, rapi hasilnya. #CetakApaAjaDiCreasa', logo: '/images/creasa-print-logo.webp' },
+    { name: 'PT Custompedia Creative Group', description: 'Rumah kreatif untuk membangun brand dari strategi sampai eksekusi. Tiga unit usaha jalan beriringan: Custompedia (Media Sosial & Branding), Voca (KOL Management), dan But Gawe (Brand Activation).', logo: '/images/favicon.svg' },
+    { name: 'PT Parcelin Creative Indonesia', description: 'Creative production house yang mengubah ide jadi produk nyata - packaging, printing, merchandise, sampai promosi brand, semua end-to-end dalam satu atap. Enam unit usaha, satu standar kerja.', logo: '/images/LOGO%20PT%20PARCELIN%201.webp' },
+    { name: 'Creasa Print', description: 'Partner printing untuk semua kebutuhan cetak: poster, sticker, DTF, kaos, hingga gantungan kunci. Cepat pengerjaannya, rapi hasilnya.', logo: '/images/creasa-print-logo.webp' },
   ] satisfies Company[],
 };
 
