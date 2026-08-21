@@ -16,86 +16,112 @@ export const southeastAsiaModule: AnimationModule = {
     const head = $<HTMLElement>('.sea-head', section || undefined);
     if (!section || !stage) return;
 
-    video?.addEventListener('loadeddata', () => ScrollTrigger.refresh(), { once: true });
+    if (video) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.playsInline = true;
+      video.setAttribute('playsinline', '');
+      video.setAttribute('webkit-playsinline', '');
+      void video.play().catch(() => undefined);
+      video.addEventListener('loadeddata', () => ScrollTrigger.refresh(), { once: true });
+    }
+
+    const isMobile = window.innerWidth <= 767;
 
     context = gsap.context(() => {
       // 1. Header entrance saat mendekat
       if (head) {
         gsap.fromTo(
           head,
-          { y: 40, opacity: 0 },
+          { y: 30, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            duration: 1.0,
+            duration: 0.8,
             ease: 'power3.out',
             scrollTrigger: {
               trigger: section,
-              start: 'top 80%',
-              toggleActions: 'play reverse play reverse',
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
             },
           },
         );
       }
 
       // 2. Video Stage:
-      //    Pacing seimbang tanpa membuat jarak kosong berlebih di bawahnya
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 65%',
-          end: 'bottom 10%',
-          scrub: 1.0,
-        },
-      });
+      if (isMobile) {
+        // Pada mobile: pastikan stage selalu tampil 100% jelas, terang, dan tidak mengecil/hitam
+        gsap.set(stage, { y: 0, scale: 1, opacity: 1 });
+        gsap.fromTo(
+          stage,
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            },
+          },
+        );
+      } else {
+        // Desktop: Pacing seimbang cinematic scroll-scrub
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 65%',
+            end: 'bottom 10%',
+            scrub: 1.0,
+          },
+        });
 
-      // Animasi IN: Frame membesar dari bawah ke ukuran penuh
-      tl.fromTo(
-        stage,
-        {
-          y: '35vh',
-          scale: 0.5,
-          opacity: 0,
-          transformOrigin: 'center center',
-        },
-        {
+        tl.fromTo(
+          stage,
+          {
+            y: '35vh',
+            scale: 0.5,
+            opacity: 0,
+            transformOrigin: 'center center',
+          },
+          {
+            y: 0,
+            scale: 1,
+            opacity: 1,
+            ease: 'power1.out',
+            duration: 1.8,
+          },
+        );
+
+        tl.to(stage, {
           y: 0,
           scale: 1,
           opacity: 1,
-          ease: 'power1.out',
-          duration: 1.8,
-        },
-      );
+          duration: 0.9,
+        });
 
-      // Posisi Tengah (Hold saat ditonton)
-      tl.to(stage, {
-        y: 0,
-        scale: 1,
-        opacity: 1,
-        duration: 0.9,
-      });
+        tl.to(stage, {
+          y: '-25vh',
+          scale: 0.72,
+          opacity: 0.1,
+          ease: 'power1.in',
+          duration: 1.3,
+        });
 
-      // Animasi OUT: Frame mengecil ke atas saat scroll keluar
-      tl.to(stage, {
-        y: '-25vh',
-        scale: 0.72,
-        opacity: 0.1,
-        ease: 'power1.in',
-        duration: 1.3,
-      });
-
-      // Header exit: Meluncur ke atas
-      if (head) {
-        tl.to(
-          head,
-          {
-            y: -50,
-            opacity: 0,
-            duration: 1.3,
-            ease: 'power1.in',
-          },
-          '>-1.3',
-        );
+        if (head) {
+          tl.to(
+            head,
+            {
+              y: -50,
+              opacity: 0,
+              duration: 1.3,
+              ease: 'power1.in',
+            },
+            '>-1.3',
+          );
+        }
       }
 
       // 3. Playback video otomatis
@@ -111,10 +137,10 @@ export const southeastAsiaModule: AnimationModule = {
             void video.play().catch(() => undefined);
           },
           onLeave: () => {
-            video.pause();
+            if (!isMobile) video.pause();
           },
           onLeaveBack: () => {
-            video.pause();
+            if (!isMobile) video.pause();
           },
         });
       }

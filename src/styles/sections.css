@@ -4296,7 +4296,7 @@ html {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: #0d1117;
+  background: #0d1117 url('/video/sea-poster.webp') center / cover no-repeat;
   overflow: hidden;
 }
 
