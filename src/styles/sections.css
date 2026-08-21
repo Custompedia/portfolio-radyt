@@ -3796,7 +3796,7 @@
   }
 
   .timeline-card[data-timeline-card='3'] .timeline-media-image {
-    object-position: center bottom;
+    object-position: center 15%;
   }
 }
 
@@ -4050,7 +4050,7 @@
 
   .timeline-card[data-timeline-card='3'] .timeline-media img,
   .timeline-card[data-timeline-card='3'] .timeline-media-image {
-    object-position: center bottom !important;
+    object-position: center 15% !important;
   }
 }
 
