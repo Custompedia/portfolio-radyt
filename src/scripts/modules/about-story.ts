@@ -22,8 +22,9 @@ let timeline: gsap.core.Timeline | null = null;
 const mobileTweens: gsap.core.Tween[] = [];
 const splits: SplitText[] = [];
 
-/** Satu viewport untuk intro, lalu satu untuk tiap chapter. */
-const HOLD_PER_ACT = 1;
+const INTRO_AT = 0.42;
+const CHAPTER_STEP = 0.7;
+const STAGE_VIEWPORTS = 3.15;
 
 /**
  * ABOUT DI MOBILE — bab yang dibacakan, bukan blok yang muncul.
@@ -148,7 +149,7 @@ export const aboutStoryModule: AnimationModule = {
     const rails = $$('[data-about-rail-fill]');
 
     section.classList.add('about--staged');
-    section.style.height = `${window.innerHeight * (chapters.length + HOLD_PER_ACT)}px`;
+    section.style.height = `${window.innerHeight * STAGE_VIEWPORTS}px`;
 
     // Dipecah setelah kelas panggung terpasang: lebar kolomnya berubah di
     // bentuk staged, dan SplitText memotong baris berdasarkan lebar saat itu.
@@ -185,8 +186,8 @@ export const aboutStoryModule: AnimationModule = {
     timeline = tl;
 
     // Babak 0 — intro menyerahkan panggung.
-    tl.to(intro, { autoAlpha: 0, y: -70, duration: 0.45, ease: 'power2.in' }, 0.55);
-    tl.to(leadLines, { yPercent: -110, duration: 0.45, stagger: 0.04, ease: 'power2.in' }, 0.55);
+    tl.to(intro, { autoAlpha: 0, y: -52, duration: 0.28, ease: 'power2.in' }, 0.34);
+    tl.to(leadLines, { yPercent: -105, duration: 0.28, stagger: 0.025, ease: 'power2.in' }, 0.34);
 
     const last = chapters.length - 1;
 
@@ -198,7 +199,7 @@ export const aboutStoryModule: AnimationModule = {
       // Tiap chapter memakai satu viewport penuh; angka 1.0 di bawah adalah
       // panjang satu babak dalam satuan timeline, bukan detik (semuanya
       // di-scrub, jadi durasi nyata ditentukan scroll).
-      const at = HOLD_PER_ACT + i;
+      const at = INTRO_AT + i * CHAPTER_STEP;
 
       gsap.set(chapter, { autoAlpha: 0 });
 
@@ -207,20 +208,20 @@ export const aboutStoryModule: AnimationModule = {
         .fromTo(
           figure,
           { yPercent: 22, autoAlpha: 0 },
-          { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' },
+          { yPercent: 0, autoAlpha: 1, duration: 0.34, ease: 'power3.out' },
           at,
         )
         .fromTo(
           titleChars,
           { yPercent: 115, autoAlpha: 0 },
-          { yPercent: 0, autoAlpha: 1, duration: 0.45, stagger: 0.018, ease: 'power3.out' },
-          at + 0.04,
+          { yPercent: 0, autoAlpha: 1, duration: 0.34, stagger: 0.012, ease: 'power3.out' },
+          at + 0.02,
         )
         .fromTo(
           bodyLines,
           { yPercent: 70, autoAlpha: 0 },
-          { yPercent: 0, autoAlpha: 1, duration: 0.42, stagger: 0.05, ease: 'power2.out' },
-          at + 0.16,
+          { yPercent: 0, autoAlpha: 1, duration: 0.34, stagger: 0.032, ease: 'power2.out' },
+          at + 0.1,
         );
 
       if (rails[i]) tl.to(rails[i], { scaleX: 1, duration: 0.35, ease: 'none' }, at);
@@ -234,7 +235,7 @@ export const aboutStoryModule: AnimationModule = {
             // teks, bukan menyala diam di satu titik.
             xPercent: -14 + i * 14,
             yPercent: -10 + i * 12,
-            duration: 0.6,
+            duration: 0.42,
             ease: 'power2.out',
           },
           at,
@@ -244,8 +245,8 @@ export const aboutStoryModule: AnimationModule = {
       // Chapter terakhir dibiarkan berdiri sampai panggung lepas.
       if (i < last) {
         tl
-          .to(chapter, { autoAlpha: 0, y: -60, duration: 0.4, ease: 'power2.in' }, at + 0.62)
-          .to(figure, { yPercent: -18, duration: 0.4, ease: 'power2.in' }, at + 0.62);
+          .to(chapter, { autoAlpha: 0, y: -48, duration: 0.24, ease: 'power2.in' }, at + 0.5)
+          .to(figure, { yPercent: -16, duration: 0.24, ease: 'power2.in' }, at + 0.5);
       }
     });
   },

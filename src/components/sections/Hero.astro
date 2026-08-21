@@ -31,14 +31,9 @@ interface GhostBox {
   h: string;
 }
 
-// Kartu perusahaan berada tepat di atas awal headline, sementara kartu tahun
-// jatuh persis di bawah kata "FROM" (baris kedua headline). Sumbu tengah kedua
-// kartu sengaja dibuat sama (≈29.7vw) supaya keduanya berdiri satu kolom.
-const STAT_SM_W = 11.4;
-const STAT_SM_H = 4.8;
+// Kartu tahun jatuh persis di bawah kata "FROM" (baris kedua headline).
 const STAT_BIG_W = 9.62;
 const STAT_BIG_H = 10.44;
-const STAT_SM_X = 24;
 const STAT_BIG_X = 24.89;
 
 /**
@@ -51,25 +46,18 @@ const STAT_BIG_X = 24.89;
  * 191–265 sementara tombol mulai di 222 — 1075px² saling tindih, dan label
  * "Years experience" tertutup tombol. Di 819×614 selisihnya −36px.
  *
- * Yang digeser KEDUA kartu dengan jarak yang sama, bukan cuma yang menabrak:
- * sumbu tengah keduanya sengaja disamakan (≈29.7vw, lihat catatan di atas), dan
- * menggeser satu saja akan mematahkan kolomnya.
- *
  * Di lebar yang lapang hasilnya nol persis, jadi komposisi desktop tidak
  * bergeser sedikit pun — diverifikasi di 1210.
  *
  * Rumusnya sendiri ada di tokens.css sebagai `--hero-stat-shift`, BUKAN di sini:
  * media query lebar-pendek harus bisa menolkannya, dan nilai yang ditulis
  * inline lewat `style` tidak bisa ditimpa aturan CSS mana pun. Kalau
- * `STAT_SM_X`/`STAT_SM_W` di atas berubah, perbarui juga angka 35.4vw di sana.
+ * `STAT_BIG_X`/`STAT_BIG_W` di atas berubah, perbarui juga angka 35.4vw di sana.
  */
 const statX = (x: number): string => `calc(${x}vw - var(--hero-stat-shift))`;
 
-const statsSmY = `calc(var(--hero-h1-top) - ${STAT_SM_H + 1}vw)`;
 const statsBigY = `min(calc(var(--hero-h1-top) + 2 * 1.03 * var(--hero-h1-size) + 1.2vh), calc(97vh - ${STAT_BIG_H}vw))`;
 
-const STAT_SM_TEXT_W = 9;
-const STAT_SM_TEXT_H = STAT_SM_TEXT_W * 0.2338;
 const STAT_BIG_TEXT_W = 6.8;
 const STAT_BIG_TEXT_H = STAT_BIG_TEXT_W * 0.9353;
 
@@ -84,17 +72,9 @@ const STAT_BIG_TEXT_H = STAT_BIG_TEXT_W * 0.9353;
  * dibaca engine dan diisi apa adanya sebagai dokumentasi.
  */
 const ghosts: GhostBox[] = [
-  { id: 'stats-card-0', x: statX(STAT_SM_X), y: statsSmY, w: `${STAT_SM_W}vw`, h: `${STAT_SM_H}vw` },
+  { id: 'stats-card-0', x: statX(STAT_BIG_X), y: statsBigY, w: `${STAT_BIG_W}vw`, h: `${STAT_BIG_H}vw` },
   {
     id: 'stat-0',
-    x: statX(STAT_SM_X + (STAT_SM_W - STAT_SM_TEXT_W) / 2),
-    y: `calc(${statsSmY} + ${(STAT_SM_H - STAT_SM_TEXT_H) / 2}vw)`,
-    w: `${STAT_SM_TEXT_W}vw`,
-    h: `${STAT_SM_TEXT_H}vw`,
-  },
-  { id: 'stats-card-1', x: statX(STAT_BIG_X), y: statsBigY, w: `${STAT_BIG_W}vw`, h: `${STAT_BIG_H}vw` },
-  {
-    id: 'stat-1',
     x: statX(STAT_BIG_X + (STAT_BIG_W - STAT_BIG_TEXT_W) / 2),
     y: `calc(${statsBigY} + ${(STAT_BIG_H - STAT_BIG_TEXT_H) / 2}vw)`,
     w: `${STAT_BIG_TEXT_W}vw`,
@@ -150,18 +130,13 @@ const navRight = nav.slice(2);
       </span>
     </p>
 
-    <!-- Potret tidak mengecil, ia melebur: blur naik sampai 90px sementara
-         opacity turun sampai NOL. Sebelumnya berhenti di 0.3, dan sisa 0.3 itu
-         yang terbaca sebagai noda gelap di belakang kartu About.
-         Selesai di 55%, bukan 70%: About ditarik naik lewat margin negatif dan
-         mulai menumpuk hero sekitar 57%, jadi potretnya harus sudah padam
-         sebelum itu — kalau tidak, nodanya tetap muncul betapapun tipisnya. -->
+    <!-- Potret melebur sepenuhnya sebelum About memasuki viewport. -->
     <div
       class="hero-portrait"
       data-tl-type="scroll"
       data-tl-trigger="[data-hero]"
       data-tl-start="0% top"
-      data-tl-end="55% top"
+      data-tl-end="48% top"
       data-tl-from="{'filter':'blur(0px)','opacity':1}"
       data-tl-to="{'filter':'blur(90px)','opacity':0}"
       data-tl-desktop
@@ -263,19 +238,12 @@ const navRight = nav.slice(2);
       {hero.headline.map((line) => <span class="hero-headline-line">{line}</span>)}
     </h1>
 
-    {stats[0] && (
-      <div class="hero-mobile-stat hero-mobile-stat-inline card">
-        <span class="hero-mobile-stat-value">{stats[0].value}</span>
-        <span class="hero-mobile-stat-label">{stats[0].label}</span>
-      </div>
-    )}
-
     <div class="hero-mobile-cards glass-card">
       {
-        stats[1] && (
-          <div class="hero-mobile-stat hero-mobile-stat-float glass-card">
-            <span class="hero-mobile-stat-value">{stats[1].value}</span>
-            <span class="hero-mobile-stat-label">{stats[1].label}</span>
+        stats[0] && (
+          <div class="hero-mobile-stat hero-mobile-stat-float glass-card" aria-label={`${stats[0].value} ${stats[0].label}`}>
+            <span class="hero-mobile-stat-value">{stats[0].value}</span>
+            <span class="hero-mobile-stat-label">{stats[0].label}</span>
           </div>
         )
       }
@@ -290,17 +258,17 @@ const navRight = nav.slice(2);
         data-tl-to="{'scale':0.3,'autoAlpha':0,'x':'-25vw','y':'-5vw'}"
         data-tl-desktop
       >
-        {hero.traits.map((trait) => (
+        {hero.holdings.map((holding) => (
           <span class="hero-trait">
             <span class="hero-trait-mark" aria-hidden="true" />
-            {trait}
+            <span class="hero-trait-name">{holding.name}</span>
           </span>
         ))}
       </div>
     </div>
 
     <p
-      class="hero-eyebrow"
+      class="hero-eyebrow hero-eyebrow--mobile-only"
       data-tl-type="scroll"
       data-tl-trigger="[data-hero]"
       data-tl-start="5% top"
@@ -309,7 +277,6 @@ const navRight = nav.slice(2);
       data-tl-to="{'yPercent':-100,'autoAlpha':0}"
       data-tl-desktop
     >
-      <span class="hero-role">{hero.eyebrow} {hero.eyebrowSecond}</span>
       <span class="hero-mobile-about-eyebrow">{about.eyebrow}</span>
     </p>
 

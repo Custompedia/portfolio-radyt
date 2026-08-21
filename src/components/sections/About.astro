@@ -26,6 +26,14 @@ import { about } from '../../data/site';
          pada panggung yang isinya nyaris seluruhnya tipografi. -->
     <span class="about-glow" data-about-glow aria-hidden="true"></span>
 
+    <div class="about-photo-cloud">
+      {about.images.map((image, index) => (
+        <figure class:list={['about-photo', `about-photo--${index + 1}`]}>
+          <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
+        </figure>
+      ))}
+    </div>
+
     <header class="section-head about-head">
       <span class="about-eyebrow">{about.eyebrow}</span>
       <h2 class="section-title h2-style" data-reveal>{about.headline}</h2>

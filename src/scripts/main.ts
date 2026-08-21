@@ -1,20 +1,17 @@
 import { ScrollTrigger } from './core/gsap';
 import type { AnimationModule } from './core/module';
-import { getLenis, initAnchorLinks, initSmoothScroll } from './core/smooth-scroll';
+import { initAnchorLinks, initSmoothScroll } from './core/smooth-scroll';
 import { debounce, isDesktop, isPerformanceConstrained, prefersReducedMotion, whenFontsReady } from './core/utils';
 
 import { sidebarModule } from './modules/sidebar';
 import { ghostModule } from './modules/ghost';
 import { styleEngineModule } from './modules/style-engine';
 import { textRevealModule } from './modules/text-reveal';
-import { horizontalModule } from './modules/horizontal';
 import { aboutStoryModule } from './modules/about-story';
 import { themeModule } from './modules/theme';
 import { timelinePathModule } from './modules/timeline-path';
 import { packagingTestModule } from './modules/packaging-test';
-import { stackModule } from './modules/stack';
 import { navActiveModule } from './modules/nav-active';
-import { workCardsModule } from './modules/work-cards';
 import { mobileMenuModule } from './modules/mobile-menu';
 import { footerCtaModule } from './modules/footer-cta';
 import { microModule } from './modules/micro';
@@ -38,15 +35,12 @@ import { brandStagesModule } from './modules/brand-stages';
 const modules: AnimationModule[] = [
   sidebarModule,
   ghostModule,
-  horizontalModule,
   aboutStoryModule,
   styleEngineModule,
   textRevealModule,
   timelinePathModule,
   themeModule,
   packagingTestModule,
-  stackModule,
-  workCardsModule,
   navActiveModule,
   mobileMenuModule,
   footerCtaModule,
@@ -158,15 +152,6 @@ async function boot(): Promise<void> {
 
   document.documentElement.classList.remove('js-loading');
   ScrollTrigger.refresh();
-
-  // Intro berjalan ~3,3 detik dan tidak akan pernah terlihat utuh kalau
-  // halaman sudah bisa di-scroll sejak frame pertama. Scroll dikunci selama
-  // durasi itu — hanya di desktop, karena intro-nya sendiri desktop-only.
-  const lenis = getLenis();
-  if (lenis && isDesktop() && !prefersReducedMotion()) {
-    lenis.stop();
-    window.setTimeout(() => lenis.start(), 3000);
-  }
 
   // Boot selesai — intro tidak boleh lagi mendapat giliran. Penting untuk
   // halaman yang dibuka di lebar mobile: di sana intro tidak pernah jalan, dan

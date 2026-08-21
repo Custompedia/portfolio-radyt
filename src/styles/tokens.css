@@ -165,9 +165,8 @@
      222 — 1075px² saling tindih dan label "Years experience" tertutup tombol.
      Di 819×614 selisihnya −36px.
 
-     35.4vw = tepi kanan kartu TERLEBAR di kolom itu (STAT_SM_X + STAT_SM_W di
-     Hero.astro); 1.2vw napas ke tombol. Di lebar lapang hasilnya nol persis,
-     jadi komposisi desktop tidak bergeser sedikit pun. */
+     35.4vw = ambang lama kolom statistik; sengaja DIPERTAHANKAN apa adanya agar
+     posisi kartu "12+" tidak bergeser sedikit pun. */
   --hero-stat-shift: max(0px, calc(35.4vw - (50vw - var(--hero-btn-w) - 0.28vw - 1.2vw)));
 
   /* Ukuran wordmark raksasa, dan SATU-SATUNYA tempat angkanya ditulis.

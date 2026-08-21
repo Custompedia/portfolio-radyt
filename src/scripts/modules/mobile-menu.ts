@@ -14,21 +14,35 @@ export const mobileMenuModule: AnimationModule = {
   rebuildOnResize: true,
 
   init() {
-    if (isDesktop()) return;
-
     const trigger = $('[data-menu-trigger]');
     const sidebar = $('.sidebar');
-    if (!trigger || !sidebar) return;
+    const panel = $('[data-sidebar-panel]');
+    if (!trigger || !sidebar || !panel) return;
+
+    if (isDesktop()) {
+      panel.inert = false;
+      panel.removeAttribute('aria-hidden');
+      return;
+    }
 
     const setOpen = (open: boolean) => {
       sidebar.classList.toggle('is-open', open);
       trigger.setAttribute('aria-expanded', String(open));
       trigger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      panel.inert = !open;
+      panel.setAttribute('aria-hidden', String(!open));
       if (open) getLenis()?.stop();
       else getLenis()?.start();
     };
 
-    const onToggle = () => setOpen(trigger.getAttribute('aria-expanded') !== 'true');
+    setOpen(false);
+
+    const onToggle = () => {
+      const open = trigger.getAttribute('aria-expanded') !== 'true';
+      setOpen(open);
+      if (open) requestAnimationFrame(() => $('.nav-link', panel)?.focus());
+      else trigger.focus();
+    };
     trigger.addEventListener('click', onToggle);
     cleanups.push(() => trigger.removeEventListener('click', onToggle));
 
@@ -41,7 +55,9 @@ export const mobileMenuModule: AnimationModule = {
     }
 
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false);
+      if (event.key !== 'Escape' || trigger.getAttribute('aria-expanded') !== 'true') return;
+      setOpen(false);
+      trigger.focus();
     };
     document.addEventListener('keydown', onKey);
     cleanups.push(() => document.removeEventListener('keydown', onKey));
@@ -51,6 +67,11 @@ export const mobileMenuModule: AnimationModule = {
     while (cleanups.length) cleanups.pop()?.();
     $('.sidebar')?.classList.remove('is-open');
     $('[data-menu-trigger]')?.setAttribute('aria-expanded', 'false');
+    const panel = $('[data-sidebar-panel]');
+    if (panel) {
+      panel.inert = false;
+      panel.removeAttribute('aria-hidden');
+    }
     getLenis()?.start();
   },
 };

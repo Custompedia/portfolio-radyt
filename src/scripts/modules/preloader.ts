@@ -67,7 +67,6 @@ const stage = () => ({
   lead: [$('.hero-eyebrow'), $('.hero-name')].filter(Boolean) as HTMLElement[],
   buttons: [$('.btn-primary'), $('.hero-secondary')].filter(Boolean) as HTMLElement[],
   supporting: [$('.hero-traits')].filter(Boolean) as HTMLElement[],
-  paragraphs: [$('.hero-subheadline'), $('.hero-brands')].filter(Boolean) as HTMLElement[],
   /** Hanya ada di bawah 768px — lihat `.hero-mobile-stat` di sections.css. */
   mobileStats: $$('.hero-mobile-stat'),
 });
@@ -161,7 +160,6 @@ export const preloaderModule: AnimationModule = {
     gsap.set(el.buttons, { autoAlpha: 0 });
     gsap.set(el.lead, { autoAlpha: 0 });
     gsap.set(el.supporting, { autoAlpha: 0 });
-    gsap.set(el.paragraphs, { autoAlpha: 0 });
 
     timeline = gsap.timeline({ delay: 0.15 });
 
@@ -198,12 +196,7 @@ export const preloaderModule: AnimationModule = {
         { autoAlpha: 1, duration: 0.8, stagger: 0.08, ease: 'power2.out' },
         'hero+=1.25',
       )
-      .to(el.supporting, { autoAlpha: 1, duration: 0.7, stagger: 0.1, ease: 'power2.out' }, 'hero+=1.55')
-      .to(
-        el.paragraphs,
-        { autoAlpha: 1, duration: 0.7, stagger: 0.1, ease: 'power2.out' },
-        'hero+=1.65',
-      );
+      .to(el.supporting, { autoAlpha: 1, duration: 0.7, stagger: 0.1, ease: 'power2.out' }, 'hero+=1.55');
   },
 
   destroy() {
@@ -228,7 +221,7 @@ export const preloaderModule: AnimationModule = {
     gsap.set(el.statCards, { clearProps: 'opacity,visibility,filter' });
     gsap.set(el.mobileStats, { clearProps: 'opacity,visibility,scale,y' });
     gsap.set([...el.supporting, ...el.lead, ...el.buttons], { clearProps: 'y' });
-    gsap.set([...el.navLinks, ...el.lead, ...el.buttons, ...el.supporting, ...el.paragraphs], {
+    gsap.set([...el.navLinks, ...el.lead, ...el.buttons, ...el.supporting], {
       clearProps: 'opacity,visibility',
     });
   },

@@ -1,39 +1,21 @@
 ---
-/**
- * Jeda visual antara The Work dan CTA penutup — scene 3D "Pedi".
- *
- * Bukan salah satu dari tujuh section handoff dan sengaja tidak menawarkan apa
- * pun: tidak ada tombol di sini, supaya satu-satunya ajakan di kaki halaman
- * tetap tombol WhatsApp di section terakhir.
- *
- * `id` diperlukan meski section ini tidak punya menu sendiri — modules/
- * nav-active.ts memakainya untuk tetap menyalakan "Contact" saat scene ini
- * lewat, bukan meninggalkan "Work" menyala di section yang bukan Work.
- *
- * Section ini lapis paling bawah dari tumpukan penutup: setelah Pedi selesai
- * nge-zoom ia DIAM satu viewport sementara The Work naik menimpanya. Lihat
- * modules/stack.ts. `data-theme-duration` mengikuti panjang pin (5.6 + 1
- * viewport penahan) — kalau tidak, sidebar keburu balik terang saat layar masih
- * gelap.
- */
-import { moment } from '../../data/site';
+import { workStory } from '../../data/site';
 ---
 
 <section
   class="packaging-test theme-dark"
-  id="moment"
+  id="work"
   data-packaging-test
-  data-stack-hold
   data-theme-section
-  data-theme-duration="6.6"
+  data-theme-duration="3.2"
   aria-labelledby="packaging-test-title"
 >
   <div class="packaging-test-stage">
     <header class="packaging-test-copy">
       <h2 id="packaging-test-title" class="packaging-test-title">
-        {moment.headline.map((line) => <span data-packaging-intro>{line}</span>)}
+        {workStory.headline.map((line) => <span data-packaging-intro>{line}</span>)}
       </h2>
-      <p class="packaging-test-intro" data-packaging-intro>{moment.intro}</p>
+      <p class="packaging-test-intro" data-packaging-intro>{workStory.intro}</p>
     </header>
 
     <div class="packaging-test-scene" aria-hidden="true">
@@ -50,21 +32,19 @@ import { moment } from '../../data/site';
     </div>
 
     <ol class="packaging-test-moments" data-packaging-moments>
-      {
-        moment.beats.map((beat) => (
-          <li class="packaging-test-moment">
-            <span class="packaging-test-number">{beat.number}</span>
-            <span class="packaging-test-moment-copy">
-              <strong>{beat.label}</strong>
-              <span>{beat.body}</span>
-            </span>
-          </li>
-        ))
-      }
+      {workStory.beats.map((beat) => (
+        <li class="packaging-test-moment">
+          <span class="packaging-test-number">{beat.number}</span>
+          <span class="packaging-test-moment-copy">
+            <strong>{beat.label}</strong>
+            <span>{beat.body}</span>
+          </span>
+        </li>
+      ))}
     </ol>
 
     <div class="packaging-test-outro" data-packaging-outro>
-      <p>{moment.closing.map((line) => <span>{line}</span>)}</p>
+      <p>{workStory.headline.map((line) => <span>{line}</span>)}</p>
     </div>
   </div>
 </section>

@@ -112,7 +112,7 @@ const path = nodes
             <p class="timeline-body">{entry.body}</p>
           </div>
           <figure class="timeline-media" data-timeline-media>
-            <img src={entry.image} alt="" loading="lazy" decoding="async" />
+            <img src={entry.image} alt={entry.alt} loading="lazy" decoding="async" />
           </figure>
         </article>
       ))

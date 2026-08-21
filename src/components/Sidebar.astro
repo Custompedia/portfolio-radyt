@@ -65,9 +65,9 @@ import { brand, clients, hero, nav, social, stats } from '../data/site';
     <div class="nav-stats-row">
       {
         stats.map((stat, i) => (
-          <div class="nav-card nav-stat-card">
+          <div class="nav-card nav-stat-card" aria-label={`${stat.value} ${stat.label}`}>
             <span class="nav-card-bg" data-ghost={`stats-card-${i}`} data-ghost-type="background" />
-            <div class="nav-stat" data-ghost={`stat-${i}`} data-ghost-type="box" data-ghost-alt={i === 0 ? 'is-inline' : undefined}>
+            <div class="nav-stat" data-ghost={`stat-${i}`} data-ghost-type="box">
               <span class="nav-stat-value">{stat.value}</span>
               <span class="nav-stat-label">
                 {

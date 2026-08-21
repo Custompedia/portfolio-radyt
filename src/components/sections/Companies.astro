@@ -25,6 +25,11 @@ import { companies } from '../../data/site';
           <div class="company-logo-wrap" data-company-logo>
             <img src={company.logo} alt={company.name} loading="eager" fetchpriority="low" decoding="async" />
           </div>
+          <div class="company-copy">
+            <span>{company.label}</span>
+            <h3>{company.name}</h3>
+            <p>{company.description}</p>
+          </div>
         </li>
       ))
     }

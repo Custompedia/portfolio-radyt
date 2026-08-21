@@ -5,7 +5,7 @@
  *   1. Active in    — komunitas bisnis dengan logo atau monogram yang jelas
  *   2. Trusted by   — logo klien (dibaca dari `clients`, sumber yang sama
  *                     dengan marquee sidebar supaya keduanya tidak pernah beda)
- *   3. Outlook      — ASPIRASI ke Asia Tenggara, bukan pencapaian
+ *   3. Outlook dipisah menjadi section Southeast Asia tersendiri.
  *
  * Bagian 3 sengaja tidak punya peta dan tidak menyebut negara: belum ada klien
  * di sana, dan menaruhnya di peta akan terbaca sebagai jangkauan yang sudah
@@ -28,11 +28,7 @@ import { clients, network, networkActive } from '../../data/site';
           networkActive.map((member) => (
             <li class:list={['network-orbit', `network-orbit--${member.shape ?? 'mark'}`]} data-network-active>
               <div class="network-orbit-mark">
-                {member.src ? (
-                  <img src={member.src} alt="" loading="lazy" decoding="async" />
-                ) : (
-                  <span aria-hidden="true">{member.mark}</span>
-                )}
+                <img src={member.src} alt={`Logo ${member.name}`} loading="lazy" decoding="async" />
               </div>
               <span class="network-orbit-name">{member.name}</span>
             </li>
@@ -41,28 +37,22 @@ import { clients, network, networkActive } from '../../data/site';
       </ul>
     </section>
 
-    <section class="network-block" aria-labelledby="network-trusted">
+    <section class="network-block network-block--trusted" aria-labelledby="network-trusted">
       <h3 class="network-label" id="network-trusted">{network.trustedLabel}</h3>
-      <ul class="network-constellation network-constellation--trusted">
-        {
-          clients.map((client) => (
-            <li
-              class:list={['network-orbit', 'network-orbit--trusted', `network-orbit--${client.shape}`]}
-              data-network-trusted
-            >
-              <div class="network-orbit-mark">
-                <img src={client.src} alt="" loading="lazy" decoding="async" />
-              </div>
-              <span class="network-orbit-name">{client.name}</span>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-
-    <section class="network-block network-outlook" aria-labelledby="network-outlook">
-      <h3 class="network-label" id="network-outlook">{network.outlookLabel}</h3>
-      <p>{network.outlook}</p>
+      <div class="trusted-marquees" aria-label="Daftar klien yang mempercayai Radhyta">
+        {[clients.slice(0, 10), clients.slice(10)].map((row, rowIndex) => (
+          <div class:list={['trusted-marquee', rowIndex === 1 && 'trusted-marquee--reverse']}>
+            <ul class="trusted-marquee-track">
+              {[...row, ...row].map((client, index) => (
+                <li class="trusted-logo" aria-hidden={index >= row.length ? 'true' : undefined}>
+                  <img src={client.src} alt={index < row.length ? client.name : ''} loading="lazy" decoding="async" />
+                  {index < row.length && <span>{client.name}</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </section>
   </div>
 </section>

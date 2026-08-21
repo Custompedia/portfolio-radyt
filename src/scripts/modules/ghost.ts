@@ -82,12 +82,8 @@ function measureAlt(real: HTMLElement, className: string): AltLayout | null {
   };
 }
 
-/**
- * Panjang morph, dihitung dari puncak hero. Hero setinggi 300vh dan lapisan
- * sticky-nya menempel selama 200vh, jadi 120vh menyelesaikan morph di sepertiga
- * awal — sama seperti `data-flip-end="40% top"` pada referensi.
- */
-const MORPH_VH = 1.2;
+/** Morph selesai sebelum About memasuki viewport. */
+const MORPH_VH = 0.72;
 
 const toRect = (el: Element): Rect => {
   const r = el.getBoundingClientRect();
@@ -289,7 +285,7 @@ interface WordmarkMorph {
 }
 
 /** Bagian akhir morph yang dipakai untuk silang-pudar, dalam satuan viewport. */
-const HANDOVER_VH = 0.1;
+const HANDOVER_VH = 0.08;
 
 function measureWordmark(): WordmarkMorph | null {
   const inner = $<HTMLElement>('[data-wordmark-inner]');
@@ -362,8 +358,8 @@ function buildFades(trigger: Element): void {
       stagger: 0.04,
       scrollTrigger: {
         trigger,
-        start: () => `${window.innerHeight * 0.84} top`,
-        end: () => `+=${window.innerHeight * 0.64}`,
+        start: () => `${window.innerHeight * 0.48} top`,
+        end: () => `+=${window.innerHeight * 0.42}`,
         scrub: 1,
       },
     },
@@ -385,7 +381,7 @@ function buildHeroTone(trigger: Element, sidebar: Element): void {
   ScrollTrigger.create({
     trigger,
     start: 'top top',
-    end: () => `+=${window.innerHeight * 0.66}`,
+    end: () => `+=${window.innerHeight * 0.52}`,
     onLeave: () => sidebar.classList.remove('is-hero-tone'),
     onEnterBack: () => sidebar.classList.add('is-hero-tone'),
   });

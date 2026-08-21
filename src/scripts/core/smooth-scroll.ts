@@ -4,10 +4,10 @@ import { prefersReducedMotion } from './utils';
 
 let lenis: Lenis | null = null;
 
-const ANCHOR_MIN_DURATION = 1.25;
-const ANCHOR_MAX_DURATION = 2.8;
-const ANCHOR_PX_PER_SECOND = 1800;
-const anchorEase = (t: number): number => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
+const ANCHOR_MIN_DURATION = 1.1;
+const ANCHOR_MAX_DURATION = 5.8;
+const ANCHOR_PX_PER_SECOND = 2200;
+const anchorEase = (t: number): number => t * t * (3 - 2 * t);
 
 /**
  * Lenis dijalankan dari ticker GSAP (bukan rAF sendiri) supaya scroll position,

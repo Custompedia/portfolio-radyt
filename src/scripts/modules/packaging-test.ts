@@ -4,14 +4,14 @@ import { $, $$, isDesktop, prefersReducedMotion } from '../core/utils';
 import type { PediPose, PediSceneController } from './pedi-scene';
 
 /** Panjang scroll yang dipakai timeline Pedi, dalam satuan viewport. */
-const TIMELINE_VIEWPORTS = 5.6;
+const TIMELINE_VIEWPORTS = 3.2;
 
 /**
  * Satu viewport tambahan di ujung pin: Pedi berhenti di zoom penuh sementara
  * The Work naik menimpanya. Lihat modules/stack.ts — angka ini harus sama
  * dengan `--stack-hold` yang menarik naik layer di atasnya.
  */
-const STACK_HOLD_VIEWPORTS = 1;
+const STACK_HOLD_VIEWPORTS = 0;
 
 let timeline: gsap.core.Timeline | null = null;
 let compact: gsap.core.Timeline | null = null;
@@ -136,8 +136,9 @@ export const packagingTestModule: AnimationModule = {
     }
 
     pose.turn = -Math.PI * 1.5;
-    gsap.set(intro, { autoAlpha: 0, y: 36 });
+    gsap.set(intro, { autoAlpha: 1, y: 0 });
     gsap.set(moments, { autoAlpha: 0, y: 28 });
+    if (moments[0]) gsap.set(moments[0], { autoAlpha: 1, y: 0 });
     gsap.set(orbits, { autoAlpha: 0, scale: 0.72, rotation: -8 });
     gsap.set(outro, { autoAlpha: 0, y: 28 });
     gsap.set(stage, { autoAlpha: 0, scale: 0.72, xPercent: -145, yPercent: 12, rotation: -7, transformOrigin: '50% 72%' });
@@ -169,14 +170,13 @@ export const packagingTestModule: AnimationModule = {
     });
 
     timeline
-      .to(intro, { autoAlpha: 1, y: 0, duration: 0.55, stagger: 0.08 })
-      .to(stage, { autoAlpha: 1, scale: 1, xPercent: 3, yPercent: 0, rotation: 0, duration: 0.92, ease: 'power4.out' }, 0.24)
-      .to(shadow, { scaleX: 1, opacity: 0.62, xPercent: 0, duration: 0.72 }, 0.42)
-      .to(orbits, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.86, ease: 'power3.out' }, 0.58)
-      .to(pose, { turn: 0, duration: 1.06, ease: 'power2.inOut' }, 0.62)
-      .to(moments[0], { autoAlpha: 1, y: 0, duration: 0.42 }, 1.28)
-      .to(moments[1], { autoAlpha: 1, y: 0, duration: 0.42 }, 1.82)
-      .to(moments[2], { autoAlpha: 1, y: 0, duration: 0.42 }, 2.28)
+      .to(stage, { autoAlpha: 1, scale: 1, xPercent: 3, yPercent: 0, rotation: 0, duration: 0.82, ease: 'power4.out' }, 0.08)
+      .to(shadow, { scaleX: 1, opacity: 0.62, xPercent: 0, duration: 0.64 }, 0.2)
+      .to(orbits, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.72, ease: 'power3.out' }, 0.3)
+      .to(pose, { turn: 0, duration: 0.92, ease: 'power2.inOut' }, 0.32)
+      .to(moments[0], { autoAlpha: 1, y: 0, duration: 0.36 }, 0.58)
+      .to(moments[1], { autoAlpha: 1, y: 0, duration: 0.36 }, 1.08)
+      .to(moments[2], { autoAlpha: 1, y: 0, duration: 0.36 }, 1.54)
       .to([intro, moments], { autoAlpha: 0, y: -26, duration: 0.48, stagger: 0.03 }, 2.78)
       .to(outro, { autoAlpha: 1, y: 0, duration: 0.58 }, 3.08)
       .to(outro, { autoAlpha: 0, y: -22, duration: 0.36 }, 3.78)
@@ -193,11 +193,13 @@ export const packagingTestModule: AnimationModule = {
      * penuh, ekor timeline diberi tween tanpa perubahan yang panjangnya
      * sebanding: durasi_sekarang × (1 viewport ÷ 5.6 viewport).
      */
-    timeline.to(pose, {
-      focus: 1,
-      duration: timeline.duration() * (STACK_HOLD_VIEWPORTS / TIMELINE_VIEWPORTS),
-      ease: 'none',
-    });
+    if (STACK_HOLD_VIEWPORTS > 0) {
+      timeline.to(pose, {
+        focus: 1,
+        duration: timeline.duration() * (STACK_HOLD_VIEWPORTS / TIMELINE_VIEWPORTS),
+        ease: 'none',
+      });
+    }
   },
 
   destroy() {

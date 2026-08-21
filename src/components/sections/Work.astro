@@ -1,109 +1,135 @@
 ---
-/**
- * Kartu proyek disusun berlapis, persis seperti referensi:
- *
- *   poster <img>  →  <video> latar  →  mockup placeholder  →  scrim + konten
- *   →  overlay peredup
- *
- * Tiga lapisan pertama saling menggantikan sesuai media yang tersedia di
- * site.ts. Selama belum ada aset asli, mockup CSS yang tampil — bukan gambar
- * rusak, dan markup-nya tidak perlu diubah saat asetnya masuk.
- */
+import Icon from '../Icon.astro';
 import { work } from '../../data/site';
 ---
 
-<!-- Tinggi section diatur oleh horizontal.ts: viewport + sisa track yang harus
-     digeser + satu viewport penahan, supaya 1px scroll = 1px geseran horizontal
-     dan footer sempat naik menimpanya di ujung (lihat modules/stack.ts).
-
-     `data-theme-end` menutup tema gelap saat tepi BAWAH section menyentuh dasar
-     layar — di titik itulah footer terang sudah menutupi layar sepenuhnya.
-     Bawaannya ("bottom top") baru berhenti satu viewport sesudahnya, jadi
-     sidebar akan tertinggal gelap di atas footer yang sudah terang. -->
-<section
-  class="section work theme-dark"
-  id="work"
-  data-work
-  data-stack-hold
-  data-theme-section
-  data-theme-end="bottom bottom"
->
-  <div class="work-sticky" data-work-sticky>
-    <header class="work-head">
-      <div class="work-head-left">
-        <h2 class="section-title h2-style-white">
-          {work.headline.map((line) => <span>{line}</span>)}
-        </h2>
-      </div>
-      <p class="work-intro" data-reveal data-reveal-stagger="0.05">{work.intro}</p>
-    </header>
-
-    <div class="work-track-wrap">
-      <div class="work-track" data-work-track>
-        {
-          work.items.map((item, i) => (
-            <article class="work-card" style={`--accent:${item.accent}`} data-work-card>
-              {item.image && (
-                <img
-                  class="work-poster"
-                  src={item.image}
-                  alt=""
-                  loading="eager"
-                  fetchpriority="low"
-                  decoding="async"
-                />
-              )}
-
-              {/* preload="none" + sumber lewat data-*: video baru diambil saat
-                  kartunya benar-benar mendekat, bukan sembilan sekaligus di
-                  awal halaman. */}
-              {item.video && (
-                <video
-                  class="work-bg"
-                  muted
-                  loop
-                  playsinline
-                  preload="none"
-                  data-src={item.video}
-                  data-webm={item.videoWebm}
-                />
-              )}
-
-              {!item.image && !item.video && (
-                <div class="work-card-visual" aria-hidden="true">
-                  <span class="work-card-glow" />
-                  <span class="work-card-mock">
-                    <span class="work-card-mock-bar" />
-                    <span class="work-card-mock-line" />
-                    <span class="work-card-mock-line is-short" />
-                    <span class="work-card-mock-block" />
-                  </span>
-                </div>
-              )}
-
-              <div class="work-card-content">
-                <div class="work-card-top">
-                  <span class="work-index">{String(i + 1).padStart(2, '0')}</span>
-                  <span class="work-tags">
-                    {item.tags.map((tag) => (
-                      <span class="work-tag">{tag}</span>
-                    ))}
-                  </span>
-                </div>
-
-                <div class="work-card-body">
-                  <span class="work-card-kind">{item.kind}</span>
-                  <h3 class="work-card-title">{item.title}</h3>
-                  {/* Tidak ada tombol panah: kartu ini tidak punya halaman
-                      detail dan tidak pernah punya `href`, jadi panah di
-                      sudutnya cuma menjanjikan tujuan yang tidak ada. */}
-                  <p class="work-card-blurb">{item.blurb}</p>
-                </div>
-              </div>
-            </article>
-          ))
-        }
-      </div>
+<section class="section work theme-dark" id="built-to-grow" data-service-work data-theme-section data-theme-end="bottom bottom" aria-labelledby="built-to-grow-title">
+  <header class="work-head">
+    <div class="work-head-left">
+      <h2 id="built-to-grow-title" class="section-title h2-style-white" aria-label="Built to Grow" data-reveal>
+        {work.headline.map((line) => <span>{line}</span>)}
+      </h2>
     </div>
+    <p class="work-intro" data-reveal data-reveal-stagger="0.05">{work.intro}</p>
+  </header>
+
+  <div class="work-tabs" role="tablist" aria-label="Pilih perusahaan">
+    {work.groups.map((group, index) => (
+      <button
+        class="work-tab"
+        id={`service-tab-${group.toLowerCase()}`}
+        type="button"
+        role="tab"
+        aria-selected={index === 0 ? 'true' : 'false'}
+        aria-controls={`service-panel-${group.toLowerCase()}`}
+        tabindex={index === 0 ? 0 : -1}
+        data-work-tab={group}
+      >
+        {group.toUpperCase()}
+      </button>
+    ))}
   </div>
+
+  {work.groups.map((group, groupIndex) => {
+    const items = work.items.filter((item) => item.group === group);
+    return (
+      <div
+        class="work-panel"
+        id={`service-panel-${group.toLowerCase()}`}
+        role="tabpanel"
+        aria-labelledby={`service-tab-${group.toLowerCase()}`}
+        hidden={groupIndex !== 0}
+        data-work-panel={group}
+      >
+        <div class="work-track-wrap" tabindex="0" aria-label={`Geser untuk melihat layanan ${group}`}>
+          <div class="work-track">
+            {items.map((item, index) => (
+              <a
+                class="work-card"
+                style={`--accent:${item.accent}`}
+                data-service-card
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${item.title} dari ${item.kind} - buka situs terkait`}
+              >
+                <img class="work-poster" src={item.image} alt={item.alt} loading="lazy" decoding="async" />
+                <div class="work-card-content">
+                  <div class="work-card-top">
+                    <span class="work-index">{String(index + 1).padStart(2, '0')}</span>
+                    <span class="work-tags">
+                      {item.tags.map((tag) => <span class="work-tag">{tag}</span>)}
+                    </span>
+                  </div>
+                  <div class="work-card-body">
+                    <span class="work-card-kind">{item.kind}</span>
+                    <h3 class="work-card-title">{item.title}</h3>
+                    <p class="work-card-blurb">{item.blurb}</p>
+                    <span class="work-card-link">Visit <Icon name="arrow" size={16} /></span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  })}
 </section>
+
+<script>
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-work-tab]'));
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-work-panel]'));
+  const cardObservers = new Map<HTMLElement, IntersectionObserver>();
+
+  panels.forEach((panel) => {
+    const wrap = panel.querySelector<HTMLElement>('.work-track-wrap');
+    if (!wrap) return;
+    const cards = Array.from(panel.querySelectorAll<HTMLElement>('[data-service-card]'));
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => entry.target.classList.toggle('is-in-view', entry.isIntersecting)),
+      { root: wrap, threshold: 0.35 },
+    );
+    cards.forEach((card) => {
+      card.classList.add('is-motion-ready');
+      observer.observe(card);
+    });
+    cardObservers.set(panel, observer);
+  });
+
+  const selectTab = (tab: HTMLButtonElement): void => {
+    const group = tab.dataset.workTab;
+    tabs.forEach((item) => {
+      const active = item === tab;
+      item.setAttribute('aria-selected', String(active));
+      item.tabIndex = active ? 0 : -1;
+    });
+    panels.forEach((panel) => {
+      panel.hidden = panel.dataset.workPanel !== group;
+      if (!panel.hidden) {
+        panel.querySelector<HTMLElement>('.work-track-wrap')?.scrollTo({ left: 0, behavior: 'smooth' });
+        requestAnimationFrame(() => {
+          const observer = cardObservers.get(panel);
+          panel.querySelectorAll<HTMLElement>('[data-service-card]').forEach((card) => {
+            observer?.unobserve(card);
+            observer?.observe(card);
+          });
+        });
+      }
+    });
+  };
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => selectTab(tab));
+    tab.addEventListener('keydown', (event) => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 :
+        (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+      const next = tabs[nextIndex];
+      if (!next) return;
+      selectTab(next);
+      next.focus();
+    });
+  });
+</script>
