@@ -101,8 +101,9 @@ const handleResize = debounce(() => {
   lastWidth = window.innerWidth;
   lastIsDesktop = desktop;
 
+  // Di layar sentuh tinggi berubah karena bar URL, bukan layout: refresh manual di sini menembus `ignoreMobileResize` dan memaksa reflow di tengah scroll.
   if (!widthChanged) {
-    ScrollTrigger.refresh();
+    if (ScrollTrigger.isTouch !== 1) ScrollTrigger.refresh();
     return;
   }
 

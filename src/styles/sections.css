@@ -1828,6 +1828,15 @@
   content: '';
 }
 
+/* Di layar sentuh dua bulatan ini ditiru radial-gradient - tampak sama tanpa filter region raksasa. */
+@media (hover: none), (pointer: coarse) {
+  .packaging-test-stage::before,
+  .packaging-test-stage::after {
+    background: radial-gradient(circle, rgba(var(--blue-rgb), 0.12), rgba(var(--blue-rgb), 0) 70%);
+    filter: none;
+  }
+}
+
 .performance-lite .packaging-test-stage::before,
 .performance-lite .packaging-test-stage::after,
 .performance-lite .pedi-shadow {
@@ -2904,8 +2913,9 @@
        y 505) supaya fotonya sudah kabur duluan sebelum memudar - itu yang
        membedakan "lebur" dari "dipotong lalu dihilangkan". */
     height: 42%;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    /* 8px, bukan 14px: pita ini difilter ulang tiap frame selama hero di layar, dan di balik mask selisihnya tak terlihat. */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     mask-image: linear-gradient(to bottom, transparent, #000 45%);
     -webkit-mask-image: linear-gradient(to bottom, transparent, #000 45%);
     content: '';

@@ -10,6 +10,10 @@ export const $$ = <T extends Element = HTMLElement>(selector: string, scope: Par
 
 export const isDesktop = (): boolean => window.innerWidth >= DESKTOP_BREAKPOINT;
 
+/** Layar sentuh tanpa penunjuk halus: di sini efek per-frame yang mahal dimatikan. */
+export const isTouchDevice = (): boolean =>
+  window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
 export const prefersReducedMotion = (): boolean =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

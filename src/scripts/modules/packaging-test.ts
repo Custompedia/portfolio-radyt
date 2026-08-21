@@ -1,6 +1,6 @@
 import { gsap, EASE_OUT } from '../core/gsap';
 import type { AnimationModule } from '../core/module';
-import { $, $$, isDesktop, prefersReducedMotion } from '../core/utils';
+import { $, $$, isDesktop, isTouchDevice, prefersReducedMotion } from '../core/utils';
 import type { PediPose, PediSceneController } from './pedi-scene';
 
 /** Panjang scroll yang dipakai timeline Pedi, dalam satuan viewport. */
@@ -11,6 +11,7 @@ let compact: gsap.core.Timeline | null = null;
 let compactReveal: gsap.core.Tween | null = null;
 let pedi: PediSceneController | null = null;
 let generation = 0;
+let lazyObserver: IntersectionObserver | null = null;
 
 const pose: PediPose = { turn: 0, focus: 0 };
 
@@ -37,21 +38,28 @@ function buildCompactScene(el: {
   orbits: HTMLElement | null;
   outro: HTMLElement;
   renderPedi: () => void;
+  staticPose: boolean;
 }): void {
   gsap.set(el.stage, { autoAlpha: 1, scale: 1, xPercent: 0, yPercent: 0, rotation: 0 });
   pose.turn = 0;
 
-  compact = gsap.timeline({
-    onUpdate: el.renderPedi,
-    scrollTrigger: {
-      trigger: el.section,
-      start: 'top bottom',
-      end: 'bottom top',
-      scrub: 0.8,
-    },
-  });
+  // Di layar sentuh kamera tidak di-scrub: scrub memanggil `renderer.render()` tiap frame scroll; di sini 3D-nya digambar sekali di pose akhir.
+  if (el.staticPose) {
+    pose.focus = 0.55;
+    el.renderPedi();
+  } else {
+    compact = gsap.timeline({
+      onUpdate: el.renderPedi,
+      scrollTrigger: {
+        trigger: el.section,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 0.8,
+      },
+    });
 
-  compact.to(pose, { focus: 0.55, duration: 0.3, ease: 'none' }, 0.7);
+    compact.to(pose, { focus: 0.55, duration: 0.3, ease: 'none' }, 0.7);
+  }
 
   // Teks dan orbit tetap disingkap seperti elemen lain di halaman: sekali jalan
   // saat masuk layar, bukan di-scrub. Yang di-scrub cukup benda 3D-nya.
@@ -112,13 +120,29 @@ export const packagingTestModule: AnimationModule = {
       }
     };
 
-    void loadPedi();
-
     pose.turn = 0;
     pose.focus = 0;
 
+    // Di layar sentuh `.glb` 813 KB baru dijemput saat section mendekat, bukan di boot bersama font dan potret hero.
+    if (isTouchDevice()) {
+      lazyObserver = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          lazyObserver?.disconnect();
+          lazyObserver = null;
+          void loadPedi();
+        },
+        { rootMargin: '400px 0px' },
+      );
+      lazyObserver.observe(section);
+    } else {
+      void loadPedi();
+    }
+
     if (!isDesktop() || window.innerWidth <= 1100 || prefersReducedMotion()) {
-      if (!prefersReducedMotion()) buildCompactScene({ section, stage, moments, orbits, outro, renderPedi });
+      if (!prefersReducedMotion()) {
+        buildCompactScene({ section, stage, moments, orbits, outro, renderPedi, staticPose: isTouchDevice() });
+      }
       return;
     }
 
@@ -161,6 +185,8 @@ export const packagingTestModule: AnimationModule = {
 
   destroy() {
     generation += 1;
+    lazyObserver?.disconnect();
+    lazyObserver = null;
     timeline?.scrollTrigger?.kill();
     timeline?.kill();
     timeline = null;

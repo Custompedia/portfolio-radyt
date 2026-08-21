@@ -22,7 +22,7 @@ export const southeastAsiaModule: AnimationModule = {
       video.playsInline = true;
       video.setAttribute('playsinline', '');
       video.setAttribute('webkit-playsinline', '');
-      void video.play().catch(() => undefined);
+      // Tidak diputar di sini - ScrollTrigger di bawah yang memicunya saat section masuk layar.
       video.addEventListener('loadeddata', () => ScrollTrigger.refresh(), { once: true });
     }
 
@@ -130,17 +130,10 @@ export const southeastAsiaModule: AnimationModule = {
           trigger: section,
           start: 'top bottom',
           end: 'bottom top',
-          onEnter: () => {
-            void video.play().catch(() => undefined);
-          },
-          onEnterBack: () => {
-            void video.play().catch(() => undefined);
-          },
-          onLeave: () => {
-            if (!isMobile) video.pause();
-          },
-          onLeaveBack: () => {
-            if (!isMobile) video.pause();
+          // Satu `onToggle` (ikut jalan saat refresh pertama), dan jeda berlaku di SEMUA lebar - mobile dulu dikecualikan sehingga video di-decode terus di luar layar.
+          onToggle: (self) => {
+            if (self.isActive) void video.play().catch(() => undefined);
+            else video.pause();
           },
         });
       }

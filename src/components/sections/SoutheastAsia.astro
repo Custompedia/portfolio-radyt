@@ -19,21 +19,20 @@ import { southeastAsia } from '../../data/site';
 
     <div class="sea-stage" data-sea-stage>
       <div class="sea-frame">
+        <!-- Tanpa `src`/`autoplay`: webm 2,7 MB baru terpilih tanpa src, dan pemutaran dipicu southeast-asia.ts saat section masuk layar. -->
         <video
           class="sea-video"
           data-sea-video
-          autoplay
           loop
           muted
           playsinline
           webkit-playsinline
           x5-playsinline
-          preload="auto"
+          preload="metadata"
           poster="/video/sea-poster.webp"
-          src="/video/southeast-asia-zoom.mp4"
         >
-          <source src="/video/southeast-asia-zoom.mp4" type="video/mp4" />
           <source src="/video/southeast-asia-zoom.webm" type="video/webm" />
+          <source src="/video/southeast-asia-zoom.mp4" type="video/mp4" />
         </video>
       </div>
     </div>

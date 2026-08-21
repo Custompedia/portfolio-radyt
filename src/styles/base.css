@@ -338,3 +338,10 @@ html.lenis body {
 .performance-lite .grain {
   display: none;
 }
+
+/* mix-blend-mode pada lapisan fixed selebar viewport memaksa GPU membaurkan ulang seluruh halaman tiap frame scroll - itu sumber kedip di ponsel. */
+@media (hover: none), (pointer: coarse) {
+  .grain {
+    display: none;
+  }
+}

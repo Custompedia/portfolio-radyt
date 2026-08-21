@@ -18,11 +18,12 @@ const anchorEase = (t: number): number => t * t * (3 - 2 * t);
 export function initSmoothScroll(): Lenis | null {
   if (prefersReducedMotion()) return null;
 
+  // `syncTouch: false` eksplisit - touch dilepas ke momentum native; `touchMultiplier` dibuang karena hanya terbaca di jalur syncTouch.
   lenis = new Lenis({
     duration: 0.4,
     easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     smoothWheel: true,
-    touchMultiplier: 1.6,
+    syncTouch: false,
   });
 
   lenis.on('scroll', ScrollTrigger.update);
