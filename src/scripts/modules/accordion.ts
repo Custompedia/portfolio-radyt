@@ -5,7 +5,7 @@ import { $, $$ } from '../core/utils';
 /**
  * Akordeon FAQ. Tingginya di-tween dari 0 ke `auto` (GSAP mengukurnya sendiri)
  * supaya tidak perlu menebak tinggi konten, dan `aria-expanded` tetap jadi
- * sumber kebenaran status — bukan kelas CSS.
+ * sumber kebenaran status - bukan kelas CSS.
  */
 
 const cleanups: Array<() => void> = [];
@@ -41,7 +41,7 @@ export const accordionModule: AnimationModule = {
 
       const onClick = () => {
         const willOpen = button.getAttribute('aria-expanded') !== 'true';
-        // Satu panel terbuka pada satu waktu — daftar sepanjang ini jadi sulit
+        // Satu panel terbuka pada satu waktu - daftar sepanjang ini jadi sulit
         // dibaca kalau semuanya boleh terbuka bersamaan.
         for (const other of items) if (other !== item) toggle(other, false);
         toggle(item, willOpen);

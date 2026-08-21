@@ -260,7 +260,7 @@ html.lenis body {
 
 /* Panggung intro hero di MOBILE. Alasannya sama dengan aturan di atas, tapi
    masalahnya baru terlihat setelah intro mobile ada: modul intro baru jalan
-   setelah `whenFontsReady()`, dan jeda itu TERUKUR ~280ms di 390px — cukup lama
+   setelah `whenFontsReady()`, dan jeda itu TERUKUR ~280ms di 390px - cukup lama
    untuk hero tampil utuh dulu, lalu mendadak disembunyikan, lalu beranimasi
    masuk. Yang terbaca user bukan pembukaan, melainkan kedipan.
 
@@ -270,7 +270,7 @@ html.lenis body {
 
    `.hero-portrait` SENGAJA TIDAK ADA DI DAFTAR INI, dan itu keputusan
    performa, bukan kelupaan: potret adalah elemen LCP halaman ini di mobile.
-   Menyembunyikannya sampai JS boot menunda LCP dari ~300ms jadi 5000ms —
+   Menyembunyikannya sampai JS boot menunda LCP dari ~300ms jadi 5000ms -
    DIUKUR pada CPU throttle 4x, dengan render delay 4880ms. Satu animasi masuk
    tidak sepadan dengan itu. Potret dibiarkan tampil sejak frame pertama; yang
    dianimasikan intro cuma teks dan kartu di atasnya. */
@@ -308,7 +308,7 @@ html.lenis body {
 
 /* Noise dibuat oleh SVG feTurbulence yang di-inline sebagai data URI: tidak ada
    berkas gambar yang perlu diunduh, dan ukurannya nol di jaringan.
-   `pointer-events: none` WAJIB — tanpa itu lapisan ini menutupi seluruh
+   `pointer-events: none` WAJIB - tanpa itu lapisan ini menutupi seluruh
    halaman dan tidak ada satu pun tombol yang bisa diklik.
    4% dengan `overlay` adalah batas di mana butirannya terasa tapi teks belum
    kehilangan ketajaman; di atas itu heading tipis mulai terlihat kotor. */
@@ -323,7 +323,7 @@ html.lenis body {
 }
 
 /* Butiran statis tidak memicu mabuk gerak, tapi ia menambah beban paint di
-   mesin lemah — dan pembaca yang meminta gerakan minimal biasanya juga
+   mesin lemah - dan pembaca yang meminta gerakan minimal biasanya juga
    meminta tampilan yang tenang. */
 @media (prefers-reduced-motion: reduce) {
   .grain {

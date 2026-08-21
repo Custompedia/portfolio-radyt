@@ -19,22 +19,22 @@ import { CustomEase } from 'gsap/CustomEase';
 gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase);
 
 /**
- * KURVA RUMAH — dan alasan kenapa angkanya persis ini.
+ * KURVA RUMAH - dan alasan kenapa angkanya persis ini.
  *
  * `--ease-out` di tokens.css sudah lama `cubic-bezier(0.16, 1, 0.3, 1)`, dipakai
  * setiap transisi CSS di situs ini. Sementara itu tween GSAP-nya memakai
- * kosakata lain sama sekali — power2/power3/power4, expo, back dengan tiga nilai
+ * kosakata lain sama sekali - power2/power3/power4, expo, back dengan tiga nilai
  * overshoot berbeda. Jadi hover tombol dan singkap section yang berdampingan di
  * layar yang sama bergerak dengan dua watak yang berbeda.
  *
  * `EASE_OUT` di bawah adalah kurva CSS itu, ditulis ulang sebagai path
- * CustomEase — titik kendalinya sama persis. Sekali ini dipakai, gerakan CSS dan
+ * CustomEase - titik kendalinya sama persis. Sekali ini dipakai, gerakan CSS dan
  * gerakan GSAP akhirnya bicara dengan aksen yang sama.
  *
  * TIGA kurva, bukan tujuh, dan pembagiannya tegas:
- *   EASE_OUT     — sesuatu TIBA (singkap, fade-in, kartu mendarat)
- *   EASE_TRAVEL  — sesuatu BERPINDAH jauh lalu berhenti (wordmark terbang)
- *   EASE_POP     — sesuatu MELETUP (logo, badge; melewati 1 sedikit)
+ *   EASE_OUT     - sesuatu TIBA (singkap, fade-in, kartu mendarat)
+ *   EASE_TRAVEL  - sesuatu BERPINDAH jauh lalu berhenti (wordmark terbang)
+ *   EASE_POP     - sesuatu MELETUP (logo, badge; melewati 1 sedikit)
  *
  * Kurva lama di hero intro, Pedi, dan timeline SENGAJA tidak diganti: ketiganya
  * hasil penyetelan panjang terhadap koreografi masing-masing, dan menyeragamkan

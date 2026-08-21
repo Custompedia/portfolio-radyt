@@ -33,7 +33,7 @@ export function debounce<A extends unknown[]>(fn: (...args: A) => void, delay = 
 
 /**
  * Atribut `data-tl-from` / `data-tl-to` ditulis dengan kutip tunggal supaya enak
- * dibaca di dalam HTML — ubah dulu ke kutip ganda sebelum JSON.parse.
+ * dibaca di dalam HTML - ubah dulu ke kutip ganda sebelum JSON.parse.
  */
 export function parseVars(raw: string | null): Record<string, unknown> {
   if (!raw) return {};
@@ -45,7 +45,7 @@ export function parseVars(raw: string | null): Record<string, unknown> {
   }
 }
 
-/** Tunggu font selesai dimuat — pengukuran layout sebelum ini tidak akurat. */
+/** Tunggu font selesai dimuat - pengukuran layout sebelum ini tidak akurat. */
 export function whenFontsReady(): Promise<void> {
   if (!('fonts' in document)) return Promise.resolve();
   return document.fonts.ready.then(() => undefined);

@@ -46,7 +46,7 @@ export const mobileMenuModule: AnimationModule = {
     trigger.addEventListener('click', onToggle);
     cleanups.push(() => trigger.removeEventListener('click', onToggle));
 
-    // Menutup sendiri setelah memilih tujuan — kalau tidak, panel menutupi
+    // Menutup sendiri setelah memilih tujuan - kalau tidak, panel menutupi
     // section yang barusan dituju.
     for (const link of $$('.nav-link, .btn', sidebar)) {
       const onNavigate = () => setOpen(false);

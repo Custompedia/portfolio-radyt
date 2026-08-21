@@ -53,7 +53,7 @@ export async function createPediScene(canvas: HTMLCanvasElement, performanceLite
   scene.add(keyLight);
 
   // Rim biru menggantikan rim kuning. Dipakai versi mudanya (#6E86FF, sama
-  // dengan --blue-tint) karena scene ini duduk di section bertema gelap —
+  // dengan --blue-tint) karena scene ini duduk di section bertema gelap -
   // #112BD6 di sini praktis tidak terlihat.
   const rimLight = new THREE.DirectionalLight(0x6e86ff, performanceLite ? 1.5 : 2.2);
   rimLight.position.set(4, 2, -3);

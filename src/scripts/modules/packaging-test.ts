@@ -8,7 +8,7 @@ const TIMELINE_VIEWPORTS = 3.2;
 
 /**
  * Satu viewport tambahan di ujung pin: Pedi berhenti di zoom penuh sementara
- * The Work naik menimpanya. Lihat modules/stack.ts — angka ini harus sama
+ * The Work naik menimpanya. Lihat modules/stack.ts - angka ini harus sama
  * dengan `--stack-hold` yang menarik naik layer di atasnya.
  */
 const STACK_HOLD_VIEWPORTS = 0;
@@ -22,11 +22,11 @@ let generation = 0;
 const pose: PediPose = { turn: 0, focus: 0 };
 
 /**
- * PEDI DI LAYAR ≤1100px — versi ringkas, bukan versi kecil.
+ * PEDI DI LAYAR ≤1100px - versi ringkas, bukan versi kecil.
  *
  * Sebelum ini seluruh koreografi berhenti di penjaga lebar, tapi `.glb`-nya
  * 813 KB tetap diunduh dengan `fetchpriority="high"` di setiap viewport. Jadi
- * ponsel membayar ongkos penuh sebuah scene 3D untuk mendapat SATU frame diam —
+ * ponsel membayar ongkos penuh sebuah scene 3D untuk mendapat SATU frame diam -
  * posisi terburuk dari dua pilihan yang ada.
  *
  * Versi ringkas ini membalik perhitungan itu tanpa menambah unduhan sedikit pun:
@@ -70,7 +70,7 @@ function buildCompactScene(el: {
   // saat masuk layar, bukan di-scrub. Yang di-scrub cukup benda 3D-nya.
   //
   // Tween ini BERDIRI SENDIRI, tidak disisipkan ke `compact`: tween yang punya
-  // ScrollTrigger sendiri tidak boleh jadi anak timeline yang juga di-scrub —
+  // ScrollTrigger sendiri tidak boleh jadi anak timeline yang juga di-scrub -
   // keduanya akan sama-sama mengatur waktunya dan hasilnya tidak menentu.
   const reveal = [...el.moments, el.outro, el.orbits].filter(Boolean) as HTMLElement[];
   if (reveal.length) {
@@ -157,7 +157,7 @@ export const packagingTestModule: AnimationModule = {
         invalidateOnRefresh: true,
         /**
          * Pin ini menyisipkan spacer ~5040px yang mendorong TURUN semua section
-         * di bawahnya — terutama The Work, yang tingginya sendiri diatur dari
+         * di bawahnya - terutama The Work, yang tingginya sendiri diatur dari
          * JS. Tanpa prioritas ini ScrollTrigger menyegarkan trigger Work lebih
          * dulu (modul horizontal init lebih awal), memakai posisi dokumen yang
          * belum memperhitungkan spacer, dan rentang geser horizontalnya jatuh
@@ -188,7 +188,7 @@ export const packagingTestModule: AnimationModule = {
 
     /**
      * Scrub memetakan SELURUH rentang pin ke SELURUH durasi timeline, jadi
-     * memperpanjang `end` saja tidak menambah jeda — ia cuma memperlambat semua
+     * memperpanjang `end` saja tidak menambah jeda - ia cuma memperlambat semua
      * geraknya. Supaya viewport tambahan itu benar-benar jadi diam di zoom
      * penuh, ekor timeline diberi tween tanpa perubahan yang panjangnya
      * sebanding: durasi_sekarang × (1 viewport ÷ 5.6 viewport).

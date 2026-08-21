@@ -1,17 +1,17 @@
 ---
 /**
- * Section 02 — About.
+ * Section 02 - About.
  *
  * Tiga chapter bergantian menguasai satu panggung yang menempel di layar,
  * bukan tiga kolom yang dibaca sekaligus. Kronologi tahun SENGAJA tidak ada di
- * sini — itu tugas section Journey; About memegang hook eyebrow-nya: tiga
+ * sini - itu tugas section Journey; About memegang hook eyebrow-nya: tiga
  * perusahaan yang dijalankan dari satu meja.
  *
  * Markup default-nya adalah versi statis (judul, intro, lalu tiga chapter
  * mengalir berurutan). modules/about-story.ts yang mengangkatnya jadi panggung
  * sticky dengan menambahkan `.about--staged`, dan hanya di desktop tanpa
  * reduced-motion. Artinya tanpa JS, di mobile, atau saat user meminta gerak
- * minimum, section ini tetap terbaca utuh — bukan layar kosong.
+ * minimum, section ini tetap terbaca utuh - bukan layar kosong.
  *
  * Judul ikut masuk ke dalam panggung supaya seluruh komposisi menempel sebagai
  * satu kesatuan; kalau judul ditinggal di luar, panggung baru mulai menempel
@@ -25,14 +25,6 @@ import { about } from '../../data/site';
     <!-- Cahaya yang ikut berpindah tiap chapter berganti; memberi kedalaman
          pada panggung yang isinya nyaris seluruhnya tipografi. -->
     <span class="about-glow" data-about-glow aria-hidden="true"></span>
-
-    <div class="about-photo-cloud">
-      {about.images.map((image, index) => (
-        <figure class:list={['about-photo', `about-photo--${index + 1}`]}>
-          <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
-        </figure>
-      ))}
-    </div>
 
     <header class="section-head about-head">
       <span class="about-eyebrow">{about.eyebrow}</span>
@@ -55,15 +47,23 @@ import { about } from '../../data/site';
               <h3 class="about-chapter-title" data-about-title>{story.title}</h3>
               <p class="about-chapter-text" data-about-text>{story.body}</p>
             </div>
+            <div class:list={['about-chapter-visual', `about-chapter-visual--${index + 1}`]} data-about-visual>
+              <figure class="about-visual-primary">
+                <img src={about.visuals[index]!.primary.src} alt={about.visuals[index]!.primary.alt} loading="lazy" decoding="async" />
+              </figure>
+              <figure class="about-visual-secondary">
+                <img src={about.visuals[index]!.secondary.src} alt={about.visuals[index]!.secondary.alt} loading="lazy" decoding="async" />
+              </figure>
+            </div>
           </article>
         ))
       }
     </div>
 
-    <ol class="about-rail" data-about-rail aria-hidden="true">
-      {about.stories.map(() => (
-        <li class="about-rail-step"><span data-about-rail-fill /></li>
-      ))}
-    </ol>
+    <div class="about-progress" data-about-progress aria-hidden="true">
+      <span class="about-progress-current" data-about-progress-current>01</span>
+      <span class="about-progress-track"><span data-about-progress-fill></span></span>
+      <span class="about-progress-total">{String(about.stories.length).padStart(2, '0')}</span>
+    </div>
   </div>
 </section>

@@ -7,7 +7,7 @@ let context: gsap.Context | null = null;
 /**
  * Letupan logo perusahaan. `back.out` yang membuatnya terbaca sebagai "pop":
  * skalanya melewati 1 sedikit sebelum mendarat, bukan meluncur masuk. Jarak
- * `y`-nya sengaja kecil — kalau logonya ikut bergeser jauh, yang terbaca adalah
+ * `y`-nya sengaja kecil - kalau logonya ikut bergeser jauh, yang terbaca adalah
  * geseran, bukan letupan.
  */
 const LOGO_HIDDEN: gsap.TweenVars = { autoAlpha: 0, scale: 0.55, y: 22, transformOrigin: '50% 60%' };
@@ -16,7 +16,7 @@ const LOGO_SHOWN: gsap.TweenVars = { autoAlpha: 1, scale: 1, y: 0, duration: 0.6
 /**
  * Kartu network mendarat, bukan meletup: ia kotak berisi logo, dan kotak yang
  * ikut memantul terbaca seperti tombol yang ditekan. Miring sedikit lalu
- * diluruskan sambil naik — seperti kartu yang dijatuhkan ke meja.
+ * diluruskan sambil naik - seperti kartu yang dijatuhkan ke meja.
  */
 const CARD_HIDDEN: gsap.TweenVars = {
   autoAlpha: 0,
@@ -39,19 +39,19 @@ const POP_STAGGER = 0.22;
 const CARD_STAGGER = 0.09;
 
 /**
- * SEMBUNYIKAN DULU, BARU ANIMASIKAN — sengaja bukan `gsap.from()`.
+ * SEMBUNYIKAN DULU, BARU ANIMASIKAN - sengaja bukan `gsap.from()`.
  *
  * `.from()` semestinya menuliskan keadaan awalnya sendiri begitu tween dibuat,
  * tapi di halaman ini tidak: diukur pada scroll 0, `.company-showcase` sama
- * sekali tidak punya style inline dan opacity-nya 1 — bahkan dengan
+ * sekali tidak punya style inline dan opacity-nya 1 - bahkan dengan
  * `immediateRender: true`, bahkan setelah `progress(0)` dipanggil paksa (tween-
  * nya baru mau menulis setelah sempat dirender penuh sekali). Akibatnya logonya
  * sudah terlihat sejak halaman dimuat lalu berkedip hilang-muncul saat pemicunya
- * lewat — persis kebalikan dari yang diminta.
+ * lewat - persis kebalikan dari yang diminta.
  *
  * `set()` + `to()` tidak punya ambiguitas itu: keadaan awal ditulis saat itu
  * juga, keadaan akhir ditulis eksplisit. Dan karena yang menyembunyikan adalah
- * JS — bukan CSS — tanpa JS atau pada `prefers-reduced-motion` (modul ini
+ * JS - bukan CSS - tanpa JS atau pada `prefers-reduced-motion` (modul ini
  * `skipOnReducedMotion`) semuanya tetap terlihat apa adanya.
  */
 const hideThenReveal = (
@@ -67,7 +67,7 @@ const hideThenReveal = (
 };
 
 /**
- * Menyingkap tiap elemen saat ELEMEN ITU SENDIRI masuk layar — dipakai untuk
+ * Menyingkap tiap elemen saat ELEMEN ITU SENDIRI masuk layar - dipakai untuk
  * susunan satu kolom, di mana stagger tidak ada gunanya karena tiap kartu tiba
  * di layar pada waktunya masing-masing.
  *
@@ -115,13 +115,13 @@ export const brandStagesModule: AnimationModule = {
        * Bukan karena tidak terpakai lagi, tapi karena SUDAH tidak pernah
        * terpakai: markup About ditulis ulang jadi panggung berbabak
        * (`[data-about-chapter]`, lihat about-story.ts) dan seluruh kait di atas
-       * ikut hilang bersamanya. DIUKUR di DOM langsung — kelima selector itu
+       * ikut hilang bersamanya. DIUKUR di DOM langsung - kelima selector itu
        * mengembalikan NOL elemen, jadi ~40 baris ini tidak pernah dieksekusi
        * sekali pun sejak markupnya berubah.
        *
        * Di antaranya ada animasi menggambar cincin yang ditulis tangan dengan
        * `getTotalLength()` + `strokeDasharray`/`strokeDashoffset`. Itu memang
-       * kandidat kuat untuk DrawSVGPlugin — tapi mengganti kode mati dengan
+       * kandidat kuat untuk DrawSVGPlugin - tapi mengganti kode mati dengan
        * kode mati yang lebih rapi tetap saja kode mati.
        */
       const companyGrid = $<HTMLElement>('.company-grid');
@@ -129,7 +129,7 @@ export const brandStagesModule: AnimationModule = {
       if (companyGrid && companyShowcases.length) {
         // Logonya tidak terlihat sampai section-nya benar-benar didatangi, lalu
         // meletup satu per satu. Berkasnya sendiri sudah di-preload di <head>
-        // (lihat Base.astro), jadi yang ditunda cuma penampakannya — bukan
+        // (lihat Base.astro), jadi yang ditunda cuma penampakannya - bukan
         // pengunduhannya.
         if (desktop) {
           // Ketiganya tersebar dalam satu bidang yang seluruhnya masuk layar
@@ -158,7 +158,7 @@ export const brandStagesModule: AnimationModule = {
         // puncak `.network-body`. Kartu paling bawah selesai dianimasikan jauh
         // sebelum user sampai ke sana.
         if (desktop) {
-          // Dua baris, dua pemicu — bukan satu timeline untuk keduanya. "Trusted
+          // Dua baris, dua pemicu - bukan satu timeline untuk keduanya. "Trusted
           // by" berdiri jauh di bawah "Active in" dan punya dua baris sendiri;
           // dengan satu pemicu di puncak `.network-body`, baris bawah selesai
           // mendarat sebelum sempat masuk layar.

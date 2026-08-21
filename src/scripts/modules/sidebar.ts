@@ -31,7 +31,7 @@ function applyScale(): void {
   gsap.set(sidebar, { scale, transformOrigin: 'top left', force3D: false });
 
   // Dipublikasikan ke CSS supaya elemen hero bisa dipatok ke ukuran sidebar
-  // yang SUDAH di-scale — itu yang membuat tombol "Book a Call" (di-scale oleh
+  // yang SUDAH di-scale - itu yang membuat tombol "Book a Call" (di-scale oleh
   // GhostEngine) dan "About Me" (statis) mendarat pada tinggi yang sama persis.
   document.documentElement.style.setProperty('--sidebar-scale', String(scale));
 

@@ -5,7 +5,7 @@
  * lalu menerbangkan elemen ini dari posisi hero ke posisi sidebar saat scroll.
  *
  * ATURAN: elemen ber-`data-ghost` TIDAK BOLEH mengandung elemen ber-`data-ghost`
- * lain — transform-nya akan bertumpuk dan pengukurannya jadi salah. Karena itu
+ * lain - transform-nya akan bertumpuk dan pengukurannya jadi salah. Karena itu
  * tiap kartu dipecah jadi lapisan background sendiri (`.nav-card-bg`) plus
  * anak-anak yang jadi saudara, bukan keturunan.
  */
@@ -37,7 +37,7 @@ import { brand, clients, hero, nav, social, stats } from '../data/site';
       <span class="brand-name" data-brand-name>{brand.name}</span><span class="brand-symbol">{brand.symbol}</span>
     </a>
     {/* Kontak adalah panel yang dicari orang untuk menghubungi, jadi ikonnya
-        sengaja jauh lebih besar dari versi sebelumnya (13px) — dan tidak lagi
+        sengaja jauh lebih besar dari versi sebelumnya (13px) - dan tidak lagi
         disembunyikan di mobile. */}
     <div class="social" data-ghost-fade>
       {
@@ -54,9 +54,10 @@ import { brand, clients, hero, nav, social, stats } from '../data/site';
        dan tombol CTA SENGAJA di LUAR wrapper ini
        (lihat komponen sebelum & sesudah blok ini) supaya keduanya tetap
        terlihat sebagai topbar tetap terlepas dari status buka/tutup panel.
-       Di desktop wrapper ini `display:contents` — tidak mengubah apa pun,
+       Di desktop wrapper ini `display:contents` - tidak mengubah apa pun,
        anak-anaknya tetap ikut flex/gap milik `.sidebar` seperti sebelumnya. -->
   <div class="sidebar-panel" data-sidebar-panel>
+    <!-- Kartu "Holding Companies" tidak punya posisi hero: ia fade-in bersama rail, bukan terbang. -->
     <!-- Tiap statistik jadi kartu terpisah, bukan satu kartu dengan pemisah: di
          hero masing-masing terbang dari posisi berbeda, jadi butuh lapisan bg
          sendiri. Kalau statistiknya lebih dari satu, gap-nya nol dan sisi yang
@@ -65,9 +66,9 @@ import { brand, clients, hero, nav, social, stats } from '../data/site';
     <div class="nav-stats-row">
       {
         stats.map((stat, i) => (
-          <div class="nav-card nav-stat-card" aria-label={`${stat.value} ${stat.label}`}>
-            <span class="nav-card-bg" data-ghost={`stats-card-${i}`} data-ghost-type="background" />
-            <div class="nav-stat" data-ghost={`stat-${i}`} data-ghost-type="box">
+          <div class="nav-card nav-stat-card" aria-label={`${stat.value} ${stat.label}`} data-ghost-fade={i === 0 ? '' : undefined}>
+            <span class="nav-card-bg" data-ghost={i === 0 ? undefined : `stats-card-${i}`} data-ghost-type={i === 0 ? undefined : 'background'} />
+            <div class="nav-stat" data-ghost={i === 0 ? undefined : `stat-${i}`} data-ghost-type={i === 0 ? undefined : 'box'}>
               <span class="nav-stat-value">{stat.value}</span>
               <span class="nav-stat-label">
                 {
@@ -178,7 +179,7 @@ import { brand, clients, hero, nav, social, stats } from '../data/site';
       </a>
     </div>
 
-    {/* Salinan khusus mobile — di sana `.nav-top` menyusut jadi topbar setinggi
+    {/* Salinan khusus mobile - di sana `.nav-top` menyusut jadi topbar setinggi
         40px yang sudah penuh oleh pill brand, tombol WhatsApp, dan tombol menu,
         jadi baris sosial di atas TIDAK muat dan disembunyikan. Tanpa salinan
         ini Instagram, TikTok, dan LinkedIn hilang sama sekali di ponsel.

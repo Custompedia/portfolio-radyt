@@ -5,12 +5,12 @@ import { $, $$, isDesktop } from '../core/utils';
 /**
  * INTRO
  *
- * Wordmark raksasa itu sendiri yang jadi bintang pembuka — bukan layar penutup
+ * Wordmark raksasa itu sendiri yang jadi bintang pembuka - bukan layar penutup
  * terpisah. Koreografinya tiga babak, mengikuti situs referensi:
  *
  *   0.0s  wordmark melayang masuk dari luar layar kanan menuju tengah layar,
  *         sementara huruf-hurufnya naik dari balik mask satu per satu
- *         (stagger 0.2 — inilah "R  A  D  Y  T" yang muncul berurutan);
+ *         (stagger 0.2 - inilah "R  A  D  Y  T" yang muncul berurutan);
  *   1.0s  wordmark memanjat dari tengah layar ke posisinya di puncak hero;
  *   1.4s  hero merakit diri sebagai kaskade: potret → eyebrow & nama →
  *         headline → link nav → kartu → tombol → paragraf.
@@ -51,7 +51,7 @@ export function sealIntro(): void {
 
 /** Semua yang harus tersembunyi dulu, lalu dimunculkan berurutan.
  *
- * `statCards` sengaja hanya mengambil kartu ber-`data-ghost` — yaitu kartu yang
+ * `statCards` sengaja hanya mengambil kartu ber-`data-ghost` - yaitu kartu yang
  * benar-benar punya posisi di hero. Kartu rail yang tidak muncul di hero
  * (`data-ghost-fade`) opacity-nya milik fade morph di ghost.ts; kalau intro
  * ikut menaikkannya ke 1, kartu itu tampil di pojok kiri atas sejak frame
@@ -67,12 +67,12 @@ const stage = () => ({
   lead: [$('.hero-eyebrow'), $('.hero-name')].filter(Boolean) as HTMLElement[],
   buttons: [$('.btn-primary'), $('.hero-secondary')].filter(Boolean) as HTMLElement[],
   supporting: [$('.hero-traits')].filter(Boolean) as HTMLElement[],
-  /** Hanya ada di bawah 768px — lihat `.hero-mobile-stat` di sections.css. */
+  /** Hanya ada di bawah 768px - lihat `.hero-mobile-stat` di sections.css. */
   mobileStats: $$('.hero-mobile-stat'),
 });
 
 /**
- * INTRO MOBILE — koreografi terpisah, bukan versi kecil dari yang di atas.
+ * INTRO MOBILE - koreografi terpisah, bukan versi kecil dari yang di atas.
  *
  * Sebelum ini `desktopOnly: true`, jadi di ponsel hero tidak punya pembukaan
  * sama sekali: halaman langsung utuh di frame pertama. Padahal justru di sanalah
@@ -81,18 +81,18 @@ const stage = () => ({
  * ATURAN YANG MEMBENTUK SELURUH KOREOGRAFI INI: intro TIDAK BOLEH menyentuh
  * wordmark maupun potret. Keduanya bergantian menjadi elemen LCP halaman ini di
  * mobile, dan menahannya sampai JS boot memindahkan LCP dari ~550ms ke detik
- * ke-5 dan ke-6 — DIUKUR keduanya pada CPU throttle 4x:
+ * ke-5 dan ke-6 - DIUKUR keduanya pada CPU throttle 4x:
  *
  *     potret disembunyikan   → LCP 5000ms (render delay 4880ms)
  *     wordmark disembunyikan → LCP 6316ms (render delay 6146ms)
  *     keduanya dibiarkan     → LCP  550ms (render delay  449ms)
  *
  * Jadi yang dianimasikan hanya lapisan di ATAS keduanya: headline, kartu angka,
- * daftar merek, baris eyebrow, tombol. Itu pun sudah cukup — dua benda terbesar
+ * daftar merek, baris eyebrow, tombol. Itu pun sudah cukup - dua benda terbesar
  * di layar sudah terpampang sejak frame pertama, dan yang tersisa untuk
  * disingkap justru teks yang memang dibaca berurutan.
  *
- * Sisanya sengaja berbeda dari desktop —
+ * Sisanya sengaja berbeda dari desktop -
  *
  *   - TANPA penerbangan dari luar layar. Di layar selebar 390px, wordmark yang
  *     melintas horizontal cuma terbaca sebagai kedutan.
@@ -100,7 +100,7 @@ const stage = () => ({
  *     selesai dilukis; menahan scroll demi animasi terbaca sebagai halaman
  *     macet, bukan halaman mewah.
  *   - Di bawah satu detik, bukan 3.3. Kalau user menggulung di tengah jalan,
- *     tweennya tetap tuntas — tidak ada yang tersangkut setengah.
+ *     tweennya tetap tuntas - tidak ada yang tersangkut setengah.
  */
 function buildMobileIntro(el: ReturnType<typeof stage>): gsap.core.Timeline {
   gsap.set(el.headlineLines, { autoAlpha: 0, yPercent: 40 });
@@ -149,12 +149,12 @@ export const preloaderModule: AnimationModule = {
     gsap.set(letters, { yPercent: 110 });
 
     gsap.set(el.portrait, { autoAlpha: 0, scale: 0.88, transformOrigin: 'center bottom' });
-    // Separator tumbuh dari tinggi nol, bukan memudar — garisnya seolah
+    // Separator tumbuh dari tinggi nol, bukan memudar - garisnya seolah
     // ditarik keluar di antara label.
     gsap.set(el.navSeps, { height: 0 });
     gsap.set(el.headlineLines, { autoAlpha: 0, scale: 0.9 });
     // Link nav & tombol utama sudah dipegang transform-nya oleh GhostEngine,
-    // jadi di sini hanya opacity + blur yang disentuh — scale akan bentrok.
+    // jadi di sini hanya opacity + blur yang disentuh - scale akan bentrok.
     gsap.set(el.navLinks, { autoAlpha: 0 });
     gsap.set(el.statCards, { autoAlpha: 0, filter: 'blur(8px)' });
     gsap.set(el.buttons, { autoAlpha: 0 });
@@ -163,15 +163,15 @@ export const preloaderModule: AnimationModule = {
 
     timeline = gsap.timeline({ delay: 0.15 });
 
-    // Babak 1 — masuk dari kanan, huruf naik berurutan.
+    // Babak 1 - masuk dari kanan, huruf naik berurutan.
     timeline
       .to(wordmark, { x: xToCenter, duration: 1, ease: 'power3.inOut' })
       .to(letters, { yPercent: 0, duration: 1, stagger: 0.2, ease: 'power3.out' }, '<');
 
-    // Babak 2 — memanjat ke posisi akhirnya di puncak hero.
+    // Babak 2 - memanjat ke posisi akhirnya di puncak hero.
     timeline.to(wordmark, { x: 0, y: 0, duration: 1, ease: 'power2.inOut' }, 1);
 
-    // Babak 3 — hero merakit diri, tumpang tindih dengan babak 2.
+    // Babak 3 - hero merakit diri, tumpang tindih dengan babak 2.
     timeline.addLabel('hero', 1.4);
 
     timeline
@@ -203,7 +203,7 @@ export const preloaderModule: AnimationModule = {
     timeline?.kill();
     timeline = null;
 
-    // Membunuh timeline tidak mengembalikan apa pun — inline style hasil
+    // Membunuh timeline tidak mengembalikan apa pun - inline style hasil
     // gsap.set() di init() tetap menempel. Kalau teardown terjadi di tengah
     // intro (mis. lebar jatuh di bawah breakpoint), elemen hero tersangkut di
     // autoAlpha: 0 dan hero versi mobile tampil kosong.

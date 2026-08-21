@@ -18,7 +18,7 @@ export interface AnimationModule {
   destroy?(): void;
 
   /**
-   * Dipanggil saat resize. Default-nya destroy() lalu init() — override hanya
+   * Dipanggil saat resize. Default-nya destroy() lalu init() - override hanya
    * bila modul butuh urutan khusus (mis. mengukur ulang sebelum membangun).
    */
   rebuild?(): void;

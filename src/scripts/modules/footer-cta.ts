@@ -13,7 +13,7 @@ export const footerCtaModule: AnimationModule = {
     if (!footer) return;
 
     // Urutan naiknya mengikuti urutan markup, jadi penandanya cukup satu atribut
-    // — menambah blok baru di footer tidak perlu menyentuh modul ini.
+    // - menambah blok baru di footer tidak perlu menyentuh modul ini.
     const targets = $$<HTMLElement>('[data-footer-reveal]', footer);
     if (targets.length === 0) return;
 
@@ -33,7 +33,7 @@ export const footerCtaModule: AnimationModule = {
     timeline?.kill();
     timeline = null;
     // Tanpa ini, membongkar modul saat animasinya belum sempat main meninggalkan
-    // `visibility: hidden` inline — dan seluruh isi footer lenyap.
+    // `visibility: hidden` inline - dan seluruh isi footer lenyap.
     for (const el of $$<HTMLElement>('[data-footer-reveal]')) gsap.set(el, { clearProps: 'opacity,visibility,transform' });
   },
 };

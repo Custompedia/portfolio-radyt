@@ -7,11 +7,11 @@ import { $, $$ } from '../core/utils';
  * tombol WhatsApp rail saat section terakhir terlihat.
  *
  * Versi sebelumnya membuat satu ScrollTrigger per link dan hanya pernah
- * MENYALAKAN — tidak ada yang mematikan. Dua akibatnya terlihat langsung:
+ * MENYALAKAN - tidak ada yang mematikan. Dua akibatnya terlihat langsung:
  * section yang tidak diwakili menu mana pun (scene 3D) meninggalkan link
  * sebelumnya menyala di tempat yang bukan miliknya, dan dua section yang
  * tumpang tindih (About ditarik naik menimpa hero lewat margin negatif)
- * menyalakan keduanya sekaligus — WORK dan CONTACT ikut menyala di halaman
+ * menyalakan keduanya sekaligus - WORK dan CONTACT ikut menyala di halaman
  * Home.
  *
  * Yang ini memutuskannya dari SATU tempat: cari section terakhir yang tepi
@@ -21,7 +21,7 @@ import { $, $$ } from '../core/utils';
  */
 
 /** Garis baca: section dianggap "sedang dibaca" begitu tepi atasnya naik
- *  melewati 45% tinggi layar — sama seperti ambang versi sebelumnya. */
+ *  melewati 45% tinggi layar - sama seperti ambang versi sebelumnya. */
 const READ_LINE = 0.45;
 
 /** Section terakhir. Selama ia terlihat, tombol WhatsApp rail disembunyikan
@@ -43,7 +43,7 @@ function sync(): void {
 
   // Section terakhir yang tepi atasnya sudah melewati garis baca. Urutan
   // `watched` mengikuti urutan dokumen, jadi "terakhir yang lolos" selalu yang
-  // paling bawah — dan section yang saling menumpuk tidak bisa lagi menyalakan
+  // paling bawah - dan section yang saling menumpuk tidak bisa lagi menyalakan
   // dua link sekaligus.
   let activeId = watched[0]?.id ?? '';
   for (const section of watched) {
@@ -80,7 +80,7 @@ export const navActiveModule: AnimationModule = {
 
     current = '';
     // Satu listener untuk semua section. ScrollTrigger dipakai sekadar sebagai
-    // sumber event yang sudah ter-throttle bersama Lenis — bukan sebagai
+    // sumber event yang sudah ter-throttle bersama Lenis - bukan sebagai
     // penentu section, supaya keputusannya tetap di satu tempat.
     trigger = ScrollTrigger.create({
       trigger: document.body,

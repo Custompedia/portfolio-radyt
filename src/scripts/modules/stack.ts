@@ -3,28 +3,28 @@ import type { AnimationModule } from '../core/module';
 import { $$ } from '../core/utils';
 
 /**
- * Tiga section penutup — Pedi, The Work, footer — tidak lagi berbaris: yang
+ * Tiga section penutup - Pedi, The Work, footer - tidak lagi berbaris: yang
  * berikutnya NAIK MENIMPA yang sebelumnya, seperti kartu yang ditumpuk.
  *
  * Resepnya dua bagian, dan sengaja TANPA tween posisi supaya gerakannya terikat
- * 1:1 pada scroll — itulah yang membuatnya mundur persis saat digulung ke atas,
+ * 1:1 pada scroll - itulah yang membuatnya mundur persis saat digulung ke atas,
  * tanpa perlu satu pun `toggleActions`:
  *
  *   1. Layer BAWAH ditahan diam satu viewport di akhir hidupnya. Di desktop
  *      penahan itu sudah ada dan tinggal diperpanjang: pin Pedi ditambah satu
  *      viewport (packaging-test.ts) dan tinggi The Work ditambah satu viewport
- *      (horizontal.ts). Di bawah 1100px keduanya tidak berlaku — CSS memaksa
- *      The Work jadi statis dan timeline Pedi tidak pernah nge-pin — jadi modul
+ *      (horizontal.ts). Di bawah 1100px keduanya tidak berlaku - CSS memaksa
+ *      The Work jadi statis dan timeline Pedi tidak pernah nge-pin - jadi modul
  *      INI yang memasang penahannya lewat pin sendiri.
  *   2. Layer ATAS ditarik naik satu viewport lewat `margin-top` negatif
  *      (sections.css). Penahan dan tarikan saling meniadakan, jadi tinggi
- *      dokumen persis sama seperti sebelum ada tumpukan — tidak ada satu pun
+ *      dokumen persis sama seperti sebelum ada tumpukan - tidak ada satu pun
  *      section lain yang posisinya bergeser.
  *
  * `--stack-hold` ditulis dari sini dalam PIXEL, bukan dibiarkan `100vh` di CSS:
  * di mobile `100vh` mengacu ke viewport saat bar browser tersembunyi, sementara
  * penahan di JS memakai `innerHeight` saat itu juga. Selisih keduanya terbaca
- * sebagai celah — atau lompatan — tepat di sambungan dua layer.
+ * sebagai celah - atau lompatan - tepat di sambungan dua layer.
  */
 
 /** Di atas lebar ini penahannya datang dari pin Pedi & tinggi The Work. */
@@ -35,7 +35,7 @@ const triggers: ScrollTrigger[] = [];
 /**
  * Ditulis ulang SETIAP kali ScrollTrigger menyegarkan, bukan sekali saat init.
  * Tinggi viewport berubah tanpa lebar ikut berubah lebih sering daripada
- * kelihatannya — bar browser mobile yang menyusut, panel devtools yang dibuka —
+ * kelihatannya - bar browser mobile yang menyusut, panel devtools yang dibuka -
  * dan main.ts sengaja hanya memanggil `ScrollTrigger.refresh()` untuk itu, tanpa
  * membangun ulang modul. Pin Pedi memakai satuan persen viewport jadi ia ikut
  * menyesuaikan sendiri; kalau nilai ini tertinggal, tarikan dan penahannya tidak
@@ -66,7 +66,7 @@ export const stackModule: AnimationModule = {
           // Tepi bawah layer menyentuh dasar layar = layar terakhirnya sudah
           // terbaca utuh. Dari titik itu ia dibekukan satu viewport. Dipatok ke
           // tepi BAWAH, bukan atas, karena di mobile section ini lebih tinggi
-          // dari layar — mematoknya ke atas akan membekukannya sebelum isinya
+          // dari layar - mematoknya ke atas akan membekukannya sebelum isinya
           // sempat terbaca.
           start: 'bottom bottom',
           end: () => `+=${window.innerHeight}`,
@@ -76,7 +76,7 @@ export const stackModule: AnimationModule = {
           invalidateOnRefresh: true,
           // Spacer pin ini mendorong turun section di bawahnya, jadi ia harus
           // disegarkan lebih dulu daripada trigger yang membaca posisi dokumen
-          // section tersebut — alasan yang sama persis dengan catatan panjang
+          // section tersebut - alasan yang sama persis dengan catatan panjang
           // di packaging-test.ts.
           refreshPriority: 1,
         }),

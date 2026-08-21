@@ -4,35 +4,35 @@ import { $, $$, isDesktop } from '../core/utils';
 import { getWorkTween } from './horizontal';
 
 /**
- * KARTU PROYEK — bidang fokus, bukan ban berjalan.
+ * KARTU PROYEK - bidang fokus, bukan ban berjalan.
  *
  * Sebelumnya section ini digerakkan satu tween `x: -overflow, ease: 'none'` dan
  * tidak ada apa-apa lagi selama 5.5 layar: kesembilan kartu meluncur sebagai
  * satu balok kaku, masuk sekali dengan `expo.out`, lalu diam. Rata, tanpa
- * kedalaman — padahal ini permukaan terbesar di halaman.
+ * kedalaman - padahal ini permukaan terbesar di halaman.
  *
  * Sekarang tiap kartu punya TIGA lapis gerak, dan ketiganya menumpang scroll
  * yang sudah ada (tidak ada pemicu scroll baru yang mahal):
  *
- *   1. BIDANG FOKUS  — jarak kartu ke tengah layar menggerakkan `scale` 0.9→1
+ *   1. BIDANG FOKUS  - jarak kartu ke tengah layar menggerakkan `scale` 0.9→1
  *      dan `brightness` 0.45→1. Yang di tengah tajam, tetangganya mundur ke
  *      dalam gelap. Ini yang mengubahnya jadi sinema.
- *   2. PARALLAX POSTER — gambar bergeser ±8% di dalam bingkainya (lihat
+ *   2. PARALLAX POSTER - gambar bergeser ±8% di dalam bingkainya (lihat
  *      `.work-poster` di sections.css). Kartu dan isinya tidak lagi bergerak
  *      dengan kecepatan yang sama, dan justru selisih kecepatan itulah yang
  *      dibaca mata sebagai kedalaman.
- *   3. ISI KARTU — judul dan tag naik saat kartunya mendekat tengah, bukan ikut
+ *   3. ISI KARTU - judul dan tag naik saat kartunya mendekat tengah, bukan ikut
  *      terbang di pintu masuk.
  *
  * PEMBAGIAN PROPERTI ITU WAJIB DIJAGA: masuk memegang `opacity`/`y`, fokus
  * memegang `scale`/`filter`, parallax memegang `xPercent` poster. Dulu tween
- * masuk ikut menulis `scale` (0.6→1) — kalau itu dipertahankan, ia dan bidang
+ * masuk ikut menulis `scale` (0.6→1) - kalau itu dipertahankan, ia dan bidang
  * fokus akan berebut properti yang sama pada kartu yang sama.
  *
  * DUA PENGGERAK, SATU RESEP:
- *   desktop — track digeser GSAP, jadi ScrollTrigger butuh `containerAnimation`
+ *   desktop - track digeser GSAP, jadi ScrollTrigger butuh `containerAnimation`
  *             untuk bisa membaca posisi elemen yang bergerak menyamping;
- *   mobile  — track adalah scroller native (`overflow-x: auto`), jadi cukup
+ *   mobile  - track adalah scroller native (`overflow-x: auto`), jadi cukup
  *             `scroller` + `horizontal: true`. Sebelum ini modulnya
  *             `desktopOnly` dan di ponsel kesembilan kartu benar-benar diam.
  */
@@ -66,7 +66,7 @@ function primeVideo(card: HTMLElement): void {
 
   video.load();
   void video.play().catch(() => {
-    /* autoplay ditolak — poster tetap tampil, tidak ada yang rusak */
+    /* autoplay ditolak - poster tetap tampil, tidak ada yang rusak */
   });
 }
 
@@ -151,7 +151,7 @@ export const workCardsModule: AnimationModule = {
 
       // --- 4. Isi kartu menyusul -------------------------------------------
       // Berhenti di tengah lintasan (`duration: 0.5` dari total 1) supaya teks
-      // sudah tegak saat kartunya paling tajam, lalu tidak bergerak lagi —
+      // sudah tegak saat kartunya paling tajam, lalu tidak bergerak lagi -
       // teks yang terus melayang selama kartunya lewat justru sulit dibaca.
       const content = card.querySelector<HTMLElement>('.work-card-content');
       if (content) {
@@ -165,7 +165,7 @@ export const workCardsModule: AnimationModule = {
       }
 
       // Pemicu video ditulis lepas, bukan menyalin `horizontalVars`: ia butuh
-      // `once` dan TIDAK boleh punya `scrub`/`end` — menyalin lalu menimpanya
+      // `once` dan TIDAK boleh punya `scrub`/`end` - menyalin lalu menimpanya
       // dengan `undefined` tidak sama dengan tidak pernah menyetelnya.
       const primer = ScrollTrigger.create({
         trigger: card,

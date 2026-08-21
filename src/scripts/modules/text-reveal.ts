@@ -5,7 +5,7 @@ import { $$ } from '../core/utils';
 /**
  * Reveal teks baris-per-baris. Tiap baris dibungkus mask ber-`overflow:hidden`
  * lalu digeser naik dari bawah mask-nya, jadi hurufnya seolah muncul dari balik
- * garis — bukan sekadar fade.
+ * garis - bukan sekadar fade.
  *
  * Dipisah dari StyleEngine karena ini pola yang dipakai puluhan kali; menulis
  * `data-tl-from`/`data-tl-to` lengkap di tiap heading hanya jadi kebisingan.
@@ -24,7 +24,7 @@ function reveal(el: HTMLElement): void {
     wordsClass: 'word',
     charsClass: 'char',
     // Default SplitText memasang aria-label di elemen induk. Pada <p> dan <h2>
-    // atribut itu terlarang menurut ARIA dan merusak accessibility tree —
+    // atribut itu terlarang menurut ARIA dan merusak accessibility tree -
     // teksnya sendiri tetap utuh di DOM, jadi pembaca layar tidak kehilangan
     // apa pun kalau kita mematikannya.
     aria: 'none',

@@ -23,8 +23,8 @@ import { brandStagesModule } from './modules/brand-stages';
  * horizontal juga harus jalan sebelum modul yang bergantung pada tinggi
  * halaman, karena ia yang menetapkan tinggi section work.
  *
- * about-story sekelompok dengan horizontal karena alasan yang sama — ia
- * menetapkan tinggi section About — dan harus mendahului text-reveal, sebab
+ * about-story sekelompok dengan horizontal karena alasan yang sama - ia
+ * menetapkan tinggi section About - dan harus mendahului text-reveal, sebab
  * kelas panggung yang dipasangnya mengubah lebar kolom judul, sementara
  * SplitText memotong baris menurut lebar saat itu juga.
  *
@@ -71,7 +71,7 @@ function initModules(subset: AnimationModule[] = modules): void {
       console.error(`[motion] modul "${m.name}" gagal init`, error);
     }
   }
-  // Modul di luar subset tetap hidup, jadi harus tetap tercatat di `active` —
+  // Modul di luar subset tetap hidup, jadi harus tetap tercatat di `active` -
   // kalau tidak, teardown penuh berikutnya akan melewatkannya.
   active = modules.filter((m) => next.includes(m) || (!subset.includes(m) && active.includes(m)));
 }
@@ -90,7 +90,7 @@ let lastIsDesktop = isDesktop();
 
 /**
  * Hanya perubahan LEBAR yang berarti. Di mobile, bar browser yang menyusut
- * saat scroll mengubah tinggi viewport terus-menerus — kalau itu ikut memicu
+ * saat scroll mengubah tinggi viewport terus-menerus - kalau itu ikut memicu
  * rebuild, seluruh modul dibongkar-pasang di tengah gerakan jari.
  *
  * Dan bahkan saat lebar berubah, yang dibangun ulang hanyalah modul yang
@@ -112,7 +112,7 @@ const handleResize = debounce(() => {
   }
 
   // Ghost mengukur wordmark di posisi istirahatnya dan intro menerbangkannya
-  // keluar layar — mengukur di tengah penerbangan itu menghasilkan morph yang
+  // keluar layar - mengukur di tengah penerbangan itu menghasilkan morph yang
   // salah total. Resize berarti user sudah tidak menonton intro; tuntaskan.
   finishIntro();
 
@@ -130,7 +130,7 @@ const handleResize = debounce(() => {
 async function boot(): Promise<void> {
   document.documentElement.classList.toggle('performance-lite', isPerformanceConstrained());
 
-  // Pengukuran ghost hanya sahih pada scroll nol — jangan biarkan browser
+  // Pengukuran ghost hanya sahih pada scroll nol - jangan biarkan browser
   // memulihkan posisi scroll lama saat reload.
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
@@ -153,7 +153,7 @@ async function boot(): Promise<void> {
   document.documentElement.classList.remove('js-loading');
   ScrollTrigger.refresh();
 
-  // Boot selesai — intro tidak boleh lagi mendapat giliran. Penting untuk
+  // Boot selesai - intro tidak boleh lagi mendapat giliran. Penting untuk
   // halaman yang dibuka di lebar mobile: di sana intro tidak pernah jalan, dan
   // tanpa segel ini melebarkan jendela melewati 768px akan memutarnya penuh.
   sealIntro();

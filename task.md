@@ -106,8 +106,8 @@ Dokumen ini adalah sumber kerja implementasi revisi website Radhyta. Setiap item
 - [x] Verifikasi headline terbaca di atas foto pada desktop dan mobile.
 - [x] Ganti semua label `3 Companies` yang relevan menjadi `3 Holding Companies`.
 - [x] Jangan menggunakan usulan lama `Holding 3 Big Companies`.
-- [x] Pastikan `3 Holding Companies` konsisten di Hero, sidebar, statistik, dan tampilan mobile.
-- [x] Turunkan sedikit posisi card `3 Holding Companies` di Hero desktop tanpa menggeser headline atau statistik lain.
+- [x] Hapus card `3 Holding Companies` dari Hero sesuai arahan terbaru; labelnya hanya muncul setelah sidebar menjadi rail.
+- [x] Besarkan tombol `Let's Talk` dan `See Work` sedikit secara bersamaan serta naikkan posisinya untuk mengisi ruang Hero yang kosong.
 - [x] Pertahankan statistik pengalaman `12+ Years experience` kecuali ada revisi sumber yang lebih baru.
 - [x] Tempatkan kartu `Custompedia / Parcelin / Creasa` di sisi kanan angka `2014`, tepat di siku kanan tulisan, tanpa menutupi headline atau kartu statistik.
 
@@ -136,7 +136,7 @@ Dokumen ini adalah sumber kerja implementasi revisi website Radhyta. Setiap item
 
 - [x] Gunakan copy final persis:
 
-  > Berawal dari satu meja di Semarang pada 2014, Radhyta membangun tiga bisnis yang kini jadi satu ekosistem kreatif: Custompedia, Parcelin, dan Creasa. Dipercaya BNI Lighthouse, Gojek, GoTo, hingga Pemerintah Provinsi Jawa Tengah untuk menyediakan semua kebutuhan kreatifnya — dari Semarang, untuk seluruh Indonesia.
+  > Berawal dari satu meja di Semarang pada 2014, Radhyta membangun tiga bisnis yang kini jadi satu ekosistem kreatif: Custompedia, Parcelin, dan Creasa. Dipercaya BNI Lighthouse, Gojek, GoTo, hingga Pemerintah Provinsi Jawa Tengah untuk menyediakan semua kebutuhan kreatifnya - dari Semarang, untuk seluruh Indonesia.
 
 - [x] Sesuaikan penyebutan Gojek/GoTo pada copy setelah gate duplikasi diputuskan.
 - [x] Pertahankan penekanan pada `Semarang`, `2014`, `Custompedia`, `Parcelin`, dan `Creasa` jika desain memakai emphasis.
@@ -190,7 +190,10 @@ Dokumen ini adalah sumber kerja implementasi revisi website Radhyta. Setiap item
 
 ### 5.1 Struktur dan experience Journey
 
-- [x] Pertahankan komposisi editorial kartu Journey yang sudah disetujui.
+- [x] Redesain seluruh kartu Journey sebagai split card editorial biru–ivory yang bersih tanpa pill, frame bertumpuk, atau ornamen berlebihan.
+- [x] Gunakan bingkai foto portrait `3:4` pada mobile dan frame tinggi adaptif pada desktop.
+- [x] Tampilkan setiap foto secara utuh dengan `object-fit: contain`; foto tidak boleh terpotong saat diam, hover, atau animasi masuk.
+- [x] Gunakan susunan vertikal ber-rel pada tablet agar card besar tidak saling bertumpuk; jalur serpentine hanya dipakai di atas `1100px`.
 - [x] Gunakan foto dari folder Drive Journey.
 - [x] Pastikan urutan chapter: 2014, 2016, 2018, 2020, 2021, 2023, 2024, 2025, 2026.
 - [x] Perbaiki kapitalisasi seluruh judul chapter sesuai daftar final.
@@ -274,7 +277,7 @@ Dokumen ini adalah sumber kerja implementasi revisi website Radhyta. Setiap item
 - [x] Gunakan judul `2024 - Nine Cities, Big Challenge, One Team`.
 - [x] Gunakan copy final persis:
 
-  > Setelah 6 tahun, seluruh akun media sosial Gojek Regional — Semarang, Solo, Bandung, Yogyakarta, Makassar, Palembang, Batam, Padang, dan Kalimantan — dikelola oleh Custompedia. Tidak hanya itu, satu tantangan besar kami terima di tahun ini, dan kami berhasil.
+  > Setelah 6 tahun, seluruh akun media sosial Gojek Regional - Semarang, Solo, Bandung, Yogyakarta, Makassar, Palembang, Batam, Padang, dan Kalimantan - dikelola oleh Custompedia. Tidak hanya itu, satu tantangan besar kami terima di tahun ini, dan kami berhasil.
 
 - [x] Gunakan foto pengelolaan akun regional dan foto tantangan/event yang ditunjukkan untuk 2024.
 - [x] Pastikan kesembilan wilayah tertulis lengkap dan tidak ada yang hilang.
@@ -341,7 +344,7 @@ Dokumen ini adalah sumber kerja implementasi revisi website Radhyta. Setiap item
 - [x] Gunakan nama badan usaha `PT Parcelin Creative Indonesia`.
 - [x] Gunakan copy final persis:
 
-  > Creative production house yang mengubah ide jadi produk nyata — packaging, printing, merchandise, sampai promosi brand, semua end-to-end dalam satu atap. Enam unit usaha, satu standar kerja. #BikinDiParcelin
+  > Creative production house yang mengubah ide jadi produk nyata - packaging, printing, merchandise, sampai promosi brand, semua end-to-end dalam satu atap. Enam unit usaha, satu standar kerja. #BikinDiParcelin
 
 - [x] Pastikan hashtag `#BikinDiParcelin` ditulis persis.
 

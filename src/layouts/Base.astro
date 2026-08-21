@@ -11,7 +11,7 @@ interface Props {
 }
 
 const {
-  title = `${brand.role} — ${brand.person} | ${brand.name}${brand.symbol}`,
+  title = `${brand.role} - ${brand.person} | ${brand.name}${brand.symbol}`,
   description = hero.subheadline,
 } = Astro.props;
 const socialImage = new URL('/images/radyta-og-blue.jpg', Astro.url).href;
@@ -45,7 +45,7 @@ const socialImage = new URL('/images/radyta-og-blue.jpg', Astro.url).href;
     <link rel="canonical" href={Astro.site} />
 
     <!-- Favicon SVG inline: pill biru dengan inisial, kembaran pill brand di
-         sidebar. Hurufnya PUTIH, bukan hitam seperti versi kuning — hitam di
+         sidebar. Hurufnya PUTIH, bukan hitam seperti versi kuning - hitam di
          atas #112BD6 cuma 2.3:1. Tanpa ini browser meminta /favicon.ico dan
          dapat 404. -->
     <link
@@ -58,15 +58,15 @@ const socialImage = new URL('/images/radyta-og-blue.jpg', Astro.url).href;
     <link rel="preload" href="/fonts/satoshi-900.woff2" as="font" type="font/woff2" crossorigin />
     <!-- Logo tiga perusahaan. Sebelumnya `loading="lazy"` tanpa preload: browser
          baru meminta berkasnya ketika grid hampir masuk layar, sementara animasi
-         singkapnya sudah jalan duluan — jadi kotaknya kosong dulu, logonya
+         singkapnya sudah jalan duluan - jadi kotaknya kosong dulu, logonya
          menyusul. Prioritasnya SENGAJA rendah: ketiganya jauh di bawah lipatan
          dan tidak boleh berebut antrean dengan potret hero maupun font.
-         Diturunkan dari data, bukan ditulis ulang — menambah perusahaan tidak
+         Diturunkan dari data, bukan ditulis ulang - menambah perusahaan tidak
          perlu menyentuh berkas ini. -->
     {companies.items.map((company) => <link rel="preload" href={company.logo} as="image" fetchpriority="low" />)}
 
     <!-- Harus inline dan di <head>: GhostEngine hanya bisa mengukur posisi awal
-         saat scroll benar-benar nol. Modul yang di-defer sudah terlambat —
+         saat scroll benar-benar nol. Modul yang di-defer sudah terlambat -
          browser keburu memulihkan posisi scroll sebelumnya. -->
     <script is:inline>
       if ('scrollRestoration' in history) history.scrollRestoration = 'manual';

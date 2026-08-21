@@ -3,7 +3,7 @@ import type { AnimationModule } from '../core/module';
 import { $$, isDesktop, parseVars } from '../core/utils';
 
 /**
- * STYLE ENGINE — animasi deklaratif lewat atribut.
+ * STYLE ENGINE - animasi deklaratif lewat atribut.
  *
  * Ini pola yang membuat situs referensi punya 163 ScrollTrigger tanpa 163 blok
  * kode: hampir tiap elemen membawa resepnya sendiri di markup.

@@ -2,12 +2,12 @@
 /**
  * Hero berisi dua hal:
  *  1. konten yang memang hanya milik hero (wordmark, potret, kolom teks),
- *  2. penanda posisi untuk elemen sidebar — kotak `.ghost` tak terlihat untuk
+ *  2. penanda posisi untuk elemen sidebar - kotak `.ghost` tak terlihat untuk
  *     kartu & tombol, dan baris label transparan untuk navigasi. Lihat
  *     modules/ghost.ts.
  *
  * Dipecah jadi DUA lapisan sticky karena sidebar (z-index 60) harus berada
- * di ATAS potret tapi di BAWAH kolom teks — persis seperti referensi, di mana
+ * di ATAS potret tapi di BAWAH kolom teks - persis seperti referensi, di mana
  * baris navigasi tersembunyi di belakang konten.
  *
  * SUSUNAN: potret duduk di tengah layar, sementara statistik, headline, CTA,
@@ -18,7 +18,7 @@
  * sidebar-nya, melainkan wordmark ini sendiri: ia harus tetap di `.hero-back`
  * supaya berada di belakang potret, sementara elemen sidebar z-index-nya di
  * atas. Di ujung lintasan keduanya berimpit persis, jadi serah-terimanya
- * cukup lewat silang-pudar — tanpa perlu menukar z-index di tengah scroll.
+ * cukup lewat silang-pudar - tanpa perlu menukar z-index di tengah scroll.
  */
 import Icon from '../Icon.astro';
 import { about, brand, hero, nav, stats } from '../../data/site';
@@ -36,24 +36,7 @@ const STAT_BIG_W = 9.62;
 const STAT_BIG_H = 10.44;
 const STAT_BIG_X = 24.89;
 
-/**
- * Kolom statistik mundur ke kiri saat tombol utama mulai mendesaknya.
- *
- * `--hero-btn-w` punya lantai `max(160px, 10.5vw)`, dan lantai itulah biang
- * tabrakannya: di bawah ~1070px tombol berhenti menyusut sementara segalanya
- * yang lain terus mengecil, jadi tepi kirinya (50vw − lebar tombol − 0.28vw)
- * merangkak masuk ke kolom statistik. DIUKUR di 768×1024: kartu "12+" duduk di
- * 191–265 sementara tombol mulai di 222 — 1075px² saling tindih, dan label
- * "Years experience" tertutup tombol. Di 819×614 selisihnya −36px.
- *
- * Di lebar yang lapang hasilnya nol persis, jadi komposisi desktop tidak
- * bergeser sedikit pun — diverifikasi di 1210.
- *
- * Rumusnya sendiri ada di tokens.css sebagai `--hero-stat-shift`, BUKAN di sini:
- * media query lebar-pendek harus bisa menolkannya, dan nilai yang ditulis
- * inline lewat `style` tidak bisa ditimpa aturan CSS mana pun. Kalau
- * `STAT_BIG_X`/`STAT_BIG_W` di atas berubah, perbarui juga angka 35.4vw di sana.
- */
+/** Kolom statistik ikut mundur di desktop sempit agar tidak bertabrakan dengan CTA. */
 const statX = (x: number): string => `calc(${x}vw - var(--hero-stat-shift))`;
 
 const statsBigY = `min(calc(var(--hero-h1-top) + 2 * 1.03 * var(--hero-h1-size) + 1.2vh), calc(97vh - ${STAT_BIG_H}vw))`;
@@ -64,17 +47,17 @@ const STAT_BIG_TEXT_H = STAT_BIG_TEXT_W * 0.9353;
 /**
  * Hanya elemen yang memang terlihat di hero yang diberi ghost: kartu statistik
  * dan tombol utama. Navigasi punya jalurnya sendiri (baris label transparan di
- * `.hero-front`). Sisanya — logo, ikon sosial,
- * kartu email, marquee klien — sengaja tidak punya posisi hero: mereka fade-in
+ * `.hero-front`). Sisanya - logo, ikon sosial,
+ * kartu email, marquee klien - sengaja tidak punya posisi hero: mereka fade-in
  * selama morph lewat `data-ghost-fade`.
  *
  * `x`/`y` menentukan sudut kiri-atas blok, `w` menentukan skalanya; `h` tidak
  * dibaca engine dan diisi apa adanya sebagai dokumentasi.
  */
 const ghosts: GhostBox[] = [
-  { id: 'stats-card-0', x: statX(STAT_BIG_X), y: statsBigY, w: `${STAT_BIG_W}vw`, h: `${STAT_BIG_H}vw` },
+  { id: 'stats-card-1', x: statX(STAT_BIG_X), y: statsBigY, w: `${STAT_BIG_W}vw`, h: `${STAT_BIG_H}vw` },
   {
-    id: 'stat-0',
+    id: 'stat-1',
     x: statX(STAT_BIG_X + (STAT_BIG_W - STAT_BIG_TEXT_W) / 2),
     y: `calc(${statsBigY} + ${(STAT_BIG_H - STAT_BIG_TEXT_H) / 2}vw)`,
     w: `${STAT_BIG_TEXT_W}vw`,
@@ -94,7 +77,7 @@ const ghosts: GhostBox[] = [
  * belahan ini, label tengah tertutup kepala dan tidak terbaca sama sekali.
  *
  * Belahannya DUA-TIGA, sama seperti referensi ("HOME | ABOUT ME" di kiri,
- * "SERVICES | CLIENTS | FAQ" di kanan) — dan dengan lima menu pembagiannya
+ * "SERVICES | CLIENTS | FAQ" di kanan) - dan dengan lima menu pembagiannya
  * jatuh persis di situ tanpa perlu angka tambahan.
  */
 const navLeft = nav.slice(0, 2);
@@ -109,9 +92,9 @@ const navRight = nav.slice(2);
          kanan, hurufnya naik satu per satu) sekaligus latar hero. Tiap huruf
          punya mask sendiri supaya bisa naik dari balik garis. -->
     <!-- Dua lapis, dan pembagian tugasnya tegas:
-         `.hero-wordmark`       — kotak selebar layar, hanya untuk menengahkan;
+         `.hero-wordmark`       - kotak selebar layar, hanya untuk menengahkan;
                                   transform-nya milik intro (terbang dari kanan).
-         `.hero-wordmark-inner` — kotak sepas teks; transform-nya milik morph
+         `.hero-wordmark-inner` - kotak sepas teks; transform-nya milik morph
                                   scroll. Dipisah karena keduanya menulis x/y,
                                   dan karena skala morph hanya benar kalau titik
                                   jangkarnya sudut kiri-atas TEKS, bukan sudut
@@ -144,7 +127,7 @@ const navRight = nav.slice(2);
       <!-- Foto studio yang latarnya sudah dipotong; lihat public/images/README.md. -->
       <img
         src="/images/portrait.webp"
-        alt={`${brand.person} — ${brand.role}`}
+        alt={`${brand.person} - ${brand.role}`}
         width="810"
         height="1365"
         fetchpriority="high"
@@ -163,7 +146,7 @@ const navRight = nav.slice(2);
     <!--
       Label di baris ini transparan: yang terlihat adalah link sidebar asli yang
       diterbangkan ke posisinya oleh ghost.ts. Jadi baris ini murni penanda tata
-      letak — dan karena ia baris flex sungguhan, posisi tiap link tidak perlu
+      letak - dan karena ia baris flex sungguhan, posisi tiap link tidak perlu
       dihitung manual di runtime.
     -->
     <div class="hero-nav" aria-hidden="true">
@@ -240,10 +223,10 @@ const navRight = nav.slice(2);
 
     <div class="hero-mobile-cards glass-card">
       {
-        stats[0] && (
-          <div class="hero-mobile-stat hero-mobile-stat-float glass-card" aria-label={`${stats[0].value} ${stats[0].label}`}>
-            <span class="hero-mobile-stat-value">{stats[0].value}</span>
-            <span class="hero-mobile-stat-label">{stats[0].label}</span>
+        stats[1] && (
+          <div class="hero-mobile-stat hero-mobile-stat-float glass-card" aria-label={`${stats[1].value} ${stats[1].label}`}>
+            <span class="hero-mobile-stat-value">{stats[1].value}</span>
+            <span class="hero-mobile-stat-label">{stats[1].label}</span>
           </div>
         )
       }

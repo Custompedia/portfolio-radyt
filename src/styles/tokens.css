@@ -65,7 +65,7 @@
   --font-sans: 'Satoshi', 'Helvetica Neue', Arial, sans-serif;
   --font-label: 'General Sans', 'Satoshi', Arial, sans-serif;
 
-  /* Skala tipe — verbatim dari referensi. Tiap baris juga mencatat line-height
+  /* Skala tipe - verbatim dari referensi. Tiap baris juga mencatat line-height
      dan weight yang menyertainya supaya pasangannya tidak terpisah. */
   --fs-body: clamp(0.75rem, 1.18vw, 1.5rem); /* lh 1.6  w400 */
   --fs-h1: clamp(3rem, 5.3vw, 5.5rem); /* lh 1.03 w700 */
@@ -76,12 +76,12 @@
      ukuran itu memenuhi layar sampai terbaca sesak. */
   --fs-h2-big: clamp(4rem, 8.2vw, 8.75rem); /* lh 0.9  w700 */
   /* Diturunkan dari clamp(5.5rem, 7.64vw, 8.5rem): pada 1920 judulnya 136px
-     dan baris terpanjang "Mereknya Rapi —" memakan 55vw, jauh melewati blok
+     dan baris terpanjang "Mereknya Rapi -" memakan 55vw, jauh melewati blok
      teks di bawahnya sehingga bacanya terasa berteriak. 5.6vw menaruhnya di
-     ~104px — masih paling besar di halaman, tapi sekelas dengan judul section
+     ~104px - masih paling besar di halaman, tapi sekelas dengan judul section
      lain (88px), bukan dua kali lipatnya. */
   --fs-cta: clamp(3.5rem, 5.6vw, 6.5rem); /* lh 1    w700 */
-  --fs-lead: clamp(2rem, 3.2vw, 3.5rem); /* lh 1    w700 — paragraf What You Get */ /* lh 1    w700 kuning */
+  --fs-lead: clamp(2rem, 3.2vw, 3.5rem); /* lh 1    w700 - paragraf What You Get */ /* lh 1    w700 kuning */
   --fs-stat: clamp(4rem, 5.69vw, 6.25rem); /* lh 0.9  w700 */
   --fs-work-title: clamp(1.25rem, 1.94vw, 3rem); /* lh 1    w500 */
   --fs-h3: clamp(0.75rem, 1.32vw, 1.75rem); /* lh 1.4  w500 */
@@ -97,7 +97,7 @@
   --lh-body: 1.6;
 
   /* Tracking hanya pernah negatif, dan hanya pada tipe terbesar. Sisanya
-     `normal` — memaksa -0.03em ke semua heading (versi sebelumnya) membuat
+     `normal` - memaksa -0.03em ke semua heading (versi sebelumnya) membuat
      ukuran menengah terlihat sesak. */
   --ls-big: -0.25vw;
   --ls-cta: -0.23vw;
@@ -130,7 +130,7 @@
      dengan koreksi optis kecil untuk pose dan bahu kiri. */
   --hero-portrait-x: -3vw;
 
-  /* Jarak tepi ATAS kotak foto ke tepi atas layar — knob naik-turun potret.
+  /* Jarak tepi ATAS kotak foto ke tepi atas layar - knob naik-turun potret.
      Kecilkan / buat negatif = potret naik. Sebelumnya angka ini terkunci di
      3vh di dalam .hero-portrait.
      Batas amannya bergantung pada --hero-portrait-h: di dalam file fotonya ada
@@ -139,11 +139,11 @@
      ikut terpotong.
      Angkanya disamakan dengan referensi: di sana ubun-ubun jatuh di 38px dari
      tepi atas layar (4.9vh @782), sementara -2vh menaruh ubun-ubun kita di 8px
-     — kepalanya terbaca mepet, dan pita atas wordmark ikut habis tertutup
+     - kepalanya terbaca mepet, dan pita atas wordmark ikut habis tertutup
      rambut. 2vh mengembalikan jarak itu ke ~39px. */
   --hero-portrait-top: 2vh;
 
-  /* KOLOM TEKS HERO — satu-satunya tempat geometri kolom kiri ditulis.
+  /* KOLOM TEKS HERO - satu-satunya tempat geometri kolom kiri ditulis.
      Dipakai bersama oleh `.hero-copy` dan baris merek di kakinya, jadi tepi
      kirinya tidak mungkin lepas sinkron.
 
@@ -154,32 +154,23 @@
   --hero-copy-top: calc(var(--hero-nav-top) + 2.8vw);
   --hero-copy-w: min(39vw, 700px);
 
-  --hero-btn-w: max(160px, 10.5vw);
-  --hero-btn-h: 3.28vw;
+  --hero-btn-w: max(170px, 11.25vw);
+  --hero-btn-h: 3.55vw;
 
-  /* Mundurnya kolom statistik hero saat tombol utama mulai mendesaknya.
-     Lantai `160px` di `--hero-btn-w` adalah biangnya: di bawah ~1070px tombol
-     berhenti menyusut sementara segalanya yang lain terus mengecil, jadi tepi
-     kirinya (50vw − lebar tombol − 0.28vw) merangkak masuk ke kolom statistik.
-     DIUKUR di 768×1024: kartu "12+" duduk di 191–265 sementara tombol mulai di
-     222 — 1075px² saling tindih dan label "Years experience" tertutup tombol.
-     Di 819×614 selisihnya −36px.
-
-     35.4vw = ambang lama kolom statistik; sengaja DIPERTAHANKAN apa adanya agar
-     posisi kartu "12+" tidak bergeser sedikit pun. */
+  /* Kolom statistik mundur di desktop sempit agar tombol utama tidak menabrak kartu 12+. */
   --hero-stat-shift: max(0px, calc(35.4vw - (50vw - var(--hero-btn-w) - 0.28vw - 1.2vw)));
 
   /* Ukuran wordmark raksasa, dan SATU-SATUNYA tempat angkanya ditulis.
    *
    * Ketiga angka di bawah diukur di browser pada "RADHYTA" (Satoshi 900,
-   * tracking -0.035em) lewat canvas measureText. JANGAN ditaksir — kalau nama
+   * tracking -0.035em) lewat canvas measureText. JANGAN ditaksir - kalau nama
    * brand-nya berubah, ukur ulang ketiganya.
    *
    * --wordmark-ink  lebar TINTA per 1vw ukuran font. Yang diukur tinta, bukan
    *                 kotak advance-nya: kotak R menyisakan side bearing kiri
    *                 yang lumayan (lihat di bawah), dan menyamakan KOTAK ke
    *                 gutter membuat tinta R berhenti ~20px lebih ke dalam
-   *                 daripada tinta A — wordmark-nya terbaca miring ke kanan,
+   *                 daripada tinta A - wordmark-nya terbaca miring ke kanan,
    *                 dan "HOME" di bawahnya menonjol keluar melewati kaki R.
    * --wordmark-bearing-l  jarak dari tepi kiri kotak R ke tinta pertamanya,
    *                 sebagai kelipatan ukuran font. Dibayar balik lewat
@@ -205,9 +196,9 @@
   --hero-h1-top: 51vh;
   --hero-h1-size: min(6.5rem, 11.5vh, 4.7vw);
   --hero-h1-bottom: calc(var(--hero-h1-top) + 3 * 1.03 * var(--hero-h1-size));
-  --hero-cta-top: calc(var(--hero-h1-bottom) + 1.7vh);
+  --hero-cta-top: calc(var(--hero-h1-bottom) + 0.9vh);
 
-  /* Tangga radius. `.83vw` adalah radius rumah — kartu, tombol, kartu work.
+  /* Tangga radius. `.83vw` adalah radius rumah - kartu, tombol, kartu work.
      `.56vw` yang lebih rapat dipakai panel sidebar dan kartu kaca hero. */
   --radius-sm: 0.56vw;
   --radius: 0.69vw;
@@ -242,12 +233,12 @@
   --theme-dur: 0.3s;
 }
 
-/* Layar lebar-pendek (rasio ≳ 2.15) — ponsel lanskap dan jendela desktop yang
+/* Layar lebar-pendek (rasio ≳ 2.15) - ponsel lanskap dan jendela desktop yang
    dipendekkan. GESERAN KOLOM STATISTIK DIMATIKAN DI SINI.
 
    Di rasio ini baris merek ("Serial entrepreneur, Semarang") duduk sejajar
    tinggi dengan kartu "12+", dan ruang di antara keduanya lebih sempit dari
-   kartunya sendiri — DIUKUR di 844×390: tinta baris merek berhenti di 198px
+   kartunya sendiri - DIUKUR di 844×390: tinta baris merek berhenti di 198px
    sementara tombol utama mulai di 260px, celah 62px untuk kartu selebar 81px.
    Menggeser kartu ke kiri di situ tidak menyelesaikan apa pun, cuma memindahkan
    tabrakan dari tombol ke teks (tertutup 38px).
@@ -264,7 +255,7 @@
 }
 
 /* Dipasang theme.ts di <html> selama section gelap menguasai layar. Hanya
-   menyentuh scrollbar — token permukaan sengaja TIDAK ikut dibalik di sini,
+   menyentuh scrollbar - token permukaan sengaja TIDAK ikut dibalik di sini,
    karena selector ini kena seluruh halaman dan akan menggelapkan juga kartu
    section terang yang masih terlihat. */
 .is-dark-scroll {
@@ -339,7 +330,7 @@
     --ls-lead: -0.01em;
 
     /* Tinggi SEMUA kontrol di topbar mobile: pill brand, tombol CTA, dan
-       tombol menu. Satu angka dipakai bertiga — itu satu-satunya cara menjamin
+       tombol menu. Satu angka dipakai bertiga - itu satu-satunya cara menjamin
        ketiganya rata, karena tanpa `height` tinggi masing-masing lahir dari
        padding + metrik font yang berbeda-beda. */
     --topbar-ctl-h: 40px;

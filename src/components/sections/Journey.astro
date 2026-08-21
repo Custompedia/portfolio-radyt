@@ -2,7 +2,7 @@
 /**
  * Garis perjalanan digambar TANGAN, bukan dihitung dari posisi kartu.
  *
- * Versi sebelumnya membangun bezier dari rect tiap kartu — hasilnya garis yang
+ * Versi sebelumnya membangun bezier dari rect tiap kartu - hasilnya garis yang
  * selalu "benar" tapi tak pernah punya karakter: lengkungnya seragam dan
  * ayunannya sekecil jarak antar kartu. Referensinya justru sebaliknya: satu
  * path tetap yang menyapu nyaris ke dua tepi, lalu KARTU-nya yang dipasang
@@ -21,12 +21,12 @@ const VB_W = 1000;
  * tinggi daripada kartunya, kalau tidak kartu ke-N menabrak kartu berikutnya.
  */
 const NODE_GAP = 290;
-const FIRST_Y = 240;
+const FIRST_Y = 380;
 
 /**
  * x/y dalam koordinat viewBox; `side` menentukan kartu duduk di kiri atau kanan
  * simpul. Kartu digantung DI ATAS simpulnya (sudut bawahnya yang menempel),
- * jadi simpul pertama harus turun setidaknya setinggi satu kartu — kalau tidak
+ * jadi simpul pertama harus turun setidaknya setinggi satu kartu - kalau tidak
  * kartu pertama terdorong ke tepi atas dan menabrak kartu kedua.
  *
  * Simpul dibangkitkan dari jumlah entri, bukan ditulis satu per satu: daftarnya
@@ -48,7 +48,7 @@ const VB_H = nodes[nodes.length - 1]!.y + 80;
 
 /**
  * Tiap ruas adalah satu kubik dengan titik kendali yang menahan arah horizontal
- * di kedua ujungnya — itulah yang membuat garisnya berayun lebar, bukan
+ * di kedua ujungnya - itulah yang membuat garisnya berayun lebar, bukan
  * memotong lurus dari simpul ke simpul.
  */
 const path = nodes
@@ -71,7 +71,7 @@ const path = nodes
   <div class="timeline" data-timeline style={`--timeline-nodes:${nodes.length}`}>
     <!-- Hanya SATU salinan path, dan ia dipotong oleh pembungkus ber-`height`
          yang di-scrub. Dulu ada salinan kedua di bawahnya sebagai jejak samar
-         sepanjang penuh — itu dihapus dengan sengaja: begitu jalur di depan
+         sepanjang penuh - itu dihapus dengan sengaja: begitu jalur di depan
          sudah kelihatan, garisnya cuma terbaca "terisi", bukan sedang
          digambar. Di depan progress sekarang benar-benar kosong. -->
     <div class="timeline-fill" data-timeline-fill aria-hidden="true">
@@ -105,15 +105,18 @@ const path = nodes
           data-tl-to="{'opacity':1,'y':'0%','scale':1,'duration':0.8,'delay':0.12,'ease':'power3.out'}"
           data-tl-start="top 88%"
         >
+          <figure class="timeline-media" data-timeline-media>
+            <img class="timeline-media-backdrop" src={entry.image} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+            <img class="timeline-media-image" src={entry.image} alt={entry.alt} loading="lazy" decoding="async" />
+            <div class="timeline-media-meta">
+              <span class="tl-card-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <time class="timeline-year" datetime={entry.year}>{entry.year}</time>
+            </div>
+          </figure>
           <div class="timeline-content">
-            <span class="tl-card-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-            <time class="timeline-year" datetime={entry.year} data-number-count={entry.year}>{entry.year}</time>
             <h3 class="timeline-title">{entry.title}</h3>
             <p class="timeline-body">{entry.body}</p>
           </div>
-          <figure class="timeline-media" data-timeline-media>
-            <img src={entry.image} alt={entry.alt} loading="lazy" decoding="async" />
-          </figure>
         </article>
       ))
     }

@@ -5,14 +5,14 @@ import { $ } from '../core/utils';
 /**
  * Galeri proyek yang bergerak menyamping. Tinggi section-nya di-set dari JS =
  * satu viewport + sisa track yang harus digeser, jadi 1px scroll vertikal
- * selalu berarti 1px geseran horizontal — tidak pernah terasa terlalu cepat
+ * selalu berarti 1px geseran horizontal - tidak pernah terasa terlalu cepat
  * atau terlalu lambat berapa pun jumlah kartunya.
  */
 
 let tween: gsap.core.Tween | null = null;
 
 /**
- * Dipakai work-cards untuk `containerAnimation` — satu-satunya cara benar
+ * Dipakai work-cards untuk `containerAnimation` - satu-satunya cara benar
  * memicu ScrollTrigger pada elemen yang bergerak menyamping. Tanpa ini,
  * ScrollTrigger memakai posisi vertikal kartu (yang tidak pernah berubah) dan
  * kesembilan kartu terpicu bersamaan di awal.
@@ -43,7 +43,7 @@ export const horizontalModule: AnimationModule = {
      * Ditulis sebagai `calc()` dengan variabelnya, bukan piksel hasil hitungan:
      * `--stack-hold` disegarkan tiap kali tinggi viewport berubah, dan begitu
      * ia berubah penahan di sini ikut menyesuaikan tanpa modul ini perlu
-     * dibangun ulang — persis sama panjang dengan margin negatif footer.
+     * dibangun ulang - persis sama panjang dengan margin negatif footer.
      */
     section.style.height = `calc(${window.innerHeight + overflow}px + var(--stack-hold, 100vh))`;
 

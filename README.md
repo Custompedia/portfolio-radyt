@@ -1,6 +1,6 @@
 # portfolio-radyt
 
-Situs satu halaman untuk **Radhyta Mahenda Mukhsin** — serial entrepreneur dari
+Situs satu halaman untuk **Radhyta Mahenda Mukhsin** - serial entrepreneur dari
 Semarang yang membangun Custompedia (creative agency), Parcelin (kemasan), dan
 Creasa (percetakan online).
 
@@ -19,13 +19,13 @@ section gelap.
 
 | | |
 |---|---|
-| Framework | [Astro](https://astro.build) 7 — zero JS by default, TypeScript strict |
-| Animasi | [GSAP](https://gsap.com) 3.15 — ScrollTrigger, SplitText, DrawSVG |
+| Framework | [Astro](https://astro.build) 7 - zero JS by default, TypeScript strict |
+| Animasi | [GSAP](https://gsap.com) 3.15 - ScrollTrigger, SplitText, DrawSVG |
 | Smooth scroll | [Lenis](https://lenis.darkroom.engineering) 1.3 |
 | Slider | [Swiper](https://swiperjs.com) 14 |
 | Font | Satoshi + General Sans ([Fontshare](https://fontshare.com), self-host) |
 
-Tanpa framework UI — semua interaksi vanilla TypeScript.
+Tanpa framework UI - semua interaksi vanilla TypeScript.
 
 ## Jalankan
 
@@ -46,7 +46,7 @@ Semua teks, daftar proyek, harga, testimoni, dan FAQ ada di satu file:
 src/data/site.ts
 ```
 
-Ganti isinya dan seluruh halaman ikut berubah — markup dan kode animasi tidak
+Ganti isinya dan seluruh halaman ikut berubah - markup dan kode animasi tidak
 perlu disentuh.
 
 Dua aturan bahasa dari handoff berlaku di seluruh file itu: judul, eyebrow, dan
@@ -62,7 +62,7 @@ src/
   data/site.ts            SATU sumber konten
   layouts/Base.astro      <head>, preload font, mount script
   components/
-    Sidebar.astro         elemen ASLI — target morph
+    Sidebar.astro         elemen ASLI - target morph
     sections/*.astro      Hero, About, Journey, Companies, Network, Work,
                           Moment (jeda 3D), Contact (merangkap footer)
   scripts/
@@ -73,12 +73,12 @@ src/
 ```
 
 Tujuh section handoff plus satu jeda visual. Menu sidebar lima item, dan satu
-menu boleh menaungi dua section — pemetaannya ada di `nav[].sections`
+menu boleh menaungi dua section - pemetaannya ada di `nav[].sections`
 (`site.ts`), dibaca `modules/nav-active.ts`.
 
 ## Cara kerja animasinya
 
-**Ghost engine** (`modules/ghost.ts`) — inilah efek utamanya. Elemen sidebar
+**Ghost engine** (`modules/ghost.ts`) - inilah efek utamanya. Elemen sidebar
 adalah satu-satunya elemen nyata; di hero hanya ada kotak `.ghost` tak terlihat
 yang menandai posisi awalnya. Engine mengukur selisih keduanya lalu membuat
 tween ter-scrub dari posisi hero ke posisi sidebar.
@@ -91,7 +91,7 @@ Lima tipe transform: `box` (skala seragam), `background` (skala tidak seragam,
 dengan kompensasi radius eliptis per sudut supaya sudut tetap bulat), `link`,
 `text`, dan `size` (melar lebar/tinggi tanpa mengecilkan label).
 
-**Style engine** (`modules/style-engine.ts`) — animasi deklaratif lewat atribut,
+**Style engine** (`modules/style-engine.ts`) - animasi deklaratif lewat atribut,
 jadi tiap elemen membawa resepnya sendiri di markup:
 
 ```html
@@ -105,11 +105,11 @@ jadi tiap elemen membawa resepnya sendiri di markup:
 Atribut lain: `data-tl-target`, `data-tl-stagger`, `data-tl-once`,
 `data-tl-desktop`, dan `data-number-count` untuk penghitung angka odometer.
 
-**Timeline berkelok** (`modules/timeline-path.ts`) — satu path tetap digambar
+**Timeline berkelok** (`modules/timeline-path.ts`) - satu path tetap digambar
 di `Journey.astro` dari daftar simpul, lalu KARTU-nya yang ditempelkan ke simpul
 itu. Garisnya terisi lewat tinggi pembungkus yang di-scrub, satu langkah per
 simpul, jadi ia terasa singgah di tiap bab. Simpul dibangkitkan dari jumlah
-entri, jadi menambah bab di `site.ts` tidak menuntut mengedit koordinat —
+entri, jadi menambah bab di `site.ts` tidak menuntut mengedit koordinat -
 kecuali `FILL_STEPS` di modul itu, yang persennya mengikuti posisi simpul.
 
 **Modul lain:** intro, sidebar auto-scale, horizontal scroll, theme switcher,
@@ -117,13 +117,13 @@ text reveal, magnetic hover, kartu proyek, scene 3D Pedi, jejak gambar footer,
 nav active, mobile menu.
 
 Tiap modul punya `init()` / `destroy()` dan menyatakan apakah ia butuh dibangun
-ulang saat resize. `main.ts` yang mengorkestrasi urutannya — sidebar mengunci
+ulang saat resize. `main.ts` yang mengorkestrasi urutannya - sidebar mengunci
 skalanya dulu, baru ghost boleh mengukur.
 
 ## Aksesibilitas & fallback
 
 - Di bawah 768px dan pada `prefers-reduced-motion: reduce`, semua morph dimatikan
-  dan layout jatuh ke versi statis — galeri proyek tetap bisa dijangkau sebagai
+  dan layout jatuh ke versi statis - galeri proyek tetap bisa dijangkau sebagai
   scroller horizontal biasa, bukan scroll-jacking.
 - Lighthouse: Aksesibilitas 95, Best Practices 100.
 

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SIDEBAR — elemen asli yang diterbangkan GhostEngine
+   SIDEBAR - elemen asli yang diterbangkan GhostEngine
    ========================================================================== */
 
 .sidebar {
@@ -17,7 +17,7 @@
 /* Wrapper murni struktural (lihat Sidebar.astro): memisahkan kartu-kartu yang
    di mobile jadi isi panel slide-out dari `.nav-top` + tombol CTA yang tetap
    jadi topbar. `display:contents` membuat wrapper ini tidak menghasilkan
-   kotak sendiri — anak-anaknya tetap ikut flex/gap `.sidebar` persis seperti
+   kotak sendiri - anak-anaknya tetap ikut flex/gap `.sidebar` persis seperti
    sebelum wrapper ini ada. Mobile override ada di sections.css. */
 .sidebar-panel {
   display: contents;
@@ -29,7 +29,7 @@
   padding: 1.11vw;
 }
 
-/* Selama morph, baris navigasi harus lewat DI BELAKANG kartu lain — persis
+/* Selama morph, baris navigasi harus lewat DI BELAKANG kartu lain - persis
    seperti referensi, di mana link tengah tertutup kartu statistik. */
 .sidebar > * {
   position: relative;
@@ -112,7 +112,7 @@
   transform: translateY(-0.13vw);
 }
 
-/* Kartu sosial khusus mobile — lihat komentarnya di Sidebar.astro. Di desktop
+/* Kartu sosial khusus mobile - lihat komentarnya di Sidebar.astro. Di desktop
    baris sosial yang dipakai adalah yang di `.nav-top`. */
 .nav-social-card {
   display: none;
@@ -123,7 +123,7 @@
 }
 
 /* Milik panel mobile saja: judul kelompok dan afordans (panah, ikon amplop).
-   `display:none` di desktop bukan sekadar kosmetik — `.nav-link` dan
+   `display:none` di desktop bukan sekadar kosmetik - `.nav-link` dan
    `.nav-email-btn` adalah elemen yang diukur GhostEngine, jadi apa pun yang
    tidak boleh ikut menggeser kotaknya di desktop harus benar-benar tidak
    menghasilkan kotak. */
@@ -145,7 +145,7 @@
 }
 
 /* Flex + center: tinggi baris ini ditentukan kartu yang isinya paling tinggi
-   (yang bertumpuk), jadi isi kartu satunya — yang cuma satu pita — akan
+   (yang bertumpuk), jadi isi kartu satunya - yang cuma satu pita - akan
    menempel ke ATAS dan menyisakan lubang di bawahnya. Diukur sebelum ini:
    napas atas 18.8px, napas bawah 51px. Dengan `align-items:center` keduanya
    duduk di tengah kotaknya masing-masing berapa pun selisih tingginya.
@@ -161,18 +161,18 @@
 }
 
 /* Sisi yang BERTEMU disiku dan border-nya dibuang, jadi dua latar yang
-   bersebelahan terbaca sebagai SATU kartu dengan garis pemisah di tengah —
+   bersebelahan terbaca sebagai SATU kartu dengan garis pemisah di tengah -
    bukan dua kartu berjejeran. Latarnya tetap dua elemen karena di hero
    masing-masing terbang dari kartu yang berbeda.
 
    `-of-type`, BUKAN `-child`: `.nav-stats-sep` dirender setelah kedua kartu,
    jadi kartu terakhir tidak pernah jadi `:last-child` dan aturan kedua di
-   bawah diam-diam tidak pernah kena — sudut kanan-atas/bawahnya tetap bulat
+   bawah diam-diam tidak pernah kena - sudut kanan-atas/bawahnya tetap bulat
    dan seam-nya terlihat sebagai celah. Span pemisah itu bukan `div`, jadi
    `:last-of-type` menunjuk kartu terakhir dengan benar.
 
    `:not()`-nya tetap penting: dengan satu statistik saja, kartu yang sama
-   adalah first- SEKALIGUS last-of-type — tanpa penjaga itu keempat sudutnya
+   adalah first- SEKALIGUS last-of-type - tanpa penjaga itu keempat sudutnya
    disiku dan kartu tunggalnya kehilangan radius sama sekali. */
 .nav-stats-row > .nav-stat-card:first-of-type:not(:last-of-type) .nav-card-bg {
   border-right: 0;
@@ -199,12 +199,12 @@
 }
 
 /* SATU susunan untuk kedua tempat: angka di atas, label di bawahnya, keduanya
- * rata tengah — persis seperti rail referensi ("80+ / Projects" dan "7+ /
+ * rata tengah - persis seperti rail referensi ("80+ / Projects" dan "7+ /
  * Years of experience" sama-sama bertumpuk di dalam satu kartu berpembatas).
  *
  * Dulu blok ini SEBARIS di rail dan BERTUMPUK di hero, dan ghost.ts punya satu
  * tipe ghost khusus untuk menjembataninya (sudah dihapus bersama susunan
- * sebarisnya — sekarang cukup tipe `box`). Susunan sebaris itu tidak pernah
+ * sebarisnya - sekarang cukup tipe `box`). Susunan sebaris itu tidak pernah
  * muat begitu statistiknya jadi dua: "950+ Businesses
  * served" saja sudah 195px sementara separuh rail cuma 145px, jadi kedua kartu
  * melar keluar rail dan menimpa isi halaman di sebelahnya. Bertumpuk, lebar
@@ -217,7 +217,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Rapat: angka dan label harus terbaca sebagai SATU blok. Kalau angka ini berubah, `stat-0` di Hero.astro ikut dihitung ulang. */
+  /* Rapat: angka dan label harus terbaca sebagai SATU blok. Kalau angka ini berubah, `stat-1` di Hero.astro ikut dihitung ulang. */
   gap: 0.35vw;
   width: fit-content;
   margin-inline: auto;
@@ -242,7 +242,7 @@
 
 /* Tiap kata turun satu baris (kata-katanya sudah dipecah jadi span sendiri di
    Sidebar.astro). Itu yang menahan lebar blok tetap selebar kata TERPANJANG,
-   bukan selebar kalimatnya — syarat supaya dua kartu muat berdampingan di
+   bukan selebar kalimatnya - syarat supaya dua kartu muat berdampingan di
    rail yang cuma 290.7px. */
 .nav-stat-label {
   display: flex;
@@ -343,7 +343,7 @@
 
 /* --- Clients marquee --- */
 
-/* Tidak boleh overflow:hidden — anak-anaknya diterbangkan jauh keluar kartu
+/* Tidak boleh overflow:hidden - anak-anaknya diterbangkan jauh keluar kartu
    oleh ghost.ts dan akan terpotong. Yang di-clip cukup .marquee saja. */
 .nav-clients {
   padding: 0.83vw 0;
@@ -372,7 +372,7 @@
 }
 
 /* Tinggi baris disimpan di custom property, BUKAN cuma di `height`, karena
-   logonya perlu angka yang sama sebagai panjang definit — lihat `.marquee-logo`. */
+   logonya perlu angka yang sama sebagai panjang definit - lihat `.marquee-logo`. */
 .marquee-item {
   --logo-row-h: 1.5vw;
   display: grid;
@@ -401,7 +401,7 @@
    file (`max-height: 100%` pun ikut tidak terpecahkan). Untuk wordmark
    landscape hasilnya kebetulan pas, tapi lambang yang memanjang ke bawah jadi
    LEBIH TINGGI dari baris marquee lalu dipotong `overflow: hidden` di
-   `.marquee` — yang tersisa cuma potongan tengahnya. Dengan tinggi definit +
+   `.marquee` - yang tersisa cuma potongan tengahnya. Dengan tinggi definit +
    `object-fit: contain`, logo mengecil sampai muat berapa pun rasionya. */
 .marquee-logo {
   display: block;
@@ -480,7 +480,7 @@
   position: relative;
   z-index: 1;
   display: block;
-  /* Label tombol utama sekarang "Chat on WhatsApp" — dua kata yang boleh
+  /* Label tombol utama sekarang "Chat on WhatsApp" - dua kata yang boleh
      membungkus akan menaikkan tinggi tombol dan merusak morph tipe `size`,
      yang menganimasikan tinggi kotaknya. */
   white-space: nowrap;
@@ -524,7 +524,7 @@
 }
 
 /* ==========================================================================
-   GHOST — kotak pengukur tak terlihat di dalam hero
+   GHOST - kotak pengukur tak terlihat di dalam hero
    ========================================================================== */
 
 .ghost {
@@ -538,7 +538,7 @@
 }
 
 /* Pill label dianimasikan dari width:0 ke width:auto, jadi ia harus
-   `overflow:hidden` dan `white-space:nowrap` — kalau tidak, teksnya membungkus
+   `overflow:hidden` dan `white-space:nowrap` - kalau tidak, teksnya membungkus
    saat lebarnya nol dan kartunya melonjak tinggi di frame pertama. */
 .label-pill {
   display: inline-flex;
@@ -572,13 +572,13 @@
    font-weight sendiri dan akan menimpanya. */
 .section-title {
   font-size: var(--fs-h2);
-  /* 900, bukan 500 — sekelas dengan headline hero, jadi judul-judul halaman ini
+  /* 900, bukan 500 - sekelas dengan headline hero, jadi judul-judul halaman ini
      terbaca sebagai satu keluarga. Satoshi Black memang sudah dimuat untuk
      wordmark, jadi tidak ada file font tambahan yang ditarik. */
   font-weight: 900;
   line-height: var(--lh-h2);
   /* Pada bobot display, jarak antar hurufnya melebar sendiri; -0.015em
-     menutupnya sekaligus mengganti lebar yang dimakan bobot barunya — itu yang
+     menutupnya sekaligus mengganti lebar yang dimakan bobot barunya - itu yang
      menjaga baris ber-`nowrap` di bawah tetap muat. */
   letter-spacing: -0.015em;
 }
@@ -714,7 +714,7 @@
 }
 
 /* ==========================================================================
-   MOBILE — lantai ukuran
+   MOBILE - lantai ukuran
 
    Sistem `vw` murni memberi proporsi yang benar di desktop dan runtuh di layar
    sempit: 0.99vw yang jadi 15px di 1512 menyusut jadi 3,8px di 390. Token yang
@@ -722,7 +722,7 @@
    adalah nilai vw mentah pada primitif bersama, jadi harus dilantai manual.
 
    Rail sendiri berubah jadi panel menu penuh layar di lebar ini, jadi ukurannya
-   bukan lagi versi kecil dari sidebar — ia memang harus seukuran menu.
+   bukan lagi versi kecil dari sidebar - ia memang harus seukuran menu.
    ========================================================================== */
 
 @media (max-width: 767px) {

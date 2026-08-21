@@ -12,8 +12,8 @@ import { getSidebarScale } from './sidebar';
  * ter-scrub: dari posisi hero → posisi sidebar.
  *
  * Dikerjakan dalam dua fase yang tegas:
- *   fase 1 — baca SEMUA rect saat DOM masih bersih (belum ada transform),
- *   fase 2 — baru terapkan tween.
+ *   fase 1 - baca SEMUA rect saat DOM masih bersih (belum ada transform),
+ *   fase 2 - baru terapkan tween.
  * Kalau dicampur, pengukuran elemen ke-N sudah tercemar transform elemen ke-1
  * dan seluruh komposisi meleset.
  */
@@ -32,7 +32,7 @@ interface Measurement {
   type: GhostType;
   from: Rect;
   to: Rect;
-  /** Hanya terisi untuk elemen ber-`data-ghost-alt` — lihat measureAlt(). */
+  /** Hanya terisi untuk elemen ber-`data-ghost-alt` - lihat measureAlt(). */
   alt?: AltLayout;
 }
 
@@ -48,12 +48,12 @@ interface AltLayout {
 }
 
 /**
- * Sebagian elemen tampil beda susunan di hero dan di rail — kartu "950+"
+ * Sebagian elemen tampil beda susunan di hero dan di rail - kartu "950+"
  * berdampingan saat besar, bertumpuk saat mendarat. `flex-direction` tidak bisa
  * ditween, jadi susunan hero-nya tidak pernah benar-benar dipasang: kelas yang
  * disebut `data-ghost-alt` ditempel SATU FRAME hanya untuk MENGUKUR, lalu
  * dilepas lagi. Selisih yang didapat dipakai menggeser tiap anak dengan
- * transform — dan transform bisa ditween, jadi angkanya betul-betul meluncur ke
+ * transform - dan transform bisa ditween, jadi angkanya betul-betul meluncur ke
  * tempatnya alih-alih bertukar tampil.
  */
 function measureAlt(real: HTMLElement, className: string): AltLayout | null {
@@ -94,7 +94,7 @@ const toRect = (el: Element): Rect => {
  * Baris navigasi hero tidak dihitung di runtime: ia adalah baris flex nyata di
  * `.hero-front` berisi label transparan, satu per link. Jadi tiap link punya
  * `data-ghost-target` sendiri dan ikut jalur pengukuran yang sama seperti kartu
- * — tidak perlu matematika distribusi, dan skalanya otomatis benar karena
+ * - tidak perlu matematika distribusi, dan skalanya otomatis benar karena
  * stringnya identik (rasio lebar = rasio font-size).
  */
 function measurePairs(): Measurement[] {
@@ -175,14 +175,14 @@ function buildTween(m: Measurement, trigger: Element): void {
     const sx = from.width / to.width;
     const sy = from.height / to.height;
     // Radius saat berukuran hero = radius akhirnya sendiri, jadi sudutnya tidak
-    // pernah berubah bentuk sepanjang morph — cuma dikoreksi supaya tetap
+    // pernah berubah bentuk sepanjang morph - cuma dikoreksi supaya tetap
     // BULAT setelah di-scale tidak seragam. Sebelumnya dipatok 26px: pada
     // ukuran hero itu tiga kali lipat radius kartu traits di sebelahnya, dan
     // kedua kartu statistik terbaca jauh lebih tumpul daripada tetangganya.
     //
     // Diambil yang TERBESAR dari keempat sudut, bukan sudut kiri-atas. Dua
     // kartu statistik saling menempel di rail dan sisi yang bertemu sengaja
-    // disiku jadi 0 (lihat components.css) — membaca satu sudut saja berarti
+    // disiku jadi 0 (lihat components.css) - membaca satu sudut saja berarti
     // kartu kedua mendapat 0 dan tampil bersudut siku sepanjang hero, padahal
     // di hero keduanya berdiri terpisah dan harus bulat penuh.
     const end = getComputedStyle(real);
@@ -206,7 +206,7 @@ function buildTween(m: Measurement, trigger: Element): void {
 
     // Radius akhir dibaca per sudut, bukan satu nilai untuk keempatnya. Dua
     // kartu statistik saling menempel di sidebar dan sisi yang bertemu
-    // sengaja disiku lewat CSS — kalau keempat sudut ditulis sama, style
+    // sengaja disiku lewat CSS - kalau keempat sudut ditulis sama, style
     // inline dari GSAP menimpanya dan celah bulat itu muncul lagi.
     const landed = (value: string) => {
       const px = parseFloat(value) || 0;
@@ -220,7 +220,7 @@ function buildTween(m: Measurement, trigger: Element): void {
     });
   } else if (type === 'size') {
     // Lebar & tinggi dianimasikan langsung, bukan di-scale. Tombol jadi bisa
-    // lebih pendek di hero tanpa ikut mengecilkan labelnya — dan ukurannya
+    // lebih pendek di hero tanpa ikut mengecilkan labelnya - dan ukurannya
     // bisa disamakan persis dengan tombol statis di sebelahnya.
     // Dibagi skala sidebar karena nilai ini ditulis ke koordinat lokal elemen.
     fromVars.width = from.width / scale;
@@ -236,7 +236,7 @@ function buildTween(m: Measurement, trigger: Element): void {
   // Anak-anaknya digeser ke susunan alternatif lalu ditarik balik ke nol
   // sepanjang morph yang sama. Karena induknya ikut mengerut di jendela yang
   // sama, keduanya terbaca sebagai satu gerakan: angkanya meluncur naik
-  // sementara labelnya turun ke bawahnya. Nilainya dibagi skala sidebar — ia
+  // sementara labelnya turun ke bawahnya. Nilainya dibagi skala sidebar - ia
   // ditulis ke koordinat lokal, sedangkan yang diukur koordinat layar.
   if (!alt) return;
 
@@ -270,12 +270,12 @@ function buildTween(m: Measurement, trigger: Element): void {
  * Arahnya SEBALIKNYA dari ghost biasa. Di ghost, elemen sidebar-lah yang nyata
  * dan diterbangkan; di sini yang terbang justru wordmark hero, karena ia harus
  * tetap tinggal di `.hero-back` (z-index 10) supaya lewat DI BELAKANG potret.
- * Elemen sidebar ada di z-index 60 — kalau ia yang diterbangkan, wordmark
+ * Elemen sidebar ada di z-index 60 - kalau ia yang diterbangkan, wordmark
  * raksasanya akan menutupi wajah subjek sepanjang hero.
  *
  * Serah-terimanya silang-pudar: di ujung lintasan kotak keduanya berimpit
  * persis, jadi wordmark tinggal padam sementara pill menyala di bawahnya.
- * Yang diukur adalah `.brand-name`, bukan `.brand` — pill punya padding dan
+ * Yang diukur adalah `.brand-name`, bukan `.brand` - pill punya padding dan
  * simbol ®, dan yang harus berimpit adalah HURUF-nya.
  */
 interface WordmarkMorph {
@@ -343,7 +343,7 @@ function buildFades(trigger: Element): void {
   // Latar dan ikon pill navigasi ikut kelompok ini: di hero link tampil sebagai
   // teks telanjang tanpa ikon, keduanya baru muncul saat mendarat. Latarnya
   // lapisan tersendiri (bukan background-color elemen link) supaya theme
-  // switcher tetap bisa mengubah warnanya — inline style dari GSAP akan
+  // switcher tetap bisa mengubah warnanya - inline style dari GSAP akan
   // mengunci warna itu.
   const targets = [...$$('[data-ghost-fade]'), ...$$('.nav-link-bg'), ...$$('.nav-link-icon')];
   if (targets.length === 0) return;
@@ -367,11 +367,11 @@ function buildFades(trigger: Element): void {
 }
 
 /**
- * Selama masih berukuran hero, kartu statistik melayang di atas potret — jadi
+ * Selama masih berukuran hero, kartu statistik melayang di atas potret - jadi
  * warnanya kaca taupe dengan teks putih, bukan beige solid seperti di rail.
  *
  * Dikerjakan lewat toggle kelas, bukan tween warna. Tween akan menulis
- * `background-color` inline dan mengunci kartunya selamanya di warna terang —
+ * `background-color` inline dan mengunci kartunya selamanya di warna terang -
  * theme switcher tidak akan pernah bisa membalikkannya lagi saat sidebar
  * melintasi section gelap.
  */
@@ -402,17 +402,17 @@ export const ghostModule: AnimationModule = {
 
     // Ghost hanya bisa diukur selama lapisan sticky hero masih menempel di
     // atas viewport. Kalau halaman sudah di-scroll melewatinya (mis. resize di
-    // tengah halaman), morph-nya toh sudah selesai — biarkan apa adanya.
+    // tengah halaman), morph-nya toh sudah selesai - biarkan apa adanya.
     const layer = $('.hero-back');
     if (layer && layer.getBoundingClientRect().top < -1) return;
 
-    // Fase 1 — semua pengukuran dulu, tanpa satu pun mutasi di antaranya.
+    // Fase 1 - semua pengukuran dulu, tanpa satu pun mutasi di antaranya.
     // Wordmark ikut diukur di sini, dan modul ini memang harus jalan sebelum
     // `intro`: intro menerbangkan wordmark masuk dari luar layar, dan rect
     // yang terukur setelah itu bukan lagi posisi istirahatnya.
     const measurements = measurePairs();
     const wordmark = measureWordmark();
-    // Fase 2 — baru menulis.
+    // Fase 2 - baru menulis.
     measurements.forEach((m) => buildTween(m, trigger));
     if (wordmark) buildWordmarkMorph(wordmark, trigger);
     buildFades(trigger);

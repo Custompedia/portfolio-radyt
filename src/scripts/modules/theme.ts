@@ -36,7 +36,7 @@ export const themeModule: AnimationModule = {
     for (const section of $$('[data-theme-section]')) {
       const duration = isDesktop() && !prefersReducedMotion() ? Number(section.getAttribute('data-theme-duration')) : 0;
       // Section yang ditimpa layer berikutnya berhenti gelap lebih awal daripada
-      // tepi bawahnya sendiri — lihat catatan di Work.astro.
+      // tepi bawahnya sendiri - lihat catatan di Work.astro.
       const customEnd = section.getAttribute('data-theme-end');
       triggers.push(
         ScrollTrigger.create({

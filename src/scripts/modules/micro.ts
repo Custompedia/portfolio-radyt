@@ -10,8 +10,8 @@ import { $$ } from '../core/utils';
  * markup-nya.
  *
  * DIBUANG dari file ini: `buildLabels()`, yang membuka lebar `[data-label-pill]`
- * dari nol dengan `expo.inOut`. Selectornya mengembalikan NOL elemen — DIUKUR di
- * DOM langsung — karena label eyebrow yang dulu memakainya sudah dihapus dari
+ * dari nol dengan `expo.inOut`. Selectornya mengembalikan NOL elemen - DIUKUR di
+ * DOM langsung - karena label eyebrow yang dulu memakainya sudah dihapus dari
  * markup semua section. Bersama itu ikut hilang satu-satunya alasan file ini
  * mengimpor gsap dan ScrollTrigger.
  */
@@ -42,7 +42,7 @@ export const microModule: AnimationModule = {
   },
 
   /**
-   * Tidak ada `destroy`: pembungkus `.word-swap` sengaja dibiarkan menempel —
+   * Tidak ada `destroy`: pembungkus `.word-swap` sengaja dibiarkan menempel -
    * ia idempoten lewat `data-swap-ready`, dan membongkarnya tiap rebuild resize
    * hanya menambah pekerjaan DOM tanpa mengubah apa pun di layar.
    */
