@@ -2628,10 +2628,7 @@
   box-shadow: var(--card-shadow);
 }
 
-.network-orbit:nth-child(2) { margin-top: 20px; }
-.network-orbit:nth-child(3) { margin-top: 8px; }
-.network-orbit:nth-child(4) { margin-top: 28px; }
-.network-orbit:nth-child(5) { margin-top: 12px; }
+.network-constellation--active .network-orbit { margin-top: 0; }
 
 .network-orbit--trusted:nth-child(2n) { margin-top: 14px; }
 .network-orbit--trusted:nth-child(3) { margin-top: 0; }
@@ -3285,6 +3282,10 @@
 .about-photo--1 { top: 3%; right: 3%; width: clamp(180px, 20vw, 320px); aspect-ratio: 1; }
 .about-photo--2 { top: 18%; bottom: auto; left: 34%; width: clamp(96px, 7.5vw, 112px); aspect-ratio: 1; }
 .about-photo--3 { right: 30%; bottom: 4%; width: clamp(120px, 13vw, 200px); aspect-ratio: 1; }
+.about-photo--4 { top: 36%; left: 56%; width: clamp(78px, 6.8vw, 104px); aspect-ratio: 1; }
+.about-photo--5 { right: 8%; bottom: 28%; width: clamp(92px, 8.5vw, 132px); aspect-ratio: 1; }
+.about-photo--6 { top: 17%; left: 52%; width: clamp(72px, 6.2vw, 96px); aspect-ratio: 1; }
+.about-photo--7 { right: 43%; bottom: 12%; width: clamp(80px, 7vw, 108px); aspect-ratio: 1; }
 .about-stage > :not(.about-photo-cloud, .about-glow) { position: relative; z-index: 1; }
 
 .about--staged {
@@ -4334,6 +4335,10 @@ html {
   .about-photo--1 { animation: about-photo-drift 11s ease-in-out infinite alternate; }
   .about-photo--2 { animation: about-photo-drift 13s ease-in-out -3s infinite alternate-reverse; }
   .about-photo--3 { animation: about-photo-drift 15s ease-in-out -6s infinite alternate; }
+  .about-photo--4 { animation: about-photo-drift 12s ease-in-out -2s infinite alternate-reverse; }
+  .about-photo--5 { animation: about-photo-drift 14s ease-in-out -5s infinite alternate; }
+  .about-photo--6 { animation: about-photo-drift 10s ease-in-out -4s infinite alternate-reverse; }
+  .about-photo--7 { animation: about-photo-drift 16s ease-in-out -7s infinite alternate; }
   .sea-route { animation: sea-route-flow 2.4s linear infinite; }
   .sea-pulse { transform-box: fill-box; transform-origin: center; animation: sea-marker-pulse 1.8s ease-out infinite; }
   .sea-target { transform-box: fill-box; transform-origin: center; animation: sea-target-breathe 2.6s ease-in-out infinite; }

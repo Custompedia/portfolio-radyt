@@ -80,11 +80,14 @@ const aboutImages: AboutPhoto[] = [
   { src: '/images/about/radhyta-business-expo.webp', alt: 'Radhyta dalam pertemuan bisnis di sebuah expo' },
   { src: '/images/about/radhyta-gofood-team.webp', alt: 'Radhyta bersama tim pada acara GoFood' },
   { src: '/images/about/radhyta-gojek-office.webp', alt: 'Radhyta dan tim di kantor Gojek' },
+  { src: '/images/timeline/2018-first-agency-client.webp', alt: 'Radhyta dan tim dalam kegiatan bersama Gojek' },
+  { src: '/images/timeline/2023-activation.webp', alt: 'Aktivasi branding bersama tim' },
+  { src: '/images/timeline/2024-regional-team.webp', alt: 'Tim Custompedia dalam kegiatan regional' },
 ];
 
 export const about = {
   eyebrow: 'Three Companies, One Desk', headline: 'About Radhyta',
-  lead: 'Berawal dari satu meja di Semarang pada 2014, Radhyta membangun tiga bisnis yang kini jadi satu ekosistem kreatif: Custompedia, Parcelin, dan Creasa. Dipercaya BNI Lighthouse, Gojek, hingga Pemerintah Provinsi Jawa Tengah untuk menyediakan semua kebutuhan kreatifnya — dari Semarang, untuk seluruh Indonesia.',
+  lead: 'Berawal dari satu meja di Semarang pada 2014, Radhyta membangun tiga bisnis yang kini jadi satu ekosistem kreatif: Custompedia, Parcelin, dan Creasa. Dipercaya BNI Lighthouse, Gojek, hingga Pemerintah Provinsi Jawa Tengah untuk menyediakan semua kebutuhan kreatifnya - dari Semarang, untuk seluruh Indonesia.',
   stories: [
     {
       title: 'Built from zero',

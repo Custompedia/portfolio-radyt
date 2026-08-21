@@ -9,6 +9,7 @@ const splits: SplitText[] = [];
 const INTRO_AT = 0.42;
 const CHAPTER_STEP = 0.7;
 const STAGE_VIEWPORTS = 3.15;
+const PHOTO_POP_AT = [0.08, 0.34, 0.5, 1.04, 1.24, 1.66, 1.84];
 
 const splitLines = (element: HTMLElement | null): HTMLElement[] => {
   if (!element) return [];
@@ -116,7 +117,7 @@ export const aboutStoryModule: AnimationModule = {
     });
     timeline = tl;
 
-    [0.08, 0.34, 0.5].forEach((at, index) => {
+    PHOTO_POP_AT.forEach((at, index) => {
       const photo = photos[index];
       const image = photoImages[index];
       if (!photo || !image) return;
