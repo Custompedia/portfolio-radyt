@@ -1,9 +1,20 @@
 ---
 import Icon from '../Icon.astro';
 import { work } from '../../data/site';
+
+const slug = (value: string): string => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+const filters = [
+  { id: 'all', label: 'All Services', count: work.items.length },
+  ...work.groups.map((group) => ({
+    id: slug(group),
+    label: group,
+    count: work.items.filter((item) => item.group === group).length,
+  })),
+];
 ---
 
-<section class="section work theme-dark" id="built-to-grow" data-service-work data-theme-section data-theme-end="bottom bottom" aria-labelledby="built-to-grow-title">
+<section class="section work theme-dark" id="built-to-grow" data-theme-section data-theme-end="bottom bottom" aria-labelledby="built-to-grow-title">
   <header class="work-head">
     <div class="work-head-left">
       <h2 id="built-to-grow-title" class="section-title h2-style-white" aria-label="BUILT TO GROW" data-reveal>
@@ -13,123 +24,196 @@ import { work } from '../../data/site';
     <p class="work-intro" data-reveal data-reveal-stagger="0.05">{work.intro}</p>
   </header>
 
-  <div class="work-tabs" role="tablist" aria-label="Pilih perusahaan">
-    {work.groups.map((group, index) => (
-      <button
-        class="work-tab"
-        id={`service-tab-${group.toLowerCase()}`}
-        type="button"
-        role="tab"
-        aria-selected={index === 0 ? 'true' : 'false'}
-        aria-controls={`service-panel-${group.toLowerCase()}`}
-        tabindex={index === 0 ? 0 : -1}
-        data-work-tab={group}
+  <div class="work-toolbar">
+    <div class="work-filters" role="group" aria-label="Filter layanan berdasarkan perusahaan">
+      {filters.map((filter) => (
+        <button
+          class="work-filter"
+          type="button"
+          data-work-filter={filter.id}
+          aria-pressed={filter.id === 'all' ? 'true' : 'false'}
+        >
+          <span class="work-filter-label">{filter.label}</span>
+          <span class="work-filter-count">{String(filter.count).padStart(2, '0')}</span>
+        </button>
+      ))}
+    </div>
+    <p class="work-status" data-work-status role="status" aria-live="polite">{work.items.length} layanan ditampilkan</p>
+  </div>
+
+  <div class="work-grid" data-work-grid>
+    {work.items.map((item, index) => (
+      <article
+        class="work-card"
+        style={`--accent:${item.accent}; --i:${index}`}
+        data-work-card
+        data-work-group={slug(item.group)}
       >
-        {group.toUpperCase()}
-      </button>
+        <img class="work-poster" src={item.image} alt={item.alt} loading="lazy" decoding="async" />
+
+        <div class="work-card-content">
+          <div class="work-card-top">
+            <span class="work-index">{String(index + 1).padStart(2, '0')}</span>
+            <span class="work-tags">
+              {item.tags.map((tag) => <span class="work-tag">{tag}</span>)}
+            </span>
+          </div>
+
+          <div class="work-card-body">
+            <span class="work-card-kind">{item.kind}</span>
+            <h3 class="work-card-title">
+              <button
+                class="work-card-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls={`work-detail-${slug(item.title)}`}
+              >
+                <span class="work-card-toggle-text">{item.title}</span>
+                <span class="work-card-sign" aria-hidden="true"><Icon name="plus" size={18} /></span>
+              </button>
+            </h3>
+
+            <div class="work-card-detail" id={`work-detail-${slug(item.title)}`}>
+              <div class="work-card-detail-inner">
+                <p class="work-card-blurb">{item.blurb}</p>
+                <a class="work-card-link" href={item.href} target="_blank" rel="noopener noreferrer">
+                  Visit <Icon name="arrow" size={16} />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
     ))}
   </div>
 
-  {work.groups.map((group, groupIndex) => {
-    const items = work.items.filter((item) => item.group === group);
-    return (
-      <div
-        class="work-panel"
-        id={`service-panel-${group.toLowerCase()}`}
-        role="tabpanel"
-        aria-labelledby={`service-tab-${group.toLowerCase()}`}
-        hidden={groupIndex !== 0}
-        data-work-panel={group}
-      >
-        <div class="work-track-wrap" tabindex="0" aria-label={`Geser untuk melihat layanan ${group}`}>
-          <div class="work-track">
-            {items.map((item, index) => (
-              <a
-                class="work-card"
-                style={`--accent:${item.accent}`}
-                data-service-card
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${item.title} dari ${item.kind} - buka situs terkait`}
-              >
-                <img class="work-poster" src={item.image} alt={item.alt} loading="lazy" decoding="async" />
-                <div class="work-card-content">
-                  <div class="work-card-top">
-                    <span class="work-index">{String(index + 1).padStart(2, '0')}</span>
-                    <span class="work-tags">
-                      {item.tags.map((tag) => <span class="work-tag">{tag}</span>)}
-                    </span>
-                  </div>
-                  <div class="work-card-body">
-                    <span class="work-card-kind">{item.kind}</span>
-                    <h3 class="work-card-title">{item.title}</h3>
-                    <p class="work-card-blurb">{item.blurb}</p>
-                    <span class="work-card-link">Visit <Icon name="arrow" size={16} /></span>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  })}
+  <div class="work-more-wrap" data-work-more-wrap hidden>
+    <button class="btn-work-more" type="button" data-work-more-btn>
+      <span class="btn-work-more-text">Lihat Layanan Lainnya</span>
+      <span class="btn-work-more-count" data-work-more-count></span>
+      <span class="btn-work-more-badge" aria-hidden="true">
+        <Icon name="arrow-down" size={14} />
+      </span>
+    </button>
+  </div>
 </section>
 
 <script>
-  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-work-tab]'));
-  const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-work-panel]'));
-  const cardObservers = new Map<HTMLElement, IntersectionObserver>();
+  const grid = document.querySelector<HTMLElement>('[data-work-grid]');
+  const filters = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-work-filter]'));
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-work-card]'));
+  const status = document.querySelector<HTMLElement>('[data-work-status]');
+  const moreWrap = document.querySelector<HTMLElement>('[data-work-more-wrap]');
+  const moreBtn = document.querySelector<HTMLButtonElement>('[data-work-more-btn]');
+  const moreCount = document.querySelector<HTMLElement>('[data-work-more-count]');
 
-  panels.forEach((panel) => {
-    const wrap = panel.querySelector<HTMLElement>('.work-track-wrap');
-    if (!wrap) return;
-    const cards = Array.from(panel.querySelectorAll<HTMLElement>('[data-service-card]'));
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((entry) => entry.target.classList.toggle('is-in-view', entry.isIntersecting)),
-      { root: wrap, threshold: 0.35 },
-    );
-    cards.forEach((card) => {
-      card.classList.add('is-motion-ready');
-      observer.observe(card);
-    });
-    cardObservers.set(panel, observer);
-  });
+  if (grid && filters.length > 0 && cards.length > 0) {
+    const ALL = 'all';
+    const MOBILE_PAGE_SIZE = 5;
+    const selected = new Set<string>();
+    let visibleLimit = MOBILE_PAGE_SIZE;
 
-  const selectTab = (tab: HTMLButtonElement): void => {
-    const group = tab.dataset.workTab;
-    tabs.forEach((item) => {
-      const active = item === tab;
-      item.setAttribute('aria-selected', String(active));
-      item.tabIndex = active ? 0 : -1;
-    });
-    panels.forEach((panel) => {
-      panel.hidden = panel.dataset.workPanel !== group;
-      if (!panel.hidden) {
-        panel.querySelector<HTMLElement>('.work-track-wrap')?.scrollTo({ left: 0, behavior: 'smooth' });
-        requestAnimationFrame(() => {
-          const observer = cardObservers.get(panel);
-          panel.querySelectorAll<HTMLElement>('[data-service-card]').forEach((card) => {
-            observer?.unobserve(card);
-            observer?.observe(card);
-          });
-        });
+    const isMobile = () => window.innerWidth <= 767;
+
+    const closeCard = (card: HTMLElement): void => {
+      card.classList.remove('is-open');
+      card.querySelector<HTMLButtonElement>('.work-card-toggle')?.setAttribute('aria-expanded', 'false');
+    };
+
+    const toggleCard = (card: HTMLElement): void => {
+      const open = card.classList.contains('is-open');
+      cards.forEach(closeCard);
+      if (open) return;
+      card.classList.add('is-open');
+      card.querySelector<HTMLButtonElement>('.work-card-toggle')?.setAttribute('aria-expanded', 'true');
+    };
+
+    const render = (): void => {
+      const mobile = isMobile();
+      const matchingCards = cards.filter((card) => selected.size === 0 || selected.has(card.dataset.workGroup ?? ''));
+      const totalMatching = matchingCards.length;
+
+      let shown = 0;
+      cards.forEach((card) => {
+        const isMatch = selected.size === 0 || selected.has(card.dataset.workGroup ?? '');
+        if (!isMatch) {
+          closeCard(card);
+          card.hidden = true;
+          return;
+        }
+
+        const matchIndex = matchingCards.indexOf(card);
+        const isVisible = !mobile || matchIndex < visibleLimit;
+
+        if (!isVisible) {
+          closeCard(card);
+          card.hidden = true;
+          return;
+        }
+
+        card.hidden = false;
+        card.style.setProperty('--i', String(shown));
+        card.classList.remove('is-enter');
+        void card.offsetWidth;
+        card.classList.add('is-enter');
+        shown += 1;
+      });
+
+      if (moreWrap && moreBtn) {
+        if (mobile && totalMatching > visibleLimit) {
+          moreWrap.hidden = false;
+          const remaining = totalMatching - visibleLimit;
+          if (moreCount) moreCount.textContent = `(+${Math.min(remaining, MOBILE_PAGE_SIZE)})`;
+        } else {
+          moreWrap.hidden = true;
+        }
       }
-    });
-  };
 
-  tabs.forEach((tab, index) => {
-    tab.addEventListener('click', () => selectTab(tab));
-    tab.addEventListener('keydown', (event) => {
-      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
-      event.preventDefault();
-      const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 :
-        (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
-      const next = tabs[nextIndex];
-      if (!next) return;
-      selectTab(next);
-      next.focus();
+      filters.forEach((filter) => {
+        const id = filter.dataset.workFilter ?? '';
+        const active = id === ALL ? selected.size === 0 : selected.has(id);
+        filter.setAttribute('aria-pressed', String(active));
+      });
+
+      if (status) {
+        if (mobile && totalMatching > visibleLimit) {
+          status.textContent = `${shown} dari ${totalMatching} layanan ditampilkan`;
+        } else {
+          status.textContent = `${totalMatching} layanan ditampilkan`;
+        }
+      }
+    };
+
+    filters.forEach((filter) => {
+      filter.addEventListener('click', () => {
+        const id = filter.dataset.workFilter ?? '';
+        if (id === ALL) selected.clear();
+        else if (selected.has(id)) selected.delete(id);
+        else selected.add(id);
+        visibleLimit = MOBILE_PAGE_SIZE;
+        render();
+      });
     });
-  });
+
+    if (moreBtn) {
+      moreBtn.addEventListener('click', () => {
+        visibleLimit += MOBILE_PAGE_SIZE;
+        render();
+      });
+    }
+
+    cards.forEach((card) => {
+      card.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement;
+        if (target.closest('a')) return;
+        toggleCard(card);
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      render();
+    });
+
+    render();
+  }
 </script>

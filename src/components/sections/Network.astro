@@ -12,6 +12,8 @@
  * berjalan.
  */
 import { clients, network, networkActive } from '../../data/site';
+
+const half = Math.ceil(clients.length / 2); // dua baris marquee dibagi rata, bukan 12 lawan sisanya
 ---
 
 <section class="section network" id="network">
@@ -40,10 +42,10 @@ import { clients, network, networkActive } from '../../data/site';
     <section class="network-block network-block--trusted" aria-labelledby="network-trusted">
       <h3 class="network-label" id="network-trusted">{network.trustedLabel}</h3>
       <div class="trusted-marquees" aria-label="Daftar klien yang mempercayai Radhyta">
-        {[clients.slice(0, 10), clients.slice(10)].map((row, rowIndex) => (
+        {[clients.slice(0, half), clients.slice(half)].map((row, rowIndex) => (
           <div class:list={['trusted-marquee', rowIndex === 1 && 'trusted-marquee--reverse']}>
             <ul class="trusted-marquee-track">
-              {[...row, ...row].map((client, index) => (
+              {[...row, ...row, ...row, ...row].map((client, index) => (
                 <li class="trusted-logo" aria-hidden={index >= row.length ? 'true' : undefined}>
                   <img src={client.src} alt={index < row.length ? client.name : ''} loading="lazy" decoding="async" />
                   {index < row.length && <span>{client.name}</span>}

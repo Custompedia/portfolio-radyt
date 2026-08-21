@@ -214,6 +214,8 @@ html.lenis body {
 .line-mask {
   overflow: hidden;
   display: block;
+  padding-bottom: 0.22em;
+  margin-bottom: -0.22em;
 }
 
 .line {

@@ -1,9 +1,8 @@
 export interface NavItem { id: string; label: string; href: string; icon: string; sections: string[] }
 export interface Stat { value: string; label: string; inHero?: boolean }
-export interface ClientLogo {
-  name: string; src: string; shape: 'landscape' | 'square' | 'portrait';
-  desktopWidth: number; mobileWidth: number; scale?: number;
-}
+// Semua file di /images/logos/trusted sudah dinormalisasi scripts/normalize-logos.py:
+// kanvas 2:1 transparan, latar dibuang, bobot optis disamakan - jadi ukurannya cukup satu aturan CSS.
+export interface ClientLogo { name: string; src: string }
 export interface AboutPhoto {
   src: string; alt: string;
 }
@@ -45,7 +44,8 @@ export const hero = {
     { name: 'Parcelin', units: [] },
     { name: 'Creasa', units: [] },
   ],
-  ctaPrimary: { label: "Let's Talk", href: brand.whatsappUrl }, ctaSecondary: { label: 'See Work', href: '#work' },
+  ctaPrimary: { label: "Let's Talk!", href: brand.whatsappUrl }, ctaSecondary: { label: 'See Work', href: '#work' },
+  location: { label: 'Semarang, Indonesia', href: 'https://share.google/eazvnwhFNcn32dNHd' },
 };
 
 export const stats: Stat[] = [
@@ -54,26 +54,27 @@ export const stats: Stat[] = [
 ];
 
 export const clients: ClientLogo[] = [
-  { name: 'Pemerintah Provinsi Jawa Tengah', src: '/images/Coat_of_arms_of_Central_Java.svg.webp', shape: 'square', desktopWidth: 1.75, mobileWidth: 32 },
-  { name: 'Pemerintah Kota Semarang', src: '/images/Lambang_Kota_Semarang%20(1).webp', shape: 'portrait', desktopWidth: 1.35, mobileWidth: 26 },
-  { name: 'Bank Jateng', src: '/images/logos/clients/bank-jateng.webp', shape: 'landscape', desktopWidth: 3.7, mobileWidth: 62 },
-  { name: 'Kata Media Jateng', src: '/images/logos/clients/katamedia-jateng.webp', shape: 'square', desktopWidth: 1.65, mobileWidth: 30 },
-  { name: 'Gojek', src: '/images/logo-gojek.webp', shape: 'landscape', desktopWidth: 3.75, mobileWidth: 60 },
-  { name: 'Tokopedia', src: '/images/Logo-Tokopedia.webp', shape: 'landscape', desktopWidth: 4.6, mobileWidth: 74 },
-  { name: 'Erha', src: '/images/logos/clients/erha.webp', shape: 'square', desktopWidth: 1.6, mobileWidth: 30 },
-  { name: 'Kyra Co-Living', src: '/images/logos/clients/kyra.webp', shape: 'square', desktopWidth: 1.65, mobileWidth: 30 },
-  { name: 'Doyle', src: '/images/logos/clients/doyle.webp', shape: 'square', desktopWidth: 1.65, mobileWidth: 30 },
-  { name: 'Unika Soegijapranata', src: '/images/Unika_Soegijapranata_Talenta_Propatria_et_Humaniora.webp', shape: 'landscape', desktopWidth: 3.1, mobileWidth: 48 },
-  { name: 'PT HM Sampoerna Tbk', src: '/images/logo-hm-sampoerna-115507099816te6s4zjge.webp', shape: 'square', desktopWidth: 1.6, mobileWidth: 30 },
-  { name: 'Ken Ken Indonesia', src: '/images/logos/clients/ken-ken-indonesia.webp', shape: 'landscape', desktopWidth: 3.5, mobileWidth: 56 },
-  { name: 'SEGEL', src: '/images/logos/clients/segel.webp', shape: 'square', desktopWidth: 1.65, mobileWidth: 30 },
-  { name: 'Cassanatama Naturindo', src: '/images/logos/clients/cassanatama-naturindo.webp', shape: 'landscape', desktopWidth: 4.1, mobileWidth: 66 },
-  { name: 'Kun Kun Visual', src: '/images/logos/clients/kunkun-visual.webp', shape: 'square', desktopWidth: 1.65, mobileWidth: 30 },
-  { name: 'Mistar Comm', src: '/images/logos/clients/mistar.webp', shape: 'square', desktopWidth: 1.65, mobileWidth: 30 },
-  { name: 'Shatara Indah Kreasi', src: '/images/logos/clients/shatara-indah-kreasi.webp', shape: 'landscape', desktopWidth: 4.1, mobileWidth: 66 },
-  { name: 'Ecolux', src: '/images/logos/clients/ecolux.webp', shape: 'landscape', desktopWidth: 3.4, mobileWidth: 54 },
-  { name: 'Gulabed', src: '/images/logos/clients/gulabed.webp', shape: 'landscape', desktopWidth: 4.1, mobileWidth: 66 },
-  { name: 'Handayani', src: '/images/logos/clients/handayani.webp', shape: 'square', desktopWidth: 1.65, mobileWidth: 30 },
+  { name: 'Gojek', src: '/images/logos/trusted/gojek.webp' },
+  { name: 'PT GoTo Gojek Tokopedia Tbk', src: '/images/logos/trusted/goto.webp' },
+  { name: 'Tokopedia', src: '/images/logos/trusted/tokopedia.webp' },
+  { name: 'PT HM Sampoerna Tbk', src: '/images/logos/trusted/sampoerna.webp' },
+  { name: 'Pemerintah Provinsi Jawa Tengah', src: '/images/logos/trusted/jawa-tengah.webp' },
+  { name: 'Pemerintah Kota Semarang', src: '/images/logos/trusted/kota-semarang.webp' },
+  { name: 'Bank Jateng', src: '/images/logos/trusted/bank-jateng.webp' },
+  { name: 'Kata Media Jateng', src: '/images/logos/trusted/katamedia-jateng.webp' },
+  { name: 'Erha', src: '/images/logos/trusted/erha.webp' },
+  { name: 'Kyra Co-Living', src: '/images/logos/trusted/kyra.webp' },
+  { name: 'Doyle', src: '/images/logos/trusted/doyle.webp' },
+  { name: 'Unika Soegijapranata', src: '/images/logos/trusted/unika-soegijapranata.webp' },
+  { name: 'Ken Ken Indonesia', src: '/images/logos/trusted/ken-ken-indonesia.webp' },
+  { name: 'SEGEL', src: '/images/logos/trusted/segel.webp' },
+  { name: 'Cassanatama Naturindo', src: '/images/logos/trusted/cassanatama-naturindo.webp' },
+  { name: 'Kun Kun Visual', src: '/images/logos/trusted/kunkun-visual.webp' },
+  { name: 'Mistar Comm', src: '/images/logos/trusted/mistar.webp' },
+  { name: 'Shatara Indah Kreasi', src: '/images/logos/trusted/shatara-indah-kreasi.webp' },
+  { name: 'Ecolux', src: '/images/logos/trusted/ecolux.webp' },
+  { name: 'Gulabed', src: '/images/logos/trusted/gulabed.webp' },
+  { name: 'Handayani', src: '/images/logos/trusted/handayani.webp' },
 ];
 
 const aboutImages: AboutPhoto[] = [
@@ -145,7 +146,8 @@ export const networkActive = [
 ];
 
 export const southeastAsia = {
-  headline: 'Setting Sights on Southeast Asia',
+  eyebrow: 'SETTING SIGHTS ON SOUTHEAST ASIA',
+  headline: ['Setting Sights on', 'Southeast Asia'],
   body: [
     'Berbasis di Semarang, melayani klien di seluruh Indonesia.',
     'Menyiapkan langkah berikutnya ke ranah Asia Tenggara.',
@@ -163,7 +165,7 @@ export const workStory = {
 };
 
 export const work = {
-  headline: ['BUILT TO', 'GROW'], intro: 'Pilih perusahaan untuk melihat layanan, unit usaha, dan contoh hasil kerjanya.',
+  headline: ['BUILT TO', 'GROW'], intro: 'Saring layanan per perusahaan, lalu klik kartunya untuk membuka detail dan unit usaha yang mengerjakan.',
   groups: ['Custompedia', 'Parcelin', 'Creasa'] as WorkGroup[],
   items: [
     { group: 'Custompedia', title: 'Branding & Identity', kind: 'Custompedia', blurb: 'Positioning, identitas visual, dan panduan merek yang bisa dipakai tim internal brand secara mandiri.', tags: ['Branding', 'Design', 'Guideline'], accent: '#3f2a1d', href: 'https://discovery.custompedia.id/', image: '/images/services/custompedia-branding.webp', alt: 'Laptop yang menampilkan proses pekerjaan branding' },

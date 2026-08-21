@@ -109,6 +109,8 @@
   --sidebar-w: 18.54vw;
   --sidebar-scale: 1;
   --sidebar-pad: 1.11vw;
+  --topbar-ctl-h: 40px;
+  --topbar-pad-y: 14px;
 
   /* Tiap section menyisakan gutter yang sama untuk rail. Asimetris memang
      disengaja: tidak ada versi terpusat dari layout ini. */

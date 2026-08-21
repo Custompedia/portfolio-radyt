@@ -12,6 +12,7 @@
   flex-direction: column;
   gap: 0.69vw;
   transform-origin: top left;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Wrapper murni struktural (lihat Sidebar.astro): memisahkan kartu-kartu yang
@@ -351,6 +352,9 @@
 
 .marquee {
   overflow: hidden;
+  /* Padding tetap ada di kedua tema supaya alas terang tema gelap (di bawah)
+     tidak menggeser apa pun saat tema di-toggle. */
+  padding-block: 0.3vw;
   transform-origin: top left;
   mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
@@ -366,32 +370,24 @@
 
 .marquee-group {
   display: flex;
+  flex-shrink: 0;
+  min-width: max-content;
   align-items: center;
   gap: 1.05vw;
   padding-right: 1.05vw;
 }
 
-/* Tinggi baris disimpan di custom property, BUKAN cuma di `height`, karena
-   logonya perlu angka yang sama sebagai panjang definit - lihat `.marquee-logo`. */
+/* Satu kotak untuk semua logo. Dulu tiap logo punya lebar sendiri di data karena
+   filenya beda-beda rasio dan padding; sekarang normalisasi itu sudah dipanggang
+   ke asetnya (kanvas 2:1, bobot optis sama), jadi tinggal satu ukuran di sini. */
 .marquee-item {
   --logo-row-h: 1.5vw;
   display: grid;
   flex: 0 0 auto;
-  width: var(--logo-width-desktop);
+  width: calc(var(--logo-row-h) * 2);
   height: var(--logo-row-h);
   place-items: center;
   opacity: 0.82;
-}
-
-/* Baris makin pendek makin menjulang bentuknya. Lambang yang tinggi disamakan
-   lewat TINGGI, bukan lebar: pada tinggi baris yang sama, logo portrait
-   terbaca dua kali lebih besar dari wordmark landscape di sebelahnya. */
-.marquee-item--square {
-  --logo-row-h: 1.2vw;
-}
-
-.marquee-item--portrait {
-  --logo-row-h: 1.05vw;
 }
 
 /* TINGGINYA PANJANG DEFINIT, BUKAN PERSENTASE.
@@ -410,8 +406,12 @@
   object-fit: contain;
   object-position: center;
   filter: saturate(0.85);
-  transform: scale(var(--logo-scale));
-  transform-origin: center;
+}
+
+/* Sembunyikan kartu client logos saat sidebar bertema gelap agar tidak ada strip putih yang bertabrakan. */
+[data-theme='dark'] .nav-clients,
+[data-theme='dark'] .panel-label--clients {
+  display: none !important;
 }
 
 @keyframes marquee-scroll {
@@ -462,6 +462,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.45vw;
   padding: 0.9vw 1.5vw;
   border-radius: var(--radius-lg);
   background: var(--blue);
@@ -474,6 +475,11 @@
   overflow: hidden;
   transform-origin: top left;
   transition: box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.btn-icon {
+  flex-shrink: 0;
+  color: currentColor;
 }
 
 .btn-label {
@@ -629,7 +635,7 @@
   z-index: 90;
   display: none;
   width: 76px;
-  height: 44px;
+  height: var(--topbar-ctl-h);
   align-items: center;
   justify-content: space-between;
   gap: 8px;
@@ -726,6 +732,12 @@
    ========================================================================== */
 
 @media (max-width: 767px) {
+  .section-title span {
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
   .sidebar {
     gap: 10px;
   }
@@ -743,9 +755,10 @@
   }
 
   .brand {
-    padding: 5px 10px 6px;
-    border-radius: 8px;
-    font-size: 1.35rem;
+    height: var(--topbar-ctl-h);
+    padding: 0 14px;
+    border-radius: 12px;
+    font-size: 1.05rem;
   }
 
   .social {
@@ -823,22 +836,20 @@
   }
 
   .marquee-group {
+    flex-shrink: 0;
+    min-width: max-content;
     gap: 14px;
     padding-right: 14px;
   }
 
   .marquee-item {
-    --logo-row-h: 20px;
-    width: var(--logo-width-mobile);
+    --logo-row-h: 22px;
   }
 
-  .marquee-item--square {
-    --logo-row-h: 16px;
+  .marquee {
+    padding-block: 4px;
   }
 
-  .marquee-item--portrait {
-    --logo-row-h: 14px;
-  }
 
   .nav-email {
     padding: 10px;

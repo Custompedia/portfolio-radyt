@@ -21,7 +21,7 @@
  * cukup lewat silang-pudar - tanpa perlu menukar z-index di tengah scroll.
  */
 import Icon from '../Icon.astro';
-import { about, brand, hero, nav, stats } from '../../data/site';
+import { brand, hero, nav, stats } from '../../data/site';
 
 interface GhostBox {
   id: string;
@@ -249,19 +249,6 @@ const navRight = nav.slice(2);
         ))}
       </div>
     </div>
-
-    <p
-      class="hero-eyebrow hero-eyebrow--mobile-only"
-      data-tl-type="scroll"
-      data-tl-trigger="[data-hero]"
-      data-tl-start="5% top"
-      data-tl-end="10% top"
-      data-tl-from="{'opacity':1,'yPercent':0}"
-      data-tl-to="{'yPercent':-100,'autoAlpha':0}"
-      data-tl-desktop
-    >
-      <span class="hero-mobile-about-eyebrow">{about.eyebrow}</span>
-    </p>
 
     <a
       class="btn hero-secondary"

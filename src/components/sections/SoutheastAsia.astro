@@ -1,82 +1,38 @@
 ---
-import Icon from '../Icon.astro';
 import { southeastAsia } from '../../data/site';
 ---
 
-<section class="section southeast-asia" id="southeast-asia" aria-labelledby="southeast-asia-title">
-  <div class="sea-copy">
-    <span class="network-label">Next Direction</span>
-    <h2 class="section-title h2-style" id="southeast-asia-title" data-reveal>{southeastAsia.headline}</h2>
-    <p class="section-intro sea-intro" data-reveal data-reveal-stagger="0.05">
-      {southeastAsia.body.map((sentence) => <span>{sentence}</span>)}
-    </p>
-  </div>
+<section class="section southeast-asia" id="southeast-asia" data-sea-section aria-labelledby="southeast-asia-title">
+  <div class="sea-container">
+    <header class="section-head sea-head">
+      <span class="sea-eyebrow">{southeastAsia.eyebrow}</span>
+      <h2 class="section-title h2-style" id="southeast-asia-title">
+        {southeastAsia.headline.map((line) => (
+          <span class="sea-title-line">{line}</span>
+        ))}
+      </h2>
+      <div class="sea-copy">
+        <p class="sea-lead">{southeastAsia.body[0]}</p>
+        <p class="sea-sublead">{southeastAsia.body[1]}</p>
+      </div>
+    </header>
 
-  <div
-    class="sea-visual"
-    data-sea-stage
-    role="img"
-    aria-label="Animasi yang bergerak dari titik Semarang menuju cakupan Asia Tenggara"
-  >
-    <div class="sea-map-layer sea-map-layer--local" data-sea-local aria-hidden="true">
-      <img
-        src="/images/southeast-asia/semarang-map.webp"
-        alt=""
-        width="1536"
-        height="1024"
-        loading="eager"
-        fetchpriority="low"
-        decoding="async"
-      />
-      <div class="sea-marker sea-marker--local" data-sea-local-marker>
-        <span class="sea-marker-pin"><Icon name="pin" size={24} /></span>
-        <span class="sea-marker-label">Semarang</span>
+    <div class="sea-stage" data-sea-stage>
+      <div class="sea-frame">
+        <video
+          class="sea-video"
+          data-sea-video
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="auto"
+          poster="/video/sea-poster.webp"
+        >
+          <source src="/video/southeast-asia-zoom.webm" type="video/webm" />
+          <source src="/video/southeast-asia-zoom.mp4" type="video/mp4" />
+        </video>
       </div>
     </div>
-
-    <div class="sea-map-layer sea-map-layer--java" data-sea-java aria-hidden="true">
-      <img
-        src="/images/southeast-asia/java-map.webp"
-        alt=""
-        width="1536"
-        height="1024"
-        loading="eager"
-        fetchpriority="low"
-        decoding="async"
-      />
-      <span class="sea-transition-dot sea-transition-dot--java" data-sea-java-marker></span>
-    </div>
-
-    <div class="sea-map-layer sea-map-layer--indonesia" data-sea-indonesia aria-hidden="true">
-      <img
-        src="/images/southeast-asia/indonesia-map.webp"
-        alt=""
-        width="1536"
-        height="1024"
-        loading="eager"
-        fetchpriority="low"
-        decoding="async"
-      />
-      <span class="sea-transition-dot sea-transition-dot--indonesia" data-sea-indonesia-marker></span>
-    </div>
-
-    <div class="sea-map-layer sea-map-layer--region" data-sea-region aria-hidden="true">
-      <img
-        src="/images/southeast-asia/region-map.webp"
-        alt=""
-        width="1536"
-        height="1024"
-        loading="eager"
-        fetchpriority="low"
-        decoding="async"
-      />
-      <span class="sea-region-focus" data-sea-focus></span>
-      <span class="sea-ripple sea-ripple--one" data-sea-ripple></span>
-      <span class="sea-ripple sea-ripple--two" data-sea-ripple></span>
-      <span class="sea-ripple sea-ripple--three" data-sea-ripple></span>
-      <span class="sea-region-marker" data-sea-region-marker></span>
-    </div>
-
-    <p class="sea-region-title" data-sea-title aria-hidden="true">Southeast Asia</p>
   </div>
 </section>

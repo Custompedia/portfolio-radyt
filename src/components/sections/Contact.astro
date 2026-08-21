@@ -1,88 +1,71 @@
 ---
-/**
- * Section 07 - footer sungguhan, sekaligus CTA penutup. Halaman berakhir di sini.
- *
- * Susunannya tiga lapis, dari yang paling mengajak ke yang paling administratif:
- *
- *   1. CTA   - "Let's talk.", satu kalimat, dan satu tombol WhatsApp.
- *   2. Kolom - menu, ventures, kontak, sosial. Ini yang sebelumnya tidak ada:
- *              separuh kanan footer kosong melompong sementara semua tautan
- *              situs cuma hidup di rail kiri, yang justru menghilang di layar
- *              sempit.
- *
- * Halaman berhenti di kolom itu. Baris penutup (wordmark + hak cipta + "kembali
- * ke atas") sempat ada dan DIHAPUS atas permintaan: setinggi apa pun isinya, ia
- * selalu jatuh di bawah lipatan sebagai satu strip tipis yang terbaca terpisah
- * dari footernya sendiri.
- *
- * Tombol "Chat on WhatsApp" di sini adalah satu-satunya CTA di layar saat section
- * ini terlihat: tombol WhatsApp di rail disembunyikan oleh `html.at-contact`
- * (lihat modules/nav-active.ts), kalau tidak ada dua tombol WhatsApp bersamaan.
- *
- * Isi kolomnya diambil dari sumber yang sudah ada - `nav`, `hero.traits`,
- * `social`, `brand` - supaya menambah menu atau venture tidak perlu menyentuh
- * berkas ini sama sekali.
- */
 import Icon from '../Icon.astro';
 import { brand, contact, nav, social, ventures } from '../../data/site';
 ---
 
 <footer class="site-footer" id="contact">
   <div class="footer-shell">
-    <div class="footer-cta">
-      <h2 class="footer-headline h2-style" data-footer-reveal>{contact.headline}</h2>
-      <div class="footer-cta-row" data-footer-reveal>
-        <p class="footer-lead">{contact.body}</p>
-        <div class="footer-cta-actions">
-          <a class="footer-wa" href={contact.button.href} target="_blank" rel="noopener noreferrer">
-            <span class="footer-wa-icon"><Icon name="whatsapp" size={20} /></span>
-            <span class="footer-wa-label">{contact.button.label}</span>
-            <Icon name="arrow" size={17} class="footer-wa-arrow" />
-          </a>
-          <ul class="footer-social footer-social--cta" aria-label="Media sosial Radhyta">
-            {social.map((channel) => (
-              <li>
-                <a class="footer-social-link" href={channel.href} target="_blank" rel="noopener noreferrer" aria-label={channel.label}>
-                  <Icon name={channel.icon} size={18} />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+    <div class="footer-cta" data-footer-reveal>
+      <h2 class="footer-headline">Let's Talk!</h2>
+      <div class="footer-lead-wrap">
+        <p class="footer-lead">
+          Tertarik untuk berdiskusi lebih lanjut atau membangun koneksi?<br />
+          Hubungi saya.
+        </p>
+      </div>
+      <div class="footer-actions">
+        <a class="footer-wa-btn" href={contact.button.href} target="_blank" rel="noopener noreferrer">
+          <span class="footer-wa-badge"><Icon name="whatsapp" size={18} /></span>
+          <span class="footer-wa-text">Chat on WhatsApp</span>
+          <Icon name="arrow" size={16} class="footer-wa-arrow" />
+        </a>
+        <ul class="footer-social-row" aria-label="Media sosial Radhyta">
+          {social.map((channel) => (
+            <li>
+              <a
+                class="footer-social-pill"
+                href={channel.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={channel.label}
+              >
+                <Icon name={channel.icon} size={18} />
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
 
     <div class="footer-cols" data-footer-reveal>
       <nav class="footer-col" aria-label="Navigasi footer">
-        <h3 class="footer-col-title">Menu</h3>
+        <h3 class="footer-col-title">MENU</h3>
         <ul class="footer-list">
-          {
-            nav.map((item) => (
-              <li>
-                <a class="footer-link" href={item.href}>
-                  {item.label}
-                </a>
-              </li>
-            ))
-          }
+          {nav.map((item) => (
+            <li>
+              <a class="footer-link" href={item.href}>
+                {item.label}
+              </a>
+            </li>
+          ))}
         </ul>
       </nav>
 
       <div class="footer-col">
-        <h3 class="footer-col-title">Ventures</h3>
+        <h3 class="footer-col-title">VENTURES</h3>
         <ul class="footer-list">
-          {
-            ventures.map((venture) => (
-              <li>
-                <a class="footer-link" href={venture.href} target="_blank" rel="noopener noreferrer">{venture.label}</a>
-              </li>
-            ))
-          }
+          {ventures.map((venture) => (
+            <li>
+              <a class="footer-link" href={venture.href} target="_blank" rel="noopener noreferrer">
+                {venture.label}
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
 
-      <div class="footer-col">
-        <h3 class="footer-col-title">Kontak</h3>
+      <div class="footer-col footer-col--contact">
+        <h3 class="footer-col-title">KONTAK</h3>
         <ul class="footer-list">
           <li><a class="footer-link" href={`mailto:${brand.email}`}>{brand.email}</a></li>
           <li>
@@ -90,15 +73,13 @@ import { brand, contact, nav, social, ventures } from '../../data/site';
               WhatsApp
             </a>
           </li>
-          <li><a class="footer-link" href={contact.location.href} target="_blank" rel="noopener noreferrer">{contact.location.label}</a></li>
+          <li>
+            <a class="footer-link" href={contact.location.href} target="_blank" rel="noopener noreferrer">
+              {contact.location.label}
+            </a>
+          </li>
         </ul>
       </div>
-
-      <div class="footer-col footer-col--note">
-        <h3 class="footer-col-title">Based In</h3>
-        <p class="footer-static">Semarang, Indonesia</p>
-      </div>
     </div>
-
   </div>
 </footer>

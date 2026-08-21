@@ -139,10 +139,7 @@ import { brand, clients, hero, nav, social, stats } from '../data/site';
           <div class="marquee-group">
             {
               clients.map((client) => (
-                <span
-                  class:list={['marquee-item', `marquee-item--${client.shape}`]}
-                  style={`--logo-width-desktop:${client.desktopWidth}vw;--logo-width-mobile:${client.mobileWidth}px;--logo-scale:${client.scale ?? 1}`}
-                >
+                <span class="marquee-item">
                   <img class="marquee-logo" src={client.src} alt={client.name} loading="eager" decoding="async" />
                 </span>
               ))
@@ -151,10 +148,7 @@ import { brand, clients, hero, nav, social, stats } from '../data/site';
           <div class="marquee-group" aria-hidden="true">
             {
               clients.map((client) => (
-                <span
-                  class:list={['marquee-item', `marquee-item--${client.shape}`]}
-                  style={`--logo-width-desktop:${client.desktopWidth}vw;--logo-width-mobile:${client.mobileWidth}px;--logo-scale:${client.scale ?? 1}`}
-                >
+                <span class="marquee-item">
                   <img class="marquee-logo" src={client.src} alt="" loading="eager" decoding="async" />
                 </span>
               ))
@@ -208,6 +202,7 @@ import { brand, clients, hero, nav, social, stats } from '../data/site';
     data-ghost-type="size"
     data-button-hover
   >
+    <Icon name="whatsapp" size={16} class="btn-icon" />
     <span class="btn-label">{hero.ctaPrimary.label}</span>
   </a>
 </aside>

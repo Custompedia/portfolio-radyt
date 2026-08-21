@@ -146,13 +146,13 @@ function buildRailFill(container: HTMLElement): void {
     fill,
     { height: '0%' },
     {
-      keyframes: FILL_STEPS,
+      height: '100%',
       ease: 'none',
       scrollTrigger: {
         trigger: container,
-        start: 'top 85%',
-        end: 'bottom 70%',
-        scrub: 1,
+        start: 'top 75%',
+        end: 'bottom 65%',
+        scrub: 0.5,
       },
     },
   );
