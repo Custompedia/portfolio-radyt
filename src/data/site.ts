@@ -146,7 +146,10 @@ export const networkActive = [
 
 export const southeastAsia = {
   headline: 'Setting Sights on Southeast Asia',
-  body: 'Berbasis di Semarang, melayani klien di seluruh Indonesia. Menyiapkan langkah berikutnya ke ranah Asia Tenggara.',
+  body: [
+    'Berbasis di Semarang, melayani klien di seluruh Indonesia.',
+    'Menyiapkan langkah berikutnya ke ranah Asia Tenggara.',
+  ],
 };
 
 export const workStory = {

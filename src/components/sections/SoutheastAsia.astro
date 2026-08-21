@@ -1,4 +1,5 @@
 ---
+import Icon from '../Icon.astro';
 import { southeastAsia } from '../../data/site';
 ---
 
@@ -6,28 +7,76 @@ import { southeastAsia } from '../../data/site';
   <div class="sea-copy">
     <span class="network-label">Next Direction</span>
     <h2 class="section-title h2-style" id="southeast-asia-title" data-reveal>{southeastAsia.headline}</h2>
-    <p class="section-intro" data-reveal data-reveal-stagger="0.05">{southeastAsia.body}</p>
+    <p class="section-intro sea-intro" data-reveal data-reveal-stagger="0.05">
+      {southeastAsia.body.map((sentence) => <span>{sentence}</span>)}
+    </p>
   </div>
 
-  <div class="sea-map" aria-label="Peta posisi Semarang dan kawasan Asia Tenggara">
-    <svg viewBox="0 0 760 520" role="img" aria-labelledby="sea-map-title sea-map-desc">
-      <title id="sea-map-title">Semarang menuju Asia Tenggara</title>
-      <desc id="sea-map-desc">Peta skematis Asia Tenggara dengan Semarang ditandai di Pulau Jawa.</desc>
-      <g class="sea-land" aria-hidden="true">
-        <path d="M130 44c38 11 63 35 82 72l24 70-28 56-45-29-11-65-39-54z" />
-        <path d="M292 72l40 20 9 65-29 62-32-31 13-49-19-32z" />
-        <path d="M382 104l64 5 43 41-14 63-63 24-38-42-4-53z" />
-        <path d="M514 151l38 20 17 45-18 36-31-31 7-32z" />
-        <path d="M204 302l154 9 72 13-30 19-142 4-68-19z" />
-        <path d="M461 306l53-19 49 19-24 42-54 13-30-32z" />
-        <path d="M591 254l50 24 19 50-26 46-28-27 10-44-35-23z" />
-        <path d="M575 407l81 18 23 36-58 17-74-31z" />
-      </g>
-      <path class="sea-route" d="M334 334C362 280 425 244 524 218" aria-hidden="true" />
-      <circle class="sea-pulse" cx="334" cy="334" r="12" aria-hidden="true" />
-      <circle class="sea-target" cx="524" cy="218" r="16" aria-hidden="true" />
-      <text class="sea-label sea-label--semarang" x="300" y="372">Semarang</text>
-      <text class="sea-label sea-label--region" x="464" y="186">Southeast Asia</text>
-    </svg>
+  <div
+    class="sea-visual"
+    data-sea-stage
+    role="img"
+    aria-label="Animasi yang bergerak dari titik Semarang menuju cakupan Asia Tenggara"
+  >
+    <div class="sea-map-layer sea-map-layer--local" data-sea-local aria-hidden="true">
+      <img
+        src="/images/southeast-asia/semarang-map.webp"
+        alt=""
+        width="1536"
+        height="1024"
+        loading="eager"
+        fetchpriority="low"
+        decoding="async"
+      />
+      <div class="sea-marker sea-marker--local" data-sea-local-marker>
+        <span class="sea-marker-pin"><Icon name="pin" size={24} /></span>
+        <span class="sea-marker-label">Semarang</span>
+      </div>
+    </div>
+
+    <div class="sea-map-layer sea-map-layer--java" data-sea-java aria-hidden="true">
+      <img
+        src="/images/southeast-asia/java-map.webp"
+        alt=""
+        width="1536"
+        height="1024"
+        loading="eager"
+        fetchpriority="low"
+        decoding="async"
+      />
+      <span class="sea-transition-dot sea-transition-dot--java" data-sea-java-marker></span>
+    </div>
+
+    <div class="sea-map-layer sea-map-layer--indonesia" data-sea-indonesia aria-hidden="true">
+      <img
+        src="/images/southeast-asia/indonesia-map.webp"
+        alt=""
+        width="1536"
+        height="1024"
+        loading="eager"
+        fetchpriority="low"
+        decoding="async"
+      />
+      <span class="sea-transition-dot sea-transition-dot--indonesia" data-sea-indonesia-marker></span>
+    </div>
+
+    <div class="sea-map-layer sea-map-layer--region" data-sea-region aria-hidden="true">
+      <img
+        src="/images/southeast-asia/region-map.webp"
+        alt=""
+        width="1536"
+        height="1024"
+        loading="eager"
+        fetchpriority="low"
+        decoding="async"
+      />
+      <span class="sea-region-focus" data-sea-focus></span>
+      <span class="sea-ripple sea-ripple--one" data-sea-ripple></span>
+      <span class="sea-ripple sea-ripple--two" data-sea-ripple></span>
+      <span class="sea-ripple sea-ripple--three" data-sea-ripple></span>
+      <span class="sea-region-marker" data-sea-region-marker></span>
+    </div>
+
+    <p class="sea-region-title" data-sea-title aria-hidden="true">Southeast Asia</p>
   </div>
 </section>

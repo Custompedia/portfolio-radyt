@@ -17,6 +17,7 @@ import { footerCtaModule } from './modules/footer-cta';
 import { microModule } from './modules/micro';
 import { finishIntro, preloaderModule, sealIntro } from './modules/preloader';
 import { brandStagesModule } from './modules/brand-stages';
+import { southeastAsiaModule } from './modules/southeast-asia';
 
 /**
  * Urutan penting: sidebar mengunci skalanya dulu, baru ghost boleh mengukur.
@@ -45,6 +46,7 @@ const modules: AnimationModule[] = [
   mobileMenuModule,
   footerCtaModule,
   brandStagesModule,
+  southeastAsiaModule,
   microModule,
   preloaderModule,
 ];
