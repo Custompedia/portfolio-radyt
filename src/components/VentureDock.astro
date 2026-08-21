@@ -1,0 +1,43 @@
+---
+/**
+ * VentureDock - Fixed navigation capsule to Custompedia & Parcelin ecosystems.
+ * Fixed in all viewports: bottom-right on desktop, bottom-center on mobile.
+ */
+import Icon from './Icon.astro';
+---
+
+<nav class="venture-dock" aria-label="Ecosystem Ventures">
+  <a
+    class="venture-dock-item"
+    href="https://custompedia.agency/"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Kunjungi Custompedia"
+  >
+    <span class="venture-dock-badge" aria-hidden="true">
+      <img src="/images/favicon.svg" alt="" width="16" height="16" loading="eager" decoding="async" />
+    </span>
+    <span class="venture-dock-name">Custompedia</span>
+    <span class="venture-dock-arrow" aria-hidden="true">
+      <Icon name="arrow" size={11} />
+    </span>
+  </a>
+
+  <span class="venture-dock-sep" aria-hidden="true"></span>
+
+  <a
+    class="venture-dock-item"
+    href="https://www.parcelin.id/"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Kunjungi Parcelin"
+  >
+    <span class="venture-dock-badge" aria-hidden="true">
+      <img src="/images/LOGO%20PT%20PARCELIN%201.webp" alt="" width="16" height="16" loading="eager" decoding="async" />
+    </span>
+    <span class="venture-dock-name">Parcelin</span>
+    <span class="venture-dock-arrow" aria-hidden="true">
+      <Icon name="arrow" size={11} />
+    </span>
+  </a>
+</nav>

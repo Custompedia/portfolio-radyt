@@ -876,3 +876,89 @@
     border-radius: 14px;
   }
 }
+
+/* ==========================================================================
+   VENTURE DOCK (Mobile-Only Fixed Shortcut to Custompedia & Parcelin)
+   ========================================================================== */
+
+.venture-dock {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .venture-dock {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 85;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    width: max-content;
+    max-width: calc(100vw - 32px);
+    padding: 3px 5px;
+    border: 1px solid rgba(var(--ink-rgb), 0.12);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 12px 28px -6px rgba(var(--ink-rgb), 0.22), 0 2px 6px rgba(0, 0, 0, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .venture-dock-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 34px;
+    padding: 0 10px 0 5px;
+    border-radius: 999px;
+    color: var(--ink);
+    font-family: var(--font-label);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .venture-dock-item:active {
+    background: rgba(var(--ink-rgb), 0.08);
+    color: var(--blue);
+  }
+
+  .venture-dock-badge {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #f1f3f7;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .venture-dock-badge img {
+    display: block;
+    width: 13px;
+    height: 13px;
+    object-fit: contain;
+  }
+
+  .venture-dock-name {
+    line-height: 1;
+  }
+
+  .venture-dock-arrow {
+    opacity: 0.45;
+    color: currentColor;
+  }
+
+  .venture-dock-sep {
+    width: 1px;
+    height: 14px;
+    background: rgba(var(--ink-rgb), 0.12);
+    flex-shrink: 0;
+  }
+}
