@@ -9,7 +9,7 @@ import { about } from '../../data/site';
     <div class="about-photo-cloud" aria-hidden="true">
       {
         about.images.map((image, index) => (
-          <figure class:list={['about-photo', `about-photo--${index + 1}`]}>
+          <figure class:list={['about-photo', `about-photo--${index + 1}`]} data-about-photo>
             <img src={image.src} alt="" loading="lazy" decoding="async" />
           </figure>
         ))

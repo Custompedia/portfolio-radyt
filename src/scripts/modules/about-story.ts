@@ -94,6 +94,8 @@ export const aboutStoryModule: AnimationModule = {
     const glow = $('[data-about-glow]');
     const progressCurrent = $('[data-about-progress-current]');
     const progressFill = $('[data-about-progress-fill]');
+    const photos = $$('[data-about-photo]');
+    const photoImages = photos.map((photo) => $('img', photo)).filter((image): image is HTMLElement => image !== null);
 
     section.classList.add('about--staged');
     section.style.height = `${window.innerHeight * STAGE_VIEWPORTS}px`;
@@ -101,6 +103,8 @@ export const aboutStoryModule: AnimationModule = {
     const leadLines = splitLines($('.about-lead', intro));
     if (glow) gsap.set(glow, { autoAlpha: 1, xPercent: -22, yPercent: -18 });
     if (progressFill) gsap.set(progressFill, { scaleX: 0, transformOrigin: 'left center' });
+    gsap.set(photos, { autoAlpha: 0 });
+    gsap.set(photoImages, { scale: 0.72, transformOrigin: 'center center' });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -111,6 +115,14 @@ export const aboutStoryModule: AnimationModule = {
       },
     });
     timeline = tl;
+
+    [0.08, 0.34, 0.5].forEach((at, index) => {
+      const photo = photos[index];
+      const image = photoImages[index];
+      if (!photo || !image) return;
+      tl.to(photo, { autoAlpha: 0.48, duration: 0.18, ease: 'power2.out' }, at)
+        .to(image, { scale: 1, duration: 0.42, ease: 'back.out(1.8)' }, at);
+    });
 
     tl.to(intro, { autoAlpha: 0, y: -52, duration: 0.28, ease: 'power2.in' }, 0.34);
     tl.to(leadLines, { yPercent: -105, duration: 0.28, stagger: 0.025, ease: 'power2.in' }, 0.34);
@@ -187,7 +199,7 @@ export const aboutStoryModule: AnimationModule = {
       section.style.removeProperty('height');
     }
 
-    $$('[data-about-intro], [data-about-chapter], .about-chapter-figure, [data-about-glow], [data-about-progress-fill]').forEach(
+    $$('[data-about-intro], [data-about-chapter], .about-chapter-figure, [data-about-glow], [data-about-progress-fill], [data-about-photo], [data-about-photo] img]').forEach(
       (element) => gsap.set(element, { clearProps: 'all' }),
     );
 
