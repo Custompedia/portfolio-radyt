@@ -80,7 +80,7 @@ const aboutImages: AboutPhoto[] = [
   { src: '/images/about/radhyta-business-expo.webp', alt: 'Radhyta dalam pertemuan bisnis di sebuah expo' },
   { src: '/images/about/radhyta-gofood-team.webp', alt: 'Radhyta bersama tim pada acara GoFood' },
   { src: '/images/about/radhyta-gojek-office.webp', alt: 'Radhyta dan tim di kantor Gojek' },
-  { src: '/images/timeline/2018-first-agency-client.webp', alt: 'Radhyta dan tim dalam kegiatan bersama Gojek' },
+  { src: '/images/timeline/2025-printing.webp', alt: 'Radhyta dan tim menghadiri expo percetakan' },
   { src: '/images/timeline/2023-activation.webp', alt: 'Aktivasi branding bersama tim' },
   { src: '/images/timeline/2024-regional-team.webp', alt: 'Tim Custompedia dalam kegiatan regional' },
 ];
@@ -163,7 +163,7 @@ export const workStory = {
 };
 
 export const work = {
-  headline: ['Built to', 'Grow'], intro: 'Pilih perusahaan untuk melihat layanan, unit usaha, dan contoh hasil kerjanya.',
+  headline: ['BUILT TO', 'GROW'], intro: 'Pilih perusahaan untuk melihat layanan, unit usaha, dan contoh hasil kerjanya.',
   groups: ['Custompedia', 'Parcelin', 'Creasa'] as WorkGroup[],
   items: [
     { group: 'Custompedia', title: 'Branding & Identity', kind: 'Custompedia', blurb: 'Positioning, identitas visual, dan panduan merek yang bisa dipakai tim internal brand secara mandiri.', tags: ['Branding', 'Design', 'Guideline'], accent: '#3f2a1d', href: 'https://discovery.custompedia.id/', image: '/images/services/custompedia-branding.webp', alt: 'Laptop yang menampilkan proses pekerjaan branding' },

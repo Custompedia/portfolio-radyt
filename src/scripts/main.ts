@@ -21,17 +21,10 @@ import { southeastAsiaModule } from './modules/southeast-asia';
 
 /**
  * Urutan penting: sidebar mengunci skalanya dulu, baru ghost boleh mengukur.
- * horizontal juga harus jalan sebelum modul yang bergantung pada tinggi
- * halaman, karena ia yang menetapkan tinggi section work.
  *
- * about-story sekelompok dengan horizontal karena alasan yang sama - ia
- * menetapkan tinggi section About - dan harus mendahului text-reveal, sebab
+ * about-story harus mendahului text-reveal, sebab
  * kelas panggung yang dipasangnya mengubah lebar kolom judul, sementara
  * SplitText memotong baris menurut lebar saat itu juga.
- *
- * stack menyusul packaging-test: ia menerbitkan `--stack-hold` dan (di bawah
- * 1100px) memasang penahan tumpukan penutup, jadi ia butuh Pedi sudah memutuskan
- * apakah dirinya nge-pin atau tidak.
  */
 const modules: AnimationModule[] = [
   sidebarModule,

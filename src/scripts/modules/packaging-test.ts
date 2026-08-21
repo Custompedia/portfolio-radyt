@@ -6,13 +6,6 @@ import type { PediPose, PediSceneController } from './pedi-scene';
 /** Panjang scroll yang dipakai timeline Pedi, dalam satuan viewport. */
 const TIMELINE_VIEWPORTS = 3.2;
 
-/**
- * Satu viewport tambahan di ujung pin: Pedi berhenti di zoom penuh sementara
- * The Work naik menimpanya. Lihat modules/stack.ts - angka ini harus sama
- * dengan `--stack-hold` yang menarik naik layer di atasnya.
- */
-const STACK_HOLD_VIEWPORTS = 0;
-
 let timeline: gsap.core.Timeline | null = null;
 let compact: gsap.core.Timeline | null = null;
 let compactReveal: gsap.core.Tween | null = null;
@@ -29,14 +22,10 @@ const pose: PediPose = { turn: 0, focus: 0 };
  * ponsel membayar ongkos penuh sebuah scene 3D untuk mendapat SATU frame diam -
  * posisi terburuk dari dua pilihan yang ada.
  *
- * Versi ringkas ini membalik perhitungan itu tanpa menambah unduhan sedikit pun:
- * modelnya berputar tiga perempat lingkaran mengikuti scroll, dan kamera
- * menutup sedikit di ujungnya.
+ * Versi ringkas ini langsung menghadap depan dan kamera menutup sedikit di ujungnya.
  *
- * TANPA PIN dan TANPA `--stack-hold`. Di lebar ini stack.ts sudah memegang pin
- * sendiri untuk section ini; menambah pin kedua akan menyisipkan spacer kedua
- * dan menggeser posisi dokumen semua section di bawahnya. Yang dipakai di sini
- * cuma scrub biasa sepanjang tinggi section yang memang sudah ada.
+ * TANPA PIN dan TANPA `--stack-hold`. Yang dipakai di sini cuma scrub biasa
+ * sepanjang tinggi section yang memang sudah ada.
  *
  * `focus` berhenti di 0.55, bukan 1: pada lebar sempit `updateCamera` menarik
  * kamera sampai kotaknya melewati tepi kanvas, dan yang terlihat cuma potongan.
@@ -50,7 +39,7 @@ function buildCompactScene(el: {
   renderPedi: () => void;
 }): void {
   gsap.set(el.stage, { autoAlpha: 1, scale: 1, xPercent: 0, yPercent: 0, rotation: 0 });
-  pose.turn = -Math.PI * 0.75;
+  pose.turn = 0;
 
   compact = gsap.timeline({
     onUpdate: el.renderPedi,
@@ -62,9 +51,7 @@ function buildCompactScene(el: {
     },
   });
 
-  compact
-    .to(pose, { turn: 0, duration: 0.7, ease: 'none' }, 0)
-    .to(pose, { focus: 0.55, duration: 0.3, ease: 'none' }, 0.7);
+  compact.to(pose, { focus: 0.55, duration: 0.3, ease: 'none' }, 0.7);
 
   // Teks dan orbit tetap disingkap seperti elemen lain di halaman: sekali jalan
   // saat masuk layar, bukan di-scrub. Yang di-scrub cukup benda 3D-nya.
@@ -135,13 +122,13 @@ export const packagingTestModule: AnimationModule = {
       return;
     }
 
-    pose.turn = -Math.PI * 1.5;
+    pose.turn = 0;
     gsap.set(intro, { autoAlpha: 1, y: 0 });
     gsap.set(moments, { autoAlpha: 0, y: 28 });
     if (moments[0]) gsap.set(moments[0], { autoAlpha: 1, y: 0 });
     gsap.set(orbits, { autoAlpha: 0, scale: 0.72, rotation: -8 });
     gsap.set(outro, { autoAlpha: 0, y: 28 });
-    gsap.set(stage, { autoAlpha: 0, scale: 0.72, xPercent: -145, yPercent: 12, rotation: -7, transformOrigin: '50% 72%' });
+    gsap.set(stage, { autoAlpha: 1, scale: 1, xPercent: 0, yPercent: 0, rotation: 0, transformOrigin: '50% 72%' });
     gsap.set(shadow, { scaleX: 0.22, opacity: 0.06, xPercent: -118 });
 
     timeline = gsap.timeline({
@@ -150,56 +137,26 @@ export const packagingTestModule: AnimationModule = {
       scrollTrigger: {
         trigger: section,
         start: 'top top',
-        end: `+=${(TIMELINE_VIEWPORTS + STACK_HOLD_VIEWPORTS) * 100}%`,
+        end: `+=${TIMELINE_VIEWPORTS * 100}%`,
         scrub: 1,
         pin: true,
         anticipatePin: 1,
         invalidateOnRefresh: true,
-        /**
-         * Pin ini menyisipkan spacer ~5040px yang mendorong TURUN semua section
-         * di bawahnya - terutama The Work, yang tingginya sendiri diatur dari
-         * JS. Tanpa prioritas ini ScrollTrigger menyegarkan trigger Work lebih
-         * dulu (modul horizontal init lebih awal), memakai posisi dokumen yang
-         * belum memperhitungkan spacer, dan rentang geser horizontalnya jatuh
-         * ~5040px terlalu tinggi: kartu selesai bergeser saat section-nya masih
-         * di bawah layar, lalu diam mentok begitu user benar-benar sampai.
-         * DIUKUR: start 11837 (salah) vs 16788 (posisi dokumen sebenarnya).
-         */
         refreshPriority: 1,
       },
     });
 
     timeline
-      .to(stage, { autoAlpha: 1, scale: 1, xPercent: 3, yPercent: 0, rotation: 0, duration: 0.82, ease: 'power4.out' }, 0.08)
       .to(shadow, { scaleX: 1, opacity: 0.62, xPercent: 0, duration: 0.64 }, 0.2)
       .to(orbits, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.72, ease: 'power3.out' }, 0.3)
-      .to(pose, { turn: 0, duration: 0.92, ease: 'power2.inOut' }, 0.32)
-      .to(moments[0], { autoAlpha: 1, y: 0, duration: 0.36 }, 0.58)
+      .to(moments[0], { autoAlpha: 1, y: 0, duration: 0.36 }, 0.04)
       .to(moments[1], { autoAlpha: 1, y: 0, duration: 0.36 }, 1.08)
       .to(moments[2], { autoAlpha: 1, y: 0, duration: 0.36 }, 1.54)
       .to([intro, moments], { autoAlpha: 0, y: -26, duration: 0.48, stagger: 0.03 }, 2.78)
       .to(outro, { autoAlpha: 1, y: 0, duration: 0.58 }, 3.08)
       .to(outro, { autoAlpha: 0, y: -22, duration: 0.36 }, 3.78)
       .to(orbits, { autoAlpha: 0, scale: 1.08, duration: 0.46 }, 3.78)
-      .to(shadow, { scaleX: 0.72, opacity: 0, duration: 0.4 }, 3.82)
-      .to(stage, { xPercent: 0, duration: 0.52, ease: 'power2.inOut' }, 3.82)
-      .to(pose, { focus: 1, duration: 1.25, ease: 'power2.inOut' }, 4.18)
-      .to(pose, { focus: 1, duration: 0.62, ease: 'none' }, 5.43);
-
-    /**
-     * Scrub memetakan SELURUH rentang pin ke SELURUH durasi timeline, jadi
-     * memperpanjang `end` saja tidak menambah jeda - ia cuma memperlambat semua
-     * geraknya. Supaya viewport tambahan itu benar-benar jadi diam di zoom
-     * penuh, ekor timeline diberi tween tanpa perubahan yang panjangnya
-     * sebanding: durasi_sekarang × (1 viewport ÷ 5.6 viewport).
-     */
-    if (STACK_HOLD_VIEWPORTS > 0) {
-      timeline.to(pose, {
-        focus: 1,
-        duration: timeline.duration() * (STACK_HOLD_VIEWPORTS / TIMELINE_VIEWPORTS),
-        ease: 'none',
-      });
-    }
+      .to(shadow, { scaleX: 0.72, opacity: 0, duration: 0.4 }, 3.82);
   },
 
   destroy() {

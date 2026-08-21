@@ -4035,24 +4035,7 @@
   }
 }
 
-/* ==========================================================================
-   TUMPUKAN PENUTUP - Pedi → The Work → footer
-
-   HARUS BERADA DI AKHIR BERKAS. Blok responsif di atas menulis ulang
-   `min-height` footer (jadi 0 di layar sempit) dan `height` The Work; kalau
-   aturan di sini datang lebih dulu, dua properti itu kalah dan layer yang naik
-   jadi lebih pendek daripada penahannya.
-
-   Tiga section terakhir saling MENIMPA, bukan berbaris: begitu Pedi selesai
-   nge-zoom, The Work naik menutupinya; begitu The Work selesai bergeser, footer
-   naik menutupi The Work. Mekanismenya dijelaskan lengkap di modules/stack.ts -
-   ringkasnya: layer bawah ditahan diam satu viewport, layer atas ditarik naik
-   satu viewport lewat margin negatif di bawah ini. Keduanya saling meniadakan,
-   jadi tinggi dokumen tidak berubah sedikit pun.
-
-   Karena murni posisi (tanpa tween), gerakannya mundur persis saat di-scroll
-   dari bawah ke atas - itu memang syaratnya.
-   ========================================================================== */
+/* Direct reading flow keeps the pinned Pedi section separate from Work. */
 
 .packaging-test {
   z-index: 1;
@@ -4067,30 +4050,17 @@
   z-index: 3;
 }
 
-/* Penahannya dipasang GSAP, dan GSAP tidak berjalan di sini - tanpa penahan,
-   margin negatif ini cuma akan menumpuk dua section jadi satu. */
 @media (prefers-reduced-motion: no-preference) {
   .work,
   .site-footer {
-    /* Fallback 100vh hanya berlaku sebelum stack.ts sempat menulis nilai
-       pikselnya; lihat alasannya di modules/stack.ts. */
-    margin-top: calc(var(--stack-hold, 100vh) * -1);
-    /* Layer yang naik TIDAK BOLEH lebih pendek dari penahannya. Kalau lebih
-       pendek, ia kehabisan tinggi sebelum sampai ke tepi atas layar dan
-       menyisakan potongan layer di bawahnya yang tidak pernah tertutup - paling
-       kelihatan di footer, yang isinya pendek di layar sempit. */
-    min-height: var(--stack-hold, 100vh);
+    margin-top: 0;
+    min-height: 0;
   }
 
-  /* Pedi dan The Work sama-sama memakai --dark-bg yang identik, jadi tepi
-     atasnya HARUS ditandai sendiri: tanpa garis rambut di dalam dan bayangan di
-     luar, layer yang naik tidak terlihat sebagai layer sama sekali. */
   .work {
-    border-top-left-radius: var(--stack-radius);
-    border-top-right-radius: var(--stack-radius);
-    box-shadow:
-      0 -26px 64px -20px rgba(0, 0, 0, 0.72),
-      inset 0 1px 0 rgba(248, 246, 240, 0.12);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
   }
 
   .site-footer {
