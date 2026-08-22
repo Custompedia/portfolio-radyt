@@ -4165,12 +4165,13 @@ html {
 .company-copy p { color: var(--fg-muted); font-size: clamp(0.9rem, 0.95vw, 1rem); line-height: 1.55; }
 
 .network-block--trusted { width: 100%; }
-.trusted-marquees { display: grid; width: 100%; gap: 16px; overflow: hidden; }
+/* Full-bleed ke kanan: logonya masuk-keluar lewat tepi layar, bukan terpotong di kolom konten. */
+.trusted-marquees { display: grid; width: calc(100vw - var(--content-left)); gap: 16px; overflow: hidden; }
 .trusted-marquee {
   overflow: hidden;
   padding-block: 4px 18px;
-  mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 clamp(20px, 4%, 72px), #000 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 clamp(20px, 4%, 72px), #000 100%);
 }
 .trusted-marquee-track {
   display: flex;
@@ -4474,6 +4475,7 @@ html {
   .js-loading .sea-visual { visibility: visible; }
   .trusted-marquee-track,
   .sea-map-layer { animation: none; }
+  .trusted-marquees { width: 100%; }
   .trusted-marquee { overflow-x: auto; }
   .work-card.is-enter { animation: none; }
 }
