@@ -466,15 +466,17 @@
   align-items: center;
   gap: 0.38vw;
   padding: 0.42vw;
+  border: 1px solid transparent;
   border-radius: var(--radius-xs);
   background: var(--surface-inner);
+  box-shadow: none;
   color: var(--fg);
   font-family: var(--font-label);
   font-size: 0.68vw;
   font-weight: 700;
   line-height: 1;
   text-decoration: none;
-  transition: background-color var(--theme-dur) var(--ease-out), color var(--theme-dur) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  transition: background-color var(--theme-dur) var(--ease-out), border-color var(--theme-dur) var(--ease-out), box-shadow var(--theme-dur) var(--ease-out), color var(--theme-dur) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
 
 .nav-ventures a:hover,
