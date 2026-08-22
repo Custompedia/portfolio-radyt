@@ -481,7 +481,7 @@
 .nav-ventures a:focus-visible {
   background: var(--blue);
   color: var(--white);
-  transform: translateY(-0.13vw);
+  translate: 0 -0.13vw;
 }
 
 .nav-ventures a:focus-visible {

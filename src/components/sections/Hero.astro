@@ -70,6 +70,20 @@ const ghosts: GhostBox[] = [
     w: 'var(--hero-btn-w)',
     h: 'var(--hero-btn-h)',
   },
+  {
+    id: 'venture-custompedia',
+    x: 'var(--gutter)',
+    y: 'calc(100vh - clamp(28px, 7vh, 76px) - clamp(56px, 5.4vw, 84px))',
+    w: 'clamp(154px, 12.5vw, 220px)',
+    h: 'clamp(56px, 5.4vw, 84px)',
+  },
+  {
+    id: 'venture-parcelin',
+    x: 'calc(100vw - var(--gutter) - clamp(154px, 12.5vw, 220px))',
+    y: 'calc(100vh - clamp(28px, 7vh, 76px) - clamp(56px, 5.4vw, 84px))',
+    w: 'clamp(154px, 12.5vw, 220px)',
+    h: 'clamp(56px, 5.4vw, 84px)',
+  },
 ];
 
 /**
@@ -265,40 +279,5 @@ const navRight = nav.slice(2);
       <span class="btn-label">{hero.ctaSecondary.label}</span>
     </a>
 
-    <nav class="hero-ventures" aria-label="Radhyta ventures">
-      <a
-        class="hero-venture hero-venture--custompedia"
-        href="https://custompedia.agency/"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Kunjungi Custompedia"
-      >
-        <span class="hero-venture-logo" aria-hidden="true">
-          <img src="/images/favicon.svg" alt="" width="64" height="64" loading="eager" decoding="async" />
-        </span>
-        <span class="hero-venture-copy">
-          <span class="hero-venture-label">Creative partner</span>
-          <span class="hero-venture-name">Custompedia</span>
-        </span>
-        <span class="hero-venture-arrow" aria-hidden="true"><Icon name="arrow" size={14} /></span>
-      </a>
-
-      <a
-        class="hero-venture hero-venture--parcelin"
-        href="https://www.parcelin.id/"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Kunjungi Parcelin"
-      >
-        <span class="hero-venture-logo" aria-hidden="true">
-          <img src="/images/LOGO%20PT%20PARCELIN%201.webp" alt="" width="64" height="64" loading="eager" decoding="async" />
-        </span>
-        <span class="hero-venture-copy">
-          <span class="hero-venture-label">Gifting partner</span>
-          <span class="hero-venture-name">Parcelin</span>
-        </span>
-        <span class="hero-venture-arrow" aria-hidden="true"><Icon name="arrow" size={14} /></span>
-      </a>
-    </nav>
   </div>
 </section>
