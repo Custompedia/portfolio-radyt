@@ -64,6 +64,7 @@ const stage = () => ({
   navLinks: $$('.nav-link'),
   navSeps: $$('.hero-nav-sep'),
   statCards: $$('.nav-stat-card [data-ghost]'),
+  ventureCards: $$('.nav-venture[data-ghost]'),
   lead: [$('.hero-eyebrow'), $('.hero-name')].filter(Boolean) as HTMLElement[],
   buttons: [$('.btn-primary'), $('.hero-secondary')].filter(Boolean) as HTMLElement[],
   supporting: [$('.hero-traits')].filter(Boolean) as HTMLElement[],
@@ -157,6 +158,7 @@ export const preloaderModule: AnimationModule = {
     // jadi di sini hanya opacity + blur yang disentuh - scale akan bentrok.
     gsap.set(el.navLinks, { autoAlpha: 0 });
     gsap.set(el.statCards, { autoAlpha: 0, filter: 'blur(8px)' });
+    gsap.set(el.ventureCards, { autoAlpha: 0, filter: 'blur(8px)' });
     gsap.set(el.buttons, { autoAlpha: 0 });
     gsap.set(el.lead, { autoAlpha: 0 });
     gsap.set(el.supporting, { autoAlpha: 0 });
@@ -192,6 +194,11 @@ export const preloaderModule: AnimationModule = {
         'hero+=0.6',
       )
       .to(
+        el.ventureCards,
+        { autoAlpha: 1, filter: 'blur(0px)', duration: 0.9, stagger: 0.1, ease: 'power2.out' },
+        'hero+=0.6',
+      )
+      .to(
         el.buttons,
         { autoAlpha: 1, duration: 0.8, stagger: 0.08, ease: 'power2.out' },
         'hero+=1.25',
@@ -219,6 +226,7 @@ export const preloaderModule: AnimationModule = {
     gsap.set(el.navSeps, { clearProps: 'height' });
     gsap.set(el.headlineLines, { clearProps: 'opacity,visibility,scale,yPercent' });
     gsap.set(el.statCards, { clearProps: 'opacity,visibility,filter' });
+    gsap.set(el.ventureCards, { clearProps: 'opacity,visibility,filter' });
     gsap.set(el.mobileStats, { clearProps: 'opacity,visibility,scale,y' });
     gsap.set([...el.supporting, ...el.lead, ...el.buttons], { clearProps: 'y' });
     gsap.set([...el.navLinks, ...el.lead, ...el.buttons, ...el.supporting], {
