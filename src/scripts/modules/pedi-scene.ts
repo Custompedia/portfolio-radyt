@@ -20,6 +20,8 @@ const CAMERA_Y = 0.05;
 const CLOSE_Y = 0.53;
 const CLOSE_Z = 2.9;
 const CLOSE_FRAMING_ASPECT = 1.25;
+/** Sisa ruang di sekeliling model sebelum tepi frame, dalam satuan dunia. */
+const FIT_MARGIN = 0.06;
 
 function disposeMaterial(material: THREE.Material): void {
   for (const value of Object.values(material)) {
@@ -86,10 +88,26 @@ export async function createPediScene(canvas: HTMLCanvasElement, performanceLite
   let closeCameraZ = CLOSE_Z;
   let activeFocus = 0;
 
+  // Diambil dari sumbu terlebar supaya tetap muat pada rotasi mana pun.
+  const modelHalfWidth = (Math.max(size.x, size.z) * scale) / 2;
+
   const updateCamera = (focus: number): void => {
-    const y = THREE.MathUtils.lerp(CAMERA_Y, CLOSE_Y, focus);
-    camera.position.set(0, y, THREE.MathUtils.lerp(baseCameraZ, closeCameraZ, focus));
-    camera.fov = THREE.MathUtils.lerp(CAMERA_FOV, CLOSE_FOV, focus);
+    const fov = THREE.MathUtils.lerp(CAMERA_FOV, CLOSE_FOV, focus);
+    const halfFov = THREE.MathUtils.degToRad(fov) / 2;
+    const spread = Math.tan(halfFov);
+
+    // Frame sempit: mundurkan kamera sampai lebar badan muat.
+    const z = Math.max(
+      THREE.MathUtils.lerp(baseCameraZ, closeCameraZ, focus),
+      (modelHalfWidth + FIT_MARGIN) / (spread * camera.aspect),
+    );
+
+    // Kamera yang naik memotong kaki Pedi di frame pendek - kenaikannya yang dibatasi, dan saat ruangnya habis model duduk tepat di tengah kanvas.
+    const headroom = Math.max(0, spread * z - (MODEL_HEIGHT / 2 + FIT_MARGIN));
+    const y = Math.min(THREE.MathUtils.lerp(CAMERA_Y, CLOSE_Y, focus), headroom);
+
+    camera.position.set(0, y, z);
+    camera.fov = fov;
     camera.lookAt(0, y, 0);
     camera.updateProjectionMatrix();
   };

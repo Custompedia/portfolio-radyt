@@ -18,6 +18,9 @@ import { CustomEase } from 'gsap/CustomEase';
  */
 gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase);
 
+// Bar URL mobile mengubah tinggi viewport tiap kali user scroll; tanpa ini ScrollTrigger menghitung ulang seluruh pin & trigger di tengah gerakan jari.
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 /**
  * KURVA RUMAH - dan alasan kenapa angkanya persis ini.
  *

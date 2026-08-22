@@ -136,6 +136,7 @@ const filters = [
     const ALL = 'all';
     const MOBILE_PAGE_SIZE = 5;
     const selected = new Set<string>();
+    const revealed = new WeakSet<HTMLElement>();
     let visibleLimit = MOBILE_PAGE_SIZE;
 
     const isMobile = () => window.innerWidth <= 767;
@@ -153,17 +154,20 @@ const filters = [
       card.querySelector<HTMLButtonElement>('.work-card-toggle')?.setAttribute('aria-expanded', 'true');
     };
 
-    const render = (): void => {
+    // `replay` hanya true saat isi grid benar-benar berganti (filter). Saat "lihat lainnya" atau resize, kartu yang sudah tampil tidak boleh dianimasikan ulang - itulah kedipan yang terlihat sebelumnya.
+    const render = (replay = false): void => {
       const mobile = isMobile();
       const matchingCards = cards.filter((card) => selected.size === 0 || selected.has(card.dataset.workGroup ?? ''));
       const totalMatching = matchingCards.length;
 
+      const entering: HTMLElement[] = [];
       let shown = 0;
       cards.forEach((card) => {
         const isMatch = selected.size === 0 || selected.has(card.dataset.workGroup ?? '');
         if (!isMatch) {
           closeCard(card);
           card.hidden = true;
+          revealed.delete(card);
           return;
         }
 
@@ -173,16 +177,25 @@ const filters = [
         if (!isVisible) {
           closeCard(card);
           card.hidden = true;
+          revealed.delete(card);
           return;
         }
 
         card.hidden = false;
-        card.style.setProperty('--i', String(shown));
-        card.classList.remove('is-enter');
-        void card.offsetWidth;
-        card.classList.add('is-enter');
+        if (replay || !revealed.has(card)) entering.push(card);
+        revealed.add(card);
         shown += 1;
       });
+
+      // Satu reflow untuk seluruh batch, bukan satu per kartu: `offsetWidth` per kartu memaksa layout berulang dan itu yang bikin tersendat.
+      if (entering.length > 0) {
+        entering.forEach((card) => card.classList.remove('is-enter'));
+        void grid.offsetWidth;
+        entering.forEach((card, index) => {
+          card.style.setProperty('--i', String(index));
+          card.classList.add('is-enter');
+        });
+      }
 
       if (moreWrap && moreBtn) {
         if (mobile && totalMatching > visibleLimit) {
@@ -216,7 +229,7 @@ const filters = [
         else if (selected.has(id)) selected.delete(id);
         else selected.add(id);
         visibleLimit = MOBILE_PAGE_SIZE;
-        render();
+        render(true);
       });
     });
 
@@ -235,10 +248,20 @@ const filters = [
       });
     });
 
-    window.addEventListener('resize', () => {
-      render();
-    });
+    // Bar URL di mobile mengubah TINGGI viewport tiap kali user scroll, dan resize-listener tanpa syarat membuat grid dirender ulang di tengah gerakan jari.
+    let lastWidth = window.innerWidth;
+    let resizeTimer = 0;
+    window.addEventListener(
+      'resize',
+      () => {
+        if (window.innerWidth === lastWidth) return;
+        lastWidth = window.innerWidth;
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(() => render(), 150);
+      },
+      { passive: true },
+    );
 
-    render();
+    render(true);
   }
 </script>

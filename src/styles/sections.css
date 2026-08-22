@@ -4050,7 +4050,7 @@
 
   .timeline-card[data-timeline-card='3'] .timeline-media img,
   .timeline-card[data-timeline-card='3'] .timeline-media-image {
-    object-position: center 15% !important;
+    object-position: center 30% !important;
   }
 }
 
@@ -4426,6 +4426,11 @@ html {
   .footer-social--cta {
     width: auto;
   }
+  /* `dvh` ikut berubah saat bar URL bergerak dan itu me-relayout section di tengah scroll; `svh` nilainya tetap. */
+  .packaging-test,
+  .packaging-test-stage {
+    min-height: 100svh;
+  }
   .packaging-test-stage {
     padding: 64px var(--gutter) 48px;
   }
@@ -4443,6 +4448,13 @@ html {
     width: min(100%, 340px);
     height: clamp(260px, 68vw, 320px);
     margin: 16px auto;
+  }
+  /* Kanvas mengisi penuh scene: pusat model, pusat kanvas, dan pusat orbit jatuh di titik yang sama. */
+  .pedi-stage {
+    inset: 0;
+  }
+  .pedi-orbits {
+    width: 96%;
   }
   .packaging-test-moment {
     gap: 16px;

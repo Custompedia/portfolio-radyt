@@ -37,6 +37,7 @@ interface Watched {
 let watched: Watched[] = [];
 let trigger: ScrollTrigger | null = null;
 let current = '';
+let atContact = false;
 
 function sync(): void {
   const line = window.innerHeight * READ_LINE;
@@ -58,7 +59,11 @@ function sync(): void {
 
   const cta = watched.find((section) => section.id === CTA_SECTION);
   const atCta = cta ? cta.el.getBoundingClientRect().top <= window.innerHeight * 0.9 : false;
-  document.documentElement.classList.toggle('at-contact', atCta);
+  // `sync` jalan tiap frame scroll - menulis kelas di <html> tanpa syarat memaksa recalc style sehalaman penuh setiap frame.
+  if (atCta !== atContact) {
+    atContact = atCta;
+    document.documentElement.classList.toggle('at-contact', atCta);
+  }
 }
 
 export const navActiveModule: AnimationModule = {
@@ -97,6 +102,7 @@ export const navActiveModule: AnimationModule = {
     trigger = null;
     watched = [];
     current = '';
+    atContact = false;
     for (const link of $$('[data-nav-link]')) link.classList.remove('is-active');
     document.documentElement.classList.remove('at-contact');
   },
