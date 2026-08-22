@@ -1838,8 +1838,7 @@
 }
 
 .performance-lite .packaging-test-stage::before,
-.performance-lite .packaging-test-stage::after,
-.performance-lite .pedi-shadow {
+.performance-lite .packaging-test-stage::after {
   filter: none;
 }
 
@@ -1984,19 +1983,6 @@
 .pedi-stage[data-state='error'] .pedi-loader {
   opacity: 0;
   animation: none;
-}
-
-.pedi-shadow {
-  position: absolute;
-  top: 87%;
-  left: 50%;
-  z-index: 1;
-  width: min(18vw, 270px);
-  height: clamp(26px, 3vw, 46px);
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.74);
-  filter: blur(18px);
-  transform: translateX(-50%);
 }
 
 @keyframes pedi-loader-pulse {
@@ -2370,16 +2356,20 @@
 
 /* --- Sidebar Fade Out Saat Masuk Footer --- */
 
+/* `translate` dipakai, bukan `transform`: sidebar.ts menulis transform skala inline, dan menimpanya bikin sidebar melompat ke ukuran penuh saat keluar. */
 .sidebar {
   transition:
     opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    translate 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s linear 0s;
 }
 
 .at-contact .sidebar {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transform: translateX(-36px) !important;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  translate: -36px 0;
+  transition-delay: 0s, 0s, 0.45s;
 }
 
 .at-contact .mobile-menu-trigger {
@@ -4075,6 +4065,18 @@
   z-index: 2;
 }
 
+/* Pinned section di atasnya berakhir pada tinggi pecahan, jadi body krem bocor jadi garis tipis - ditutup lidah bg gelap. */
+.work::before {
+  position: absolute;
+  top: -4px;
+  right: 0;
+  left: 0;
+  height: 4px;
+  background: var(--work-bg);
+  content: '';
+  pointer-events: none;
+}
+
 .site-footer {
   z-index: 3;
 }
@@ -4111,7 +4113,7 @@ html {
 }
 
 .hero-headline-line {
-  -webkit-text-stroke: clamp(1.8px, 0.16vw, 3.4px) var(--blue);
+  -webkit-text-stroke: clamp(1.8px, 0.16vw, 3.4px) rgba(27, 52, 87);
   paint-order: stroke fill;
 }
 

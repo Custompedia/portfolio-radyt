@@ -3,6 +3,54 @@ import type { AnimationModule } from '../core/module';
 import { $ } from '../core/utils';
 
 let context: gsap.Context | null = null;
+let cleanupPlayback: (() => void) | null = null;
+
+// Unduh video hanya saat section mendekat, dan putar hanya saat benar-benar terlihat di tab yang aktif.
+function setupViewportPlayback(video: HTMLVideoElement): () => void {
+  let isVisible = false;
+
+  const sync = () => {
+    if (isVisible && !document.hidden) void video.play().catch(() => undefined);
+    else video.pause();
+  };
+
+  const preloadObserver = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      preloadObserver.disconnect();
+      if (video.preload !== 'auto') {
+        video.preload = 'auto';
+        video.load();
+      }
+    },
+    { rootMargin: '400px 0px' },
+  );
+  preloadObserver.observe(video);
+
+  const playbackObserver = new IntersectionObserver(
+    (entries) => {
+      isVisible = entries.some((entry) => entry.isIntersecting);
+      sync();
+    },
+    { threshold: 0.25 },
+  );
+  playbackObserver.observe(video);
+
+  const suspend = () => video.pause();
+
+  document.addEventListener('visibilitychange', sync);
+  window.addEventListener('pagehide', suspend);
+  window.addEventListener('pageshow', sync);
+
+  return () => {
+    preloadObserver.disconnect();
+    playbackObserver.disconnect();
+    document.removeEventListener('visibilitychange', sync);
+    window.removeEventListener('pagehide', suspend);
+    window.removeEventListener('pageshow', sync);
+    video.pause();
+  };
+}
 
 export const southeastAsiaModule: AnimationModule = {
   name: 'southeast-asia',
@@ -22,8 +70,8 @@ export const southeastAsiaModule: AnimationModule = {
       video.playsInline = true;
       video.setAttribute('playsinline', '');
       video.setAttribute('webkit-playsinline', '');
-      // Tidak diputar di sini - ScrollTrigger di bawah yang memicunya saat section masuk layar.
       video.addEventListener('loadeddata', () => ScrollTrigger.refresh(), { once: true });
+      cleanupPlayback = setupViewportPlayback(video);
     }
 
     const isMobile = window.innerWidth <= 767;
@@ -123,24 +171,12 @@ export const southeastAsiaModule: AnimationModule = {
           );
         }
       }
-
-      // 3. Playback video otomatis
-      if (video) {
-        ScrollTrigger.create({
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          // Satu `onToggle` (ikut jalan saat refresh pertama), dan jeda berlaku di SEMUA lebar - mobile dulu dikecualikan sehingga video di-decode terus di luar layar.
-          onToggle: (self) => {
-            if (self.isActive) void video.play().catch(() => undefined);
-            else video.pause();
-          },
-        });
-      }
     }, section);
   },
 
   destroy() {
+    cleanupPlayback?.();
+    cleanupPlayback = null;
     context?.revert();
     context = null;
     const stage = $<HTMLElement>('[data-sea-stage]');

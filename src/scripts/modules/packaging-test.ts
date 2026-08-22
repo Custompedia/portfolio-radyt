@@ -89,9 +89,8 @@ export const packagingTestModule: AnimationModule = {
     const section = $<HTMLElement>('[data-packaging-test]');
     const stage = $<HTMLElement>('[data-pedi-stage]');
     const canvas = $<HTMLCanvasElement>('[data-pedi-canvas]');
-    const shadow = $<HTMLElement>('[data-pedi-shadow]');
     const outro = $<HTMLElement>('[data-packaging-outro]');
-    if (!section || !stage || !canvas || !shadow || !outro) return;
+    if (!section || !stage || !canvas || !outro) return;
 
     const run = ++generation;
     const intro = $$<HTMLElement>('[data-packaging-intro]', section);
@@ -153,7 +152,6 @@ export const packagingTestModule: AnimationModule = {
     gsap.set(orbits, { autoAlpha: 0, scale: 0.72, rotation: -8 });
     gsap.set(outro, { autoAlpha: 0, y: 28 });
     gsap.set(stage, { autoAlpha: 1, scale: 1, xPercent: 0, yPercent: 0, rotation: 0, transformOrigin: '50% 72%' });
-    gsap.set(shadow, { scaleX: 0.22, opacity: 0.06, xPercent: -118 });
 
     timeline = gsap.timeline({
       defaults: { ease: 'power3.out' },
@@ -171,7 +169,6 @@ export const packagingTestModule: AnimationModule = {
     });
 
     timeline
-      .to(shadow, { scaleX: 1, opacity: 0.62, xPercent: 0, duration: 0.64 }, 0.2)
       .to(orbits, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.72, ease: 'power3.out' }, 0.3)
       .to(moments[0], { autoAlpha: 1, y: 0, duration: 0.36 }, 0.04)
       .to(moments[1], { autoAlpha: 1, y: 0, duration: 0.36 }, 1.08)
@@ -179,8 +176,7 @@ export const packagingTestModule: AnimationModule = {
       .to([intro, moments], { autoAlpha: 0, y: -26, duration: 0.48, stagger: 0.03 }, 2.78)
       .to(outro, { autoAlpha: 1, y: 0, duration: 0.58 }, 3.08)
       .to(outro, { autoAlpha: 0, y: -22, duration: 0.36 }, 3.78)
-      .to(orbits, { autoAlpha: 0, scale: 1.08, duration: 0.46 }, 3.78)
-      .to(shadow, { scaleX: 0.72, opacity: 0, duration: 0.4 }, 3.82);
+      .to(orbits, { autoAlpha: 0, scale: 1.08, duration: 0.46 }, 3.78);
   },
 
   destroy() {
@@ -202,7 +198,7 @@ export const packagingTestModule: AnimationModule = {
     pedi = null;
     const stage = $<HTMLElement>('[data-pedi-stage]');
     if (stage) stage.dataset.state = 'loading';
-    $$<HTMLElement>('[data-packaging-test] [data-packaging-intro], [data-packaging-test] .packaging-test-moment, [data-packaging-test] [data-packaging-outro], [data-packaging-test] [data-pedi-orbits], [data-packaging-test] [data-pedi-stage], [data-packaging-test] [data-pedi-shadow]').forEach((element) => {
+    $$<HTMLElement>('[data-packaging-test] [data-packaging-intro], [data-packaging-test] .packaging-test-moment, [data-packaging-test] [data-packaging-outro], [data-packaging-test] [data-pedi-orbits], [data-packaging-test] [data-pedi-stage]').forEach((element) => {
       gsap.set(element, { clearProps: 'all' });
     });
   },

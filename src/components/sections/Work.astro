@@ -99,6 +99,31 @@ const filters = [
 </section>
 
 <script>
+  // Hangatkan cache poster saat idle supaya grid sudah tergambar penuh begitu user tiba di section ini.
+  const warmPosters = (): void => {
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    if (connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType ?? '')) return;
+
+    const sources = Array.from(document.querySelectorAll<HTMLImageElement>('[data-work-grid] .work-poster'))
+      .map((img) => img.currentSrc || img.src)
+      .filter(Boolean);
+
+    Array.from(new Set(sources)).forEach((src) => {
+      const warm = new Image();
+      warm.decoding = 'async';
+      warm.fetchPriority = 'low';
+      warm.src = src;
+    });
+  };
+
+  const scheduleWarm = (): void => {
+    if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(warmPosters, { timeout: 3000 });
+    else window.setTimeout(warmPosters, 1200);
+  };
+
+  if (document.readyState === 'complete') scheduleWarm();
+  else window.addEventListener('load', scheduleWarm, { once: true });
+
   const grid = document.querySelector<HTMLElement>('[data-work-grid]');
   const filters = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-work-filter]'));
   const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-work-card]'));
